@@ -8,4 +8,9 @@ class Country extends Model
 {
     protected $primaryKey = 'country_id';
     public $timestamps = false;
+
+    protected $fillable = [
+        'country_desc',
+    ];
+
 }

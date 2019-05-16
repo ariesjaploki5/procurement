@@ -47,6 +47,7 @@ Vue.filter('myDate5', function(val){return moment(val).format('LTS');});
 
 Vue.filter('numeral1', function(val){return numeral(val).format('000');});
 Vue.filter('numeral2', function(val){return numeral(val).format('0000');});
+Vue.filter('numeral3', function(val){return numeral(val).format('0,0');});
 
 Vue.filter('num_words', function(val){return converter.toWords(val);});
 
@@ -59,6 +60,7 @@ let Fire = new Vue();
 window.Fire = Fire;
 
 const store = new Vuex.Store(StoreData);
+
 const router = new VueRouter({
     routes,
     mode: 'history',

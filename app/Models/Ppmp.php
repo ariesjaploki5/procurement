@@ -16,4 +16,8 @@ class Ppmp extends Model
     public function items(){
         return $this->belongsToMany('App\Models\Item');
     }
+
+    public function category(){
+        return $this->belongsTo('App\Models\Category', 'category_id', 'category_id');
+    }
 }

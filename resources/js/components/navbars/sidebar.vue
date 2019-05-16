@@ -2,8 +2,7 @@
     <aside class="main-sidebar sidebar-light-primary elevation-4">
         <router-link to="#" class="brand-link">
         <!-- Brand Logo -->
-            <img :src="'/img/bghmc.png'" alt="BGHMC Logo" class="brand-image img-circle elevation-5"
-                 style="opacity: 1">
+            <img :src="'/img/bghmc.png'" alt="BGHMC Logo" class="brand-image img-circle elevation-5" style="opacity: 1">
           <span class="brand-text font-weight-light">Procurement</span>
         </router-link>
         <div class="sidebar">
@@ -22,39 +21,45 @@
               <!-- Add icons to the links using the .nav-icon class
                    with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <router-link to='/dashboard' class="nav-link">
+                    <router-link to='../../dashboard' class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='ppmps' class="nav-link">
+                    <router-link to='../../ppmps' class="nav-link">
                         <i class="nav-icon fas fa-balance-scale"></i>
                         <p>PPMP</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='apps' class="nav-link">
+                    <router-link to='../../apps' class="nav-link">
                         <i class="nav-icon fas fa-wallet"></i>
                         <p>APP</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='price_schedules' class="nav-link">
+                    <router-link to='../../price_schedules' class="nav-link">
                         <i class="nav-icon fas fa-balance-scale"></i>
                         <p>Price Schedules</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='purchase_requests' class="nav-link">
+                    <router-link to='../../purchase_requests' class="nav-link">
                         <i class="nav-icon fas fa-shopping-cart"></i>
                         <p>Purchase Requests</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='purchase_orders' class="nav-link">
+                    <router-link to='../../purchase_orders' class="nav-link">
                         <i class="nav-icon fab fa-first-order"></i>
                         <p>Purchase Orders</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../inventory' class="nav-link">
+                        <i class="nav-icon fab fa-first-order"></i>
+                        <p>Inventory</p>
                     </router-link>
                 </li>
                 <!-- <li class="nav-item">

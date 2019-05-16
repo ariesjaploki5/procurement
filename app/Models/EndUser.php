@@ -8,4 +8,8 @@ class EndUser extends Model
 {
     protected $primaryKey = 'end_user_id';
     public $timestamps = false;
+
+    protected $fillable = [
+        'end_user_desc',
+    ];
 }

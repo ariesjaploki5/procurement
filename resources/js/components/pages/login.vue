@@ -3,22 +3,31 @@
         <div class="col-lg-3 col-md-6 col-sm-8 mt-5">
             <div class="card mt-5">
                 <div class="card-body">
-                    <div class="card-title text-center">
-                        Login
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <img :src="'/img/bghmc.png'" alt="BGHMC Logo" style="opacity: 1" width="150px" height="150px">
+                        </div>
                     </div>
-                    <form @submit.prevent="authenticate">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="username" v-model="form.username" class="form-control" placeholder="Username" required autofocus>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-title text-center">
+                                Procurement
+                            </div>
+                            <form @submit.prevent="authenticate">
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="username" v-model="form.username" class="form-control form-control-sm" placeholder="Username" required autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" v-model="form.password" class="form-control form-control-sm" placeholder="Password" required>
+                                </div>
+                                <div class="form-group text-center">
+                                    <input type="submit" value="Login" class="btn btn-primary btn-sm">
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" v-model="form.password" class="form-control" placeholder="Password" required>
-                        </div>
-                        <div class="form-group text-center">
-                            <input type="submit" value="Login" class="btn btn-primary btn-sm">
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

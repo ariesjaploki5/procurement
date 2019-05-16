@@ -56,7 +56,7 @@
                                         <div class="form-group row">
                                             <label for="category" class="col-sm-3 col-form-label">Category</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control form-control-sm" v-model="category_id">
+                                                <select class="form-control form-control-sm" v-model="category_id" @change="categoryChange()">
                                                     <option v-for="cat in categories" :key="cat.category_id" :value="cat.category_id">{{ cat.category_desc }}</option>
                                                 </select>
                                             </div>
@@ -66,7 +66,7 @@
                                         <div class="form-group row">
                                             <label for="mode" class="col-sm-3 col-form-label">Mode</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control form-control-sm" v-model="mode_id">
+                                                <select class="form-control form-control-sm" v-model="mode_id" @change="modeChange()">
                                                     <option v-for="mode in modes" :key="mode.mode_id" :value="mode.mode_id">{{ mode.mode_desc }}</option>
                                                 </select>
                                             </div>
@@ -146,6 +146,8 @@ export default {
                 purchase_request_id: '',
                 supplier_id: '',
                 items:{},
+                mode_id: '',
+                category_id: '',
             }),
         }
     },
@@ -155,20 +157,20 @@ export default {
         ]),
         create_pr(){
             this.editmode = false;
+            this.form.reset();
             $('#prModal').modal('show')
+        },
+        store_pr(){
+
         },
         modeChange(){
             this.get_items();
-            this.search_form.cat_id = this.cat_id;
+            this.form.category_id = this.category_id;
 
         },
         categoryChange(){
-
             this.isLoading = true;
-
-            this.get_items();
-            this.search_form.cat_id = this.cat_id;
-
+            this.form.category_id = this.category_id;
         },
         get_items(){
             axios.get('../../api/item/'+this.mode_id+'/'+this.category_id).then(({data}) => {

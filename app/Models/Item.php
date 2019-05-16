@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
+    use \Awobaz\Compoships\Compoships;
+
     protected $primaryKey = 'item_id';
     public $timestamps = false;
 
     protected $fillable = [
-        'description', 'category_id', 'unit_id', 'standard_stock_level', 'beginning_balance',
+        'item_desc', 'category_id', 'unit_id', 'standard_stock_level', 'beginning_balance',
     ];
 
     public function ppmps(){
@@ -31,6 +33,18 @@ class Item extends Model
 
     public function total_received(){
 
+    }
+
+    public function item_price_schedules(){
+        return $this->hasMany('App\Models\ItemPriceSchedule', 'item_id', 'item_id');
+    }
+
+    public function item_ppmps(){
+        return $this->hasMany('App\Models\ItemPpmp', 'item_id', 'item_id');
+    }
+
+    public function item_homis_link(){
+        return $this->hasOne('App\Views\ItemHomisLink', 'item_id', 'item_id');
     }
 
 }

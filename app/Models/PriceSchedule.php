@@ -22,6 +22,7 @@ class PriceSchedule extends Model
     }
 
     public function items(){
-        return $this->belongsToMany('App\Models\Item');
+        return $this->belongsToMany('App\Models\Item', 'item_price_schedule', 'price_schedule_id', 'item_id')
+        ->withPivot('id', 'item_id', 'price_schedule_id', 'rank', 'bid_price', 'supplier_id', 'manufacturer_id', 'country_id', 'packaging_id', 'brand_id');
     }
 }

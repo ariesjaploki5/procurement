@@ -26,3 +26,36 @@ Broadcast::channel('ps_created', function(){
 Broadcast::channel('ps_updated', function(){
     return true;
 });
+
+Broadcast::channel('ips_created', function(){
+    return true;
+});
+
+Broadcast::channel('ips_updated', function(){
+    return true;
+});
+
+Broadcast::channel('app_created', function(){
+    return true;
+});
+
+Broadcast::channel('app_updated', function(){
+    return true;
+});
+
+Broadcast::channel('ippmp_created', function(){
+    return true;
+});
+
+Broadcast::channel('ippmp_updated', function(){
+    return true;
+});
+
+
+Broadcast::channel('ppmp_created', function(){
+    return true;
+});
+
+Broadcast::channel('ppmp_updated', function(){
+    return true;
+});

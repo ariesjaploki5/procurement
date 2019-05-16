@@ -9,28 +9,38 @@ use App\Models\Brand;
 class BrandController extends Controller
 {
 
-    public function index()
-    {
-        //
+    public function index(){
+        $data = Brand::orderBy('brand_desc', 'asc')->get();
+
+        return response()->json($data);
     }
 
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $brand = Brand::create([
+            'brand_desc' => $request->brand_desc,
+        ]);
+
+        return response()->json($brand);
     }
 
-    public function show($id)
-    {
-        //
+    public function show($id){
+
+        
     }
 
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id){
+        $brand = Brand::findOrFail($id);
+        $brand->update([
+            'brand_desc' => $request->brand_desc,
+        ]);
+        
+        return response()->json($brand);
     }
 
-    public function destroy($id)
-    {
-        //
+    public function destroy($id){
+        $brand = Brand::where('brand_id', $id)->first();
+        $brand->delete();
+
+        return response()->json($brand);
     }
 }

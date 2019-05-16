@@ -8,4 +8,8 @@ class Mode extends Model
 {
     protected $primaryKey = 'mode_id';
     public $timestamps = false;
+
+    protected $fillable = [
+        'mode_desc',
+    ];
 }

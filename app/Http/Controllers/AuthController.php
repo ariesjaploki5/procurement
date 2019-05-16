@@ -29,6 +29,8 @@ class AuthController extends Controller
         $username = $request->username;
         $password = $request->password;
 
+        
+
         $select = DB::select("Select top 1 employeeid from hospital.dbo.user_acc where user_name = '$username' and user_pass = webapp.dbo.ufn_crypto('$password',1)");
 
         $user_account = $select[0]->employeeid;

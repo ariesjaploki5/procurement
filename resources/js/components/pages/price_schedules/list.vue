@@ -30,12 +30,14 @@
                                 <tr v-for="ps in price_schedules" :key="ps.id">
                                     <td>{{ ps.price_schedule_id }}</td>
                                     <td>{{ ps.price_schedule_year }}</td>
-                                    <td>{{ ps.created_by.employee.lastname }}, {{ ps.created_by.employee.firstname }}</td>
+                                    <td>
+                                        {{ ps.created_by.employee.lastname }}, {{ ps.created_by.employee.firstname }}
+                                    </td>
                                     <td>{{ ps.created_at }}</td>
                                     <td class="text-center" width="20%">
-                                        <router-link class="btn btn-sm btn-primary" to=""><i class="fas fa-eye"></i></router-link>
+                                        <router-link class="btn btn-sm btn-primary" :to="{ name: 'price_schedule_show', params: { id: ps.price_schedule_id }}"><i class="fas fa-eye"></i></router-link>
                                         <button type="button" class="btn btn-sm btn-success" @click="edit_ps(ps)"><i class="fas fa-edit"></i></i></button>
-                                        <button type="button" class="btn btn-sm btn-danger" @click="delete_ps(ps.id)"><i class="fas fa-trash"></i></button>
+                                        <button type="button" class="btn btn-sm btn-danger" @click="delete_ps(ps.price_schedule_id)"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -114,7 +116,7 @@ export default {
         },
         store_ps(){
             this.form.post('../../api/price_schedule').then(() => {
-
+                this.get_price_schedules();
                 $('#psModal').modal('hide')
             }).catch(() => {
 
@@ -127,6 +129,7 @@ export default {
         },
         update_ps(){
             this.form.put('../../api/price_schedule/'+this.form.price_schedule_id).then(() => {
+                
                 $('#psModal').modal('hide')
             }).catch(() => {
 
@@ -134,8 +137,8 @@ export default {
         },
         delete_ps(id){
             axios.delete('../../api/price_schedule/'+id).then(() => {
-
-            }).catch(() => {
+                
+            }).catch(() => {    
 
             });
         },

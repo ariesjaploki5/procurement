@@ -1,5 +1,6 @@
 import { get_local_user } from "./store/helpers/auth";
 import axios from 'axios';
+
 const user = get_local_user();
 
 export default {
@@ -9,6 +10,13 @@ export default {
         modes: {},
         categories: {},
         price_schedules: {},
+        item_price_schedules: {},
+        suppliers: {},
+        manufacturers: {},
+        brands: {},
+        packagings: {},
+        countries: {},
+        apps: {},
     },
     getters: {
         isLoading(state) {
@@ -28,7 +36,25 @@ export default {
         },
         price_schedules(state){
             return state.price_schedules;
-        }
+        },
+        suppliers(state){
+            return state.suppliers;
+        },
+        brands(state){
+            return state.brands;
+        },
+        packagings(state){
+            return state.packagings;
+        },
+        manufacturers(state){
+            return state.manufacturers;
+        },
+        countries(state){
+            return state.countries;
+        },
+        apps(state){
+            return state.apps;
+        },
 
     },
     mutations: {
@@ -63,8 +89,28 @@ export default {
         },
         set_price_schedules(state, payload){
             state.price_schedules = payload;
-        }
-
+        },
+        set_item_price_schedules(state, payload){
+            state.price_schedules = payload;
+        },
+        set_suppliers(state, payload){
+            state.suppliers = payload;
+        },
+        set_brands(state, payload){
+            state.brands = payload;
+        },
+        set_packagings(state, payload){
+            state.packagings = payload;
+        },
+        set_manufacturers(state, payload){
+            state.manufacturers = payload;
+        },
+        set_countries(state, payload){
+            state.countries = payload;
+        },
+        set_apps(state, payload){
+            state.apps = payload;
+        },
     },
     actions: {
         login(context) {
@@ -85,6 +131,36 @@ export default {
                 context.commit('set_price_schedules', data);
             })
         },
+        get_suppliers(context){
+            axios.get('../../api/supplier').then(({data}) => {
+                context.commit('set_suppliers', data);
+            })
+        },
+        get_brands(context){
+            axios.get('../../api/brand').then(({data}) => {
+                context.commit('set_brands', data);
+            })
+        },
+        get_packagings(context){
+            axios.get('../../api/packaging').then(({data}) => {
+                context.commit('set_packagings', data);
+            })
+        },
+        get_manufacturers(context){
+            axios.get('../../api/manufacturer').then(({data}) => {
+                context.commit('set_manufacturers', data);
+            })
+        },
+        get_countries(context){
+            axios.get('../../api/country').then(({data}) => {
+                context.commit('set_countries', data);
+            })
+        },
+        get_apps(context){
+            axios.get('../../api/app').then(({data}) => {
+                context.commit('set_apps', data);
+            })
+        }
 
     }
 };

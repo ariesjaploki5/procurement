@@ -11,7 +11,7 @@ class SupplierController extends Controller
 
     public function index()
     {
-        $data = Supplier::orderBy('name', 'asc')->orderBy('address', 'asc')->get();
+        $data = Supplier::orderBy('supplier_name', 'asc')->get();
 
         return response()->json($data);
     }

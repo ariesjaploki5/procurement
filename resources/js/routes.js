@@ -8,14 +8,20 @@ import home from './components/pages/dashboard.vue';
 import categories from './components/pages/categories/main';
 import category_list from './components/pages/categories/list';
 
+import apps from './components/pages/apps/main';
+import app_list from './components/pages/apps/list';
+import app_show from './components/pages/apps/show';
+
 import inventory from './components/pages/inventory/main';
 import inventory_list from './components/pages/inventory/list';
 
 import ppmps from './components/pages/ppmps/main';
 import ppmp_list from './components/pages/ppmps/list';
+import ppmp_show from './components/pages/ppmps/show';
 
 import price_schedules from './components/pages/price_schedules/main';
 import price_schedule_list from './components/pages/price_schedules/list';
+import price_schedule_show from './components/pages/price_schedules/show';
 
 import purchase_orders from './components/pages/purchase_orders/main';
 import purchase_order_list from './components/pages/purchase_orders/list';
@@ -64,6 +70,11 @@ export const routes = [
                 path: '',
                 component: ppmp_list
             },
+            {
+                path: 'show/:id',
+                component: ppmp_show,
+                name: 'ppmp_show',
+            }
         ]
     },
     {
@@ -74,6 +85,11 @@ export const routes = [
                 path: '',
                 component: price_schedule_list
             },
+            {
+                path: 'show/:id',
+                component: price_schedule_show,
+                name: 'price_schedule_show',
+            }
         ]
     },
     {
@@ -93,6 +109,21 @@ export const routes = [
             {
                 path: '',
                 component: purchase_request_list
+            },
+        ]
+    },
+    {
+        path: '/apps',
+        component: apps,
+        children: [
+            {
+                path: '',
+                component: app_list
+            },
+            {
+                path: 'show/:id',
+                component: app_list,
+                name: 'app_show'
             },
         ]
     },

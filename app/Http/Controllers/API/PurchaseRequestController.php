@@ -18,18 +18,29 @@ class PurchaseRequestController extends Controller
     }
 
     public function store(Request $request){
+        $item = $request->items;
+
         $pr = PurchaseRequest::create([
             'user_id' => $request->user_id,
             'supplier_id' => $request->supplier_id,
         ]);
+        
+        $this->item_purchase_request($pr, $item);
     }
 
-    public function many($request){
+    public function item_purchase_request($pr, $item){
+        $count = count($item);
 
+        for($i = 0; $i < $count; $i++){
+            $item_id = $item[$i]['item_id'];
+            $request_quantity = $item[$i]['quantity'];
+            $pr->items()->attach($item_id, ['request_quantity' => $request_quantity]);
+        }
+
+        return response()->json();
     }
 
-    public function show($id)
-    {
+    public function show($id){
         
     }
 

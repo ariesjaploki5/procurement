@@ -10,7 +10,11 @@ class PurchaseRequest extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'user_id', 'supplier_id', 'purchase_request_quantity',
+        'user_id', 
+        'supplier_id', 
+        'request_quantity',
+        'div_head_received', 
+        'div_head_released'
     ];
 
     public function items(){
