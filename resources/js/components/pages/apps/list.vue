@@ -20,7 +20,8 @@
                                     <td>ID</td>
                                     <td>Year</td>
                                     <td>Category</td>
-                                    <td>Action</td>
+                                    <td class="text-center">Budget</td>
+                                    <td class="text-center">Action</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -28,7 +29,8 @@
                                     <td>{{ app.app_id }}</td>
                                     <td>{{ app.app_year }}</td>
                                     <td>{{ app.category.category_desc }}</td>
-                                    <td>
+                                    <td class="text-right">{{ app.app_budget }}</td>
+                                    <td class="text-center">
                                         <router-link class="btn btn-sm btn-primary" :to="{ name: 'app_show', params: { id: app.app_id }}"><i class="fas fa-eye"></i></router-link>
                                         <button type="button" class="btn btn-sm btn-success" @click="edit_app(app)"><i class="fas fa-pen"></i></button>
                                         <button type="button" class="btn btn-sm btn-danger" @click="delete_app(app.id)"><i class="fas fa-trash"></i></button>
@@ -103,6 +105,7 @@ export default {
         ...mapActions([
             'get_apps', 'get_categories'
         ]),
+
         create_app(){
             this.editmode = false;
             this.form.user_id = this.current_user.user_id;

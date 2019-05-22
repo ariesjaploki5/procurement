@@ -66,8 +66,11 @@
                                         <div class="form-group row">
                                             <label for="mode" class="col-sm-3 col-form-label">Mode</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control form-control-sm" v-model="mode_id" @change="modeChange()">
+                                                <select class="form-control form-control-sm" v-model="mode_id" @change="modeChange()" v-if="category_id">
                                                     <option v-for="mode in modes" :key="mode.mode_id" :value="mode.mode_id">{{ mode.mode_desc }}</option>
+                                                </select>
+                                                <select class="form-control form-control-sm" disabled v-else> 
+                                                    
                                                 </select>
                                             </div>
                                         </div>
@@ -165,7 +168,7 @@ export default {
         },
         modeChange(){
             this.get_items();
-            this.form.category_id = this.category_id;
+            this.form.mode_id = this.mode_id;
 
         },
         categoryChange(){

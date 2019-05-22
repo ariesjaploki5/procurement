@@ -10,4 +10,9 @@ class Hdmhdrsub extends Model
     
     protected $table = 'hospital.dbo.hdmhdrsub';
     public $timestamps = false;
+
+    protected $fillable = [
+        'dmdcomb', 'dmdctr', 'dmhdrsub', 'stockbal', 'statusMed', 'baldteasof'
+    ];
+
 }

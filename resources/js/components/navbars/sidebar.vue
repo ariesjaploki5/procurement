@@ -62,6 +62,18 @@
                         <p>Inventory</p>
                     </router-link>
                 </li>
+                <li class="nav-item">
+                    <router-link to='../../adjustments' class="nav-link">
+                        <i class="nav-icon fab fa-first-order"></i>
+                        <p>Adjustments</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../links' class="nav-link">
+                        <i class="nav-icon fab fa-first-order"></i>
+                        <p>Link</p>
+                    </router-link>
+                </li>
                 <!-- <li class="nav-item">
                     <a href="logout" @click.prevent="logout" class="nav-link">
                         <i class="nav-icon fas fa-power-off"></i>

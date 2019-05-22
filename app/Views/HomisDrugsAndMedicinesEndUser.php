@@ -10,4 +10,8 @@ class HomisDrugsAndMedicinesEndUser extends Model
 
     protected $table = 'view_homis_drugs_and_medicines_end_user';
     public $timestamps = false;
+
+    public function item_homis_link(){
+        return $this->hasMany('App\Views\ItemHomisLink');
+    }
 }

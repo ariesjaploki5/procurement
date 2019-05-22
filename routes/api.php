@@ -62,3 +62,17 @@ Route::post('search_item_ppmp/{id}', 'API\ItemController@search_item_ppmp');
 
 Route::post('item_ppmp/{ppmp_id}/{item_id}', 'API\ItemPpmpController@store');
 Route::get('item_ppmp/{id}', 'API\ItemPpmpController@show');
+Route::put('item_ppmp/{id}', 'API\ItemPpmpController@update');
+
+Route::get('item_links', 'API\LinkController@index');
+Route::get('homis_drugs_and_medicines', 'API\LinkController@homis_drugs_and_medicines');
+Route::put('item_homis_link', 'API\LinkController@item_homis_link');
+
+
+Route::get('homis_end_user', 'API\HomisEndUserController@index');
+Route::get('adjustment/{id}', 'API\AdjustmentController@items');
+Route::post('adjustment/{id}', 'API\AdjustmentController@search');
+
+Route::get('get_medicines', 'API\AdjustmentController@get_medicines');
+Route::post('add_medicine/{id}', 'API\AdjustmentController@add_medicine');
+Route::post('adjust_medicine', 'API\AdjustmentController@adjust_medicine');

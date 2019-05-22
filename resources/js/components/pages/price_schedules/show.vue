@@ -9,85 +9,60 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive-sm" id="price_schedule">
-                        <table class="table table-sm table-hover table-bordered" id="table1">
-                            <thead>
+                        <table class="table table-sm table-hover table-bordered" id="price_schedule_table_2">
+                            <thead id="price_schedule_thead">
                                 <tr>
-                                    <th>#</th>
-                                    <th width="15%">Description</th>
-                                    <th class="text-center">Quantity</th>
-                                    <th>ABC</th>
-                                    <th>
-                                        <div class="row thead_bidder">
-                                            <div class="col_rank">Rank</div>
-                                            <div class="col_bid">Bidders</div>
-                                            <div class="col_price">Bid Price</div>
-                                            <div class="col_brand">Brand</div>
-                                            <div class="col_pack">Packaging</div>
-                                            <div class="col_manu">Manufaturer</div>
-                                            <div class="col_co">Country of Origin</div>
-                                            <div class="col_act">Modify</div>
+                                    <th id="ps_id">#</th>
+                                    <th id="ps_desc">Description</th>
+                                    <th id="ps_qty">Quantity</th>
+                                    <th id="ps_abc">ABC</th>
+                                    <th id="ps_bid">
+                                        <div id="ps_bid_2">
+                                            <div id="ps_bid_rank_head">Rank</div>
+                                            <div id="ps_bid_bidder_head">Bidder</div>
+                                            <div id="ps_bid_price_head">Bid Price</div>
+                                            <div id="ps_bid_brand_head">Brand</div>
+                                            <div id="ps_bid_pack_head">Packaging</div>
+                                            <div id="ps_bid_manu_head">Manufaturer</div>
+                                            <div id="ps_bid_co_head">Country of Origin</div>
+                                            <div id="ps_bid_mod_head">Modify</div>
                                         </div>
                                     </th>
-                                    <th class="text-center">Action</th>
+                                    <th id="ps_act" class="text-center">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                        </table>
+                        <table class="table table-sm table-hover table-bordered" id="price_schedule_table_2">
+                            <tbody id="price_schedule_tbody">
                                 <tr v-for="item in items" :key="item.item_id">
-                                    <td>{{ item.item_id }}</td>
-                                    <td widtd="15%">{{ item.item_desc }}</td>
-                                    <td class="text-center">Quantity</td>
-                                    <td>ABC</td>
-                                    <td>
-                                        <p v-if="!item.item_price_schedules.length">No Bidder</p>
-                                        <div v-else>
-                                            <table class="table" id="table2">
-                                                <tbody>
-                                                    <tr v-for="(ps, index) in item.item_price_schedules" :key="ps.id">
-                                                        <td v-bind:class="{ 'table-success' : index == 0, 'bg-danger': ps.terminated == 1}">
-                                                            <div class="row tbody_bidder">
-                                                                <div class="col_rank">
-                                                                    <p v-if="ps.rank">{{ ps.rank }}</p>
-                                                                    <p v-else></p>
-                                                                </div>
-                                                                <div class="col_bid">{{ ps.supplier.supplier_name }}</div>
-                                                                <div class="col_price">
-                                                                    {{ ps.bid_price | currency2 }}
-                                                                </div>
-                                                                <div class="col_brand">
-                                                                    <p v-if="ps.brand">{{ ps.brand.brand_desc }}</p>
-                                                                    <p v-else></p>
-                                                                </div>
-                                                                <div class="col_pack">
-                                                                    <p v-if="ps.packaging">{{ ps.packaging.packaging_desc }}</p>
-                                                                    <p v-else></p>
-                                                                </div>
-                                                                <div class="col_manu">
-                                                                    <p v-if="ps.manufacturer">{{ ps.manufacturer.manufacturer_desc }}</p>
-                                                                    <p v-else></p>
-                                                                </div>
-                                                                <div class="col_co">
-                                                                    <p v-if="ps.country">{{ ps.country.country_desc }}</p>
-                                                                    <p v-else></p>
-                                                                </div>
-                                                                <div class="col_act">
-                                                                    <div class="btn-group dropleft btn-sm">
-                                                                        <button id="btn_custom" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-                                                                        <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                                                                            <button class="dropdown-item" @click="edit_bidder(item, ps)"><i class="fas fa-pen"></i> Edit</button>
-                                                                            <button class="dropdown-item" @click="terminate_bidder(ps.id)">Terminate</button>
-                                                                            <button class="dropdown-item" @click="unterminate_bidder(ps.id)">Unterminate</button>
-                                                                            <button class="dropdown-item" @click="delete_bidder(ps.id)">Remove</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                    <td id="ps_id">{{ item.item_id }}</td>
+                                    <td id="ps_desc">{{ item.item_desc }}</td>
+                                    <td id="ps_qty">Quantity</td>
+                                    <td id="ps_abc">ABC</td>
+                                    <td id="ps_bid">
+                                        <p id="ps_bid_2" v-if="!item.item_price_schedules.length">No Bidder</p>
+                                        <div id="ps_bid_2" v-else v-for="(ps, index) in item.item_price_schedules" :key="ps.id"  v-bind:class="{ 'table-success' : index == 0, 'bg-danger': ps.terminated == 1}">
+                                            <div id="ps_bid_rank"><p v-if="ps.rank">{{ ps.rank }}</p><p v-else></p></div>
+                                            <div id="ps_bid_bidder">{{ ps.supplier.supplier_name }}</div>
+                                            <div id="ps_bid_price">{{ ps.bid_price | currency2 }}</div>
+                                            <div id="ps_bid_brand"><p v-if="ps.brand">{{ ps.brand.brand_desc }}</p><p v-else></p></div>
+                                            <div id="ps_bid_pack"><p v-if="ps.packaging">{{ ps.packaging.packaging_desc }}</p><p v-else></p></div>
+                                            <div id="ps_bid_manu"><p v-if="ps.manufacturer">{{ ps.manufacturer.manufacturer_desc }}</p><p v-else></p></div>
+                                            <div id="ps_bid_co"><p v-if="ps.country">{{ ps.country.country_desc }}</p><p v-else></p></div>
+                                            <div id="ps_bid_mod">
+                                                <div class="btn-group dropleft btn-sm">
+                                                    <button id="btn_custom" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                                    <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                                        <button class="dropdown-item" @click="edit_bidder(item, ps)"><i class="fas fa-pen"></i> Edit</button>
+                                                        <button class="dropdown-item" @click="terminate_bidder(ps.id)">Terminate</button>
+                                                        <button class="dropdown-item" @click="unterminate_bidder(ps.id)">Unterminate</button>
+                                                        <button class="dropdown-item" @click="delete_bidder(ps.id)">Remove</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td  id="ps_act" class="text-center">
                                         <button class="btn btn-primary btn-sm" @click="add_bidder(item)" id="btn_custom">
                                             <i class="fas fa-plus"></i> Bidder
                                         </button>
@@ -291,84 +266,131 @@ export default {
         line-height: 1.5;
         border-radius: 0.2rem;
     }
-
-    #price_schedule{
-        font-size: 11px !important;
-    }
-
-    .btn-system{
-        padding-top: 4rem !important;
-        padding-bottom: 4rem !important;
-        font-weight: 700 !important;
-        font-size: 1.5rem !important;
-        border-radius: 1rem !important;
-        border: 3px solid !important;
-        margin-top: 3% !important;
-        margin-bottom: 3% !important;
-    }
-
-
-    .row .thead_bidder{
+    #price_schedule_table_1{
+        table-layout: fixed;
         width: 100%;
-        margin-left: 0.15rem !important;
-        margin-right: 0.15rem !important;
     }
-
-    .row .tbody_bidder{
+    #price_schedule_table_2{
+        table-layout: fixed;
         width: 100%;
-        margin-left: 0.15rem !important;
-        margin-right: 0.15rem !important;
+    }
+    #price_schedule_thead{
+        width: 100% !important;
+        display: block !important;
+    }
+    #ps_id{
+        width: 4%;
+    }
+    #ps_desc{
+        width: 18%;
+    }
+    #ps_qty{
+        width: 5%;
+    }
+    #ps_abc{
+        width: 5%;
+    }
+    #ps_bid{
+        width: 60%;
+    }
+    #ps_act{
+        width: 7%;
+    }
+    #ps_bid_2{
+        display: flex;
+        flex-wrap: wrap;
+        /* margin-right: -15px;
+        margin-left: -15px; */
+        width: 100%;
     }
 
-    .col_price{
-        width: 20% !important;
-        padding: 0rem 0.1rem !important;
+    #ps_bid_rank_head{
+        position: relative;
+        width: 10%;
+        font-size: 10px;text-align: center;
+    }
+    #ps_bid_bidder_head{
+        position: relative;
+        width: 20%;
+        font-size: 10px;text-align: center;
+    }
+    #ps_bid_price_head{
+        position: relative;
+        width: 10%;
+        font-size: 10px;text-align: center;
+    }
+    #ps_bid_brand_head{
+        position: relative;
+        width: 10%;
+        font-size: 10px;text-align: center;
+    }
+    #ps_bid_pack_head{
+        position: relative;
+        width: 10%;
+        font-size: 10px;text-align: center;
+    }
+    
+    #ps_bid_manu_head{
+        position: relative;
+        width: 20%;
+        font-size: 10px;text-align: center;
     }
 
-    .col_bal{
-        width: 20% !important;
-        padding: 0rem 0.1rem !important;
+    #ps_bid_co_head{
+        position: relative;
+        width: 10%;
+        font-size: 10px;text-align: center;
     }
 
-    .col_rank{
-        width: 7% !important;
-        padding: 0rem 0.1rem !important;
+    #ps_bid_mod_head{
+        position: relative;
+        width: 10%;
+        font-size: 10px;text-align: center;
     }
 
-    .col_bid{
-        width: 19% !important;
-        padding: 0rem 0.15rem !important;
+    
+    #ps_bid_rank{
+        width: 10%;
+        font-size: 10px;
+    }
+    #ps_bid_bidder{
+        width: 20%;
+        font-size: 10px;
+    }
+    #ps_bid_price{
+        width: 10%;
+        font-size: 10px;
+    }
+    #ps_bid_brand{
+        width: 10%;
+        font-size: 10px;
+    }
+    #ps_bid_pack{
+        width: 10%;
+        font-size: 10px;
+    }
+    
+    #ps_bid_manu{
+        width: 20%;
+        font-size: 10px;
     }
 
-    .col_price{
-        width: 10% !important;
-        padding: 0rem 0.15rem !important;
+    #ps_bid_co{
+        width: 10%;
+        font-size: 10px;
     }
 
-    .col_brand{
-        width: 14% !important;
-        padding: 0rem 0.15rem !important;
+    #ps_bid_mod{
+        width: 10%;
+        font-size: 10px;
     }
-
-    .col_pack{
-        width: 12% !important;
-        padding: 0rem 0.15rem !important;
+    
+    #price_schedule_tbody{
+        width: 100% !important;
+        display: block !important;
+        height: 32rem !important;
+        position: relative;
+        overflow-y: scroll,hidden !important;
+        overflow-x: hidden !important;
     }
-
-    .col_manu{
-        width: 15% !important;
-        padding: 0rem 0.15rem !important;
-    }
-
-    .col_co{
-        width: 15% !important;
-        padding: 0rem 0.15rem !important;
-    }
-
-    .col_act{
-        width: 8% !important;
-        padding: 0rem 0.15rem !important;
-        margin: auto !important;
-    }
-
 </style>

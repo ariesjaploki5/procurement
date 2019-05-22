@@ -28,11 +28,13 @@ class CategoryController extends Controller
     }
 
     public function store(Request $request){
+
         $category = Category::create([
             'category_desc' => $request->country_desc,
         ]);
 
         return response()->json($category);
+
     }
 
     public function show($id){

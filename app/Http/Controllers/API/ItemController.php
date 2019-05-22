@@ -67,10 +67,7 @@ class ItemController extends Controller
     public function search_item_ppmp(Request $request, $id){
 
         $word = $request->word;
-        // $items = Item::where('category_id', $id)->where('item_desc', 'like', $word.'%')->get();
-
-        $items = DB::select("SELECT * FROM procurement.dbo.items as item left join procurement.dbo.item_ppmp as item_ppmp on item.item_id = item_ppmp.item_id where item.category_id = '$id' and item_ppmp.item_id is null and item.item_desc LIKE '$word%'");
-
+        $items = DB::select("SELECT * FROM procurement.dbo.view_item_item_ppmp where item_id_2 is null and item_desc LIKE '$word%'");
         return response()->json($items);
     }
 

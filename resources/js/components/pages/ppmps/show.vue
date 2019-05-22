@@ -48,96 +48,97 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive-sm" id="table_2" v-show="form.items.length">
-                        <table class="table table-sm table-hover">
-                            <thead class="text-center table-bordered">
-                                <tr>
-                                    <th rowspan="2" style="width: 4% !important;">CODE</th>
-                                    <th rowspan="2" style="width: 14% !important;">General Description</th>
-                                    <th rowspan="2" style="width: 4% !important;">Unit of Issue</th>
-                                    <th style="width: 4% !important;">Quantity</th>
-                                    <th rowspan="2" style="width: 4% !important;">Estimated Budget</th>
-                                    <th rowspan="2" style="width: 4% !important;">Mode of Procurement</th>
-                                    <th colspan="12" style="width: 60% !important;">Schedule/Milestone of Activies</th>
-                                </tr>
-                                <tr>
-                                    <th>Size</th>
-                                    <th>Jan</th>
-                                    <th>Feb</th>
-                                    <th>Mar</th>
-                                    <th>Apr</th>
-                                    <th>May</th>
-                                    <th>Jun</th>
-                                    <th>July</th>
-                                    <th>Aug</th>
-                                    <th>Sept</th>
-                                    <th>Oct</th>
-                                    <th>Nov</th>
-                                    <th>Dec</th>
-                                </tr>
-                            </thead>
-                            <tbody v-if="isLoading == false" class="table_tbody">
-                                <tr v-for="item in form.items" :key="item.item_ppmp_id">
-                                    <td></td>
-                                    <td>{{ item.item.item_desc }}</td>
-                                    <td>
-                                        
-                                    </td>
-                                    <td>
-                                        
-                                    </td>
-                                    <td>
-                                        
-                                    </td>
-                                    <td>
-                                        <select v-model="item.mode_id" class="form-control form-control-sm">
-                                            <option v-for="mode in modes" :key="mode.mode_id" :value="mode.mode_id">{{ mode.mode_desc }}</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control form-control-sm">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="card-body" v-show="form.items.length">
+                    <form @submit.prevent="update_item_ppmp()">
+                        <div class="table-responsive-sm" id="table_2" v-show="form.items.length">
+                            <table class="table table-sm table-hover">
+                                <thead class="text-center table-bordered">
+                                    <tr>
+                                        <th rowspan="2" style="width: 4% !important;">CODE</th>
+                                        <th rowspan="2" style="width: 14% !important;">General Description</th>
+                                        <th rowspan="2" style="width: 4% !important;">Unit of Issue</th>
+                                        <th style="width: 4% !important;">Quantity</th>
+                                        <th rowspan="2" style="width: 4% !important;">Estimated Budget</th>
+                                        <th rowspan="2" style="width: 4% !important;">Mode of Procurement</th>
+                                        <th colspan="12" style="width: 60% !important;">Schedule/Milestone of Activies</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Size</th>
+                                        <th>Jan</th>
+                                        <th>Feb</th>
+                                        <th>Mar</th>
+                                        <th>Apr</th>
+                                        <th>May</th>
+                                        <th>Jun</th>
+                                        <th>July</th>
+                                        <th>Aug</th>
+                                        <th>Sept</th>
+                                        <th>Oct</th>
+                                        <th>Nov</th>
+                                        <th>Dec</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-if="isLoading == false" class="table_tbody">
+                                    <tr v-for="item in form.items" :key="item.item_ppmp_id">
+                                        <td></td>
+                                        <td>{{ item.item.item_desc }}</td>
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            <select v-model="item.mode_id">
+                                                <option v-for="mode in modes" :key="mode.mode_id" :value="mode.mode_id">{{ mode.mode_desc }}</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.jan">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.feb">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.mar">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.apr">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.may">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.june">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.july">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.aug">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.sept">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.oct">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.nov">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="input_number" v-model="item.dec">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
+                    </form>
                 </div>
-                
-                
             </div>
             <div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
@@ -175,7 +176,6 @@ export default {
             editmode: false,
             items: {},
             form:new Form({
-                id: '',
                 ppmp_id: '',
                 items:{},
             }),
@@ -192,6 +192,7 @@ export default {
         ppmp_get(){
             axios.get('../../api/ppmp_get/'+this.$route.params.id).then(({data}) => {
                 this.ppmp = data;
+                this.form.ppmp_id = this.$route.params.id;
             }).catch(() => {
 
             });
@@ -218,7 +219,11 @@ export default {
 
         },
         update_item_ppmp(){
+            this.form.put('../../api/item_ppmp/'+this.form.ppmp_id).then(() => {
+                this.get_item_ppmp();
+            }).catch(() => {
 
+            });
         },
         search(){
             this.search_form.post('../../api/search_item_ppmp/'+this.ppmp.category_id).then(({data}) => {
@@ -255,5 +260,13 @@ export default {
 #table_2{
     background-color: white !important;
     font-size: 11px !important;
+}
+.input_number{
+    width: 50px !important;
+    text-align: right;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
 }
 </style>

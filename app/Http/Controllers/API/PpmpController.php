@@ -32,7 +32,7 @@ class PpmpController extends Controller
 
         $data = Ppmp::with([
             'category'
-        ])->where('user_id', $id)->orderBy('ppmp_year', 'desc')->get();
+        ])->orderBy('ppmp_year', 'desc')->get();
 
         return response()->json($data);
     }

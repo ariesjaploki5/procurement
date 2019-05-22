@@ -11,7 +11,7 @@ class PurchaseRequestController extends Controller
 
     public function index(){
         $data = PurchaseRequest::with([
-            'supplier', 'user'
+            'supplier', 'user', 'mode'
         ])->get();
 
         return response()->json($data);

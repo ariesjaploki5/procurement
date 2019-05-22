@@ -24,61 +24,55 @@
                     </div>  
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive-sm">
-                        <table class="table table-sm table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">ID</th>
-                                    <th width="45%">Description</th>
-                                    <th class="text-center">Standard Stock Level</th>
-                                    <th class="text-center">Re-order Point</th>
-                                    <th class="text-center">Balance On Hand</th>
-                                    <th class="text-center">Item in Transit</th>
-                                    <th class="text-right">Modify</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="item in items" :key="item.item_id" v-bind:class="{ 'table-danger' : !item.item_homis_link }">
-                                    <td>{{ item.item_id }}</td>
-                                    <td>{{ item.item_desc }}</td>
-                                    <td class="text-right">
-                                        <div v-if="item.standard_stock_level == null || item.standard_stock_level == 0">
-                                            
-                                        </div>
-                                        <div v-else>
-                                            {{ item.standard_stock_level | numeral3}}
-                                        </div>
-                                    </td>
-                                    <td class="text-right">
-                                        <div v-if="item.standard_stock_level == null || item.standard_stock_level == 0">
-                                            
-                                        </div>
-                                        <div v-else>
-                                            {{ item.standard_stock_level / 2 | numeral3 }}
-                                        </div>
-                                    </td>
-                                    <td class="text-right">
-                                        <div v-if="!item.item_homis_link">
-                                            
-                                        </div>
-                                        <div v-else>
-                                            {{ item.item_homis_link.boh | numeral3}}
-                                        </div>
-                                        
-                                    </td>
-                                    <td></td>
-                                    <td class="text-center">
-                                        <div class="btn-group dropleft btn-sm">
-                                            <button id="btn_custom" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-                                            <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                                                <button class="dropdown-item" @click="edit_item(item)"><i class="fas fa-pen"></i> Edit</button>
-                                                <button class="dropdown-item" @click="view_balance(item)"><i class="fas fa-eye"></i> View Balance</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive-sm">
+                                <table id="inventory_thead_1">
+                                    <thead v-show="items.length">
+                                        <tr>
+                                            <th id="id">ID</th>
+                                            <th id="desc">Description</th>
+                                            <th id="ssl">Standard Stock Level</th>
+                                            <th id="rop">Re-order Point</th>
+                                            <th id="boh">Balance On Hand</th>
+                                            <th id="iit">Item in Transit</th>
+                                            <th id="act">Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                <table id="inventory_table_2" v-show="items.length">
+                                    <tbody id="inventory_tbody">
+                                        <tr v-for="item in items" :key="item.item_id" v-bind:class="{ 'table-danger' : !item.item_homis_link }">
+                                            <td id="id">{{ item.item_id }}</td>
+                                            <td id="desc">{{ item.item_desc }}</td>
+                                            <td id="ssl">
+                                                <div v-if="item.standard_stock_level == null || item.standard_stock_level == 0"></div>
+                                                <div v-else>{{ item.standard_stock_level | numeral3}}</div>
+                                            </td>
+                                            <td id="rop">
+                                                <div v-if="item.standard_stock_level == null || item.standard_stock_level == 0"></div>
+                                                <div v-else>{{ item.standard_stock_level / 2 | numeral3 }}</div>
+                                            </td>
+                                            <td id="boh">
+                                                <div v-if="!item.item_homis_link"></div>
+                                                <div v-else>{{ item.item_homis_link.boh | numeral3}}</div>
+                                            </td>
+                                            <td id="iit"></td>
+                                            <td id="act">
+                                                <div class="btn-group dropleft btn-sm">
+                                                    <button id="btn_custom" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+                                                    <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                                        <button class="dropdown-item" @click="edit_item(item)"><i class="fas fa-pen"></i> Edit</button>
+                                                        <button class="dropdown-item" @click="view_balance(item)"><i class="fas fa-eye"></i> View Balance</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,7 +100,7 @@
                                             <tbody v-show="views.end_users">
                                                 <tr v-for="end_user in views.end_users" :key="end_user.id">
                                                     <td>{{ end_user.chrgdesc }}</td>
-                                                    <td class="text-right">{{ end_user.stockbal }}</td>
+                                                    <td class="text-right">{{ end_user.stockbal | numeral3 }}</td>
                                                     <td>
                                                     </td>
                                                 </tr>
@@ -198,9 +192,7 @@ export default {
         view_balance(item){
             this.form.item_id = item.item_id;
             this.form.item_desc = item.item_desc;
-            
             this.views = item.item_homis_link;
-            
             
             $('#viewModal').modal('show');
 
@@ -248,4 +240,55 @@ export default {
         line-height: 1.5;
         border-radius: 0.2rem;
     }
+
+#inventory_table_1{
+    table-layout: fixed;
+    width: 100%;
+    display: block !important;
+    position: relative;
+}
+#inventory_table_2{
+    table-layout: fixed;
+    width: 100%;
+    display: block !important;
+    height: 32rem !important;
+    overflow-y: scroll !important;
+    position: relative;
+}
+
+#id {
+    width: 5%;
+}
+#desc{
+    width: 43%;
+}
+#ssl{
+    width: 10%;
+}
+#rop{
+    width: 10%;
+}
+#boh{
+    width: 10%;
+}
+#iit{
+    width: 10%;
+}
+#act{
+    width: 12%;
+    text-align: center;
+    align-content: center;
+}
+thead #ssl, #rop, #boh, #iit{
+    text-align: center;
+}
+tbody #ssl, #rop, #boh, #iit{
+    text-align: right;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+ 
+
 </style>

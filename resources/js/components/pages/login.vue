@@ -1,11 +1,11 @@
 <template>
-    <div class="login row justify-content-center mt-5">
-        <div class="col-lg-3 col-md-6 col-sm-8 mt-5">
+    <div class="login row justify-content-center mt-2">
+        <div class="col-lg-3 col-md-6 col-sm-8">
             <div class="card mt-5">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <img :src="'/img/bghmc.png'" alt="BGHMC Logo" style="opacity: 1" width="150px" height="150px">
+                            <img :src="'/img/BGHMC_LOGO.gif'" alt="BGHMC Logo" style="opacity: 1" width="250px" height="250px">
                         </div>
                     </div>
                     <div class="row">

@@ -32,6 +32,12 @@ import purchase_request_list from './components/pages/purchase_requests/list';
 import users from './components/pages/users/main';
 import user_list from './components/pages/users/list';
 
+import links from './components/pages/links/main';
+import link_list from './components/pages/links/list';
+
+import adjustments from './components/pages/adjustments/main';
+import adjustment_list from './components/pages/adjustments/list';
+
 export const routes = [
 
     {
@@ -134,6 +140,26 @@ export const routes = [
             {
                 path: '',
                 component: user_list
+            },
+        ]
+    },
+    {
+        path: '/links',
+        component: links,
+        children: [
+            {
+                path: '',
+                component: link_list
+            },
+        ]
+    },
+    {
+        path: '/adjustments',
+        component: adjustments,
+        children: [
+            {
+                path: '',
+                component: adjustment_list
             },
         ]
     },
