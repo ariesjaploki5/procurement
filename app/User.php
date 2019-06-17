@@ -11,7 +11,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
-    protected $table = 'users';
+    protected $table = 'procurement.dbo.users';
     protected $primaryKey = 'user_id';
     public $timestamps = false;
     

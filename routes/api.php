@@ -2,21 +2,6 @@
 
 use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
@@ -25,7 +10,12 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
 });
 
 Route::apiResources([
+    'uacs' => 'API\UacsController',
+    'fund_source' => 'API\FundSourceController',
+    'uacs_code' => 'API\UacsCodeController', 
+    'allotment' => 'API\AllotmentController',
     'app' => 'API\AppController',
+    'unit' => 'API\UnitController',
     'brand' => 'API\BrandController',
     'category' => 'API\CategoryController',
     'country' => 'API\CountryController',
@@ -40,7 +30,48 @@ Route::apiResources([
     'supplier' => 'API\SupplierController',
     'manufacturer' => 'API\ManufacturerController',
     'item_price_schedule' => 'API\ItemPriceScheduleController',
+    'dmd_price_schedule' => 'API\DmdPriceScheduleController',
+    'app_dmd' => 'API\AppDmdController',
+    'user' => 'API\UserController',
+    'dmd' => 'API\DrugsAndMedicineController',
+    'dmd_pr' => 'API\DmdPurchaseRequestController',
+    'cart'=> 'API\CartController',
 ]);
+
+Route::put('div_head_rcv/{id}', 'API\PurchaseRequestController@div_head_rcv');
+Route::put('div_head_rls/{id}', 'API\PurchaseRequestController@div_head_rls');
+Route::put('pmo_rcv/{id}', 'API\PurchaseRequestController@pmo_rcv');
+Route::put('pmo_rls/{id}', 'API\PurchaseRequestController@pmo_rls');
+Route::put('div_head_rcv_2/{id}', 'API\PurchaseRequestController@div_head_rcv_2');
+Route::put('div_head_rls_2/{id}', 'API\PurchaseRequestController@div_head_rls_2');
+Route::put('pmo_rcv_2/{id}', 'API\PurchaseRequestController@pmo_rcv_2');
+Route::put('pmo_rls_2/{id}', 'API\PurchaseRequestController@pmo_rls_2');
+Route::put('budget_rcv/{id}', 'API\PurchaseRequestController@budget_rcv');
+Route::put('budget_rls/{id}', 'API\PurchaseRequestController@budget_rls');
+Route::put('accounting_rcv/{id}', 'API\PurchaseRequestController@accounting_rcv');
+Route::put('accounting_rls/{id}', 'API\PurchaseRequestController@accounting_rls');
+Route::put('mcc_rcv/{id}', 'API\PurchaseRequestController@mcc_rcv');
+Route::put('mcc_rls/{id}', 'API\PurchaseRequestController@mcc_rls');
+Route::put('fmo_rcv/{id}', 'API\PurchaseRequestController@fmo_rcv');
+Route::put('fmo_rls/{id}', 'API\PurchaseRequestController@fmo_rls');
+Route::put('pmo_rcv_3/{id}', 'API\PurchaseRequestController@pmo_rcv_3');
+Route::put('pmo_rls_3/{id}', 'API\PurchaseRequestController@pmo_rls_3');
+Route::put('pmo_rcv_3/{id}', 'API\PurchaseRequestController@pmo_rcv_3');
+Route::put('pmo_rls_3/{id}', 'API\PurchaseRequestController@pmo_rls_3');
+Route::put('mmo_rcv/{id}', 'API\PurchaseRequestController@mmo_rcv');
+Route::put('mmo_rls/{id}', 'API\PurchaseRequestController@mmo_rls');
+
+Route::get('public_bidding', 'API\CartController@public_bidding');
+Route::post('cart_dmd/{user_id}', 'API\CartController@add_dmd');
+Route::delete('cart_dmd/{id}', 'API\CartController@remove_dmd');
+
+Route::post('dmd_search', 'API\DrugsAndMedicineController@search');
+Route::put('dmd_ssl_update/{id}', 'API\DrugsAndMedicineController@update_ssl');
+Route::get('dmd_mode/{id}', 'API\DrugsAndMedicineController@dmd_pr');
+
+Route::post('dmd_price_schedule/{id}', 'API\DmdPriceScheduleController@store');
+Route::put('dmd_price_schedule/{id}/terminate', 'API\DmdPriceScheduleController@terminate');
+Route::put('dmd_price_schedule/{id}/unterminate', 'API\DmdPriceScheduleController@unterminate');
 
 Route::post('item_price_schedule/{id}', 'API\ItemPriceScheduleController@store');
 Route::put('item_price_schedule/{id}/terminate', 'API\ItemPriceScheduleController@terminate');

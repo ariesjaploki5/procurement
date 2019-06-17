@@ -152,6 +152,7 @@ export default {
                 mode_id: '',
                 category_id: '',
             }),
+            purchase_requests: [],
         }
     },
     methods:{
@@ -182,6 +183,73 @@ export default {
 
             });
         },
+        get_prs(){
+            axios.get('../../api/purchase_request').then(({data}) => {
+                this.purchase_requests = data;
+            }).catch(() => {
+
+            });
+        },
+        div_head_rcv(id){
+
+        },
+        div_head_rls(id){
+
+        },
+        pmo_rcv(id){
+
+        },
+        pmo_rls(id){
+
+        },
+        budget_rcv(id){
+
+        },
+        budget_rls(id){
+
+        },
+        accounting_rcv(id){
+
+        },
+        accounting_rls(id){
+
+        },
+        mcc_rcv(id){
+
+        },
+        mcc_rls(id){
+
+        },
+        fmo_rcv(id){
+
+        },
+        fmo_rls(id){
+
+        },
+        pmo_rcv2(id){
+
+        },
+        pmo_rls2(id){
+
+        },
+        pmo_rcv3(id){
+
+        },
+        pmo_rls3(id){
+
+        },
+        mmo_rcv(id){
+
+        },
+        mmo_rls(id){
+
+        },
+        div_head_rcv2(id){
+
+        },
+        div_head_rls2(id){
+
+        },
     },
     computed:{
         ...mapGetters([
@@ -191,6 +259,7 @@ export default {
     created(){
         this.get_categories();
         this.get_modes();
+        this.get_prs();
     }
 }
 </script>

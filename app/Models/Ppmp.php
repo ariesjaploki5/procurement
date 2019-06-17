@@ -20,4 +20,12 @@ class Ppmp extends Model
     public function category(){
         return $this->belongsTo('App\Models\Category', 'category_id', 'category_id');
     }
+
+    public function dmds(){
+        return $this->belongsToMany('App\Models\Dmd', 'dmd_ppmp', 'ppmp_id', 'dmd_id');
+    }
+
+    public function dmd_ppmps(){
+        return $this->haMany('App\Models\DmdPpmp', 'ppmp_id', 'ppmp_id');
+    }
 }

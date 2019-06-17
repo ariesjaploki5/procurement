@@ -33,7 +33,8 @@
                                     <td>
                                         <router-link class="btn btn-sm btn-primary" :to="{ name: 'ppmp_show', params: { id: ppmp.ppmp_id }}"><i class="fas fa-eye"></i></router-link>
                                         <button type="button" class="btn btn-sm btn-success" @click="edit_ppmp(ppmp)"><i class="fas fa-pen"></i></button>
-                                        <button type="button" class="btn btn-sm btn-danger" @click="delete_ppmp(ppmp.id)"><i class="fas fa-trash"></i></button>
+                                        <button type="button" class="btn btn-sm btn-danger" @click="delete_ppmp(ppmp.ppmp_id)"><i class="fas fa-trash"></i></button>
+                                        <router-link class="btn btn-sm btn-primary" :to="{ name: 'ppmp_print', params: { id: ppmp.ppmp_id }}"><i class="fas fa-print"></i></router-link>
                                     </td>
                                 </tr>
                             </tbody>
@@ -162,6 +163,22 @@ export default {
     },
 }
 </script>
-<style>
+<style scoped>
+    tr {
+        width: 100%;
+        display: inline-table;
+        table-layout: fixed;
+    }
 
+    table {
+        height:33rem;             
+        display: -moz-groupbox;    
+    }
+
+    tbody {
+        overflow-y: scroll;      
+        height: 31rem;           
+        width: 98.5%;
+        position: absolute;
+    }
 </style>

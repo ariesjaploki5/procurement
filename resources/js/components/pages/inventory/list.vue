@@ -219,12 +219,7 @@ export default {
     },
     mounted(){
         
-        window.Echo.channel("item_created").listen(".item.created", (e) => {
-            this.get_items();
-        });
-        window.Echo.channel("item_updated").listen(".item.updated", (e) => {
-            this.get_items();
-        });
+        
     
     },
 }

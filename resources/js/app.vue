@@ -1,5 +1,6 @@
 <template>
     <div>
+        <vue-progress-bar></vue-progress-bar>
         <div  v-if="!current_user">
             <router-view></router-view>
         </div>

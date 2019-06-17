@@ -36,6 +36,23 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+tr {
+    width: 100%;
+    display: inline-table;
+    table-layout: fixed;
+}
 
+table {
+    height:33rem;             
+    display: -moz-groupbox;    
+}
+
+tbody {
+    overflow-y: scroll;      
+    height: 31rem;           
+    width: 98.5%;
+    position: absolute;
+}
 </style>
+

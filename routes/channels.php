@@ -19,6 +19,14 @@ Broadcast::channel('po_updated', function(){
     return true;
 });
 
+Broadcast::channel('pr_created', function(){
+    return true;
+});
+
+Broadcast::channel('pr_updated', function(){
+    return true;
+});
+
 Broadcast::channel('ps_created', function(){
     return true;
 });
@@ -57,5 +65,20 @@ Broadcast::channel('ppmp_created', function(){
 });
 
 Broadcast::channel('ppmp_updated', function(){
+    return true;
+});
+
+Broadcast::channel('dmd_updated', function(){
+    return true;
+});
+
+Broadcast::channel('app_dmd_updated', function(){
+    return true;
+});
+
+Broadcast::channel('dmd_price_schedule_updated', function(){
+    return true;
+});
+Broadcast::channel('dmd_price_schedule_created', function(){
     return true;
 });

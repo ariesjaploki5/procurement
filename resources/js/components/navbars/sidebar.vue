@@ -1,25 +1,19 @@
 <template>
     <aside class="main-sidebar sidebar-light-primary elevation-4">
         <router-link to="#" class="brand-link">
-        <!-- Brand Logo -->
             <img :src="'/img/bghmc.png'" alt="BGHMC Logo" class="brand-image img-circle elevation-5" style="opacity: 1">
           <span class="brand-text font-weight-light">Procurement</span>
         </router-link>
         <div class="sidebar">
-          <!-- Sidebar user panel (optional) -->
           <div class="user-panel mt-3 pb-3 mb-1 d-flex">
             <div class="image">
-              <!-- <img src="" class="img-circle elevation-2" alt="User Image"> -->
             </div>
             <div class="dark">
                 {{ current_user.username }}
             </div>
           </div>
-          <!-- Sidebar Menu -->
           <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-              <!-- Add icons to the links using the .nav-icon class
-                   with font-awesome or any other icon font library -->
+            <ul v-show="user.role_id === '1'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <router-link to='../../dashboard' class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -27,9 +21,23 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='../../ppmps' class="nav-link">
-                        <i class="nav-icon fas fa-balance-scale"></i>
-                        <p>PPMP</p>
+                    <router-link to='../../users' class="nav-link">
+                        <i class="nav-icon fab fa-first-order"></i>
+                        <p>Users</p>
+                    </router-link>
+                </li>
+            </ul>
+            <ul v-show="user.role_id === '2'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <router-link to='../../purchase_request2' class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Purchase Request</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../drugs_and_medicines' class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Drugs And Medicines</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
@@ -39,47 +47,92 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
+                    <router-link to='../../ppmps' class="nav-link">
+                        <i class="nav-icon fas fa-balance-scale"></i>
+                        <p>PPMP</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
                     <router-link to='../../price_schedules' class="nav-link">
                         <i class="nav-icon fas fa-balance-scale"></i>
                         <p>Price Schedules</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='../../purchase_requests' class="nav-link">
-                        <i class="nav-icon fas fa-shopping-cart"></i>
-                        <p>Purchase Requests</p>
+                    <router-link to='../../suppliers' class="nav-link">
+                        <i class="nav-icon fas fa-wallet"></i>
+                        <p>Supplier</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='../../purchase_orders' class="nav-link">
+                    <router-link to='../../users' class="nav-link">
                         <i class="nav-icon fab fa-first-order"></i>
-                        <p>Purchase Orders</p>
+                        <p>Users</p>
+                    </router-link>
+                </li>
+            </ul>
+            <ul v-show="user.role_id === '3'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <router-link to='../../purchase_request2' class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Purchase Request</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='../../inventory' class="nav-link">
-                        <i class="nav-icon fab fa-first-order"></i>
-                        <p>Inventory</p>
+                    <router-link to='../../purchase_order2' class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Purchase Order</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='../../adjustments' class="nav-link">
-                        <i class="nav-icon fab fa-first-order"></i>
-                        <p>Adjustments</p>
+                    <router-link to='../../apps' class="nav-link">
+                        <i class="nav-icon fas fa-wallet"></i>
+                        <p>APP</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='../../links' class="nav-link">
-                        <i class="nav-icon fab fa-first-order"></i>
-                        <p>Link</p>
+                    <router-link to='../../ppmps' class="nav-link">
+                        <i class="nav-icon fas fa-balance-scale"></i>
+                        <p>PPMP</p>
                     </router-link>
                 </li>
-                <!-- <li class="nav-item">
-                    <a href="logout" @click.prevent="logout" class="nav-link">
-                        <i class="nav-icon fas fa-power-off"></i>
-                        <p>Logout</p>
-                    </a>
-                </li> -->
+                <li class="nav-item">
+                    <router-link to='../../price_schedules' class="nav-link">
+                        <i class="nav-icon fas fa-balance-scale"></i>
+                        <p>Price Schedules</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../suppliers' class="nav-link">
+                        <i class="nav-icon fas fa-wallet"></i>
+                        <p>Supplier</p>
+                    </router-link>
+                </li>
+                
+            </ul>
+            <ul v-show="user.role_id === '5'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <router-link to='../../purchase_request2' class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Purchase Request</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../purchase_order2' class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Purchase Order</p>
+                    </router-link>
+                </li>
+                
+            </ul>
+            <ul v-show="user.role_id === '7'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <router-link to='../../purchase_order2' class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Purchase Order</p>
+                    </router-link>
+                </li>
+                
             </ul>
           </nav>
           <!-- /.sidebar-menu -->
@@ -89,12 +142,27 @@
 </template>
 <script>
     export default {
+        data(){
+            return{
+                user: {},
+            }
+        },
         name: 'app-sidebar',
         methods: {
             logout() {
                 this.$store.commit('logout');
                 this.$router.push('/');
-            }
+            },
+            get_user(){
+                axios.get('../../api/user/'+this.current_user.user_id).then(({data}) => {
+                    this.user = data;
+                }).catch(() => {
+
+                });
+            },
+        },
+        created(){
+            this.get_user();
         },
         computed: {
             current_user() {

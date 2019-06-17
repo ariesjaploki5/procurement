@@ -13,8 +13,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive-sm">
-                        <table class="table table-sm table-hover">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <td>ID</td>
@@ -29,11 +29,11 @@
                                     <td>{{ app.app_id }}</td>
                                     <td>{{ app.app_year }}</td>
                                     <td>{{ app.category.category_desc }}</td>
-                                    <td class="text-right">{{ app.app_budget }}</td>
+                                    <td class="text-right">{{ app.app_budget | currency2 }}</td>
                                     <td class="text-center">
                                         <router-link class="btn btn-sm btn-primary" :to="{ name: 'app_show', params: { id: app.app_id }}"><i class="fas fa-eye"></i></router-link>
                                         <button type="button" class="btn btn-sm btn-success" @click="edit_app(app)"><i class="fas fa-pen"></i></button>
-                                        <button type="button" class="btn btn-sm btn-danger" @click="delete_app(app.id)"><i class="fas fa-trash"></i></button>
+                                        <button type="button" class="btn btn-sm btn-danger" @click="delete_app(app.app_id)"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -70,7 +70,7 @@
                                 <div class="form-group row">
                                     <label for="year" class="col-sm-2 col-form-label">Budget</label>
                                     <div class="col-sm-10">
-                                        <input type="number" class="form-control form-control-sm" v-model="form.app_budget">
+                                        <input type="decimal" class="form-control form-control-sm" v-model="form.app_budget">
                                     </div>
                                 </div>
                             </div>
@@ -97,6 +97,7 @@ export default {
                 app_year: '',
                 app_budget: '',
                 user_id: '',
+                category_id: '',
             }),
 
         }
@@ -107,15 +108,18 @@ export default {
         ]),
 
         create_app(){
+            
             this.editmode = false;
             this.form.user_id = this.current_user.user_id;
             $('#appModal').modal('show');
         },
         store_app(){
-            this.form.post('../../api/app').then(() => {
+            this.$Progress.start();
+            this.form.post('../../api/app_dmd').then(() => {
                 $('#appModal').modal('hide');
+                this.$Progress.finish();
             }).catch(() => {
-
+                this.$Progress.fail();
             });
         },
         edit_app(app){
@@ -123,15 +127,16 @@ export default {
             this.form.fill(app);
             $('#appModal').modal('show');
         },
+
         update_app(){
-            this.form.put('../../api/app').then(() => {
+            this.form.put('../../api/app/'+this.form.app_id).then(() => {
                 $('#appModal').modal('hide');
             }).catch(() => {
 
             });
         },
         delete_app(id){
-            axios.delete('../../api/app/'+id).then(() => {
+            axios.delete('../../api/app_dmd/'+id).then(() => {
 
             }).catch(() => {
 
@@ -162,6 +167,23 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+tr {
+    width: 100%;
+    display: inline-table;
+    table-layout: fixed;
+}
 
+table {
+    height:33rem;             
+    display: -moz-groupbox;    
+}
+
+tbody {
+    overflow-y: scroll;      
+    height: 31rem;           
+    width: 98.5%;
+    position: absolute;
+}
 </style>
+

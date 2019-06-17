@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "846332f29edd37c9944a7f7324d4f818",
+    "content-hash": "9e21356625680a226ed7bb4c0d3d2969",
     "packages": [
         {
             "name": "awobaz/compoships",
@@ -1718,6 +1718,39 @@
                 "uuid"
             ],
             "time": "2018-07-19T23:38:55+00:00"
+        },
+        {
+            "name": "staudenmeir/eloquent-param-limit-fix",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/staudenmeir/eloquent-param-limit-fix.git",
+                "reference": "d6aecdfb8483873763609e2779843b3bab787ca3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/staudenmeir/eloquent-param-limit-fix/zipball/d6aecdfb8483873763609e2779843b3bab787ca3",
+                "reference": "d6aecdfb8483873763609e2779843b3bab787ca3",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Staudenmeir\\EloquentParamLimitFix\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonas Staudenmeir",
+                    "email": "mail@jonas-staudenmeir.de"
+                }
+            ],
+            "description": "Eloquent eager loading fix for parameter limits in SQLite and SQL Server",
+            "time": "2018-05-28T21:19:32+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

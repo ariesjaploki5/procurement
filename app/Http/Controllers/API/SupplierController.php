@@ -16,23 +16,35 @@ class SupplierController extends Controller
         return response()->json($data);
     }
 
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $supplier = Supplier::firstOrCreate([
+            'supplier_name' => $request->supplier_name,
+            'supplier_address' => $request->supplier_address,
+        ]);
+        
+        return response()->json();
     }
 
-    public function show($id)
-    {
-        //
+    public function show($id){
+        $data = Supplier::findOrFail($id);
+
+        return response()->json($data);
     }
 
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id){
+        $supplier = Supplier::findOrFail($id);
+        $supplier->update([
+            'supplier_name' => $request->supplier_name,
+            'supllier_address' => $request->supplier_address,
+        ]);
+
+        return response()->json();
     }
 
-    public function destroy($id)
-    {
-        //
+    public function destroy($id){
+        $supplier = Supplier::where('supplier_id', $id)->first();
+        $supllier->delete();
+
+        return response()->json();
     }
 }

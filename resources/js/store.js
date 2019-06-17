@@ -17,6 +17,8 @@ export default {
         packagings: {},
         countries: {},
         apps: {},
+        units: {},
+        users: {},
     },
     getters: {
         isLoading(state) {
@@ -55,7 +57,12 @@ export default {
         apps(state){
             return state.apps;
         },
-
+        units(state){
+            return state.units;
+        },
+        users(state){
+            return state.users;
+        },
     },
     mutations: {
         login(state) {
@@ -111,6 +118,12 @@ export default {
         set_apps(state, payload){
             state.apps = payload;
         },
+        set_units(state, payload){
+            state.units = payload;
+        },
+        set_users(state, payload){
+            state.users = payload;
+        },
     },
     actions: {
         login(context) {
@@ -160,7 +173,16 @@ export default {
             axios.get('../../api/app').then(({data}) => {
                 context.commit('set_apps', data);
             })
-        }
-
+        },
+        get_units(context){
+            axios.get('../../api/unit').then(({data}) => {
+                context.commit('set_units', data);
+            })
+        },
+        get_users(context){
+            axios.get('../../api/user').then(({data}) => {
+                context.commit('set_users', data);
+            })
+        },
     }
 };

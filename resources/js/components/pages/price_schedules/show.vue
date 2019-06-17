@@ -3,9 +3,21 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3>
-                        {{ price_schedule.category.category_desc }} - {{ price_schedule.price_schedule_year }}
-                    </h3>
+                    <div class="col-md-12">
+                        <h3>
+                            {{ price_schedule.category.category_desc }} - {{ price_schedule.price_schedule_year }}
+                        </h3>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-auto text-right">
+                                Search:
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control form-control-sm" v-model="search_word">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive-sm" id="price_schedule">
@@ -31,17 +43,15 @@
                                     <th id="ps_act" class="text-center">Action</th>
                                 </tr>
                             </thead>
-                        </table>
-                        <table class="table table-sm table-hover table-bordered" id="price_schedule_table_2">
                             <tbody id="price_schedule_tbody">
-                                <tr v-for="item in items" :key="item.item_id">
-                                    <td id="ps_id">{{ item.item_id }}</td>
-                                    <td id="ps_desc">{{ item.item_desc }}</td>
+                                <tr v-for="dmd in filteredDmds" :key="dmd.dmd_id">
+                                    <td id="ps_id">{{ dmd.dmd_id }}</td>
+                                    <td id="ps_desc">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
                                     <td id="ps_qty">Quantity</td>
                                     <td id="ps_abc">ABC</td>
                                     <td id="ps_bid">
-                                        <p id="ps_bid_2" v-if="!item.item_price_schedules.length">No Bidder</p>
-                                        <div id="ps_bid_2" v-else v-for="(ps, index) in item.item_price_schedules" :key="ps.id"  v-bind:class="{ 'table-success' : index == 0, 'bg-danger': ps.terminated == 1}">
+                                        <p id="ps_bid_2" v-if="!dmd.dmd_price_schedules.length">No Bidder</p>
+                                        <div id="ps_bid_2" v-else v-for="(ps, index) in dmd.dmd_price_schedules" :key="ps.id"  v-bind:class="{ 'table-success' : index == 0, 'bg-danger': ps.terminated == 1}">
                                             <div id="ps_bid_rank"><p v-if="ps.rank">{{ ps.rank }}</p><p v-else></p></div>
                                             <div id="ps_bid_bidder">{{ ps.supplier.supplier_name }}</div>
                                             <div id="ps_bid_price">{{ ps.bid_price | currency2 }}</div>
@@ -53,7 +63,7 @@
                                                 <div class="btn-group dropleft btn-sm">
                                                     <button id="btn_custom" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                                     <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                                                        <button class="dropdown-item" @click="edit_bidder(item, ps)"><i class="fas fa-pen"></i> Edit</button>
+                                                        <button class="dropdown-item" @click="edit_bidder(dmd, ps)"><i class="fas fa-pen"></i> Edit</button>
                                                         <button class="dropdown-item" @click="terminate_bidder(ps.id)">Terminate</button>
                                                         <button class="dropdown-item" @click="unterminate_bidder(ps.id)">Unterminate</button>
                                                         <button class="dropdown-item" @click="delete_bidder(ps.id)">Remove</button>
@@ -63,7 +73,7 @@
                                         </div>
                                     </td>
                                     <td  id="ps_act" class="text-center">
-                                        <button class="btn btn-primary btn-sm" @click="add_bidder(item)" id="btn_custom">
+                                        <button class="btn btn-primary btn-sm" @click="add_bidder(dmd)" id="btn_custom">
                                             <i class="fas fa-plus"></i> Bidder
                                         </button>
                                     </td>
@@ -87,20 +97,22 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <div class="col">
-                                        <h4>{{ form.item_desc }}</h4>
+                                        <h4>{{ form.dmddesc }}</h4>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="cat" class="col col-form-label">Bidder</label>
                                     <div class="col">
                                         <select class="from-control form-control-sm" v-model="form.supplier_id" required>
-                                            <option v-for="s in suppliers" :key="s.supplier_id" :value="s.supplier_id">{{ s.supplier_name }}</option>
+                                            <option v-for="s in suppliers" :key="s.supplier_id" :value="s.supplier_id">
+                                                {{ s.supplier_name }}
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group">
                                     <label for="cat" class="col-sm-2 col-form-label">Bid Price</label>
-                                    <div class="col-sm-6">
+                                    <div class="col">
                                         <input type="float" class="form-control form-control-sm" v-model="form.bid_price" required>  
                                     </div>
                                 </div>
@@ -154,11 +166,11 @@ export default {
     data(){
         return{
             editmode: false,
-            items: {},
+            dmds: [],
             form: new Form({
                 id: '',
-                item_desc: '',
-                item_id: '',
+                dmddesc: '',
+                dmd_id: '',
                 bid_price: '',
                 supplier_id: '',
                 brand_id: '',
@@ -167,6 +179,7 @@ export default {
                 country_id: '',
             }),
             price_schedule: {},
+            search_word: '',
         }
     },
     methods:{
@@ -178,65 +191,63 @@ export default {
                 this.price_schedule = data;
             });
         },
-
-        add_bidder(item){
+        add_bidder(dmd){
             this.editmode = false;
             this.form.reset();
-            this.form.item_id = item.item_id;
-            this.form.item_desc = item.item_desc;
+            this.form.dmd_id = dmd.dmd_id;
+            this.form.dmddesc = dmd.dmddesc;
             $('#bidderModal').modal('show');
         },
         store_bidder(){
-            this.form.post('../../api/item_price_schedule/'+this.$route.params.id).then(() => {
+            this.form.post('../../api/dmd_price_schedule/'+this.$route.params.id).then(() => {
                 
                 $('#bidderModal').modal('hide');
             });
         },
-        edit_bidder(item, ps){
+        edit_bidder(dmd, ps){
             this.editmode = true;
             this.form.reset();
             this.form.fill(ps);
-            this.form.item_desc = item.item_desc;
+            this.form.dmddesc = dmd.dmddesc;
             $('#bidderModal').modal('show');
         },
         update_bidder(){
-            this.form.put('../../api/item_price_schedule/'+this.form.id).then(() => {
+            this.form.put('../../api/dmd_price_schedule/'+this.form.id).then(() => {
                 
                 $('#bidderModal').modal('hide');
             });
         },
         terminate_bidder(id){
-            axios.put('../../api/item_price_schedule/'+id+"/terminate").then(() => {
+            axios.put('../../api/dmd_price_schedule/'+id+"/terminate").then(() => {
                 
             }).catch(() => {
 
             });
         },
         unterminate_bidder(id){
-            axios.put('../../api/item_price_schedule/'+id+"/unterminate").then(() => {
+            axios.put('../../api/dmd_price_schedule/'+id+"/unterminate").then(() => {
                 
             }).catch(() => {
 
             });
         },
         delete_bidder(id){
-            axios.delete('../../api/item_price_schedule/'+id).then(() => {
+            axios.delete('../../api/dmd_price_schedule/'+id).then(() => {
                 
             }).catch(() => {
 
             });
         },
-        get_items(){
+        get_dmds(){
             axios.get('../../api/price_schedule/'+this.$route.params.id).then(({data}) => {
-                this.items = data;
+                this.dmds = data;
             }).catch(() => {
 
             });
         },
-        
     },
     created(){
-        this.get_items();
+        this.get_dmds();
         this.get_suppliers();
         this.get_brands();
         this.get_packagings();
@@ -248,18 +259,42 @@ export default {
         ...mapGetters([
             'suppliers', 'brands', 'packagings', 'manufacturers', 'countries'
         ]),
+        filteredDmds: function(){
+            let matcher = new RegExp(this.search_word, 'i')
+            return this.dmds.filter(function(dmd){
+                return matcher.test(dmd.gendesc)
+            })
+        },
     },
     mounted(){
-        window.Echo.channel("ips_created").listen(".item_price_schedule.created", (e) => {
-            this.get_items();
+        window.Echo.channel("dmd_price_schedule_created").listen(".dmd_price_schedule.created", (e) => {
+            this.get_dmds();
         });
-        window.Echo.channel("ips_updated").listen(".item_price_schedule.updated", (e) => {
-            this.get_items();
+        window.Echo.channel("dmd_price_schedule_updated").listen(".dmd_price_schedule.updated", (e) => {
+            this.get_dmds();
         });
     }
 }
 </script>
-<style>
+
+<style scoped>
+    tr {
+        width: 100%;
+        display: inline-table;
+        table-layout: fixed;
+    }
+
+    table {
+        height:33rem;             
+        display: -moz-groupbox;    
+    }
+
+    tbody {
+        overflow-y: scroll;      
+        height: 31rem;           
+        width: 98.5%;
+        position: absolute;
+    }
     #btn_custom {
         padding: 0.3rem 0.3rem !important;
         font-size: 0.60rem !important;
@@ -274,10 +309,7 @@ export default {
         table-layout: fixed;
         width: 100%;
     }
-    #price_schedule_thead{
-        width: 100% !important;
-        display: block !important;
-    }
+
     #ps_id{
         width: 4%;
     }
@@ -384,13 +416,5 @@ export default {
         width: 10%;
         font-size: 10px;
     }
-    
-    #price_schedule_tbody{
-        width: 100% !important;
-        display: block !important;
-        height: 32rem !important;
-        position: relative;
-        overflow-y: scroll,hidden !important;
-        overflow-x: hidden !important;
-    }
+
 </style>

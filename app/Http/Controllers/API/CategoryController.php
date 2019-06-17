@@ -9,9 +9,7 @@ use App\Models\Category;
 class CategoryController extends Controller
 {
 
-    public function index()
-    {
-
+    public function index(){
         $data = Category::orderBy('category_desc', 'asc')->get();
 
         return response()->json($data);
@@ -28,7 +26,6 @@ class CategoryController extends Controller
     }
 
     public function store(Request $request){
-
         $category = Category::create([
             'category_desc' => $request->country_desc,
         ]);

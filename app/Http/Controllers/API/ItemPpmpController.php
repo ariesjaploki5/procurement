@@ -35,7 +35,6 @@ class ItemPpmpController extends Controller
 
     public function update(Request $request, $id){
 
-        
         $item = $request->items;
 
         $count = count($item);

@@ -60,7 +60,7 @@
                                         <th style="width: 4% !important;">Quantity</th>
                                         <th rowspan="2" style="width: 4% !important;">Estimated Budget</th>
                                         <th rowspan="2" style="width: 4% !important;">Mode of Procurement</th>
-                                        <th colspan="12" style="width: 60% !important;">Schedule/Milestone of Activies</th>
+                                        <th colspan="12" style="width: 60% !important;">Schedule/Milestone of Activities</th>
                                     </tr>
                                     <tr>
                                         <th>Size</th>
@@ -247,7 +247,25 @@ export default {
 }
 </script>
 
-<style>
+
+<style scoped>
+tr {
+    width: 100%;
+    display: inline-table;
+    table-layout: fixed;
+}
+
+table {
+    height:33rem;             
+    display: -moz-groupbox;    
+}
+
+tbody {
+    overflow-y: scroll;      
+    height: 31rem;           
+    width: 98.5%;
+    position: absolute;
+}
 #btn_custom {
         padding: 0.3rem 0.3rem !important;
         font-size: 0.55rem !important;

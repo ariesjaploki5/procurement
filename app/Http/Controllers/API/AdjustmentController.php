@@ -11,22 +11,22 @@ use App\Views\HomisDrugsAndMedicines;
 use App\Models\Hdmhdrsub;
 use Carbon\Carbon;
 
-
 class AdjustmentController extends Controller
 {
     public function items($id){
         $data = AdjustmentItem::where('chrgcode', $id)->orderBy('gendesc', 'asc')->get();
-        
 
         return response()->json($data);
     }
 
     public function search(Request $request, $id){
         $data = AdjustmentItem::where('chrgcode', $id)->where('item_desc', 'like', $request->word.'%')->orderBy('gendesc', 'asc')->get();
+        
         return response()->json($data);
     }
     
     public function adjust_drugs(Request $request){
+        
         $adjust = Adjustment::create([
             'itemType' => 'D',
             'dmdComb' => $request->dmdcomb,

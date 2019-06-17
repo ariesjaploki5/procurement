@@ -38,12 +38,128 @@ import link_list from './components/pages/links/list';
 import adjustments from './components/pages/adjustments/main';
 import adjustment_list from './components/pages/adjustments/list';
 
-export const routes = [
+import purchase_request2 from './components/pharmacy/purchase_request.vue';
+import purchase_order2 from './components/pharmacy/purchase_order.vue';
 
+import drugs_and_medicines from './components/pharmacy/drugs_and_medicines.vue';
+
+import suppliers from './components/pages/supplier/main';
+import supplier_list from './components/pages/supplier/list';
+
+import accounting_po from './components/accounting/purchase_order.vue';
+import budget_po from './components/budget/purchase_order.vue';
+import div_head_po from './components/div_head/purchase_order.vue';
+import fmo_po from './components/fmo/purchase_order.vue';
+import pmo_po from './components/pmo/purchase_order.vue';
+import mmo_po from './components/mmo/purchase_order.vue';
+
+import aoq from './components/print/aoq';
+import app from './components/print/app';
+import ors from './components/print/ors';
+import po from './components/print/po';
+import ppmp from './components/print/ppmp';
+import pr from './components/print/pr';
+import rfq from './components/print/rfq';
+import sps from './components/print/sps';
+
+export const routes = [
+    {
+        path: '/accounting_po',
+        component: accounting_po,
+        name: 'accounting_po'
+    },
+    {
+        path: '/budget_po',
+        component: budget_po,
+        name: 'budget_po'
+    },
+    {
+        path: '/div_head_po',
+        component: div_head_po,
+        name: 'div_head_po'
+    },
+    {
+        path: '/pmo_po',
+        component: pmo_po,
+        name: 'pmo_po'
+    },
+    {
+        path: '/fmo_po',
+        component: fmo_po,
+        name: 'fmo_po'
+    },
+    {
+        path: '/mmo_po',
+        component: mmo_po,
+        name: 'mmo_po'
+    },
+    {
+        path: '/aoq/:id',
+        component: aoq,
+        name: 'aoq'
+    },
+    {
+        path: '/app/:id',
+        component: app,
+        name: 'app'
+    },
+    {
+        path: '/ors/:id',
+        component: ors,
+        name: 'ors'
+    },
+    {
+        path: '/po/:id',
+        component: po,
+        name: 'po'
+    },
+    {
+        path: '/ppmp/:id',
+        component: ppmp,
+        name: 'ppmp'
+    },
+    {
+        path: '/pr/:id',
+        component: pr,
+        name: 'pr'
+    },
+    {
+        path: '/rfq/:id',
+        component: rfq,
+        name: 'rfq'
+    },
+    {
+        path: '/sps/:id',
+        component: sps,
+        name: 'sps'
+    },
+    {
+        path: '/suppliers',
+        component: suppliers,
+        children: [
+            {
+                path: '',
+                component: supplier_list
+            },
+        ]
+    },
     {
         path: '/',
         component: login
     },
+    {
+        path: '/purchase_request2',
+        component: purchase_request2
+    },
+    {
+        path: '/purchase_order2',
+        component: purchase_order2
+    },
+    {
+        path: '/drugs_and_medicines',
+        component: drugs_and_medicines
+    },
+
     {
         path: '/home',
         component: home
@@ -128,7 +244,7 @@ export const routes = [
             },
             {
                 path: 'show/:id',
-                component: app_list,
+                component: app_show,
                 name: 'app_show'
             },
         ]

@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\PriceSchedule;
 use App\Models\Item;
 use App\Models\ItemPriceSchedule;
+use App\Views\Dmds;
+use App\Models\DmdPriceSchedule;
 
 use App\Events\PriceScheduleCreated;
 use App\Events\PriceScheduleUpdated;
@@ -30,21 +32,33 @@ class PriceScheduleController extends Controller
             'user_id' => $request->user_id,
         ]);
 
-        broadcast(new PriceScheduleCreated($ps));
-
         return response()->json($ps);
     }
 
+    // public function show($id){
+    //     $data = Item::with([
+    //             'item_price_schedules' => function($query) use ($id){
+    //                 $query->with(['brand', 'manufacturer', 'packaging', 'supplier', 'country'
+    //                 ])->where('price_schedule_id', $id)->orderBy('rank', 'asc');
+    //             },
+    //         ])->get();
+    //     return response()->json($data);
+    // }
+
     public function show($id){
-        $data = Item::with([
-                'item_price_schedules' => function($query) use ($id){
-                    $query->with(['brand', 'manufacturer', 'packaging', 'supplier', 'country'
+        $data = Dmds::with([
+                'dmd_price_schedules' => function($query) use ($id){
+                    $query->with([
+                        'brand', 
+                        'manufacturer', 
+                        'packaging', 
+                        'supplier', 
+                        'country',
                     ])->where('price_schedule_id', $id)->orderBy('rank', 'asc');
                 },
-            ])->get();
+            ])->orderBy('gendesc', 'asc')->get();
         return response()->json($data);
     }
-
 
     
 
@@ -57,16 +71,12 @@ class PriceScheduleController extends Controller
             'user_id' => $request->user_id,
         ]);
 
-        broadcast(new PriceScheduleUpdated($ps));
-
         return response()->json($ps);
     }
 
     public function destroy($id){
         $ps = PriceSchedule::where('price_schedule_id', $id)->first();
         $ps->delete();
-
-        broadcast(new PriceScheduleUpdated($ps));
 
         return response()->json($ps);
     }

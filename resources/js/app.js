@@ -18,9 +18,10 @@ import appvue from './app.vue';
 import moment from 'moment';
 import numeral from 'numeral';
 import converter from 'number-to-words';
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
+import VueProgressBar from 'vue-progressbar';
 
-window.swal = swal;
+window.Swal = Swal;
 
 import {routes} from './routes.js';
 import StoreData from './store.js';
@@ -32,7 +33,12 @@ Vue.component(AlertError.name, AlertError);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-const toast = swal.mixin({toast: true,position: 'top-end',showConfirmButton: false,timer: 3000});
+const toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+  });
 window.toast = toast;
 
 Vue.filter('upText', function(text){return text.charAt(0).toUpperCase() + text.slice(1);});
@@ -54,6 +60,12 @@ Vue.filter('num_words', function(val){return converter.toWords(val);});
 Vue.filter('currency', function(val){return accounting.formatMoney(val, {symbol: '',});});
 Vue.filter('currency2', function(val){return accounting.formatMoney(val, {symbol: '₱  ',decimals: 2,});});
 Vue.filter('decimal_to_whole', function(val){return accounting.formatMoney(val, {symbol: '',precision: 0,});});
+
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '5px'
+});
 
 let Fire = new Vue();
 
