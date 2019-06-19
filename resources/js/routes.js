@@ -47,11 +47,15 @@ import suppliers from './components/pages/supplier/main';
 import supplier_list from './components/pages/supplier/list';
 
 import accounting_po from './components/accounting/purchase_order.vue';
+import accounting_dmd from './components/accounting/drugs_and_medicines.vue';
+
 import budget_po from './components/budget/purchase_order.vue';
 import div_head_po from './components/div_head/purchase_order.vue';
 import fmo_po from './components/fmo/purchase_order.vue';
 import pmo_po from './components/pmo/purchase_order.vue';
+
 import mmo_po from './components/mmo/purchase_order.vue';
+import mmo_dmd from './components/mmo/drugs_and_medicines.vue';
 
 import aoq from './components/print/aoq';
 import app from './components/print/app';
@@ -63,6 +67,11 @@ import rfq from './components/print/rfq';
 import sps from './components/print/sps';
 
 export const routes = [
+    {
+        path: '/accounting_dmd',
+        component: accounting_dmd,
+        name: 'accounting_dmd'
+    },
     {
         path: '/accounting_po',
         component: accounting_po,
@@ -92,6 +101,11 @@ export const routes = [
         path: '/mmo_po',
         component: mmo_po,
         name: 'mmo_po'
+    },
+    {
+        path: '/mmo_dmd',
+        component: mmo_dmd,
+        name: 'mmo_dmd'
     },
     {
         path: '/aoq/:id',

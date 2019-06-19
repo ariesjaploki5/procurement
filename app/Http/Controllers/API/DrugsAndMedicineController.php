@@ -17,7 +17,14 @@ class DrugsAndMedicineController extends Controller
         $now = Carbon::now();
         $year = $now->year;
 
-        $data = AppDmd::with(['dmd_price_schedule'])->where('app_year', $year)->orderBy('gendesc', 'asc')->get();
+        $data = AppDmd::with([
+            'dmd_price_schedule', 
+            'dmd_uacs' => function($query){
+                $query->with([
+                    'brand'
+                ]);
+            },
+        ])->where('app_year', $year)->orderBy('gendesc', 'asc')->get();
 
         return response()->json($data);
     }
@@ -54,8 +61,8 @@ class DrugsAndMedicineController extends Controller
         return response()->json();
     }
 
-    public function store(){
-
+    public function store(Request $request){
+        
     }
 
     public function update(){

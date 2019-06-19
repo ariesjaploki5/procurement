@@ -15,7 +15,7 @@ class PurchaseRequest extends Model
         'supplier_id', 
         'mode_id',
         'category_id',
-
+        'purpose',
         'purchase_order_id',
 
         'request_quantity',

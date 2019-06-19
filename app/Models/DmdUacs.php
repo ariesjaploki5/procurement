@@ -16,4 +16,8 @@ class DmdUacs extends Model
     public function dmd(){
         return $this->belongsTo('App\Models\Dmd', 'dmd_id', 'dmd_id');
     }
+
+    public function brand(){
+        return $this->belongsTo('App\Models\Brand', 'brand_id', 'brand_id');
+    }
 }

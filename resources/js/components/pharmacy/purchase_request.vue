@@ -13,6 +13,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Mode</th>
                                     <th>Status</th>
                                     <th>Date Created</th>
                                     <th>Action</th>
@@ -21,6 +22,7 @@
                             <tbody>
                                 <tr v-for="prs in purchase_requests" :key="prs.purchase_request_id">
                                     <td>{{ prs.purchase_request_id }}</td>
+                                    <td>{{ prs.mode.mode_desc }}</td>
                                     <td>
                                         <div v-show="prs.status == 0">Pending</div>
                                         <div v-show="prs.status == 1">Approved</div>
@@ -73,7 +75,7 @@
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
-                                            <th></th>
+                                            <th width="3%"></th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="!isLoading">
@@ -95,7 +97,11 @@
                                                 <div v-if="dmd.dmd_price_schedule">{{ dmd.request_quantity * dmd.dmd_price_schedule.bid_price | currency2}}</div>
                                                 <div v-else></div>
                                             </td>
-                                            <td></td>
+                                            <td width="3%" class="text-center">
+                                                <button type="button" class="btn btn-sm btn-danger" @click="remove_item(dmd.id)">
+                                                    <i class="fas fa-times-circle"></i>
+                                                </button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                     <tbody v-else>
@@ -178,7 +184,8 @@ export default {
             }),
             isLoading: false,
             track_pr_modal: {},
-        }
+            selected_id: '',
+        }   
     },
     methods:{
         get_prs(){
@@ -190,7 +197,7 @@ export default {
         },
         view_pr(id){
             axios.get('../../api/purchase_request/'+id).then(({data}) => {
-                    console.table(data);
+                    this.selected_id = id;
                     this.view_pr_form.reset();
                     this.isLoading = true;
                     this.view_pr_form.fill(data);
@@ -240,6 +247,13 @@ export default {
                     title: 'Purchase Order Created Successfully'
                 });
             }).catch(() => {
+
+            });
+        },
+        remove_item(id){
+            axios.delete('../../api/dmd_pr/'+id).then(() => {
+                this.view_pr(this.selected_id);
+            }).catch(()=> {
 
             });
         }

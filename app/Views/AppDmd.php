@@ -12,4 +12,8 @@ class AppDmd extends Model
     public function dmd_price_schedule(){
         return $this->hasOne('App\Views\DmdPriceSchedule', 'dmd_id', 'dmd_id')->orderBy('rank', 'asc');
     }
+
+    public function dmd_uacs(){
+        return $this->hasMany('App\Models\DmdUacs', 'dmd_id', 'dmd_id');
+    }
 }

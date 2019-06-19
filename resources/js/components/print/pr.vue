@@ -69,8 +69,14 @@
                         <td class="pr border-bottom-0 text-center" width="7%">(unit_of_issue)</td>
                         <td class="pr border-bottom-0 text-center">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
                         <td class="pr border-bottom-0 text-center" width="7%">(batch_no)</td>
-                        <td class="pr border-bottom-0 text-center" width="15%">{{ item.dmd_price_schedule.bid_price | currency2 }}</td>
-                        <td class="pr border-bottom-0 text-center" width="15%">{{ item.request_quantity * item.dmd_price_schedule.bid_price | currency2 }}</td>
+                        <td class="pr border-bottom-0 text-center" width="15%">
+                            <span v-if="pr.mode_id == 1">{{ item.dmd_price_schedule.bid_price | currency2 }}</span>
+                            <span v-else></span>
+                        </td>
+                        <td class="pr border-bottom-0 text-center" width="15%">
+                            <span v-if="pr.mode_id == 1">{{ item.request_quantity * item.dmd_price_schedule.bid_price | currency2 }}</span>
+                            <span v-else></span>
+                        </td>
                     </tr>
 
                      <!--Name of Supplier  -->
@@ -78,7 +84,10 @@
                         <td class="pur border-top border-bottom-0 text-center" width="5%"></td>
                         <td class="pur border-top border-bottom-0 text-center" width="5%"></td>
                         <td class="pur border-top border-bottom-0 text-center" width="7%"></td>
-                        <td class="pur border-top border-bottom-0 text-center"><b>Name of Supplier</b></td>
+                        <td class="pur border-top border-bottom-0 text-center"><b>
+                            <span v-if="pr.mode_id == 1">{{ pr.supplier.supplier_name }}</span>
+                            <span v-else></span>
+                        </b></td>
                         <td class="pur border-top border-bottom-0 text-center" width="7%"></td>
                         <td class="pur border-top border-bottom-0 text-center" width="15%"></td>
                         <td class="pur border-top border-bottom-0 text-center" width="15%"><b></b></td>
@@ -92,14 +101,19 @@
                         <td class="pur border-top border-bottom-0"></td>
                         <td class="pur border-top border-bottom-0"></td>
                         <td class="pur border-top border-bottom-0"></td>
-                        <td class="pr1 border-top border-left-0 text-center align-bottom" style="border-bottom:double" width="15%"><b>Total Amount</b></td>
+                        <td class="pr1 border-top border-left-0 text-center align-bottom" style="border-bottom:double" width="15%">
+                            <b>
+                                <span v-if="pr.mode_id == 1">{{ estimated_cost | currency2 }}</span>
+                                <span v-else></span>
+                            </b>
+                        </td>
                     </tr>
                     <tr>
                         <td class="pr1 border-top-0" colspan="7"></td>
                     </tr>
                     <tr>
                         <td class="pr1 border-right-0 border-top-0">Purpose:</td>
-                        <td class="pr1 border-left-0 border-top-0 text-center" colspan="7"><b>(Purpose)</b></td>
+                        <td class="pr1 border-left-0 border-top-0 text-center" colspan="7"><b>{{ pr.purpose }}</b></td>
                     </tr>
                     <tr>
                         <td class="pr1 border-top-0" colspan="7"><b>Required Attachments:</b> <i class="text-primary">(For Procurement Management Office use only)</i></td>
@@ -190,6 +204,19 @@
         },
         created(){
             this.get_pr();
+        },
+        computed:{
+            estimated_cost(){
+                if(this.pr.mode_id == 1){
+                    let sum = 0;
+                    this.pr.view_dmd_purchase_requests.forEach(function(item) {
+                        sum += (parseFloat(item.dmd_price_schedule.bid_price) * parseFloat(item.request_quantity));
+                    });
+                        return sum;
+                }
+            
+            },
+
         },
     
     }

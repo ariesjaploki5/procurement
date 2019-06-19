@@ -38,6 +38,10 @@ Route::apiResources([
     'cart'=> 'API\CartController',
 ]);
 
+Route::get('shopping', 'API\CartController@shopping');
+Route::post('shopping', 'API\DmdPurchaseRequestController@shopping');
+
+
 Route::post('obrs', 'API\PurchaseOrderController@store_update_obrs');
 
 Route::put('div_head_rcv/{id}', 'API\PurchaseRequestController@div_head_rcv');
@@ -64,7 +68,10 @@ Route::put('mmo_rcv/{id}', 'API\PurchaseRequestController@mmo_rcv');
 Route::put('mmo_rls/{id}', 'API\PurchaseRequestController@mmo_rls');
 
 Route::get('public_bidding', 'API\CartController@public_bidding');
-Route::get('shopping', 'API\CartController@shopping');
+
+
+Route::post('dmd_uacs', 'API\DmdUacsController@store');
+Route::put('dmd_uacs/{id}', 'API\DmdUacsController@update');
 
 Route::post('cart_dmd/{user_id}', 'API\CartController@add_dmd');
 Route::post('cart_dmd_2/{user_id}', 'API\CartController@add_dmd_2');

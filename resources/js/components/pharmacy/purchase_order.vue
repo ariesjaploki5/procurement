@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="col-md-6">
-                        Purchase Requests
+                        Purchase Orders
                     </div>
                 </div>
                 <div class="card-body">
@@ -22,15 +22,9 @@
                                 <tr v-for="pos in purchase_orders" :key="pos.purchase_order_id">
                                     <td>{{ pos.purchase_order_id }}</td>
                                     <td>
-                                        <div v-show="pos.status == 0">
-                                            Pending
-                                        </div>
-                                        <div v-show="pos.status == 1">
-                                            Approved
-                                        </div>
-                                        <div v-show="pos.status == 2">
-                                            Disapproved
-                                        </div>
+                                        <div v-show="pos.status == 0">Pending</div>
+                                        <div v-show="pos.status == 1">Approved</div>
+                                        <div v-show="pos.status == 2">Disapproved</div>
                                     </td>
                                     <td>{{ pos.created_at }}</td>
                                     <td>

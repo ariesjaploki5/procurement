@@ -37,6 +37,7 @@ class DmdPurchaseRequestController extends Controller
                 'category_id' => $request->category_id,
                 'user_id' => $request->user_id, 
                 'status' => 0,
+                'purpose' => $request->purpose,
             ]);
 
             $pr->dmd_purchase_requests()->create([
@@ -50,6 +51,39 @@ class DmdPurchaseRequestController extends Controller
 
     }
 
+    public function shopping(Request $request){
+        $dmd = $request->items;
+        $count = count($dmd);
+        $cart_id = $dmd[0]['cart_id'];
+
+        $cart = Cart::findOrFail($cart_id);
+
+        $pr = PurchaseRequest::create([
+            'mode_id' => $request->mode_id,
+            'category_id' => $request->category_id,
+            'user_id' => $request->user_id, 
+            'status' => 0,
+            'purpose' => $request->purpose,
+        ]);
+
+        for($i = 0; $i < $count; $i++){
+
+            $dmd_id = $dmd[$i]['dmd_id'];
+            $quantity = $dmd[$i]['quantity'];
+
+            $pr->dmd_purchase_requests()->create([
+                'dmd_id' => $dmd_id,
+                'request_quantity' => $quantity,
+            ]);
+        }
+
+        $cart->update([
+            'status' => 1
+        ]);  
+
+        return response()->json();
+    }
+
     public function show($id){
         $data = DmdPurchaseRequest::where('purchase_request_id', $id)->get();
 
@@ -61,8 +95,10 @@ class DmdPurchaseRequestController extends Controller
 
     }
 
-    public function destory($id){
+    public function destroy($id){
+        $dmd = DmdPurchaseRequest::where('id', $id)->first();
+        $dmd->delete();
 
-        
+        return response()->json();
     }
 }

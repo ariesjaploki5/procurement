@@ -13,4 +13,5 @@ class UacsCodeController extends Controller
 
         return response()->json($data);
     }
+
 }

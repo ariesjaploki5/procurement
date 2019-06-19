@@ -143,6 +143,10 @@
                                     </tbody>
                                 </table>
                                 <div class="form-group">
+                                    <label class="form-label">Purpose: </label>
+                                    <textarea type="text" class="form-control" rows="5" v-model="pb_form.purpose"></textarea>
+                                </div>
+                                <div class="form-group">
                                     <button type="submit" class="btn btn-sm btn-success">Submit</button>
                                 </div>
                             </form>
@@ -202,6 +206,10 @@
                                     </tbody>
                                 </table>
                                 <div class="form-group">
+                                    <label class="form-label">Purpose: </label>
+                                    <textarea  id="" class="form-control" rows="10" v-model="sp_form.purpose"></textarea>
+                                </div>
+                                <div class="form-group">
                                     <button type="submit" class="btn btn-sm btn-success">Submit</button>
                                 </div>
                             </form>
@@ -237,12 +245,14 @@ export default {
                 category_id: 1,
                 pr_id: '',
                 items: [],
+                purpose: '',
             }),
             sp_form:new Form({
                 pr_id: '',
                 mode_id: 4,
                 category_id: 1,
                 items: [],
+                purpose: '',
             }),
         }
     },
@@ -267,6 +277,7 @@ export default {
                 mode_id: this.pb_form.mode_id,
                 category_id: this.pb_form.category_id,
                 user_id: this.current_user.user_id,
+                purpose: this.pb_form.purpose,
             }).then(() => {
                 $('#pbModal').modal('hide');
                 this.get_dmds();
@@ -274,7 +285,22 @@ export default {
             }).catch(() => {
 
             });
-        },  
+        },
+        sp_submit(){
+            axios.post('../../api/shopping', {
+                items: this.sp_form.items,
+                mode_id: this.sp_form.mode_id,
+                category_id: this.sp_form.category_id,
+                user_id: this.current_user.user_id,
+                purpose: this.sp_form.purpose,
+            }).then(() => {
+                $('#spModal').modal('hide');
+                this.get_dmds();
+                this.get_sp_items();
+            }).catch(() =>{
+
+            });
+        }, 
         add_item(dmd){
             axios.post('../../api/cart_dmd/'+this.current_user.user_id, {
                 mode_id: dmd.mode_id,
