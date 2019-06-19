@@ -1,9 +1,9 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row mb-3">
+            <!-- <div class="card"> -->
+                <!-- <div class="card-header"> -->
+                    <div class="row mb-1">
                         <div class="col-md-6">
                             Drugs And Medicines
                         </div>
@@ -18,12 +18,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mb-1">
                         <div class="col-md-auto text-right">Search:</div>
                         <div class="col-md-4"><input type="text" class="form-control form-control-sm" v-model="search_word"></div>
                     </div>
-                </div>
-                <div class="card-body">
+                <!-- </div> -->
+                <!-- <div class="card-body"> -->
                     <div class="table-responsive-sm">
                         <table class="table table-fixed table-sm table-hover">
                             <thead>
@@ -39,7 +39,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'bg-success' : (d.boh + d.item_in_transit) > d.ssl/2, 'bg-warning' : d.ssl/2 >= (d.boh + d.item_in_transit), 'bg-danger' : d.ssl == 0 }" >
+                                <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'bg-warning' : d.boh_iit < d.ssl/2 , 'bg-danger' : d.ssl == 0 , 'bg-success' : d.boh > d.ssl/2, 'bg-primary' : d.boh_iit > d.ssl/2}" >
                                     <td width="5%">{{ index + 1}}</td>
                                     <td width="10%">{{ d.dmdcomb }}-{{ d.dmdctr}}</td>
                                     <td width="30%">{{ d.gendesc }} {{ d.dmdnost }} {{ d.stredesc }} {{ d.formdesc }} {{ d.brandname }}</td>
@@ -51,8 +51,8 @@
                                         <button type="button" class="btn btn-sm btn-light btn-outline-dark" @click="edit_ssl(d)">
                                             <i class="fas fa-pen"></i>
                                         </button>
-                                        <div class="btn-group dropleft btn-sm" v-show="d.ssl != 0 || d.ssl/2 > d.boh + d.item_in_transit">
-                                            <button id="btn_custom" :disabled="d.cart_dmd_id != null" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cart-plus"></i></button>
+                                        <div class="btn-group dropleft btn-sm">
+                                            <button id="btn_custom"  v-show="d.boh_iit <= d.ssl/2 && d.ssl != 0" :disabled="d.cart_dmd_id != null" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cart-plus"></i></button>
                                             <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                                 <button class="dropdown-item" v-show="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)"><i class="fas fa-cart-plus"></i> Public Bidding</button>
                                                 <button class="dropdown-item" @click="add_item_2(d, 4)"><i class="fas fa-cart-plus"></i> Shopping</button>
@@ -63,8 +63,8 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
+                <!-- </div> -->
+            <!-- </div> -->
             <div class="modal fade" id="sslModal" tabindex="-1" role="dialog" aria-labelledby="sslModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
@@ -371,13 +371,13 @@ tr {
 }
 
 table {
-    height:33rem;             
+    height:36rem;             
     display: -moz-groupbox;    
 }
 
 tbody {
     overflow-y: scroll;      
-    height: 31rem;           
+    height: 34rem;           
     width: 98.5%;
     position: absolute;
 }
