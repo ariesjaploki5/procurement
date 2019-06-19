@@ -39,21 +39,25 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'bg-success' : d.boh > d.ssl/2, 'bg-warning' : d.ssl/2 >= d.boh, 'bg-danger' : d.ssl == 0 }" >
+                                <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'bg-success' : (d.boh + d.item_in_transit) > d.ssl/2, 'bg-warning' : d.ssl/2 >= (d.boh + d.item_in_transit), 'bg-danger' : d.ssl == 0 }" >
                                     <td width="5%">{{ index + 1}}</td>
                                     <td width="10%">{{ d.dmdcomb }}-{{ d.dmdctr}}</td>
                                     <td width="30%">{{ d.gendesc }} {{ d.dmdnost }} {{ d.stredesc }} {{ d.formdesc }} {{ d.brandname }}</td>
                                     <td width="10%" class="text-right">{{ d.boh | numeral3 }}</td>
                                     <td class="text-right">{{ d.ssl | numeral3 }}</td>
                                     <td class="text-right">{{ d.rop | numeral3 }}</td>
-                                    <td class="text-right"></td>
+                                    <td class="text-right">{{ d.item_in_transit | numeral3 }}</td>
                                     <td class="text-left">
                                         <button type="button" class="btn btn-sm btn-light btn-outline-dark" @click="edit_ssl(d)">
                                             <i class="fas fa-pen"></i>
                                         </button>
-                                        <button v-show="d.dmd_price_schedule !== null" :disabled="d.cart_dmd_id != null || d.ssl/2 < d.boh || d.ssl == 0" type="button" class="btn btn-sm btn-primary " @click="add_item(d)">
-                                            <i class="fas fa-cart-plus"></i>
-                                        </button>
+                                        <div class="btn-group dropleft btn-sm" v-show="d.ssl != 0 || d.ssl/2 > d.boh + d.item_in_transit">
+                                            <button id="btn_custom" :disabled="d.cart_dmd_id != null" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cart-plus"></i></button>
+                                            <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                                <button class="dropdown-item" v-show="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)"><i class="fas fa-cart-plus"></i> Public Bidding</button>
+                                                <button class="dropdown-item" @click="add_item_2(d, 4)"><i class="fas fa-cart-plus"></i> Shopping</button>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -168,22 +172,32 @@
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
-                                            <th></th>
+                                            <th class="text-center">
+                                                Action
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="(item,index) in sp_form.items" :key="item.dmd_id">
                                             <td>{{ index + 1}}</td>
-                                            <td>{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
+                                            <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
                                             <td class="text-right table-danger">{{ item.ssl }}</td>
                                             <td class="text-right table-danger">{{ item.boh }}</td>
                                             <td class="text-right table-danger"></td>
-                                            <td class="text-right">
-                                                <input type="text" class="form-control form-control-sm text-right" :value="item.quantity = item.ssl - item.boh">
+                                            <td width="10%" class="text-right">
+                                                <input type="number" class="form-control form-control-sm text-right" v-model="item.quantity">
                                             </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td class="text-right">
+                                                
+                                            </td>
+                                            <td class="text-right">
+                                                
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.id)">
+                                                    <i class="fas fa-times-circle"></i>
+                                                </button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -226,6 +240,8 @@ export default {
             }),
             sp_form:new Form({
                 pr_id: '',
+                mode_id: 4,
+                category_id: 1,
                 items: [],
             }),
         }
@@ -236,6 +252,13 @@ export default {
                 this.pb_form.items = data;
             }).catch(() => {
                 
+            });
+        },
+        get_sp_items(){
+            axios.get('../../api/shopping').then(({data}) => {
+                this.sp_form.items = data;
+            }).catch(() => {
+
             });
         },
         pb_submit(){
@@ -252,9 +275,6 @@ export default {
 
             });
         },  
-        get_sp_items(){
-
-        },
         add_item(dmd){
             axios.post('../../api/cart_dmd/'+this.current_user.user_id, {
                 mode_id: dmd.mode_id,
@@ -262,6 +282,20 @@ export default {
             }).then(() => {
                 this.get_dmds();
                 this.get_pb_items();
+                this.get_sp_items();
+            }).catch(() => {
+
+            });
+        },
+        add_item_2(dmd, mode_id){
+            // console.log(mode_id);
+            axios.post('../../api/cart_dmd_2/'+this.current_user.user_id, {
+                mode_id: mode_id,
+                dmd_id: dmd.dmd_id,
+            }).then(() => {
+                this.get_dmds();
+                this.get_pb_items();
+                this.get_sp_items();
             }).catch(() => {
 
             });
@@ -270,6 +304,7 @@ export default {
             axios.delete('../../api/cart_dmd/'+id).then(() => {
                 this.get_dmds();
                 this.get_pb_items();
+                this.get_sp_items();
             })
         },
         public_bidding(){
@@ -309,6 +344,7 @@ export default {
     created(){
         this.get_dmds();
         this.get_pb_items();
+        this.get_sp_items();
     },
     computed:{
         current_user() {

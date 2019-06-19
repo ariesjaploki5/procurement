@@ -6,7 +6,7 @@
 
             <table class="table table-condensed table-sm a">
                 <tr>
-                    <td rowspan="8" class="pr1 border-top-0 border-right-0"><img src="/bghmc.png" style="margin-left: 15%; margin-top: 15%" width="150" height="150"></td>
+                    <td rowspan="8" class="pr1 border-top-0 border-right-0"><img :src="'/img/bghmc.png'" style="margin-left: 15%; margin-top: 15%" width="150" height="150"></td>
                     <td colspan="5" class="pr1 border-top-0 border-bottom-0" id="pr1">
                         <center>Republic of the Philippines</center>
                     </td>

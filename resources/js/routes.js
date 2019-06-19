@@ -55,7 +55,7 @@ import mmo_po from './components/mmo/purchase_order.vue';
 
 import aoq from './components/print/aoq';
 import app from './components/print/app';
-import ors from './components/print/ors';
+import obrs from './components/print/obrs';
 import po from './components/print/po';
 import ppmp from './components/print/ppmp';
 import pr from './components/print/pr';
@@ -104,9 +104,9 @@ export const routes = [
         name: 'app'
     },
     {
-        path: '/ors/:id',
-        component: ors,
-        name: 'ors'
+        path: '/obrs/:id',
+        component: obrs,
+        name: 'obrs'
     },
     {
         path: '/po/:id',

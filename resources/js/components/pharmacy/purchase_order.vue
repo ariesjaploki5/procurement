@@ -37,8 +37,8 @@
                                         <div id="print" class="mb-2">
                                             <button type="button" class="btn btn-sm btn-primary" @click="view_po(pos)"><i class="fas fa-eye"></i></button>
                                             <button type="button" class="btn btn-sm btn-success" @click="track_po(pos)"><i class="fas fa-truck"></i></button>
-                                            <router-link class="btn btn-sm btn-info" :to="{ name: 'po', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
-                                            <router-link class="btn btn-sm btn-info" :to="{ name: 'sps', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> SPS</router-link>
+                                            <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
+                                            <router-link class="btn btn-sm btn-success" :to="{ name: 'obrs', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
                                         </div>
                                         <div id="document_tracking" class="">
                                             <div v-show="current_user.role_id == 5">
@@ -127,26 +127,25 @@
                                     <div class="col-md-6">
                                         <div class="card">
                                             <div class="card-header">
-                                                
                                             </div>
                                             <div class="card-body">
-                                                <form action="">
+                                                <form @submit.prevent="store_obrs()">
                                                     <div class="form-group">
                                                         <div class="form-label">Fund Source</div>
-                                                        <select class="form-control form-control-sm" v-model="obrs_form.fund_source_id">
+                                                        <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.fund_source_id">
                                                             <option v-for="fs in fund_sources" :key="fs.id" :value="fs.id">{{ fs.description }}</option>
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-label">Allotment</div>
-                                                        <select class="form-control form-control-sm" v-model="obrs_form.allotment_id">
+                                                        <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.allotment_id">
                                                             <option v-for="al in allotments" :key="al.allotment_id" :value="al.allotment_id">{{ al.allotment_desc }}</option>
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-label">UACS</div>
-                                                        <select class="form-control form-control-sm" v-model="obrs_form.uacs_id">
-                                                            <option v-for="uc in uacs" :key="uc.uacs_id" :value="uc.uacs_id">{{ uc.description }}</option>
+                                                        <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.uacs_id">
+                                                            <option v-for="uc in uacs" :key="uc.id" :value="uc.id">{{ uc.description }}</option>
                                                         </select>
                                                     </div>
                                                     <button type="submit" class="btn btn-sm btn-success">Save</button>
@@ -220,9 +219,13 @@ export default {
         return{
             purchase_orders: [],
             view_po_form: new Form({
-               purchase_order_id: '',
-               purchase_request_id: '',
-               purchase_request:{
+                purchase_order_id: '',
+                purchase_request_id: '',
+                uacs_code_id: '',
+                allotment_id: '',
+                uacs_id: '',
+                fund_source_id: '',
+                purchase_request:{
                    view_dmd_purchase_requests:[],
                },
             }),
@@ -231,13 +234,6 @@ export default {
                 purchase_order_id: '',
                 uacs_code_id: '',
             }),
-            obrs_form: new Form({
-                purchase_order_id: '',
-                uacs_code_id: '',
-                allotment_id: '',
-                uacs_id: '',
-            }),
-
             allotments: {},
             uacs_codes: {},
             fund_sources: {},
@@ -245,6 +241,18 @@ export default {
         }
     },
     methods:{
+        store_obrs(){
+            axios.post('../../api/obrs', {
+                purchase_order_id: this.view_po_form.purchase_order_id,
+                uacs_id: this.view_po_form.uacs_id,
+                allotment_id: this.view_po_form.allotment_id,
+                fund_source_id: this.view_po_form.fund_source_id,
+            }).then(() => {
+
+            }).catch(() => {
+
+            });
+        },
         get_uacs(){
             axios.get('../../api/uacs').then(({data}) => {
                 this.uacs = data;
@@ -282,7 +290,6 @@ export default {
         },
         view_po(pos){
             this.view_po_form.fill(pos);
-            this.obrs_form.purchase_order_id = pos.purchase_order_id;
             $('#poModal').modal('show');
         },
         track_po(pos){

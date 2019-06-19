@@ -47,6 +47,46 @@ class PurchaseRequestController extends Controller
         return response()->json();
     }
 
+    public function store_public_bidding(Request $request){
+        $item = $request->items;
+        $count = count($item);
+
+        for($i = 0; $i < $count; $i++){
+            $dmd_id = $item[$i]['dmd_id'];
+            $request_quantity = $item[$i]['quantity'];
+            $supplier_id = $item[$i]['dmd_price_schedule']['supplier_id'];
+
+            $pr = PurchaseRequest::firstOrCreate([
+                'user_id' => $request->user_id,
+                'supplier_id' => $supplier_id,
+            ]);
+            
+            $pr->dmds()->attach($dmd_id, ['request_quantity' => $request_quantity]);
+        }
+
+        return response()->json();
+    }
+
+    public function store_shopping(Request $request){
+        $item = $request->items;
+        $count = count($item);
+
+        for($i = 0; $i < $count; $i++){
+            $dmd_id = $item[$i]['dmd_id'];
+            $request_quantity = $item[$i]['quantity'];
+            $supplier_id = $item[$i]['dmd_price_schedule']['supplier_id'];
+
+            $pr = PurchaseRequest::firstOrCreate([
+                'user_id' => $request->user_id,
+                'supplier_id' => $supplier_id,
+            ]);
+            
+            $pr->dmds()->attach($dmd_id, ['request_quantity' => $request_quantity]);
+        }
+
+        return response()->json();
+    }
+
     public function item_purchase_request($pr, $item){
         
     }

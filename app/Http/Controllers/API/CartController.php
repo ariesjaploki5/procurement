@@ -28,11 +28,27 @@ class CartController extends Controller
         $mode_id = $request->mode_id;
        
         $cart = Cart::firstOrCreate([ 
-            'user_id' => $user_id , 
+            'user_id' => $user_id, 
             'mode_id' => $mode_id,
             'status' => 0 
         ]);
         
+        if(!CartDmd::where('cart_id', $cart->id)->where('dmd_id', $request->dmd_id)->exists()){
+            $cart->dmds()->attach($request->dmd_id);
+        }
+        
+        return response()->json($mode_id);
+    }
+
+    public function add_dmd_2(Request $request, $user_id){
+        $mode_id = $request->mode_id;
+
+        $cart = Cart::firstOrCreate([
+            'user_id' => $user_id,
+            'mode_id' => $mode_id,
+            'status' => 0
+        ]);
+
         if(!CartDmd::where('cart_id', $cart->id)->where('dmd_id', $request->dmd_id)->exists()){
             $cart->dmds()->attach($request->dmd_id);
         }
@@ -51,8 +67,18 @@ class CartController extends Controller
 
     }
 
+    public function shopping(){
+        $data = Carts::where('mode_id', 4)
+            ->where('app_year', $this->year_now())
+            ->where('status', 0)
+            ->orderBy('gendesc', 'asc')
+            ->get();
+
+        return response()->json($data);
+    }
+
     public function public_bidding(){
-        $data = Carts::with(['dmd_price_schedule'])->where('mode_id', 1)
+        $data = Carts::with(['dmd_price_schedule'])->where('mode_id', '1')
             ->where('app_year', $this->year_now())
             ->where('status', 0)
             ->orderBy('gendesc', 'asc')
@@ -68,11 +94,7 @@ class CartController extends Controller
         return $year;
     }
 
-    public function shopping(){
-        $data = Carts::where('mode_id', 4)->where('app_year', $this->year_now())->where('status', 0)->orderBy('gendesc', 'asc')->get();
-        
-        return response()->json($data);
-    }
+
 
     public function update(Request $request, $id){
 

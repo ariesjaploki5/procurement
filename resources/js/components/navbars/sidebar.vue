@@ -125,6 +125,14 @@
                 </li>
                 
             </ul>
+            <ul v-show="user.role_id === '6'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <router-link to='../../purchase_order2' class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Purchase Order</p>
+                    </router-link>
+                </li>
+            </ul>
             <ul v-show="user.role_id === '7'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <router-link to='../../purchase_order2' class="nav-link">
@@ -132,7 +140,6 @@
                         <p>Purchase Order</p>
                     </router-link>
                 </li>
-                
             </ul>
           </nav>
           <!-- /.sidebar-menu -->
