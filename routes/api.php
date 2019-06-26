@@ -36,11 +36,16 @@ Route::apiResources([
     'dmd' => 'API\DrugsAndMedicineController',
     'dmd_pr' => 'API\DmdPurchaseRequestController',
     'cart'=> 'API\CartController',
+    'rfq' => 'API\RfqController',
 ]);
+
+Route::post('add_rfq/{id}', 'API\RfqController@add_rfq');
+
+Route::get('pr_shopping', 'API\PurchaseRequestController@shopping');
+Route::get('pr_public_bidding', 'API\PurchaseRequestController@public_bidding');
 
 Route::get('shopping', 'API\CartController@shopping');
 Route::post('shopping', 'API\DmdPurchaseRequestController@shopping');
-
 
 Route::post('obrs', 'API\PurchaseOrderController@store_update_obrs');
 

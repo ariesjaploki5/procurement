@@ -16,4 +16,8 @@ class AppDmd extends Model
     public function dmd_uacs(){
         return $this->hasMany('App\Models\DmdUacs', 'dmd_id', 'dmd_id');
     }
+
+    public function app(){
+        return $this->belongsTo('App\Models\App', 'app_id', 'app_id');
+    }
 }

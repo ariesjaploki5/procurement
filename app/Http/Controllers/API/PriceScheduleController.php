@@ -13,6 +13,7 @@ use App\Models\DmdPriceSchedule;
 use App\Events\PriceScheduleCreated;
 use App\Events\PriceScheduleUpdated;
 use App\Events\ItemPriceScheduleUpdated;
+use Carbon\Carbon;
 
 class PriceScheduleController extends Controller
 {
@@ -46,16 +47,17 @@ class PriceScheduleController extends Controller
     // }
 
     public function show($id){
+        $year = Carbon::now()->year;
+
         $data = Dmds::with([
                 'dmd_price_schedules' => function($query) use ($id){
                     $query->with([
                         'brand', 
-                        'manufacturer', 
                         'packaging', 
                         'supplier', 
                         'country',
                     ])->where('price_schedule_id', $id)->orderBy('rank', 'asc');
-                },
+                }, 'app_dmd',
             ])->orderBy('gendesc', 'asc')->get();
         return response()->json($data);
     }

@@ -142,7 +142,7 @@
                                                             <option v-for="uc in uacs" :key="uc.id" :value="uc.id">{{ uc.description }}</option>
                                                         </select>
                                                     </div>
-                                                    <button type="submit" class="btn btn-sm btn-success">Save</button>
+                                                    <button v-show="current_user.role_id == 6" type="submit" class="btn btn-sm btn-success">Save</button>
                                                 </form>
                                             </div>
                                         </div>

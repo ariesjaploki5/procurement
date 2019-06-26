@@ -1,13 +1,10 @@
 <template>
     <div id="f01">
         <div id="content-wrapper">
-
             <div class="col-lg-12">
-
                 <table class="table table-condensed table-sm a">
                     <tr>
-                        <td class="pr1 border-top-0 border-right-0" rowspan="8"><img src="/bghmc.png"
-                                style="margin-left: 15%; margin-top: 10%" width="150" height="150"></td>
+                        <td class="pr1 border-top-0 border-right-0" rowspan="8"><img src="/bghmc.png" style="margin-left: 15%; margin-top: 10%" width="150" height="150"></td>
                         <td class="pr1 border-top-0 border-bottom-0" colspan="5" id="pr1">
                             <center>Republic of the Philippines</center>
                         </td>
@@ -27,9 +24,7 @@
                     </tr>
                     <tr>
                         <td class="pr1" rowspan="3" width="40%">
-                            <center><br><b>
-                                    <h3>REQUEST FOR QUOTATION</h3>
-                                </b></center>
+                            <center><br><b><h3>REQUEST FOR QUOTATION</h3></b></center>
                         </td>
                         <td class="pr1" colspan="4">Form No.: HS - PS - 007</td>
                     </tr>
@@ -38,7 +33,6 @@
                         <td class="pr1" colspan="4">Effectivity Date: December 1, 2015</td>
                     </tr>
                 </table>
-
                 <table class="table table-condensed table-borderless border-0 table-sm" style="margin-top:-1.2%">
                     <tr>
                         <td class="pr1 border-top-0 border-right-0 border-left-0"></td>
@@ -59,9 +53,7 @@
                 </table>
                 <table class="table table-condensed table-borderless border-0 table-sm" style="margin-top:-1.2%">
                     <tr>
-                        <td>
-                            <h5>Gentlemen:</h5>
-                        </td>
+                        <td><h5>Gentlemen:</h5></td>
                     </tr>
                     <tr>
                         <td style="text-indent: 50px; text-align:justify">

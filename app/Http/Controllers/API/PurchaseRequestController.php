@@ -14,7 +14,7 @@ class PurchaseRequestController extends Controller
 
     public function index(){
         $data = PurchaseRequest::with([
-            'supplier', 'user', 'mode', 
+            'supplier', 'user', 'mode', 'rfq',
             'view_dmd_purchase_requests' => function($query){
                 $query->with([
                     'dmd_price_schedule' => function($query){
@@ -23,6 +23,36 @@ class PurchaseRequestController extends Controller
                 ]);
             },
         ])->get();
+
+        return response()->json($data);
+    }
+
+    public function public_bidding(){
+        $data = PurchaseRequest::with([
+            'supplier', 'user', 'mode', 
+            'view_dmd_purchase_requests' => function($query){
+                $query->with([
+                    'dmd_price_schedule' => function($query){
+                        $query->first();
+                    },
+                ]);
+            },
+        ])->where('mode_id', 1)->get();
+
+        return response()->json($data);
+    }
+
+    public function shopping(){
+        $data = PurchaseRequest::with([
+            'supplier', 'user', 'mode', 
+            'view_dmd_purchase_requests' => function($query){
+                $query->with([
+                    'dmd_price_schedule' => function($query){
+                        $query->first();
+                    },
+                ]);
+            },
+        ])->where('mode_id', 4)->get();
 
         return response()->json($data);
     }
@@ -93,10 +123,10 @@ class PurchaseRequestController extends Controller
 
     public function show($id){
         $data = PurchaseRequest::with([
-            'supplier', 'user', 'mode', 
+            'supplier', 'user', 'mode', 'rfq',
             'view_dmd_purchase_requests'=> function($query){
                 $query->with([
-                    'dmd_price_schedule',
+                    'dmd_price_schedule', 'app_dmd'
                 ]);
             },
         ])->where('purchase_request_id', $id)->first();

@@ -1,12 +1,12 @@
 <template>
 <div id="f01">
-    <div id="content-wrapper" v-for="item in pr.dmd_purchase_requests" :key="item.dmd_id">
+    <div id="content-wrapper" v-for="item in pr.view_dmd_purchase_requests" :key="item.dmd_id">
         <div class="col-lg-12">
             <table class="table table-condensed table-sm a">
                 <tr>
-                    <td rowspan="7" class="pr1 border-top-0 border-right-0"><img :src="'/img/bghmc.png'"
+                    <td rowspan="7" class="pr1 border-right-0"><img :src="'/img/bghmc.png'"
                                 style="margin-left: 15%; margin-top: 8%" width="150" height="150"></td>
-                    <td colspan="5" class="pr1 border-top-0 border-bottom-0" id="pr1">
+                    <td colspan="5" class="pr1 border-bottom-0" id="pr1">
                         <center>Republic of the Philippines</center>
                     </td>
                 </tr>
@@ -146,6 +146,11 @@
                 </td>
             </table>
         </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
     </div>
 </div>
 </template>

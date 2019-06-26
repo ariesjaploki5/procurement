@@ -22,23 +22,29 @@
                                     <th width="5%">#</th>
                                     <th width="45%">Description</th>
                                     <th>Unit of Issue</th>
-                                    <th>Quantity</th>
                                     <th>Mode of Procurement</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Cost</th>
                                     <th>Budget</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(dmd, index) in filteredDmds" :key="dmd.dmd_id" id="app_data">
+                                <tr v-for="(dmd, index) in filteredDmds" :key="dmd.dmd_id" id="app_data" :class="{ 'bg-danger' : !dmd.cost && !dmd.quantity }">
                                     <td width="5%">{{ index + 1}}</td>
                                     <td width="45%">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
-                                    <td class="text-center">{{ dmd.formdesc }}</td>
-                                    <td class="text-right">{{ dmd.quantity }}</td>
+                                    <td class="text-center">{{ dmd.unit_desc }}</td>
                                     <td class="text-center">
                                         {{ dmd.mode_desc }}
                                     </td>
+                                    <td class="text-right">{{ dmd.quantity }}</td>
                                     <td class="text-right">
-                                        {{ dmd.budget | currency2 }}
+                                        <span v-if="dmd.cost">{{ dmd.cost | currency2 }}</span>
+                                        <span v-else></span>
+                                    </td>
+                                    <td class="text-right">
+                                        <span v-if="dmd.cost && dmd.quantity">{{ dmd.cost * dmd.quantity | currency2 }}</span>
+                                        <span v-else></span>
                                     </td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-primary" @click="edit_app_dmd(dmd)">Edit</button>
@@ -68,13 +74,18 @@
                                         <option v-for="unit in units" :value="unit.unit_id" :key="unit.unit_id">{{ unit.unit_desc }}</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="" class="form-label">Budget</label>
-                                    <input type="number" class="form-control form-control-sm text-right" v-model="form.budget" min="0" step="1">
-                                </div>
+                                
                                 <div class="form-group">
                                     <label for="" class="form-label">Quantity</label>
                                     <input type="number" class="form-control form-control-sm text-right" v-model="form.quantity" min="0" step="1">
+                                </div>
+                                <div>
+                                    <label for="" class="form-label">Unit Cost</label>
+                                    <input type="text" class="form-control form-control-sm text-right" v-model="form.cost" min="0" step="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="form-label">Budget</label>
+                                    <input type="number" class="form-control form-control-sm text-right" :value="form.cost * form.quantity" disabled min="0" step="1">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -101,10 +112,10 @@ export default {
                 formdesc: '',
                 brandname: '',
                 id: '',
-                budget: '',
                 mode_id: '',
                 unit_id: '',
                 quantity: '',
+                cost: '',
             }),
             dmds: [],
             search: '',

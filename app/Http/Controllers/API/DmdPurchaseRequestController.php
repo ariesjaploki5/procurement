@@ -26,7 +26,6 @@ class DmdPurchaseRequestController extends Controller
         ]);  
 
         for($i = 0; $i < $count; $i++){
-
             $dmd_id = $dmd[$i]['dmd_id'];
             $quantity = $dmd[$i]['quantity'];
             $supplier_id = $dmd[$i]['dmd_price_schedule']['supplier_id'];
@@ -44,7 +43,6 @@ class DmdPurchaseRequestController extends Controller
                 'dmd_id' => $dmd_id,
                 'request_quantity' => $quantity,
             ]);
-            
         }
 
         return response()->json();
@@ -57,6 +55,44 @@ class DmdPurchaseRequestController extends Controller
         $cart_id = $dmd[0]['cart_id'];
 
         $cart = Cart::findOrFail($cart_id);
+
+        $pr = PurchaseRequest::create([
+            'mode_id' => $request->mode_id,
+            'category_id' => $request->category_id,
+            'user_id' => $request->user_id, 
+            'status' => 0,
+            'purpose' => $request->purpose,
+        ]);
+
+        for($i = 0; $i < $count; $i++){
+
+            $dmd_id = $dmd[$i]['dmd_id'];
+            $quantity = $dmd[$i]['quantity'];
+            
+            $pr->dmd_purchase_requests()->create([
+                'dmd_id' => $dmd_id,
+                'request_quantity' => $quantity,
+            ]);
+        }
+
+        $cart->update([
+            'status' => 1
+        ]);  
+
+        return response()->json();
+    }
+
+    public function rfq(Request $request){
+        $dmd = $request->items;
+        $count = count($dmd);
+        $cart_id = $dmd[0]['cart_id'];
+
+        $cart = Cart::findOrFail($cart_id);
+
+        $rfq = RequestForQuotation::create([
+            'category_id' => $request->category_id,
+            'user_id' => $request->user_id, 
+        ]);
 
         $pr = PurchaseRequest::create([
             'mode_id' => $request->mode_id,

@@ -20,12 +20,7 @@
                         <p>Dashboard</p>
                     </router-link>
                 </li>
-                <li class="nav-item">
-                    <router-link to='../../users' class="nav-link">
-                        <i class="nav-icon fab fa-first-order"></i>
-                        <p>Users</p>
-                    </router-link>
-                </li>
+
             </ul>
             <ul v-show="user.role_id === '2'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
@@ -64,18 +59,19 @@
                         <p>Supplier</p>
                     </router-link>
                 </li>
-                <li class="nav-item">
-                    <router-link to='../../users' class="nav-link">
-                        <i class="nav-icon fab fa-first-order"></i>
-                        <p>Users</p>
-                    </router-link>
-                </li>
+
             </ul>
             <ul v-show="user.role_id === '3'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <router-link to='../../purchase_request2' class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Purchase Request</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../request_for_quotation' class="nav-link">
+                        <i class="nav-icon fas fa-wallet"></i>
+                        <p>Request For Quotation</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
@@ -108,7 +104,6 @@
                         <p>Supplier</p>
                     </router-link>
                 </li>
-                
             </ul>
             <ul v-show="user.role_id === '5'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">

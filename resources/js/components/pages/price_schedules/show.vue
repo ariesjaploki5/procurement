@@ -26,6 +26,7 @@
                                 <tr>
                                     <th id="ps_id">#</th>
                                     <th id="ps_desc">Description</th>
+                                    <th id="ps_unit">Unit</th>
                                     <th id="ps_qty">Quantity</th>
                                     <th id="ps_abc">ABC</th>
                                     <th id="ps_bid">
@@ -35,7 +36,7 @@
                                             <div id="ps_bid_price_head">Bid Price</div>
                                             <div id="ps_bid_brand_head">Brand</div>
                                             <div id="ps_bid_pack_head">Packaging</div>
-                                            <div id="ps_bid_manu_head">Manufaturer</div>
+                                            <div id="ps_bid_manu_head">Manufacturer</div>
                                             <div id="ps_bid_co_head">Country of Origin</div>
                                             <div id="ps_bid_mod_head">Modify</div>
                                         </div>
@@ -44,29 +45,30 @@
                                 </tr>
                             </thead>
                             <tbody id="price_schedule_tbody">
-                                <tr v-for="dmd in filteredDmds" :key="dmd.dmd_id">
-                                    <td id="ps_id">{{ dmd.dmd_id }}</td>
+                                <tr v-for="(dmd, index) in filteredDmds" :key="dmd.dmd_id">
+                                    <td id="ps_id">{{ index+1 }}</td>
                                     <td id="ps_desc">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
-                                    <td id="ps_qty">Quantity</td>
-                                    <td id="ps_abc">ABC</td>
+                                    <td id="ps_unit">{{ dmd.app_dmd.unit_desc }}</td>
+                                    <td id="ps_qty">{{ dmd.app_dmd.quantity }}</td>
+                                    <td id="ps_abc">{{ dmd.app_dmd.cost | currency2 }}</td>
                                     <td id="ps_bid">
-                                        <p id="ps_bid_2" v-if="!dmd.dmd_price_schedules.length">No Bidder</p>
-                                        <div id="ps_bid_2" v-else v-for="(ps, index) in dmd.dmd_price_schedules" :key="ps.id"  v-bind:class="{ 'table-success' : index == 0, 'bg-danger': ps.terminated == 1}">
-                                            <div id="ps_bid_rank"><p v-if="ps.rank">{{ ps.rank }}</p><p v-else></p></div>
-                                            <div id="ps_bid_bidder">{{ ps.supplier.supplier_name }}</div>
+                                        <p v-show="!dmd.dmd_price_schedules.length">No Bidder</p>
+                                        <div id="ps_bid_2" v-show="dmd.dmd_price_schedules != null" v-for="(ps, index) in dmd.dmd_price_schedules" :key="ps.dps_id"  v-bind:class="{ 'table-success' : index == 0, 'bg-danger': ps.terminated == 1}">
+                                            <div id="ps_bid_rank">{{ ps.rank }}</div>
+                                            <div id="ps_bid_bidder">{{ ps.supplier_name }}</div>
                                             <div id="ps_bid_price">{{ ps.bid_price | currency2 }}</div>
-                                            <div id="ps_bid_brand"><p v-if="ps.brand">{{ ps.brand.brand_desc }}</p><p v-else></p></div>
-                                            <div id="ps_bid_pack"><p v-if="ps.packaging">{{ ps.packaging.packaging_desc }}</p><p v-else></p></div>
-                                            <div id="ps_bid_manu"><p v-if="ps.manufacturer">{{ ps.manufacturer.manufacturer_desc }}</p><p v-else></p></div>
-                                            <div id="ps_bid_co"><p v-if="ps.country">{{ ps.country.country_desc }}</p><p v-else></p></div>
+                                            <div id="ps_bid_brand">{{ ps.brand_desc }}</div>
+                                            <div id="ps_bid_pack">{{ ps.packaging_desc }}</div>
+                                            <div id="ps_bid_manu">{{ ps.manufacturer_desc }}</div>
+                                            <div id="ps_bid_co">{{ ps.country_desc }}</div>
                                             <div id="ps_bid_mod">
                                                 <div class="btn-group dropleft btn-sm">
                                                     <button id="btn_custom" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                                     <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                                         <button class="dropdown-item" @click="edit_bidder(dmd, ps)"><i class="fas fa-pen"></i> Edit</button>
-                                                        <button class="dropdown-item" @click="terminate_bidder(ps.id)">Terminate</button>
-                                                        <button class="dropdown-item" @click="unterminate_bidder(ps.id)">Unterminate</button>
-                                                        <button class="dropdown-item" @click="delete_bidder(ps.id)">Remove</button>
+                                                        <button class="dropdown-item" @click="terminate_bidder(ps.dps_id)">Terminate</button>
+                                                        <button class="dropdown-item" @click="unterminate_bidder(ps.dps_id)">Unterminate</button>
+                                                        <button class="dropdown-item" @click="delete_bidder(ps.dps_id)">Remove</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -311,10 +313,13 @@ export default {
     }
 
     #ps_id{
-        width: 4%;
+        width: 2%;
     }
     #ps_desc{
         width: 18%;
+    }
+    #ps_unit{
+        width: 4%;
     }
     #ps_qty{
         width: 5%;
@@ -323,7 +328,7 @@ export default {
         width: 5%;
     }
     #ps_bid{
-        width: 60%;
+        width: 58%;
     }
     #ps_act{
         width: 7%;

@@ -67,4 +67,12 @@ class PurchaseRequest extends Model
     public function purchase_orders(){
         return $this->belongsTo('App\Models\PurchaseOrder', 'purchase_order_id', 'purchase_order_id');
     }
+
+    public function app_dmd(){
+        return $this->belongsTo('App\Views\AppDmd', 'dmd_id', 'dmd_id');
+    }
+
+    public function rfq(){
+        return $this->hasOne('App\Models\RequestForQuotation', 'purchase_request_id');
+    }
 }

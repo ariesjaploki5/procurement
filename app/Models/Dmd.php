@@ -34,4 +34,8 @@ class Dmd extends Model
     public function carts(){
         return $this->belongsToMany('App\Models\Cart', 'cart_dmd', 'dmd_id', 'cart_id');
     }
+
+    public function rfqs(){
+        return $this->hasMany('App\Models\RequestForQuotation', 'dmd_id', 'dmd_id');
+    }
 }

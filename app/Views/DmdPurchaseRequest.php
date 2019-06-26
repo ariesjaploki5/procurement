@@ -13,5 +13,11 @@ class DmdPurchaseRequest extends Model
         return $this->hasOne('App\Views\DmdPriceSchedule', 'dmd_id', 'dmd_id')->orderBy('rank', 'asc');
     }
 
+    public function app_dmd(){
+        return $this->hasOne('App\Views\AppDmd', 'dmd_id', 'dmd_id');
+    }
     
+    public function dmd_rfqs(){
+        return $this->hasMany('App\Models\DmdRfq', 'dmd_id', 'dmd_id');
+    }
 }

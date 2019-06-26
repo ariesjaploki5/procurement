@@ -50,9 +50,8 @@
                     </tr>
                     <td class="pr1 border-top-0" colspan="7"></td>
                 </table>
-
-                <table class="table table-condensed table-sm table-sm" style="margin-top: -1.65%">
-                    <tr>
+                <table id="table_height" class="table table-condensed table-sm table-sm" style="margin-top: -1.65%; height: 47rem;">
+                    <tr style="height: 1rem;">
                         <td class="pr1 text-center" width="5%"><b>Item No.</b></td>
                         <td class="pr1 text-center" width="5%"><b>Qty.</b></td>
                         <td class="pr1 text-center" width="7%"><b>Unit of Issue</b></td>
@@ -63,17 +62,17 @@
                     </tr>
 
                     <!--Line 1 -->
-                    <tr v-for="item in pr.view_dmd_purchase_requests" :key="item.dmd_id">
-                        <td class="pr border-bottom-0 text-center" width="5%">{{ item.dmd_id }}</td>
-                        <td class="pr border-bottom-0 text-center" width="5%">{{ item.request_quantity }}</td>
-                        <td class="pr border-bottom-0 text-center" width="7%">(unit_of_issue)</td>
-                        <td class="pr border-bottom-0 text-center">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
-                        <td class="pr border-bottom-0 text-center" width="7%">(batch_no)</td>
-                        <td class="pr border-bottom-0 text-center" width="15%">
+                    <tr class="prpr" v-for="item in pr.view_dmd_purchase_requests" :key="item.dmd_id">
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ item.dmd_id }}</td>
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ item.request_quantity }}</td>
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="7%">(unit_of_issue)</td>
+                        <td class="pr border-top-0 border-bottom-0 text-center">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="7%"></td>
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="15%">
                             <span v-if="pr.mode_id == 1">{{ item.dmd_price_schedule.bid_price | currency2 }}</span>
                             <span v-else></span>
                         </td>
-                        <td class="pr border-bottom-0 text-center" width="15%">
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="15%">
                             <span v-if="pr.mode_id == 1">{{ item.request_quantity * item.dmd_price_schedule.bid_price | currency2 }}</span>
                             <span v-else></span>
                         </td>
@@ -81,45 +80,45 @@
 
                      <!--Name of Supplier  -->
                     <tr>
-                        <td class="pur border-top border-bottom-0 text-center" width="5%"></td>
-                        <td class="pur border-top border-bottom-0 text-center" width="5%"></td>
-                        <td class="pur border-top border-bottom-0 text-center" width="7%"></td>
-                        <td class="pur border-top border-bottom-0 text-center"><b>
+                        <td class="pur border-top-0 border-bottom-0 text-center" width="5%"></td>
+                        <td class="pur border-top-0 border-bottom-0 text-center" width="5%"></td>
+                        <td class="pur border-top-0 border-bottom-0 text-center" width="7%"></td>
+                        <td class="pur border-top-0 border-bottom-0 text-center"><b>
                             <span v-if="pr.mode_id == 1">{{ pr.supplier.supplier_name }}</span>
                             <span v-else></span>
                         </b></td>
-                        <td class="pur border-top border-bottom-0 text-center" width="7%"></td>
-                        <td class="pur border-top border-bottom-0 text-center" width="15%"></td>
-                        <td class="pur border-top border-bottom-0 text-center" width="15%"><b></b></td>
+                        <td class="pur border-top-0 border-bottom-0 text-center" width="7%"></td>
+                        <td class="pur border-top-0 border-bottom-0 text-center" width="15%"></td>
+                        <td class="pur border-top-0 border-bottom-0 text-center" width="15%"><b></b></td>
                     </tr>
-
                      <!--Total Amount  -->
                     <tr>
-                        <td class="pur border-top border-bottom-0"></td>
-                        <td class="pur border-top border-bottom-0"></td>
-                        <td class="pur border-top border-bottom-0"></td>
-                        <td class="pur border-top border-bottom-0"></td>
-                        <td class="pur border-top border-bottom-0"></td>
-                        <td class="pur border-top border-bottom-0"></td>
-                        <td class="pr1 border-top border-left-0 text-center align-bottom" style="border-bottom:double" width="15%">
+                        <td class="pur border-top-0 border-bottom-0"></td>
+                        <td class="pur border-top-0 border-bottom-0"></td>
+                        <td class="pur border-top-0 border-bottom-0"></td>
+                        <td class="pur border-top-0 border-bottom-0"></td>
+                        <td class="pur border-top-0 border-bottom-0"></td>
+                        <td class="pur border-top-0 border-bottom-0"></td>
+                        <td class="pr1 border-top-0 border-left-0 text-center align-bottom" style="border-bottom:double" width="15%">
                             <b>
                                 <span v-if="pr.mode_id == 1">{{ estimated_cost | currency2 }}</span>
                                 <span v-else></span>
                             </b>
                         </td>
                     </tr>
+                    
+                </table>
+                <table class="table table-condensed table-borderless table-sm a" style="margin-top: -1.7%">
                     <tr>
-                        <td class="pr1 border-top-0" colspan="7"></td>
+                        <td class="pr1 border-top-0" colspan="6"></td>
                     </tr>
                     <tr>
                         <td class="pr1 border-right-0 border-top-0">Purpose:</td>
-                        <td class="pr1 border-left-0 border-top-0 text-center" colspan="7"><b>{{ pr.purpose }}</b></td>
+                        <td class="pr1 border-left-0 border-top-0 text-center" colspan="5"><b>{{ pr.purpose }}</b></td>
                     </tr>
                     <tr>
-                        <td class="pr1 border-top-0" colspan="7"><b>Required Attachments:</b> <i class="text-primary">(For Procurement Management Office use only)</i></td>
+                        <td class="pr1 border-top-0" colspan="6"><b>Required Attachments:</b> <i class="text-primary">(For Procurement Management Office use only)</i></td>
                     </tr>
-                </table>
-                <table class="table table-condensed table-borderless table-sm a" style="margin-top: -1.7%">
                     <tr>
                         <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td class="pr1 border-0">Stock Position Sheet for Consumables</td>
@@ -240,6 +239,10 @@
     div#pr1 {
         font-family: 'Helvetica', sans-serif;
     }
+    tr.prpr{
+        padding-top: none;
+        padding-bottom: none;
+    }
 
     td.pr1 {
         border-collapse: collapse;
@@ -254,7 +257,7 @@
         border: 1px solid black;
         margin: 0px;
         padding: none;
-        padding-bottom: 20px;
+        padding-bottom: 0px;
     }
 
     td.pur {
@@ -265,11 +268,12 @@
         padding-bottom: 15px;
     }
 
-    table#t01 th {
+    table #t01 th {
         background-color: rgb(184, 172, 172) !important;
         border: 1px solid black;
         color: black;
         margin: 0px;
         padding: none;
     }
+
 </style>

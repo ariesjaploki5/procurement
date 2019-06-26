@@ -56,6 +56,7 @@ class AppDmdController extends Controller
             'mode_id' => $request->mode_id,
             'quantity' => $request->quantity,
             'unit_id' => $request->unit_id,
+            'cost' => $request->cost,
         ]);
 
         return response()->json();

@@ -27,7 +27,6 @@ import purchase_orders from './components/pages/purchase_orders/main';
 import purchase_order_list from './components/pages/purchase_orders/list';
 
 import purchase_requests from './components/pages/purchase_requests/main';
-import purchase_request_list from './components/pages/purchase_requests/list';
 
 import users from './components/pages/users/main';
 import user_list from './components/pages/users/list';
@@ -41,6 +40,10 @@ import adjustment_list from './components/pages/adjustments/list';
 import purchase_request2 from './components/pharmacy/purchase_request.vue';
 import purchase_order2 from './components/pharmacy/purchase_order.vue';
 
+import request_for_quotation from './components/pages/rfq/main.vue';
+import request_for_quotation_list from './components/pages/rfq/list.vue';
+import request_for_quotation_show from './components/pages/rfq/show.vue';
+
 import drugs_and_medicines from './components/pharmacy/drugs_and_medicines.vue';
 
 import suppliers from './components/pages/supplier/main';
@@ -51,6 +54,7 @@ import accounting_dmd from './components/accounting/drugs_and_medicines.vue';
 
 import budget_po from './components/budget/purchase_order.vue';
 import div_head_po from './components/div_head/purchase_order.vue';
+
 import fmo_po from './components/fmo/purchase_order.vue';
 import pmo_po from './components/pmo/purchase_order.vue';
 
@@ -67,6 +71,7 @@ import rfq from './components/print/rfq';
 import sps from './components/print/sps';
 
 export const routes = [
+
     {
         path: '/accounting_dmd',
         component: accounting_dmd,
@@ -197,6 +202,20 @@ export const routes = [
                 component: inventory_list
             },
         ]
+    },    {
+        path: '/request_for_quotation',
+        component: request_for_quotation,
+        children: [
+            {
+                path: '',
+                component: request_for_quotation_list
+            },
+            {
+                path: 'show/:id',
+                component: request_for_quotation_show,
+                name: 'request_for_quotation_show'
+            },
+        ]
     },
     {
         path: '/ppmps',
@@ -241,12 +260,6 @@ export const routes = [
     {
         path: '/purchase_requests',
         component: purchase_requests,
-        children: [
-            {
-                path: '',
-                component: purchase_request_list
-            },
-        ]
     },
     {
         path: '/apps',

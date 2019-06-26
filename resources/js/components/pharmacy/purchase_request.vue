@@ -12,7 +12,7 @@
                         <table class="table table-sm table-hover">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>PR #</th>
                                     <th>Mode</th>
                                     <th>Status</th>
                                     <th>Date Created</th>
@@ -21,7 +21,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="prs in purchase_requests" :key="prs.purchase_request_id">
-                                    <td>{{ prs.purchase_request_id }}</td>
+                                    <td>{{ prs.created_at | myDate }} - {{ prs.purchase_request_id | numeral2 }}</td>
                                     <td>{{ prs.mode.mode_desc }}</td>
                                     <td>
                                         <div v-show="prs.status == 0">Pending</div>
@@ -57,7 +57,7 @@
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            {{view_pr_form.purchase_request_id}}
+                            {{ view_pr_form.created_at | myDate }} - {{ view_pr_form.purchase_request_id | numeral2 }}
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -75,7 +75,7 @@
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
-                                            <th width="3%"></th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="!isLoading">
@@ -90,14 +90,14 @@
                                                 <div v-else>{{ dmd.order_quantity }}</div>
                                             </td>
                                             <td class="text-right">
-                                                <div v-if="dmd.dmd_price_schedule">{{ dmd.dmd_price_schedule.bid_price | currency2}}</div>
-                                                <div v-else></div>
+                                                <div v-if="view_pr_form.mode_id == 1">{{ dmd.dmd_price_schedule.bid_price | currency2}}</div>
+                                                <div v-else>{{ dmd.app_dmd.cost | currency2}}</div>
                                             </td>
                                             <td  class="text-right">
-                                                <div v-if="dmd.dmd_price_schedule">{{ dmd.request_quantity * dmd.dmd_price_schedule.bid_price | currency2}}</div>
-                                                <div v-else></div>
+                                                <div v-if="view_pr_form.mode_id == 1">{{ dmd.request_quantity * dmd.dmd_price_schedule.bid_price | currency2}}</div>
+                                                <div v-else>{{ dmd.request_quantity * dmd.app_dmd.cost | currency2}}</div>
                                             </td>
-                                            <td width="3%" class="text-center">
+                                            <td class="text-center">
                                                 <button type="button" class="btn btn-sm btn-danger" @click="remove_item(dmd.id)">
                                                     <i class="fas fa-times-circle"></i>
                                                 </button>
@@ -113,7 +113,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button v-show="!view_pr_form.purchase_order_id" class="btn btn-primary" type="button" @click="store_po(view_pr_form.purchase_request_id)">Purchase Order</button>
+                            <button v-show="view_pr_form.mode_id == 4 && view_pr_form.rfq === null" class="btn btn-primary" type="button" @click="store_rfq(view_pr_form.purchase_request_id)">Request for Quotation</button>
+                            <button v-show="!view_pr_form.purchase_order_id && view_pr_form.mode_id == 1 && current_user.role_id == 3" class="btn btn-primary" type="button" @click="store_po(view_pr_form.purchase_request_id)">Purchase Order</button>
                         </div>
                     </div>
                 </div>
@@ -122,7 +123,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            {{track_pr_modal.purchase_request_id}}
+                            {{ track_pr_modal.created_at | myDate }} - {{ track_pr_modal.purchase_request_id | numeral2 }}
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -171,7 +172,6 @@
         </div>
     </div>
 </template>
-
 <script>
 export default {
     data(){
@@ -181,6 +181,9 @@ export default {
                purchase_request_id: '',
                view_dmd_purchase_requests: [],
                purchase_order_id: '',
+               mode_id: '',
+               rfq: {},
+               created_at: '',
             }),
             isLoading: false,
             track_pr_modal: {},
@@ -250,6 +253,17 @@ export default {
 
             });
         },
+        store_rfq(id){
+            this.view_pr_form.post('../../api/rfq').then(() => {
+                $('#prModal').modal('hide');
+                toast.fire({
+                    type: 'success',
+                    title: 'Request For Quotation Created Successfully'
+                });
+            }).catch(() => {
+
+            });
+        },
         remove_item(id){
             axios.delete('../../api/dmd_pr/'+id).then(() => {
                 this.view_pr(this.selected_id);
@@ -258,17 +272,14 @@ export default {
             });
         }
     },
-    
     computed: {
         current_user() {
             return this.$store.getters.current_user;
         }
     },
-    
     created(){
         this.get_prs();
     },
-
     mounted(){
         window.Echo.channel("pr_created").listen(".purchase_request.created", (e) => {
             this.get_prs();
@@ -279,33 +290,32 @@ export default {
     }
 }
 </script>
-
 <style scoped>
-ul{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0;
-}
-ul li{
-    width: 50% !important;
-    
-}
-tr {
-    width: 100%;
-    display: inline-table;
-    table-layout: fixed;
-}
+    ul{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0;
+    }
+    ul li{
+        width: 50% !important;
+        
+    }
+    tr {
+        width: 100%;
+        display: inline-table;
+        table-layout: fixed;
+    }
 
-table {
-    height:33rem;             
-    display: -moz-groupbox;    
-}
+    table {
+        height:33rem;             
+        display: -moz-groupbox;    
+    }
 
-tbody {
-    overflow-y: scroll;      
-    height: 31rem;           
-    width: 98.5%;
-    position: absolute;
-}
+    tbody {
+        overflow-y: scroll;      
+        height: 31rem;           
+        width: 98.5%;
+        position: absolute;
+    }
 </style>

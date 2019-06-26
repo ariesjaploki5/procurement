@@ -16,6 +16,8 @@ class AppDmd extends Model
     ];
 
     protected $fillable = [
-        'budget', 'mode_id', 'quantity', 'unit_id'
+        'budget', 'mode_id', 'quantity', 'unit_id', 'cost'
     ];
+
+    
 }

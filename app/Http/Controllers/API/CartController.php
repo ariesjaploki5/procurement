@@ -68,7 +68,9 @@ class CartController extends Controller
     }
 
     public function shopping(){
-        $data = Carts::where('mode_id', 4)
+        $data = Carts::with([
+                'app_dmd'
+            ])->where('mode_id', 4)
             ->where('app_year', $this->year_now())
             ->where('status', 0)
             ->orderBy('gendesc', 'asc')

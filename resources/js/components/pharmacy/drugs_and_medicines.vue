@@ -1,70 +1,64 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <!-- <div class="card"> -->
-                <!-- <div class="card-header"> -->
-                    <div class="row mb-1">
-                        <div class="col-md-6">
-                            Drugs And Medicines
+            <div class="row mb-1">
+                <div class="col-md-6">
+                    Drugs And Medicines
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="btn-group dropleft">
+                        <button type="button"  :disabled="!pb_form.items.length && !sp_form.items.length" class="btn btn-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i>  Purchase Requests</button>
+                        <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                            <button v-show="pb_form.items.length" class="dropdown-item" @click="public_bidding()">Public Bidding</button>
+                            <button v-show="sp_form.items.length" class="dropdown-item" @click="shopping()">Shopping</button>
+                            <!-- <button class="dropdown-item" @click="small_value()">Small Value</button> -->
                         </div>
-                        <div class="col-md-6 text-right">
-                            <div class="btn-group dropleft">
-                                <button type="button"  :disabled="!pb_form.items.length && !sp_form.items.length" class="btn btn-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i>  Purchase Requests</button>
-                                <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                                    <button v-show="pb_form.items.length" class="dropdown-item" @click="public_bidding()">Public Bidding</button>
-                                    <button v-show="sp_form.items.length" class="dropdown-item" @click="shopping()">Shopping</button>
-                                    <!-- <button class="dropdown-item" @click="small_value()">Small Value</button> -->
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-auto text-right">Search:</div>
+                <div class="col-md-4"><input type="text" class="form-control form-control-sm" v-model="search_word"></div>
+            </div>
+            <div class="table-responsive-sm">
+                <table class="table table-fixed table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th width="5%">#</th>
+                            <th width="10%">ID</th>
+                            <th width="30%">Description</th>
+                            <th width="10%" class="text-center">Balance On Hand</th>
+                            <th class="text-center">SSL</th>
+                            <th class="text-center">ROP</th>
+                            <th class="text-center">Item In Transit</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'bg-warning' : d.boh_iit < d.ssl/2 , 'bg-danger' : d.ssl == 0 , 'bg-success' : d.boh > d.ssl/2, 'bg-primary' : d.boh_iit > d.ssl/2}" >
+                            <td width="5%">{{ index + 1}}</td>
+                            <td width="10%">{{ d.dmdcomb }}-{{ d.dmdctr}}</td>
+                            <td width="30%">{{ d.gendesc }} {{ d.dmdnost }} {{ d.stredesc }} {{ d.formdesc }} {{ d.brandname }}</td>
+                            <td width="10%" class="text-right">{{ d.boh | numeral3 }}</td>
+                            <td class="text-right">{{ d.ssl | numeral3 }}</td>
+                            <td class="text-right">{{ d.rop | numeral3 }}</td>
+                            <td class="text-right">{{ d.item_in_transit | numeral3 }}</td>
+                            <td class="text-left">
+                                <button type="button" class="btn btn-sm btn-light btn-outline-dark" @click="edit_ssl(d)">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <div class="btn-group dropleft btn-sm">
+                                    <button  v-show="d.boh_iit <= d.ssl/2 && d.ssl != 0 " :disabled="d.cart_dmd_id != null" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cart-plus"></i></button>
+                                    <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                        <button class="dropdown-item" v-show="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)"><i class="fas fa-cart-plus"></i> Public Bidding</button>
+                                        <button class="dropdown-item" v-show="d.cost" @click="add_item_2(d, 4)"><i class="fas fa-cart-plus"></i> Shopping</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-md-auto text-right">Search:</div>
-                        <div class="col-md-4"><input type="text" class="form-control form-control-sm" v-model="search_word"></div>
-                    </div>
-                <!-- </div> -->
-                <!-- <div class="card-body"> -->
-                    <div class="table-responsive-sm">
-                        <table class="table table-fixed table-sm table-hover">
-                            <thead>
-                                <tr>
-                                    <th width="5%">#</th>
-                                    <th width="10%">ID</th>
-                                    <th width="30%">Description</th>
-                                    <th width="10%" class="text-center">Balance On Hand</th>
-                                    <th class="text-center">SSL</th>
-                                    <th class="text-center">ROP</th>
-                                    <th class="text-center">Item In Transit</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'bg-warning' : d.boh_iit < d.ssl/2 , 'bg-danger' : d.ssl == 0 , 'bg-success' : d.boh > d.ssl/2, 'bg-primary' : d.boh_iit > d.ssl/2}" >
-                                    <td width="5%">{{ index + 1}}</td>
-                                    <td width="10%">{{ d.dmdcomb }}-{{ d.dmdctr}}</td>
-                                    <td width="30%">{{ d.gendesc }} {{ d.dmdnost }} {{ d.stredesc }} {{ d.formdesc }} {{ d.brandname }}</td>
-                                    <td width="10%" class="text-right">{{ d.boh | numeral3 }}</td>
-                                    <td class="text-right">{{ d.ssl | numeral3 }}</td>
-                                    <td class="text-right">{{ d.rop | numeral3 }}</td>
-                                    <td class="text-right">{{ d.item_in_transit | numeral3 }}</td>
-                                    <td class="text-left">
-                                        <button type="button" class="btn btn-sm btn-light btn-outline-dark" @click="edit_ssl(d)">
-                                            <i class="fas fa-pen"></i>
-                                        </button>
-                                        <div class="btn-group dropleft btn-sm">
-                                            <button id="btn_custom"  v-show="d.boh_iit <= d.ssl/2 && d.ssl != 0" :disabled="d.cart_dmd_id != null" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cart-plus"></i></button>
-                                            <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                                                <button class="dropdown-item" v-show="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)"><i class="fas fa-cart-plus"></i> Public Bidding</button>
-                                                <button class="dropdown-item" @click="add_item_2(d, 4)"><i class="fas fa-cart-plus"></i> Shopping</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                <!-- </div> -->
-            <!-- </div> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="modal fade" id="sslModal" tabindex="-1" role="dialog" aria-labelledby="sslModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
@@ -122,9 +116,9 @@
                                         <tr v-for="(item,index) in pb_form.items" :key="item.dmd_id">
                                             <td>{{ index + 1}}</td>
                                             <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
-                                            <td class="text-right table-danger">{{ item.ssl }}</td>
-                                            <td class="text-right table-danger">{{ item.boh }}</td>
-                                            <td class="text-right table-danger"></td>
+                                            <td class="text-right">{{ item.ssl }}</td>
+                                            <td class="text-right">{{ item.boh }}</td>
+                                            <td class="text-right"></td>
                                             <td width="10%" class="text-right">
                                                 <input type="number" class="form-control form-control-sm text-right" v-model="item.quantity">
                                             </td>
@@ -164,7 +158,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form  @submit.prevent="sp_submit()">
+                            <form @submit.prevent="sp_submit()">
                                 <table class="table table-sm table-hover">
                                     <thead>
                                         <tr class="text-center">
@@ -176,27 +170,21 @@
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
-                                            <th class="text-center">
-                                                Action
-                                            </th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="(item,index) in sp_form.items" :key="item.dmd_id">
                                             <td>{{ index + 1}}</td>
                                             <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
-                                            <td class="text-right table-danger">{{ item.ssl }}</td>
-                                            <td class="text-right table-danger">{{ item.boh }}</td>
-                                            <td class="text-right table-danger"></td>
+                                            <td class="text-right">{{ item.ssl }}</td>
+                                            <td class="text-right">{{ item.boh }}</td>
+                                            <td class="text-right">{{ item.app_dmd.item_in_transit }}</td>
                                             <td width="10%" class="text-right">
-                                                <input type="number" class="form-control form-control-sm text-right" v-model="item.quantity">
+                                                <input type="number" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" min="1" v-model="item.quantity">
                                             </td>
-                                            <td class="text-right">
-                                                
-                                            </td>
-                                            <td class="text-right">
-                                                
-                                            </td>
+                                            <td class="text-right">{{ item.app_dmd.cost | currency2 }}</td>
+                                            <td class="text-right">{{ item.app_dmd.cost * item.quantity | currency2 }}</td>
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.id)">
                                                     <i class="fas fa-times-circle"></i>
@@ -207,7 +195,7 @@
                                 </table>
                                 <div class="form-group">
                                     <label class="form-label">Purpose: </label>
-                                    <textarea  id="" class="form-control" rows="10" v-model="sp_form.purpose"></textarea>
+                                    <textarea type="text" class="form-control" rows="5" v-model="pb_form.purpose"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-sm btn-success">Submit</button>
@@ -248,9 +236,9 @@ export default {
                 purpose: '',
             }),
             sp_form:new Form({
-                pr_id: '',
                 mode_id: 4,
                 category_id: 1,
+                pr_id: '',
                 items: [],
                 purpose: '',
             }),
@@ -282,6 +270,10 @@ export default {
                 $('#pbModal').modal('hide');
                 this.get_dmds();
                 this.get_pb_items();
+                toast.fire({
+                    type: 'success',
+                    title: 'Purchase Request Created Successfully'
+                });
             }).catch(() => {
 
             });
@@ -297,6 +289,10 @@ export default {
                 $('#spModal').modal('hide');
                 this.get_dmds();
                 this.get_sp_items();
+                toast.fire({
+                    type: 'success',
+                    title: 'Purchase Request Created Successfully'
+                });
             }).catch(() =>{
 
             });
