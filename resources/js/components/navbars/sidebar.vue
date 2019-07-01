@@ -54,11 +54,17 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
+                    <router-link to='../../consignments' class="nav-link">
+                        <i class="nav-icon fas fa-balance-scale"></i>
+                        <p>Consignments</p>
+                    </router-link>
+                </li>
+                <!-- <li class="nav-item">
                     <router-link to='../../suppliers' class="nav-link">
                         <i class="nav-icon fas fa-wallet"></i>
                         <p>Supplier</p>
                     </router-link>
-                </li>
+                </li> -->
 
             </ul>
             <ul v-show="user.role_id === '3'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -102,6 +108,14 @@
                     <router-link to='../../suppliers' class="nav-link">
                         <i class="nav-icon fas fa-wallet"></i>
                         <p>Supplier</p>
+                    </router-link>
+                </li>
+            </ul>
+            <ul v-show="user.role_id === '4'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <router-link to='../../mmo_po' class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Purchase Order</p>
                     </router-link>
                 </li>
             </ul>

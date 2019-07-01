@@ -38,15 +38,27 @@ Route::apiResources([
     'cart'=> 'API\CartController',
     'rfq' => 'API\RfqController',
 ]);
+Route::put('send_to_cmps/{id}', 'API\PurchaseRequestController@send_to_cmps');
+
+Route::post('date_of_delivery', 'API\PurchaseOrderController@store_date_of_delivery');
+
+Route::get('new_purchase_request', 'API\PurchaseRequestController@new');
+
+Route::get('consignment/{id}', 'API\ConsignmentController@search');
+
+Route::post('received_dmd', 'API\PurchaseOrderController@received_dmd');
 
 Route::post('add_rfq/{id}', 'API\RfqController@add_rfq');
 
 Route::get('pr_shopping', 'API\PurchaseRequestController@shopping');
 Route::get('pr_public_bidding', 'API\PurchaseRequestController@public_bidding');
 
+Route::post('pr_submit', 'API\PurchaseRequestController@pr_submit');
+Route::get('pr_items', 'API\CartController@pr_items');
+
+
 Route::get('shopping', 'API\CartController@shopping');
 Route::post('shopping', 'API\DmdPurchaseRequestController@shopping');
-
 Route::post('obrs', 'API\PurchaseOrderController@store_update_obrs');
 
 Route::put('div_head_rcv/{id}', 'API\PurchaseRequestController@div_head_rcv');
@@ -74,12 +86,14 @@ Route::put('mmo_rls/{id}', 'API\PurchaseRequestController@mmo_rls');
 
 Route::get('public_bidding', 'API\CartController@public_bidding');
 
-
 Route::post('dmd_uacs', 'API\DmdUacsController@store');
 Route::put('dmd_uacs/{id}', 'API\DmdUacsController@update');
 
 Route::post('cart_dmd/{user_id}', 'API\CartController@add_dmd');
 Route::post('cart_dmd_2/{user_id}', 'API\CartController@add_dmd_2');
+
+Route::post('cart_dmd_3/{user_id}', 'API\CartController@add_p_3');
+
 Route::delete('cart_dmd/{id}', 'API\CartController@remove_dmd');
 
 Route::post('dmd_search', 'API\DrugsAndMedicineController@search');

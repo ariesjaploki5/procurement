@@ -22,7 +22,23 @@ class PurchaseRequestController extends Controller
                     },
                 ]);
             },
-        ])->get();
+        ])->orderBy('created_at', 'desc')->get();
+
+        return response()->json($data);
+    }
+
+    public function new(){
+
+        $data = PurchaseRequest::with([
+            'supplier', 'user', 'mode', 'rfq',
+            'view_dmd_purchase_requests' => function($query){
+                $query->with([
+                    'dmd_price_schedule' => function($query){
+                        $query->first();
+                    },
+                ]);
+            },
+        ])->where('created_at', '>=', Carbon::today())->orderBy('created_at', 'desc')->get();
 
         return response()->json($data);
     }
@@ -187,10 +203,22 @@ class PurchaseRequestController extends Controller
         return Carbon::now();
     }
 
+    public function send_to_cmps($id){
+
+        $pr = PurchaseRequest::findOrFail($id);
+        $pr->update([
+            'send' => $this->date_now(),
+            'current_status' => 'Send To CMPS',
+        ]);
+
+        return response()->json();
+    }
+
     public function div_head_rcv($id){
         $pr = PurchaseRequest::findOrFail($id);
         $pr->update([
-            'div_head_rcv' => $this->date_now()
+            'div_head_rcv' => $this->date_now(),
+            'current_status' => 'Received From End User',
         ]);
 
         return response()->json();
@@ -199,7 +227,8 @@ class PurchaseRequestController extends Controller
     public function div_head_rls($id){
         $pr = PurchaseRequest::findOrFail($id);
         $pr->update([
-            'div_head_rls' => $this->date_now()
+            'div_head_rls' => $this->date_now(),
+            'current_status' => 'Release to PMO',
         ]);
         return response()->json();
     }
@@ -207,7 +236,8 @@ class PurchaseRequestController extends Controller
     public function pmo_rcv($id){
         $pr = PurchaseRequest::findOrFail($id);
         $pr->update([
-            'pmo_rcv' => $this->date_now()
+            'pmo_rcv' => $this->date_now(),
+            'current_status' => 'Received From CMPS'
         ]);
         return response()->json();
     }
@@ -215,27 +245,10 @@ class PurchaseRequestController extends Controller
     public function pmo_rls($id){
         $pr = PurchaseRequest::findOrFail($id);
         $pr->update([
-            'pmo_rls' => $this->date_now()
+            'pmo_rls' => $this->date_now(),
+            'current_status' => 'Release To CMPS'
         ]);
         return response()->json();
     }
-
-    public function div_head_rcv_2($id){
-        $pr = PurchaseRequest::findOrFail($id);
-        $pr->update([
-            'div_head_rcv_2' => $this->date_now()
-        ]);
-        return response()->json();
-    }
-    
-
-    public function div_head_rls_2($id){
-        $pr = PurchaseRequest::findOrFail($id);
-        $pr->update([
-            'div_head_rls_2' => $this->date_now()
-        ]);
-        return response()->json();
-    }
-
 
 }

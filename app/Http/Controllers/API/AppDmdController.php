@@ -23,6 +23,7 @@ class AppDmdController extends Controller
             'app_budget' => $request->app_budget,
             'category_id' => $request->category_id,
         ]);
+        
         for($i = 0; $i < $count; $i++){
             $id = $dmds[$i]->dmd_id;
             $app->dmds()->attach($id);

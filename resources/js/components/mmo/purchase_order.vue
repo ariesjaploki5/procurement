@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="col-md-6">
-                        Purchase Requests
+                        Purchase Orders
                     </div>
                 </div>
                 <div class="card-body">
@@ -13,32 +13,20 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Status</th>
                                     <th>Date Created</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="pos in purchase_orders" :key="pos.purchase_order_id">
-                                    <td>{{ pos.purchase_order_id }}</td>
-                                    <td>
-                                        <div v-show="pos.status == 0">
-                                            Pending
-                                        </div>
-                                        <div v-show="pos.status == 1">
-                                            Approved
-                                        </div>
-                                        <div v-show="pos.status == 2">
-                                            Disapproved
-                                        </div>
-                                    </td>
+                                    <td>{{ pos.created_at | myDate }} - {{ pos.purchase_order_id | numeral2 }}</td>
                                     <td>{{ pos.created_at }}</td>
                                     <td>
                                         <div id="print" class="mb-2">
                                             <button type="button" class="btn btn-sm btn-primary" @click="view_po(pos)"><i class="fas fa-eye"></i></button>
                                             <button type="button" class="btn btn-sm btn-success" @click="track_po(pos)"><i class="fas fa-truck"></i></button>
-                                            <router-link class="btn btn-sm btn-info" :to="{ name: 'po', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
-                                            <router-link class="btn btn-sm btn-info" :to="{ name: 'sps', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> SPS</router-link>
+                                            <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
+                                            <router-link class="btn btn-sm btn-success" :to="{ name: 'obrs', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
                                         </div>
                                         <div id="document_tracking" class="">
                                             <div v-show="current_user.role_id == 4">
@@ -59,7 +47,7 @@
                         <div class="modal-header">
                             {{view_po_form.purchase_order_id}}
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                                <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
@@ -69,7 +57,8 @@
                                         <tr class="text-center">
                                             <th>#</th>
                                             <th width="20%">Description</th>
-                                            <th width="10%">Quantity</th>
+                                            <th width="10%">Ordered Quantity</th>
+                                            <th>Received Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
                                             <th></th>
@@ -79,54 +68,25 @@
                                         <tr v-for="(dmd,index) in view_po_form.purchase_request.view_dmd_purchase_requests" :key="dmd.dmd_id">
                                             <td>{{ index + 1}}</td>
                                             <td width="20%">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
+                                            <td width="10%" class="text-right">{{ dmd.order_quantity }}</td>
                                             <td width="10%" class="text-right">
-                                                <input type="number" class="form-control form-control-sm text-right" v-model="dmd.request_quantity">
+                                                <input type="number" class="form-control form-control-sm text-right" v-model="dmd.received_quantity">
                                             </td>
-                                            <td class="text-right">
-                                                {{ dmd.dmd_price_schedule.bid_price | currency2}}
-                                            </td>
-                                            <td class="text-right">
-                                                {{ dmd.request_quantity * dmd.dmd_price_schedule.bid_price | currency2 }}
-                                            </td>
+                                            <td class="text-right">{{ dmd.dmd_price_schedule.bid_price | currency2}}</td>
+                                            <td class="text-right">{{ dmd.request_quantity * dmd.dmd_price_schedule.bid_price | currency2 }}</td>
                                             <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="">
-                                                    <div class="form-group">
-                                                        <div class="form-label">Fund Source</div>
-                                                        <select class="form-control form-control-sm" v-model="obrs_form.fund_source_id">
-                                                            <option v-for="fs in fund_sources" :key="fs.id" :value="fs.id">{{ fs.description }}</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-label">Allotment</div>
-                                                        <select class="form-control form-control-sm" v-model="obrs_form.allotment_id">
-                                                            <option v-for="al in allotments" :key="al.allotment_id" :value="al.allotment_id">{{ al.allotment_desc }}</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-label">UACS</div>
-                                                        <select class="form-control form-control-sm" v-model="obrs_form.uacs_id">
-                                                            <option v-for="uc in uacs" :key="uc.uacs_id" :value="uc.uacs_id">{{ uc.description }}</option>
-                                                        </select>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-sm btn-success">Save</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div>
+                                Date of Delivery: {{ view_po_form.date_of_delivery }}
+                            </div>
+                            <div>
+                                ORS / BURS No.: {{ view_po_form.fund_source.acronym }}-0{{ view_po_form.allotment.allotment_code }}-{{ view_po_form.uacs.current_appropriations }}-{{ view_po_form.obrs_date | myDate}}-{{ view_po_form.purchase_order_id | numeral2}}
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-sm btn-success" @click="received_dmd()">Received</button>
                             </div>
                         </div>
                     </div>
@@ -192,9 +152,17 @@ export default {
         return{
             purchase_orders: [],
             view_po_form: new Form({
-               purchase_order_id: '',
-               purchase_request_id: '',
-               purchase_request:{
+                purchase_order_id: '',
+                purchase_request_id: '',
+                uacs_code_id: '',
+                uacs: '',
+                allotment_id: '',
+                allotment: '',
+                uacs_id: '',
+                fund_source_id: '',
+                fund_source: '',
+                date_of_delivery: '',
+                purchase_request:{
                    view_dmd_purchase_requests:[],
                },
             }),
@@ -203,13 +171,6 @@ export default {
                 purchase_order_id: '',
                 uacs_code_id: '',
             }),
-            obrs_form: new Form({
-                purchase_order_id: '',
-                uacs_code_id: '',
-                allotment_id: '',
-                uacs_id: '',
-            }),
-
             allotments: {},
             uacs_codes: {},
             fund_sources: {},
@@ -217,30 +178,9 @@ export default {
         }
     },
     methods:{
-        get_uacs(){
-            axios.get('../../api/uacs').then(({data}) => {
-                this.uacs = data;
-            }).catch(() => {
-
-            });
-        },
-        get_fund_sources(){
-            axios.get('../../api/fund_source').then(({data}) => {
-                this.fund_sources = data;
-            }).catch(() => {
-
-            });
-        },
-        get_uacs_codes(){
-            axios.get('../../api/uacs_code').then(({data}) => {
-                this.uacs_codes = data;
-            }).catch(() => {
-
-            });
-        },
-        get_allotments(){
-            axios.get('../../api/allotment').then(({data}) => {
-                this.allotments = data;
+        received_dmd(){
+            this.view_po_form.post('../../received_dmd').then(() => {
+             
             }).catch(() => {
 
             });
@@ -254,7 +194,6 @@ export default {
         },
         view_po(pos){
             this.view_po_form.fill(pos);
-            this.obrs_form.purchase_order_id = pos.purchase_order_id;
             $('#poModal').modal('show');
         },
         track_po(pos){
@@ -263,14 +202,20 @@ export default {
         },
         mmo_rcv(id){
             axios.put('../../api/mmo_rcv/'+id).then(() => {
-
+                toast.fire({
+                    type: 'success',
+                    title: 'PO Received'
+                });
             }).catch(() => {
 
             });
         },
         mmo_rls(id){
             axios.put('../../api/mmo_rls/'+id).then(() => {
-
+                toast.fire({
+                    type: 'success',
+                    title: 'PO Release'
+                });
             }).catch(() => {
 
             });
@@ -285,10 +230,7 @@ export default {
     },
     created(){
         this.get_pos();
-        this.get_allotments();
-        this.get_uacs_codes();
-        this.get_fund_sources();
-        this.get_uacs();
+
     },
     mounted(){
         window.Echo.channel("pr_created").listen(".purchase_order.created", (e) => {

@@ -56,6 +56,20 @@ class CartController extends Controller
         return response()->json($mode_id);
     }
 
+    public function add_dmd_3(Request $request, $id){
+
+        $cart = Cart::firstOrCreate([
+            'user_id' => $user_id,
+            'status' => 0,
+        ]);
+
+        if(!CartDmd::where('cart_id', $cart->id)->where('dmd_id', $request->dmd_id)->exists()){
+            $cart->dmds()->attach($request->dmd_id);
+        }
+
+        return response()->json($cart);
+    }
+
     public function remove_dmd($id){
         $cart_dmd = CartDmd::where('id', $id)->delete();
 
@@ -96,7 +110,17 @@ class CartController extends Controller
         return $year;
     }
 
+    public function pr_items(){
+        
+        $data = Carts::with([
+            'dmd_price_schedule', 'app_dmd'
+            ])->where('app_year', $this->year_now())
+            ->where('status', 0)
+            ->orderBy('gendesc', 'asc')
+            ->get();
 
+        return response()->json($data);
+    }
 
     public function update(Request $request, $id){
 

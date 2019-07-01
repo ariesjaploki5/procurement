@@ -59,7 +59,6 @@ Broadcast::channel('ippmp_updated', function(){
     return true;
 });
 
-
 Broadcast::channel('ppmp_created', function(){
     return true;
 });

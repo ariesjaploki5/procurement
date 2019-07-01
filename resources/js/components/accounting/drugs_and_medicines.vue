@@ -33,7 +33,7 @@
                                     <div id="uacs_2" v-for="uc in d.dmd_uacs" :key="uc.id">
                                         <div id="brand">{{ uc.brand.brand_desc }}</div>
                                         <div id="code">{{ uc.code }}</div>
-                                        <div id="action"><button type="button" class="btn btn-success btn-sm" @click="edit_uacs()">Edit</button></div>
+                                        <div id="action"><button type="button" class="btn btn-success btn-sm" @click="edit_uacs(d, uc.brand_id, uc.code)">Edit</button></div>
                                     </div>
                                 </td>
                                 <td width="5%">
@@ -116,17 +116,22 @@
             },
             store_uacs(){
                 this.form.post('../../api/dmd_uacs').then(() => {
-
+                    $('#uacsModal').modal('hide');
+                    this.get_dmds();
                 }).catch(() => {
 
                 });
             },
-            edit_uacs(id){
+            edit_uacs(d, brand_id, code){
+                this.form.fill(d);
+                this.form.brand_id = brand_id;
+                this.form.code = code;
                 $('#uacsModal').modal('show');
             },
             update_uacs(){
                 this.form.put('../../api/dmd_uacs/'+this.form.id).then(() => {
-
+                    $('#uacsModal').modal('hide');
+                    this.get_dmds();
                 }).catch(() => {
 
                 });

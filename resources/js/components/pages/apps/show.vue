@@ -30,7 +30,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(dmd, index) in filteredDmds" :key="dmd.dmd_id" id="app_data" :class="{ 'bg-danger' : !dmd.cost && !dmd.quantity }">
+                                <tr v-for="(dmd, index) in filteredDmds" :key="dmd.dmd_id" id="app_data" :class="{ 'table-danger' : !dmd.cost && !dmd.quantity }">
                                     <td width="5%">{{ index + 1}}</td>
                                     <td width="45%">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
                                     <td class="text-center">{{ dmd.unit_desc }}</td>
@@ -60,7 +60,6 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            
                             <h5 class="modal-title" id="appDmdModalLabel">{{ form.gendesc }} {{ form.dmdnost }} {{ form.stredesc }} {{ form.formdesc }}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -74,7 +73,6 @@
                                         <option v-for="unit in units" :value="unit.unit_id" :key="unit.unit_id">{{ unit.unit_desc }}</option>
                                     </select>
                                 </div>
-                                
                                 <div class="form-group">
                                     <label for="" class="form-label">Quantity</label>
                                     <input type="number" class="form-control form-control-sm text-right" v-model="form.quantity" min="0" step="1">
@@ -152,8 +150,7 @@ export default {
             }).catch(() => {
 
             });
-        }
-
+        },
     },
     computed:{
         ...mapGetters([

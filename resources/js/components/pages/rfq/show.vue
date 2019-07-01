@@ -67,7 +67,7 @@
                                                 <button id="btn_custom" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                                 <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                                     <button class="dropdown-item" @click="edit_rfq(item, rfq.id)"><i class="fas fa-pen"></i> Edit</button>
-                                                    <button class="dropdown-item" @click="delete_rfq(rfq)"><i class="fas fa-trash"></i> Delete</button>
+                                                    <button class="dropdown-item" @click="delete_rfq(rfq.id)"><i class="fas fa-trash"></i> Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -182,6 +182,13 @@ export default {
 
             }); 
         },
+        delete_rfq(id){
+            axios.delete('../../api/rfq/'+id).then(() => {
+                this.get_rfqs();
+            }).catch(() => {
+
+            });
+        },
     },
     created(){
         this.get_rfqs();
@@ -236,6 +243,7 @@ export default {
     #rfq_act{
         position: relative;
         width: 10%;
+        text-align: center;
     }
     #rfq_price{
         display: flex;
@@ -255,11 +263,11 @@ export default {
     #rfq_unit{
         position: relative;
         width: 50%;
-        text-align: center;
+        text-align: right;
     }
     #rfq_total{
         position: relative;
         width: 50%;
-        text-align: center;
+        text-align: right;
     }   
 </style>

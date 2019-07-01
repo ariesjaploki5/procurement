@@ -1,32 +1,35 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="col-md-6">
-                        Purchase Requests
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive-sm">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new" aria-selected="true">New</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false">All</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="new" role="tabpanel" aria-labelledby="new-tab">
+                    <div class="table-responsive-sm mt-4">
                         <table class="table table-sm table-hover">
                             <thead>
                                 <tr>
                                     <th>PR #</th>
                                     <th>Mode</th>
-                                    <th>Status</th>
+                                    <th>Supplier</th>
                                     <th>Date Created</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="prs in purchase_requests" :key="prs.purchase_request_id">
+                                <tr v-for="prs in new_purchase_requests" :key="prs.purchase_request_id" v-show="prs.view_dmd_purchase_requests.length">
                                     <td>{{ prs.created_at | myDate }} - {{ prs.purchase_request_id | numeral2 }}</td>
                                     <td>{{ prs.mode.mode_desc }}</td>
+
                                     <td>
-                                        <div v-show="prs.status == 0">Pending</div>
-                                        <div v-show="prs.status == 1">Approved</div>
-                                        <div v-show="prs.status == 2">Disapproved</div>
+                                        <span v-if="!prs.supplier"></span>
+                                        <span v-else>{{ prs.supplier.supplier_name }}</span>
                                     </td>
                                     <td>{{ prs.created_at }}</td>
                                     <td>
@@ -38,12 +41,56 @@
                                         </div>
                                         <div id="document_tracking" class="">
                                             <div v-show="current_user.role_id == 5">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!prs.div_head_rcv" @click="div_head_rcv(prs.purchase_request_id)"><i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.div_head_rcv" @click="div_head_rls(prs.purchase_request_id)"><i class="fas fa-file-upload"></i></button>
+                                                <button type="button" class="btn btn-sm btn-success" v-show="!prs.div_head_rcv" @click="div_head_rcv(prs.purchase_request_id)">Received From End User <i class="fas fa-file-download"></i></button>
+                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.div_head_rcv && !prs.div_head_rls" @click="div_head_rls(prs.purchase_request_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
                                             </div>
                                             <div v-show="current_user.role_id == 3">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!prs.pmo_rcv" @click="pmo_rcv(prs.purchase_request_id)"><i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.pmo_rcv" @click="pmo_rls(prs.purchase_request_id)"><i class="fas fa-file-upload"></i></button>
+                                                <button type="button" class="btn btn-sm btn-success" v-show="!prs.pmo_rcv" @click="pmo_rcv(prs.purchase_request_id)">Received From CMPS <i class="fas fa-file-download"></i></button>
+                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.pmo_rcv && !prs.pmo_rls" @click="pmo_rls(prs.purchase_request_id)"><i class="fas fa-file-upload"></i></button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
+                    <div class="table-responsive-sm mt-4">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>PR #</th>
+                                    <th>Mode</th>
+                                    <th>Supplier</th>
+                                    <th>Date Created</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="prs in purchase_requests" :key="prs.purchase_request_id" v-show="prs.view_dmd_purchase_requests.length">
+                                    <td>{{ prs.created_at | myDate }} - {{ prs.purchase_request_id | numeral2 }}</td>
+                                    <td>{{ prs.mode.mode_desc }}</td>
+                                    <td>
+                                        <span v-if="!prs.supplier"></span>
+                                        <span v-else>{{ prs.supplier.supplier_name }}</span>
+                                    </td>
+                                    <td>{{ prs.created_at }}</td>
+                                    <td>
+                                        <div id="print" class="mb-2">
+                                            <button type="button" class="btn btn-sm btn-primary" @click="view_pr(prs.purchase_request_id)"><i class="fas fa-eye"></i></button>
+                                            <button type="button" class="btn btn-sm btn-success" @click="track_pr(prs)"><i class="fas fa-truck"></i></button>
+                                            <router-link class="btn btn-sm btn-info" :to="{ name: 'pr', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> PR</router-link>
+                                            <router-link class="btn btn-sm btn-info" :to="{ name: 'sps', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> SPS</router-link>
+                                        </div>
+                                        <div id="document_tracking" class="">
+                                            <div v-show="current_user.role_id == 5">
+                                                <button type="button" class="btn btn-sm btn-success" v-show="!prs.div_head_rcv" @click="div_head_rcv(prs.purchase_request_id)">Received From End User <i class="fas fa-file-download"></i></button>
+                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.div_head_rcv && !prs.div_head_rls" @click="div_head_rls(prs.purchase_request_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
+                                            </div>
+                                            <div v-show="current_user.role_id == 3">
+                                                <button type="button" class="btn btn-sm btn-success" v-show="!prs.pmo_rcv" @click="pmo_rcv(prs.purchase_request_id)">Received From CMPS <i class="fas fa-file-download"></i></button>
+                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.pmo_rcv && !prs.pmo_rls" @click="pmo_rls(prs.purchase_request_id)"><i class="fas fa-file-upload"></i></button>
                                             </div>
                                         </div>
                                     </td>
@@ -67,7 +114,7 @@
                                 <table class="table table-sm table-hover">
                                     <thead>
                                         <tr class="text-center">
-                                            <th>#</th>
+                                            <th width="5%">#</th>
                                             <th width="20%">Description</th>
                                             <th>SSL</th>
                                             <th>BOH</th>
@@ -80,7 +127,7 @@
                                     </thead>
                                     <tbody v-if="!isLoading">
                                         <tr v-for="(dmd,index) in view_pr_form.view_dmd_purchase_requests" :key="dmd.dmd_id">
-                                            <td>{{ index + 1}}</td>
+                                            <td width="5%">{{ index + 1}}</td>
                                             <td width="20%">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
                                             <td class="text-right table-danger">{{ dmd.ssl }}</td>
                                             <td class="text-right table-danger">{{ dmd.boh }}</td>
@@ -113,8 +160,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button v-show="view_pr_form.mode_id == 4 && view_pr_form.rfq === null" class="btn btn-primary" type="button" @click="store_rfq(view_pr_form.purchase_request_id)">Request for Quotation</button>
+                            <button v-show="view_pr_form.mode_id == 4 && view_pr_form.rfq === null && current_user.role_id == 3" class="btn btn-primary" type="button" @click="store_rfq(view_pr_form.purchase_request_id)">Request for Quotation</button>
                             <button v-show="!view_pr_form.purchase_order_id && view_pr_form.mode_id == 1 && current_user.role_id == 3" class="btn btn-primary" type="button" @click="store_po(view_pr_form.purchase_request_id)">Purchase Order</button>
+                            <button v-show="!view_pr_form.purchase_order_id && view_pr_form.mode_id == 1 && current_user.role_id == 2 && !view_pr_form.send" type="button" class="btn btn-sm btn-primary" @click="send_to_cmps(view_pr_form.purchase_request_id)">Send to CMPS</button>
                         </div>
                     </div>
                 </div>
@@ -177,6 +225,7 @@ export default {
     data(){
         return{
             purchase_requests: [],
+            new_purchase_requests: [],
             view_pr_form: new Form({
                purchase_request_id: '',
                view_dmd_purchase_requests: [],
@@ -184,6 +233,7 @@ export default {
                mode_id: '',
                rfq: {},
                created_at: '',
+               send: '',
             }),
             isLoading: false,
             track_pr_modal: {},
@@ -191,9 +241,27 @@ export default {
         }   
     },
     methods:{
+        send_to_cmps(id){
+            this.view_pr_form.put('../../api/send_to_cmps/'+id).then(() =>{
+                $('#prModal').modal('hide');
+                toast.fire({
+                    type: 'success',
+                    title: 'Send Successfuly'
+                });
+            }).catch(() => {
+
+            });
+        },
         get_prs(){
             axios.get('../../api/purchase_request').then(({data}) => {
                 this.purchase_requests = data;
+            }).catch(() => {
+
+            });
+        },
+        get_new_prs(){
+            axios.get('../../api/new_purchase_request').then(({data}) => {
+                this.new_purchase_requests = data;
             }).catch(() => {
 
             });
@@ -216,28 +284,40 @@ export default {
         },
         div_head_rcv(id){
             axios.put('../../api/div_head_rcv/'+id).then(() => {
-
+                toast.fire({
+                    type: 'success',
+                    title: 'PR Recieved'
+                });
             }).catch(() => {
 
             });
         },
         div_head_rls(id){
             axios.put('../../api/div_head_rls/'+id).then(() => {
-
+                toast.fire({
+                    type: 'success',
+                    title: 'PR Release'
+                });
             }).catch(() => {
 
             });
         },
         pmo_rcv(id){
             axios.put('../../api/pmo_rcv/'+id).then(() => {
-
+                toast.fire({
+                    type: 'success',
+                    title: 'PR Received'
+                });
             }).catch(() => {
 
             });
         },
         pmo_rls(id){
             axios.put('../../api/pmo_rls/'+id).then(() => {
-
+                toast.fire({
+                    type: 'success',
+                    title: 'PR Release'
+                });
             }).catch(() => {
 
             });
@@ -267,6 +347,7 @@ export default {
         remove_item(id){
             axios.delete('../../api/dmd_pr/'+id).then(() => {
                 this.view_pr(this.selected_id);
+                this.get_prs();
             }).catch(()=> {
 
             });
@@ -279,13 +360,16 @@ export default {
     },
     created(){
         this.get_prs();
+        this.get_new_prs();
     },
     mounted(){
         window.Echo.channel("pr_created").listen(".purchase_request.created", (e) => {
             this.get_prs();
+            this.get_new_prs();
         });
         window.Echo.channel("pr_updated").listen(".purchase_request.updated", (e) => {
             this.get_prs();
+            this.get_new_prs();
         });
     }
 }

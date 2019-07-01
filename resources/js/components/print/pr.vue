@@ -26,15 +26,15 @@
                     <td class="pr1" colspan="7"></td>
                     <tr>
                         <td class="pr1 border-right-0 border-bottom-0" colspan="1" width="15%">Department: </td>
-                        <td class="pr1 border-left-0 border-right-0" width="10%"><b>getDivision()</b></td>
+                        <td class="pr1 border-left-0 border-right-0" width="10%"><b>MEDICAL SERVICES</b></td>
                         <td class="pr1 border-left-0 border-right-0 border-bottom-0" width="12.5%">PR No.:</td>
-                        <td class="pr1 border-left-0 border-right-0 text-left" width="11%"><b></b></td>
+                        <td class="pr1 border-left-0 border-right-0 text-left" width="11%"><b>{{ pr.created_at | myDate }} - {{ pr.purchase_request_id | numeral2 }}</b></td>
                         <td class="pr1 border-left-0 border-right-0 border-bottom-0" width="1%">Date: </td>
-                        <td class="pr1 border-left-0" width=""><b>getDate()</b></td>
+                        <td class="pr1 border-left-0" width=""><b>{{ pr.created_at | myDate3 }}</b></td>
                     </tr>
                     <tr>
                         <td class="pr1 border-right-0 border-top-0 border-bottom-0" colspan="1" width="15%">Section: </td>
-                        <td class="pr1 border-left-0 border-right-0"><b>getDepartment()</b></td>
+                        <td class="pr1 border-left-0 border-right-0"><b>PHARMACY</b></td>
                         <td class="pr1 border-0">SAI No.:</td>
                         <td class="pr1 border-left-0 border-right-0" width=""></td>
                         <td class="pr1 border-0" width="">Date: </td>
@@ -60,7 +60,6 @@
                         <td class="pr1 text-center" width="15%"><b>Estimated Unit Cost</b></td>
                         <td class="pr1 text-center" width="15%"><b>Estimated Cost</b></td>
                     </tr>
-
                     <!--Line 1 -->
                     <tr class="prpr" v-for="item in pr.view_dmd_purchase_requests" :key="item.dmd_id">
                         <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ item.dmd_id }}</td>
@@ -77,16 +76,12 @@
                             <span v-else></span>
                         </td>
                     </tr>
-
                      <!--Name of Supplier  -->
                     <tr>
                         <td class="pur border-top-0 border-bottom-0 text-center" width="5%"></td>
                         <td class="pur border-top-0 border-bottom-0 text-center" width="5%"></td>
                         <td class="pur border-top-0 border-bottom-0 text-center" width="7%"></td>
-                        <td class="pur border-top-0 border-bottom-0 text-center"><b>
-                            <span v-if="pr.mode_id == 1">{{ pr.supplier.supplier_name }}</span>
-                            <span v-else></span>
-                        </b></td>
+                        <td class="pur border-top-0 border-bottom-0 text-center"><b><span v-if="pr.mode_id == 1">{{ pr.supplier.supplier_name }}</span><span v-else></span></b></td>
                         <td class="pur border-top-0 border-bottom-0 text-center" width="7%"></td>
                         <td class="pur border-top-0 border-bottom-0 text-center" width="15%"></td>
                         <td class="pur border-top-0 border-bottom-0 text-center" width="15%"><b></b></td>
@@ -99,12 +94,7 @@
                         <td class="pur border-top-0 border-bottom-0"></td>
                         <td class="pur border-top-0 border-bottom-0"></td>
                         <td class="pur border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 text-center align-bottom" style="border-bottom:double" width="15%">
-                            <b>
-                                <span v-if="pr.mode_id == 1">{{ estimated_cost | currency2 }}</span>
-                                <span v-else></span>
-                            </b>
-                        </td>
+                        <td class="pr1 border-top-0 border-left-0 text-center align-bottom" style="border-bottom:double" width="15%"><b><span v-if="pr.mode_id == 1">{{ estimated_cost | currency2 }}</span><span v-else></span></b></td>
                     </tr>
                     
                 </table>
@@ -122,10 +112,8 @@
                     <tr>
                         <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td class="pr1 border-0">Stock Position Sheet for Consumables</td>
-
                         <td width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td>Acknowledgement Receipt for Equipment</td>
-
                         <td class="pr1 border-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td class="pr1 border-top-0 border-left-0 border-bottom-0">Certificate of No suitable subtitute</td>
                     </tr>
@@ -133,10 +121,8 @@
                     <tr>
                         <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td class="pr1 border-0">Justification for none inclusion in the PPMP</td>
-
                         <td width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td><small>Biomedical Service Report / MIS Service Report</small></td>
-
                         <td class="pr1 border-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td class="pr1 border-top-0 border-left-0 border-bottom-0"><small>Certificate of Exclusive Distributorship</small></td>
                     </tr>
@@ -144,10 +130,8 @@
                     <tr>
                         <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td class="pr1 border-0"><small>Complete generic specification of item/s requested</small></td>
-
                         <td width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td>Scope of Work / Detailed Estimate</td>
-
                         <td class="pr1 border-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td class="pr1 border-top-0 border-left-0 border-bottom-0">Price Quotation</td>
                     </tr>

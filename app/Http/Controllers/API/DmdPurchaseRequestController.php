@@ -134,7 +134,6 @@ class DmdPurchaseRequestController extends Controller
     public function destroy($id){
         $dmd = DmdPurchaseRequest::where('id', $id)->first();
         $dmd->delete();
-
         return response()->json();
     }
 }

@@ -70,87 +70,111 @@ import pr from './components/print/pr';
 import rfq from './components/print/rfq';
 import sps from './components/print/sps';
 
+import consignments from './components/pages/consignments/main.vue';
+
 export const routes = [
+    {
+        path: '/consignments',
+        component: consignments,
+        name: 'consignments',
+        meta: { requiresAuth: true }
+    },
 
     {
         path: '/accounting_dmd',
         component: accounting_dmd,
-        name: 'accounting_dmd'
+        name: 'accounting_dmd',
+        meta: { requiresAuth: true }
     },
     {
         path: '/accounting_po',
         component: accounting_po,
-        name: 'accounting_po'
+        name: 'accounting_po',
+        meta: { requiresAuth: true }
     },
     {
         path: '/budget_po',
         component: budget_po,
-        name: 'budget_po'
+        name: 'budget_po',
+        meta: { requiresAuth: true }
     },
     {
         path: '/div_head_po',
         component: div_head_po,
-        name: 'div_head_po'
+        name: 'div_head_po',
+        meta: { requiresAuth: true }
     },
     {
         path: '/pmo_po',
         component: pmo_po,
-        name: 'pmo_po'
+        name: 'pmo_po',
+        meta: { requiresAuth: true }
     },
     {
         path: '/fmo_po',
         component: fmo_po,
-        name: 'fmo_po'
+        name: 'fmo_po',
+        meta: { requiresAuth: true }
     },
     {
         path: '/mmo_po',
         component: mmo_po,
-        name: 'mmo_po'
+        name: 'mmo_po',
+        meta: { requiresAuth: true }
     },
     {
         path: '/mmo_dmd',
         component: mmo_dmd,
-        name: 'mmo_dmd'
+        name: 'mmo_dmd',
+        meta: { requiresAuth: true }
     },
     {
         path: '/aoq/:id',
         component: aoq,
-        name: 'aoq'
+        name: 'aoq',
+        meta: { requiresAuth: true }
     },
     {
         path: '/app/:id',
         component: app,
-        name: 'app'
+        name: 'app',
+        meta: { requiresAuth: true }
     },
     {
         path: '/obrs/:id',
         component: obrs,
-        name: 'obrs'
+        name: 'obrs',
+        meta: { requiresAuth: true }
     },
     {
         path: '/po/:id',
         component: po,
-        name: 'po'
+        name: 'po',
+        meta: { requiresAuth: true }
     },
     {
         path: '/ppmp/:id',
         component: ppmp,
-        name: 'ppmp'
+        name: 'ppmp',
+        meta: { requiresAuth: true }
     },
     {
         path: '/pr/:id',
         component: pr,
-        name: 'pr'
+        name: 'pr',
+        meta: { requiresAuth: true }
     },
     {
         path: '/rfq/:id',
         component: rfq,
-        name: 'rfq'
+        name: 'rfq',
+        meta: { requiresAuth: true }
     },
     {
         path: '/sps/:id',
         component: sps,
-        name: 'sps'
+        name: 'sps',
+        meta: { requiresAuth: true }
     },
     {
         path: '/suppliers',
@@ -160,7 +184,8 @@ export const routes = [
                 path: '',
                 component: supplier_list
             },
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
     {
         path: '/',
@@ -168,20 +193,24 @@ export const routes = [
     },
     {
         path: '/purchase_request2',
-        component: purchase_request2
+        component: purchase_request2,
+        meta: { requiresAuth: true }
     },
     {
         path: '/purchase_order2',
-        component: purchase_order2
+        component: purchase_order2,
+        meta: { requiresAuth: true }
     },
     {
         path: '/drugs_and_medicines',
-        component: drugs_and_medicines
+        component: drugs_and_medicines,
+        meta: { requiresAuth: true }
     },
 
     {
         path: '/home',
-        component: home
+        component: home,
+        meta: { requiresAuth: true }
     },
     {
         path: '/categories',
@@ -191,7 +220,8 @@ export const routes = [
                 path: '',
                 component: category_list
             },
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
     {
         path: '/inventory',
@@ -201,7 +231,8 @@ export const routes = [
                 path: '',
                 component: inventory_list
             },
-        ]
+        ],
+        meta: { requiresAuth: true }
     },    {
         path: '/request_for_quotation',
         component: request_for_quotation,
@@ -215,7 +246,8 @@ export const routes = [
                 component: request_for_quotation_show,
                 name: 'request_for_quotation_show'
             },
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
     {
         path: '/ppmps',
@@ -230,7 +262,8 @@ export const routes = [
                 component: ppmp_show,
                 name: 'ppmp_show',
             }
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
     {
         path: '/price_schedules',
@@ -245,7 +278,8 @@ export const routes = [
                 component: price_schedule_show,
                 name: 'price_schedule_show',
             }
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
     {
         path: '/purchase_orders',
@@ -255,11 +289,13 @@ export const routes = [
                 path: '',
                 component: purchase_order_list
             },
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
     {
         path: '/purchase_requests',
         component: purchase_requests,
+        meta: { requiresAuth: true }
     },
     {
         path: '/apps',
@@ -274,7 +310,8 @@ export const routes = [
                 component: app_show,
                 name: 'app_show'
             },
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
     {
         path: '/users',
@@ -284,7 +321,8 @@ export const routes = [
                 path: '',
                 component: user_list
             },
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
     {
         path: '/links',
@@ -294,7 +332,8 @@ export const routes = [
                 path: '',
                 component: link_list
             },
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
     {
         path: '/adjustments',
@@ -304,6 +343,7 @@ export const routes = [
                 path: '',
                 component: adjustment_list
             },
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
 ];

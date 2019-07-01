@@ -6,14 +6,14 @@
                     Drugs And Medicines
                 </div>
                 <div class="col-md-6 text-right">
-                    <div class="btn-group dropleft">
-                        <button type="button"  :disabled="!pb_form.items.length && !sp_form.items.length" class="btn btn-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i>  Purchase Requests</button>
+                    <button class="btn btn-sm btn-primary" @click="cart_modal()"><i class="fas fa-shopping-cart"></i> Purchase Requests</button>
+                    <!-- <div class="btn-group dropleft">
+                        <button type="button" :disabled="!pb_form.items.length && !sp_form.items.length" class="btn btn-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i>  Purchase Requests</button>
                         <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                             <button v-show="pb_form.items.length" class="dropdown-item" @click="public_bidding()">Public Bidding</button>
                             <button v-show="sp_form.items.length" class="dropdown-item" @click="shopping()">Shopping</button>
-                            <!-- <button class="dropdown-item" @click="small_value()">Small Value</button> -->
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="row mb-1">
@@ -31,11 +31,12 @@
                             <th class="text-center">SSL</th>
                             <th class="text-center">ROP</th>
                             <th class="text-center">Item In Transit</th>
-                            <th class="text-center">Action</th>
+                            <th class="text-center">Last PR</th>
+                            <th class="text-center" width="8%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'bg-warning' : d.boh_iit < d.ssl/2 , 'bg-danger' : d.ssl == 0 , 'bg-success' : d.boh > d.ssl/2, 'bg-primary' : d.boh_iit > d.ssl/2}" >
+                        <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'table-warning' : d.boh_iit < d.ssl/2 , 'table-danger' : d.ssl == 0 , 'table-success' : d.boh > d.ssl/2, 'table-primary' : d.boh_iit > d.ssl/2}" >
                             <td width="5%">{{ index + 1}}</td>
                             <td width="10%">{{ d.dmdcomb }}-{{ d.dmdctr}}</td>
                             <td width="30%">{{ d.gendesc }} {{ d.dmdnost }} {{ d.stredesc }} {{ d.formdesc }} {{ d.brandname }}</td>
@@ -43,17 +44,35 @@
                             <td class="text-right">{{ d.ssl | numeral3 }}</td>
                             <td class="text-right">{{ d.rop | numeral3 }}</td>
                             <td class="text-right">{{ d.item_in_transit | numeral3 }}</td>
-                            <td class="text-left">
+                            <td class="text-center">
+                                <span v-if="d.last_pr">{{ d.last_pr | myDate3 }}</span>
+                                <span v-else></span>
+                            </td>
+                            <td class="text-left" width="8%">
                                 <button type="button" class="btn btn-sm btn-light btn-outline-dark" @click="edit_ssl(d)">
                                     <i class="fas fa-pen"></i>
                                 </button>
-                                <div class="btn-group dropleft btn-sm">
-                                    <button  v-show="d.boh_iit <= d.ssl/2 && d.ssl != 0 " :disabled="d.cart_dmd_id != null" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cart-plus"></i></button>
+                                <span v-show="(d.dmd_price_schedule !== null || d.cost)  && d.ssl != 0"  :disabled="d.cart_dmd_id != null">
+                                    <button class="btn btn-sm btn-primary" v-if="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)">
+                                    <i class="fas fa-cart-plus"></i> 
+                                    <!-- Public Bidding -->
+                                    </button>
+                                    <button class="btn btn-sm btn-primary" v-else @click="add_item_2(d, 4)">
+                                        <i class="fas fa-cart-plus"></i> 
+                                        <!-- Shopping -->
+                                    </button>
+                                </span>
+                                <!-- <div class="btn-group dropleft btn-sm">
+                                    <button  v-show="d.boh_iit <= d.ssl/2 && d.ssl != 0" :disabled="d.cart_dmd_id != null" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cart-plus"></i></button>
                                     <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                         <button class="dropdown-item" v-show="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)"><i class="fas fa-cart-plus"></i> Public Bidding</button>
                                         <button class="dropdown-item" v-show="d.cost" @click="add_item_2(d, 4)"><i class="fas fa-cart-plus"></i> Shopping</button>
                                     </div>
-                                </div>
+                                </div> -->
+                                <!-- <button type="button" class="btn btn-sm btn-primary" @click="add_item_3(d.dmd_id)">
+                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-cart-plus"></i>
+                                </button> -->
                             </td>
                         </tr>
                     </tbody>
@@ -85,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="pbModal" tabindex="-1" role="dialog" aria-labelledby="pbModalLabel" aria-hidden="true">
+            <!-- <div class="modal fade" id="pbModal" tabindex="-1" role="dialog" aria-labelledby="pbModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -204,6 +223,87 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+            <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Purchase Request
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="pr_submit()">
+                                <table class="table table-sm table-hover">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>#</th>
+                                            <th width="20%">Description</th>
+                                            <th>SSL</th>
+                                            <th>BOH</th>
+                                            <th>Item In Transit</th>
+                                            <th width="10%">Quantity</th>
+                                            <th>Unit Cost</th>
+                                            <th>Estimated Cost</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        public bidding
+                                        <tr v-for="(item,index) in pb_form.items" :key="item.dmd_id">
+                                            <td>{{ index + 1}}</td>
+                                            <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
+                                            <td class="text-right">{{ item.ssl }}</td>
+                                            <td class="text-right">{{ item.boh }}</td>
+                                            <td class="text-right">{{ item.item_in_transit }}</td>
+                                            <td width="10%" class="text-right">
+                                                <input type="number" class="form-control form-control-sm text-right" v-model="item.quantity">
+                                            </td>
+                                            <td class="text-right">
+                                                {{ item.dmd_price_schedule.bid_price | currency2 }}
+                                            </td>
+                                            <td class="text-right">
+                                                {{ item.dmd_price_schedule.bid_price * item.quantity | currency2 }}
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.id)">
+                                                    <i class="fas fa-times-circle"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        shopping
+                                        <tr v-for="(item,index) in sp_form.items" :key="item.dmd_id">
+                                            <td>{{ index + 1}}</td>
+                                            <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
+                                            <td class="text-right">{{ item.ssl }}</td>
+                                            <td class="text-right">{{ item.boh }}</td>
+                                            <td class="text-right">{{ item.item_in_transit }}</td>
+                                            <td width="10%" class="text-right">
+                                                <input type="number" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" min="1" v-model="item.quantity">
+                                            </td>
+                                            <td class="text-right">{{ item.app_dmd.cost | currency2 }}</td>
+                                            <td class="text-right">{{ item.app_dmd.cost * item.quantity | currency2 }}</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.id)">
+                                                    <i class="fas fa-times-circle"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                                <div class="form-group">
+                                    <label class="form-label">Purpose: </label>
+                                    <textarea type="text" class="form-control" rows="5" v-model="form.purpose"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-sm btn-success" @click="pr_submit()">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -213,9 +313,6 @@ export default {
     data(){
         return{
             dmds: [],
-            form: new Form({
-                
-            }),
             search_word: '',
             ssl_form: new Form({
                 dmd_id: '',
@@ -227,6 +324,13 @@ export default {
                 dmdcomb: '',
                 dmdctr: '',
                 ssl: '',
+            }),
+            form: new Form({
+                mode_id: 1,
+                category_id: 1,
+                pr_id: '',
+                items: [],
+                purpose: '',
             }),
             pb_form:new Form({
                 mode_id: 1,
@@ -259,24 +363,38 @@ export default {
 
             });
         },
+        get_pr_items(){
+            axios.get('../../api/pr_items').then(({data}) => {
+                this.form.items = data;
+            }).catch(() => {
+
+            });
+        },
         pb_submit(){
             axios.post('../../api/dmd_pr',{
                 items: this.pb_form.items,
                 mode_id: this.pb_form.mode_id,
                 category_id: this.pb_form.category_id,
                 user_id: this.current_user.user_id,
-                purpose: this.pb_form.purpose,
-            }).then(() => {
-                $('#pbModal').modal('hide');
-                this.get_dmds();
-                this.get_pb_items();
-                toast.fire({
-                    type: 'success',
-                    title: 'Purchase Request Created Successfully'
-                });
+                purpose: this.form.purpose,
+            }).then(() => { 
+                
             }).catch(() => {
 
             });
+        },
+        pr_submit(){
+            this.pb_submit();
+            this.sp_submit();
+            $('#cartModal').modal('hide');
+            toast.fire({
+                type: 'success',
+                title: 'Purchase Request Created Successfully',
+            });
+            this.get_dmds();
+            this.get_pb_items();
+            this.get_sp_items();
+            this.$router.push({path: '/purchase_request2'});
         },
         sp_submit(){
             axios.post('../../api/shopping', {
@@ -284,15 +402,9 @@ export default {
                 mode_id: this.sp_form.mode_id,
                 category_id: this.sp_form.category_id,
                 user_id: this.current_user.user_id,
-                purpose: this.sp_form.purpose,
+                purpose: this.form.purpose,
             }).then(() => {
-                $('#spModal').modal('hide');
-                this.get_dmds();
-                this.get_sp_items();
-                toast.fire({
-                    type: 'success',
-                    title: 'Purchase Request Created Successfully'
-                });
+
             }).catch(() =>{
 
             });
@@ -310,7 +422,6 @@ export default {
             });
         },
         add_item_2(dmd, mode_id){
-            // console.log(mode_id);
             axios.post('../../api/cart_dmd_2/'+this.current_user.user_id, {
                 mode_id: mode_id,
                 dmd_id: dmd.dmd_id,
@@ -318,6 +429,21 @@ export default {
                 this.get_dmds();
                 this.get_pb_items();
                 this.get_sp_items();
+                toast.fire({
+                    type: 'success',
+                    title: 'Item added',
+                });
+            }).catch(() => {
+
+            });
+        },
+        add_item_3(dmd){
+            axios.post('../../api/cart_dmd_3/'+this.current_user.user_id, {
+                mode_id: form.mode_id,
+                dmd_id: dmd.dmd_id,
+            }).then(() => {
+                this.get_dmds();
+                this.get_pr_items();
             }).catch(() => {
 
             });
@@ -327,13 +453,16 @@ export default {
                 this.get_dmds();
                 this.get_pb_items();
                 this.get_sp_items();
-            })
+            });
         },
         public_bidding(){
             $('#pbModal').modal('show');
         },
         shopping(){
             $('#spModal').modal('show');
+        },
+        cart_modal(){
+            $('#cartModal').modal('show');
         },
         get_dmds(){
             axios.get('../../api/dmd').then(({data}) => {
@@ -376,7 +505,7 @@ export default {
             let matcher = new RegExp(this.search_word, 'i')
             return this.dmds.filter(function(dmd){
                 return matcher.test(dmd.gendesc)
-            })
+            });
         },
     },
     mounted(){
@@ -384,23 +513,20 @@ export default {
     },
 }
 </script>
-
 <style scoped>
-tr {
-    width: 100%;
-    display: inline-table;
-    table-layout: fixed;
-}
-
-table {
-    height:36rem;             
-    display: -moz-groupbox;    
-}
-
-tbody {
-    overflow-y: scroll;      
-    height: 34rem;           
-    width: 98.5%;
-    position: absolute;
-}
+    tr {
+        width: 100%;
+        display: inline-table;
+        table-layout: fixed;
+    }
+    table {
+        height:37rem;             
+        display: -moz-groupbox;    
+    }
+    tbody {
+        overflow-y: scroll;      
+        height: 35rem;           
+        width: 98.5%;
+        position: absolute;
+    }
 </style>

@@ -1,31 +1,22 @@
 <template>
     <div id="f01">
+      <button class="btn btn-primary d-print-none button" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
         <div id="content-wrapper">
             <div class="col-lg-12">
-                <table class="table table-condensed table-sm a">
+                <table class="table table-condensed table-sm a" style="margin-top: 1%">
                     <tr>
-                        <td class="pr1 border-top-0 border-right-0" rowspan="8"><img src="/bghmc.png" style="margin-left: 15%; margin-top: 10%" width="150" height="150"></td>
-                        <td class="pr1 border-top-0 border-bottom-0" colspan="5" id="pr1">
-                            <center>Republic of the Philippines</center>
-                        </td>
+                        <td class="pr1 border-top-0 border-right-0" rowspan="8"><img :src="'/img/bghmc.png'" style="margin-left: 15%; margin-top: 10%" width="150" height="150"></td>
+                        <td class="pr1 border-top-0 border-bottom-0 text-center" colspan="5" id="pr1">Republic of the Philippines</td>
                     </tr>
-                    <td class="pr1 border-top-0 border-bottom-0" colspan="5">
-                        <center>Department of Health</center>
-                    </td>
+                    <td class="pr1 border-top-0 border-bottom-0 text-center" colspan="5">Department of Health</td>
                     <tr>
-                        <td class="pr1 border-top-0 border-bottom-0" colspan="5">
-                            <center><b>BAGUIO GENERAL HOSPITAL AND MEDICAL CENTER</b></center>
-                        </td>
+                        <td class="pr1 border-top-0 border-bottom-0 text-center" colspan="5"><b>BAGUIO GENERAL HOSPITAL AND MEDICAL CENTER</b></td>
                     </tr>
                     <tr>
-                        <td class="pr1 border-top-0" colspan="5">
-                            <center>Baguio City</center>
-                        </td>
+                        <td class="pr1 border-top-0 text-center" colspan="5">Baguio City</td>
                     </tr>
                     <tr>
-                        <td class="pr1" rowspan="3" width="40%">
-                            <center><br><b><h3>REQUEST FOR QUOTATION</h3></b></center>
-                        </td>
+                        <td class="pr1 text-center" rowspan="3" width="40%"><br><b><h3>REQUEST FOR QUOTATION</h3></b></td>
                         <td class="pr1" colspan="4">Form No.: HS - PS - 007</td>
                     </tr>
                     <td class="pr1" colspan="4">Revision No.: 1</td>
@@ -33,6 +24,7 @@
                         <td class="pr1" colspan="4">Effectivity Date: December 1, 2015</td>
                     </tr>
                 </table>
+
                 <table class="table table-condensed table-borderless border-0 table-sm" style="margin-top:-1.2%">
                     <tr>
                         <td class="pr1 border-top-0 border-right-0 border-left-0"></td>
@@ -53,7 +45,9 @@
                 </table>
                 <table class="table table-condensed table-borderless border-0 table-sm" style="margin-top:-1.2%">
                     <tr>
-                        <td><h5>Gentlemen:</h5></td>
+                        <td>
+                            <h5>Gentlemen:</h5>
+                        </td>
                     </tr>
                     <tr>
                         <td style="text-indent: 50px; text-align:justify">
@@ -70,100 +64,50 @@
 
                 <table class="table table-condensed table-sm" style="margin-top:-1.2%">
                     <tr>
-                        <td class="pr1" rowspan="2" width="5%">
-                            <center>ITEM NO.</center>
-                        </td>
-                        <td class="pr1" rowspan="2" width="5%"><br>
-                            <center>QTY</center>
-                        </td>
-                        <td class="pr1" rowspan="2" width="5%"><br>
-                            <center>UNIT</center>
-                        </td>
-                        <td class="pr1" rowspan="2">
-                            <h5>
-                                <center><br><b>ARTICLE AND DESCRIPTION</b></center>
-                            </h5>
-                        </td>
-                        <td class="pr1" rowspan="2" width="10%">
-                            <center><small>Approved Budget for the Contact</small></center>
-                        </td>
-                        <td class="pr1" rowspan="2" width="10%"><br>
-                            <center>Brand Name</center>
-                        </td>
-                        <td class="pr1" rowspan="2" width="10%"><br>
-                            <center>Manufacturer</center>
-                        </td>
-                        <td class="pr1" colspan="2" width="10%">
-                            <center>PRICE</center>
-                        </td>
+                        <td class="pr1 text-center" rowspan="2" width="5%">ITEM NO.</td>
+                        <td class="pr1 text-center" rowspan="2" width="5%"><br>QTY</td>
+                        <td class="pr1 text-center" rowspan="2" width="5%"><br>UNIT</td>
+                        <td class="pr1 text-center" rowspan="2"><h5><br><b>ARTICLE AND DESCRIPTION</b></h5></td>
+                        <td class="pr1 text-center" rowspan="2" width="10%"><small>Approved Budget for the Contact</small></td>
+                        <td class="pr1 text-center" rowspan="2" width="10%"><br>Brand Name</td>
+                        <td class="pr1 text-center" rowspan="2" width="10%"><br>Manufacturer</td>
+                        <td class="pr1 text-center" colspan="2" width="10%">PRICE</td>
                     </tr>
                     <tr>
-                        <td class="pr1">
-                            <center>UNIT</center>
-                        </td>
-                        <td class="pr1">
-                            <center>TOTAL</center>
-                        </td>
+                        <td class="pr1 text-center">UNIT</td>
+                        <td class="pr1 text-center">TOTAL</td>
                     </tr>
                     <tr>
-                        <td class="pr1">
-                            <center>1</center>
-                        </td>
-                        <td class="pr1">
-                            <center></center>
-                        </td>
-                        <td class="pr1">
-                            <center></center>
-                        </td>
-                        <td class="pr1">
-                            <center></center>
-                        </td>
-                        <td class="pr1">
-                            <center></center>
-                        </td>
-                        <td class="pr1">
-                            <center></center>
-                        </td>
-                        <td class="pr1">
-                            <center></center>
-                        </td>
-                        <td class="pr1">
-                            <center></center>
-                        </td>
-                        <td class="pr1">
-                            <center></center>
-                        </td>
+                        <td class="pr1 text-center">1</td>
+                        <td class="pr1 text-center"> </td>
+                        <td class="pr1 text-center"> </td>
+                        <td class="pr1 text-center"> </td>
+                        <td class="pr1 text-center"> </td>
+                        <td class="pr1 text-center"> </td>
+                        <td class="pr1 text-center"> </td>
+                        <td class="pr1 text-center"> </td>
+                        <td class="pr1 text-center"> </td>
                     </tr>
                 </table>
                 <table class="table table-condensed table-borderless border-0 table-sm">
                     <tr>
-                        <td style="text-align:justify">
-                            <h5>NOTE: This Request for Quotation be submitted by the canvasser<b><u> at the BGHMC BAC
-                                        Office sealed</u></b></h5> or before _______________________________________.
-                        </td>
+                        <td style="text-align:justify"><h5>NOTE: This Request for Quotation be submitted by the canvasser<b><u> at the BGHMC BAC Office sealed</u></b></h5> or before _______________________________________.</td>
                     </tr>
                 </table>
                 <table class="table table-condensed table-borderless border-0 table-sm" style="margin-top: 10%">
                     <tr>
-                        <td style="text-align:justify">
-                            <h5>Requested By:</h5>
-                        </td>
+                        <td style="text-align:justify"><h5>Requested By:</h5></td>
                     </tr>
                     <tr>
-                        <td style="text-indent: 50px">
-                            <br><br><br>___________________________________________________________</td>
-                        <td><br><br><br>___________________________________________________________</td>
+                        <td style="text-indent: 50px"><br><br><br>___________________________________________________________</td>
+                        <td><br><br><br>_________________________________________________________</td>
                     </tr>
                     <tr>
-                        <td style="text-indent: 90px"><b>
-                                <h5>FELICIDAD F. ATOS, MPA</h5>
-                            </b></td>
-                        <td style="text-indent: 155px">
-                            <h5>BAC Member</h5>
-                        </td>
+                        <td class="align-bottom" style="text-indent: 90px"><b><h5>FELICIDAD F. ATOS, MPA</h5></b></td>
+                        <td style="text-indent: 155px"><h5>BAC Member</h5></td>
                     </tr>
                     <tr>
-                        <td style="text-indent: 90px"><small>SAO, Procurement Management Office</small></td>
+                        <td class="align-top" style="text-indent: 90px"><small>SAO, Procurement Management Office</small></td>
                     </tr>
                     <tr>
                         <td style="text-align:justify">This is to certify that I personally distributed the Request for
@@ -175,31 +119,19 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td>___________________________________________________________</td>
+                        <td>________________________________________________________</td>
                     </tr>
                     <tr>
-                        <td style="text-indent: 90px">
-                            <h5></h5>
-                        </td>
-                        <td style="text-indent: 155px">
-                            <h5>Supplier</h5>
-                        </td>
+                        <td style="text-indent: 90px"><h5> </h5></td>
+                        <td class="align-bottom" style="text-indent: 155px"><h5>Supplier</h5></td>
                     </tr>
                     <tr>
-                        <td style="text-indent: 100px">
-                            <h5></h5>
-                        </td>
-                        <td style="text-indent: 80px">
-                            <h6>(Signature over Printed Name)</h6>
-                        </td>
+                        <td style="text-indent: 100px"><h5> </h5></td>
+                        <td class="align-top" style="text-indent: 80px"><h6>(Signature over Printed Name)</h6></td>
                     </tr>
                     <tr>
-                        <td style="text-indent: 100px">
-                            <h5></h5>
-                        </td>
-                        <td>
-                            <h6>Address: <u></u></h6>
-                        </td>
+                        <td style="text-indent: 100px"><h5> </h5></td>
+                        <td><h6>Address: <u></u></h6></td>
                     </tr>
                     <tr>
                         <td>___________________________________________________________</td>
@@ -214,9 +146,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><b>
-                                <h5>Email:<i class="text-primary"> bghmcprocurement@gmail.com</i></h5>
-                            </b></td>
+                        <td><b><h5>Email:<i class="text-primary"> bghmcprocurement@gmail.com</i></h5></b></td>
                     </tr>
                 </table>
             </div>
@@ -226,14 +156,28 @@
 
 <script>
     export default {
+        data(){
+            return{
+
+            }
+        },
+        methods:{
+
+        },
+        created(){
+
+        },
         mounted() {
 
         }
     }
-
+    function print(){
+        window.print();
+        location.reload();
+    }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     @font-face {
         font-family: 'Helvetica';
         src: url('https://fonts.googleapis.com/css?family=Helvetica');

@@ -11,7 +11,7 @@ class PurchaseOrder extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'created_at', 'allotment_id', 'uacs_id', 'fund_source_id', 'amount'
+        'created_at', 'allotment_id', 'uacs_id', 'fund_source_id', 'amount', 'obrs_date', 'date_of_delivery'
     ];
 
     protected $dispatchesEvents = [

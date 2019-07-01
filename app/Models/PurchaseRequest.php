@@ -18,7 +18,9 @@ class PurchaseRequest extends Model
         'purpose',
         'purchase_order_id',
 
-        'request_quantity',
+        'send',
+        'current_status',
+
         'div_head_rcv', 'div_head_rls',
         'div_head_rcv_2', 'div_head_rls_2',
         'pmo_rcv','pmo_rls',

@@ -13,9 +13,25 @@ use DB;
 class RfqController extends Controller
 {
     public function index(){
+        $year = Carbon::now()->year;  
         $data = Rfq::with([
-            'purchase_request'
-        ])->get();  
+            'purchase_request' => function($query) use($year){
+                $query->with([
+                    'view_dmd_purchase_requests' => function($query) use ($year){
+                        $query->with([
+                            'app_dmd' => function($query) use($year){
+                                $query->where('app_year', $year);
+                            },
+                            'dmd_rfqs' => function ($query){
+                                $query->with([
+                                    'brand', 'manufacturer',
+                                ]);
+                            }
+                        ]);
+                    },
+                ])->get();
+            },
+        ])->get();
 
         return response()->json($data);
     }
@@ -56,9 +72,9 @@ class RfqController extends Controller
     }
 
     public function add_rfq(Request $request, $id){
-        
+        $rfq_id = $id;
         $rfq = DmdRfq::create([
-            'rfq_id' => $id,
+            'rfq_id' => $rfq_id,
             'dmd_id' => $request->dmd_id,
             'brand_id' => $request->brand_id,
             'manufacturer_id' => $request->manufacturer_id,
@@ -69,13 +85,19 @@ class RfqController extends Controller
     }
 
     public function update(Request $request, $id){
-
-
+        $rfq = DmdRfq::findOrFail($id);
+        $rfq->update([
+            'brand_id' => $request->brand_id,
+            'manufacturer_id' => $request->manufacturer_id,
+            'cost_unit' => $request->cost_unit,
+        ]);
+        
         return response()->json();
     }
 
     public function destroy($id){
-
+        $rfq = DmdRfq::where('id', $id)->first();
+        $rfq->delete();
 
         return response()->json();
     }

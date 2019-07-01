@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 
-class BrandController extends Controller
-{
+class BrandController extends Controller{
 
     public function index(){
         $data = Brand::orderBy('brand_desc', 'asc')->get();

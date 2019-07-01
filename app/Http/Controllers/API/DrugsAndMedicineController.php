@@ -18,8 +18,7 @@ class DrugsAndMedicineController extends Controller
         $year = $now->year;
 
         $data = AppDmd::with([
-            'dmd_price_schedule', 
-            'dmd_uacs' => function($query){
+            'dmd_price_schedule', 'dmd_uacs' => function($query){
                 $query->with([
                     'brand'
                 ]);
@@ -30,6 +29,7 @@ class DrugsAndMedicineController extends Controller
     }
 
     public function search(Request $request){
+        
         $word = $request->word;
         $data = DB::SELECT("SELECT * FROM procurement.dbo.view_dmds WHERE gendesc LIKE '$word%' ORDER BY gendesc ASC");
 

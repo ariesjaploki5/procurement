@@ -44,23 +44,33 @@
             <table class="table table-condensed table-sm" style="margin-top:-2.2%">
                 <tr>
                     <td class="pr1 border-right-0 border-bottom-0" width="8%">Supplier:</td>
-                    <td class="pr1 border-left-0" width="45%"><b>{{ po.purchase_request.supplier.supplier_name }}</b></td>
+                    <td class="pr1 border-left-0" width="45%"><b>
+                        <span v-if="po.purchase_request">{{ po.purchase_request.supplier.supplier_name }}</span>
+                        <span v-else></span>
+                    </b></td>
                     <td class="pr1 border-right-0 border-bottom-0" width="20%">Purchase Order Number:</td>
                     <td class="pr1 border-left-0" width="20%">
-                        <center><b>(year-month-series)</b></center>
+                        <center><b>{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2}}</b></center>
                     </td>
                 </tr>
                 <td class="pr1 border-top-0 border-bottom-0" colspan="2"></td>
                 <td class="pr1 border-top-0 border-right-0 border-bottom-0"> Pruchase Order Date</td>
                 <td class="pr1 border-left-0">
-                    <center><b>(Date Today)</b></center>
+                    <center><b>{{ po.created_at | myDate3 }}</b></center>
                 </td>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0">Address:</td>
-                    <td class="pr1 border-left-0 border-top-0"><b>{{ po.purchase_request.supplier.supplier_address }}</b></td>
+                    <td class="pr1 border-left-0 border-top-0"><b>
+                        <span v-if="po.purchase_request">{{ po.purchase_request.supplier.supplier_address }}</span>
+                        <span v-else></span>
+                    </b></td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0">Mode of Procurement:</td>
                     <td class="pr1 border-left-0">
-                        <center><b>{{ po.purchase_request.mode.mode_desc }}</b></center>
+                        <center><b>
+                            <span v-if="po.purchase_request">{{ po.purchase_request.mode.mode_desc }}</span>
+                            <span v-else></span>
+                            
+                        </b></center>
                     </td>
                 </tr>
                 <td class="pr1 border-top-0" colspan="7"></td>
@@ -78,14 +88,17 @@
                 </tr>
                 <tr>
                     <td class=" pr1 border-top-0 border-right-0 border-bottom-0">Date of Delivery:</td>
-                    <td class=" pr1 border-left-0"><b><center>(Date of delivery)</center></b></td>
+                    <td class=" pr1 border-left-0"><b><center>
+                        <span v-if="po.date_of_delivery">{{ po.date_of_delivery }}</span>
+                        <span v-else></span>
+                    </center></b></td>
                     <td class=" pr1 border-top-0 border-right-0 border-bottom-0">Payment Term:</td>
                     <td class=" pr1 border-left-0"><b><center></center></b></td>
                 </tr>
                 <td class="pr1 border-top-0" colspan="7"> </td>
             </table>
 
-            <table class="table table-condensed table-sm" style="margin-top:-2%">
+            <table v-if="po.purchase_request" class="table table-condensed table-sm" style="margin-top:-2%">
                 <tr>
                     <td class="pr1" width="10%"><b><center>Stock Number</center></b></td>
                     <td class="pr1" width="10%"><b><center>UNIT</center></b></td>
@@ -94,6 +107,7 @@
                     <td class="pr1" width="10%"><b><center>UNIT COST</center></b></td>
                     <td class="pr1" width="10%"><b><center>AMOUNT</center></b></td>
                 </tr>
+              
                 <tr v-for="item in po.purchase_request.view_dmd_purchase_requests" :key="item.id">
                     <td class="pr1"><center></center></td>
                     <td class="pr1"></td>
@@ -113,14 +127,15 @@
                         <center>{{ item.dmd_price_schedule.bid_price * item.order_quantity | currency2}}</center>
                     </td>
                 </tr>
-
+               
                 <td class="pr1 text-center border-0" colspan="6">
                     <h6><b><i>***Remarks<!-- Remarks-->***</i></b></h6>
                 </td>
             </table>
+            <table v-else></table>
             <table class="table table-condensed table-borderless table-sm" style="margin-top: 10%">
                 <tr>
-                    <td class="pr1"><b>Total Amount in Words: <i>{{ estimated_cost | num_words }} pesos</i></b></td>
+                    <td class="pr1"><b>Total Amount in Words: <i> {{ estimated_cost | num_words }} pesos</i></b></td>
                     <td class="pr1 text-right"><b>{{ estimated_cost | currency2 }}</b></td>
                 </tr>
             </table>
@@ -178,7 +193,10 @@
             <table class="table table-condensed table-sm" style="margin-top:-2.2%">
                 <tr>
                     <td class="pr1 border-right-0 border-bottom-0" width="10%"><b>FUND CLUSTER:</b></td>
-                    <td class="pr1 border-left-0" width="30%"></td>
+                    <td class="pr1 border-left-0" width="30%">
+                        <span v-if="po.fund_source">0{{ po.fund_source.id }}</span>
+                        <span v-else></span>    
+                    </td>
                     <td class="pr1 border-right-0 border-bottom-0" width="15%"></td>
                     <td class="pr1 border-left-0 border-bottom-0" width="20%"></td>
                 </tr>
@@ -191,7 +209,11 @@
                     <td class="pr1 border-left-0 border-bottom-0"></td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="15%">ORS / BURS No.:</td>
                     <td class="pr1 border-top-0 border-left-0" width="20%">
-                        <center><b>XXXX-00-000000-0000-00-0000</b></center>
+                        
+                        <center><b>
+                            <span v-if="po.fund_source">{{ po.fund_source.acronym }}-0{{ po.allotment.allotment_code }}-{{ po.uacs.current_appropriations }}-{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2}}</span>
+                            <span v-else></span>
+                        </b></center>
                     </td>
                 </tr>
                 <tr>
@@ -201,7 +223,7 @@
                     </td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="15%">Date of ORS / BURS:</td>
                     <td class="pr1 border-left-0">
-                        <center><b>getDate</b></center>
+                        <center><b>{{ po.obrs_date | myDate3 }}</b></center>
                     </td>
                 </tr>
                 <tr>
@@ -210,7 +232,7 @@
                         <center><small>Accountant IV</small></center>
                     </td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0">Amount:</td>
-                    <td class="pr1 border-left-0"></td>
+                    <td class="pr1 border-left-0">{{ estimated_cost | currency2}}</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0"></td>
@@ -249,12 +271,13 @@ export default {
         computed:{
             estimated_cost(){
             let sum = 0;
-            this.po.purchase_request.view_dmd_purchase_requests.forEach(function(item) {
-                sum += (parseFloat(item.dmd_price_schedule.bid_price) * parseFloat(item.order_quantity));
-            });
-                return sum;
-            },
-
+            if(this.po.purchase_request){
+                this.po.purchase_request.view_dmd_purchase_requests.forEach(function(item) {
+                    sum += (parseFloat(item.dmd_price_schedule.bid_price) * parseFloat(item.order_quantity));
+                });
+                    return sum;
+                }
+            }
         },
     mounted() {
 
