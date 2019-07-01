@@ -179,7 +179,9 @@ export default {
     },
     methods:{
         received_dmd(){
-            this.view_po_form.post('../../received_dmd').then(() => {
+            axios.post('../../api/received_dmd',{
+                items : this.view_po_form.purchase_request.view_dmd_purchase_requests,
+            }).then(() => {
              
             }).catch(() => {
 

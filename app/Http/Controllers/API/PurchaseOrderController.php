@@ -29,32 +29,45 @@ class PurchaseOrderController extends Controller
         return response()->json($data);
     }
 
-    public function received_dmd(Request $request, $id){
-        $dmd = $request->purchase_request->view_dmd_purchase_requests;
-        $count = count($item);
+    public function received_dmd(Request $request){
+        $dmd = $request->items;
+        
+        $count = count($dmd);
+        
 
         for($i = 0; $i < $count; $i++){
 
-            $dmd_pr = DmdPurchaseRequest::findOrFail($dmd[$i]['id']);
+            $received_quantity = $dmd[$i]['received_quantity'];
+            $dmdcomb = $dmd[$i]['dmdcomb'];
+            $dmdctr = $dmd[$i]['dmdctr'];
+            $id = $dmd[$i]['id'];
+
+            $dmd_pr = DmdPurchaseRequest::findOrFail($id);
             $dmd_pr->update([
-                'received_quantity' => $dmd[$i]['received_quantity'],
+                'received_quantity' => $received_quantity,
             ]);
 
-            $check = DB::SELECT("SELECT * FROM hdmhdrsub WHERE dmhdrsub = 'DRUM4' 
-            AND dmdcomb = $dmd[$i]['dmdcomb'] 
-            AND dmdctr = $dmd[$i]['dmdctr']");
-            
-            if(count($check) > 0){
-                DB::UPDATE("UPDATE hdmhdrsub SET stockbal = stockbal +  $dmd[$i]['received_quantity'], 
-                WHERE dmhdrsub = 'DRUM4' AND dmdcomb = $dmd[$i]['dmdcomb'] AND dmdctr = $dmd[$i]['dmdctr']");
+
+            $check = DB::SELECT("SELECT * FROM hospital.dbo.hdmhdrsub WHERE dmhdrsub = 'DRUM4' AND dmdcomb = $dmdcomb AND dmdctr = $dmdctr");
+            $count_check = count($check);
+
+            if($count_check > 0){
+                DB::table('hospital.dbo.hdmhdrsub')->where('dmdcomb', $dmdcomb)
+                ->where('dmdctr', $dmdctr)->where('dmhdrsub', 'DRUM4')
+                ->update(['stockbal' + $received_quantity]);
+                
             } else{
-                DB::INSERT("INSERT INTO hdmhdrsub (dmdcomb, dmdctr, dmhdrsub, stockbal, statusMed) 
-                VALUES ($dmd[$i]['dmdcomb'], $dmd[$i]['dmdctr'],'DRUM4', $dmd[$i]['received_quantity'])");
+                DB::table('hospital.dbo.hdmhdrsub')->insert([
+                    'dmdcomb' => $dmdcomb, 
+                    'dmdctr' => $dmdctr, 
+                    'dmhdrsub' => 'DRUM4', 
+                    'statusMed' => 'A',
+                    'stockbal' => $received_quantity]);
             }
         
         }
 
-        return response()->json($pr);
+        return response()->json();
     }
 
     public function store_date_of_delivery(Request $request){
