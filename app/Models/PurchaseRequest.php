@@ -20,6 +20,7 @@ class PurchaseRequest extends Model
 
         'send',
         'current_status',
+        'status',
 
         'div_head_rcv', 'div_head_rls',
         'div_head_rcv_2', 'div_head_rls_2',
@@ -76,5 +77,9 @@ class PurchaseRequest extends Model
 
     public function rfq(){
         return $this->hasOne('App\Models\RequestForQuotation', 'purchase_request_id');
+    }
+
+    public function purchase_request_remarks(){
+        return $this->hasOne('App\Models\PurchaseRequestRemark', 'purchase_request_id', 'purchase_request_id');
     }
 }

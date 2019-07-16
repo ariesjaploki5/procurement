@@ -2,23 +2,19 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
-                    
+                <div class="card-header font-weight-bold">
+                    Terminated
                 </div>
                 <div class="card-body">
-                    <table class="table table-sm table-hover">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th>Date</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td></td>
-                                <td></td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -29,20 +25,24 @@
         </div>
     </div>
 </template>
+
 <script>
 export default {
     data(){
         return{
-
-
+            terminateds: {},
         }
     },
     methods:{
-
+        get_terminated(){
+            axios.get('../../api/terminated').then(({data}) =>{
+                this.terminateds = data;
+            });
+        },
 
     },
     created(){
-
+        this.get_terminated();
 
     },
     computed:{
@@ -55,6 +55,7 @@ export default {
     }
 }
 </script>
+
 <style>
 
 </style>

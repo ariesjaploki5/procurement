@@ -1,13 +1,12 @@
 <template>
-<div id="f01">
+<div id="f01" class="orientation">
+     <button class="btn btn-primary d-print-none button btn-sm" type="button" @click="print()"><i class="fas fa-print ml-2"></i> Print</button>
     <div id="content-wrapper">
-
         <div class="col-lg-12">
-
-            <table class="table table-condensed table-sm a">
+            <table class="table table-condensed table-sm a" style="margin-top: 1%">
                 <tr>
-                    <td class="pr1 border-top-0 border-right-0" rowspan="8"><img src="/bghmc.png" style="margin-left: 15%; margin-top: 10%" width="150" height="150"></td>
-                    <td class="pr1 border-top-0 border-bottom-0" colspan="5" id="pr1">
+                    <td class="pr1 border-right-0" rowspan="8"><img :src="'/img/bghmc.png'" style="margin-left: 15%; margin-top: 10%" width="150" height="150"></td>
+                    <td class="pr1 border-bottom-0" colspan="5" id="pr1">
                         <center>Republic of the Philippines</center>
                     </td>
                 </tr>
@@ -39,26 +38,38 @@
                 <tr>
                     <td colspan="2"></td>
                     <td width="15%">PR No.:</td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="20%"></td>
+                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="20%">
+                        <span v-if="aoq.dmd_rfqs[0].purchase_request_id">{{ aoq.dmd_rfqs[0].created_at | myDate }} - {{ aoq.dmd_rfqs[0].purchase_request_id | numeral2 }}</span>
+                        <span v-else></span>
+                    </td>
                 </tr>
                 <td colspan="2">Canvassed By:</td>
                 <td>AOQ No.:</td>
-                <td class="pr1 border-top-0 border-left-0 border-right-0" width="20%"></td>
+                <td class="pr1 border-top-0 border-left-0 border-right-0" width="20%">
+                    <span v-if="aoq.dmd_rfqs[0].purchase_request_id">{{ aoq.dmd_rfqs[0].created_at | myDate }} - {{ aoq.dmd_rfqs[0].purchase_request_id | numeral2 }}</span>
+                        <span v-else></span>
+                </td>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Date:</td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="20%"></td>
+                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="20%">
+                        <span v-if="aoq.dmd_rfqs[0].created_at">{{ aoq.dmd_rfqs[0].created_at | myDate3 }}</span>
+                        <span v-else></span>
+                    </td>
                 </tr>
             </table>
             <table class="table table-condensed border-top-0 border-left-0 border-right-0 table-sm">
-                <tr class="">
+                <tr class="" >
                     <td class="pr1 border-top-0 border-left-0 border-right-0" colspan="4"></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0"><b><center>Supplier 1</center></b></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0"><b><center>Supplier 2</center></b></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0"><b><center>Supplier 3</center></b></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0"><b><center>Supplier 4</center></b></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0"><b><center>Supplier 5</center></b></td>
+                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="10%" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
+                        <b>
+                            <center>
+                                <span v-if="rfq.supplier_name">{{ rfq.supplier_name  }}</span>
+                                <span v-else></span>
+                            </center>
+                        </b>
+                    </td>
                 </tr>
                 <tr>
                     <td class="pr1 border-top" width="5%">
@@ -100,22 +111,10 @@
                         <center></center>
                     </td>
                     <td class="pr1">
-                        <center></center>
+                        <center>{{ aoq.dmddesc }}</center>
                     </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
+                    <td class="pr1" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
+                        <center>{{ rfq.cost_unit | currency2 }}</center>
                     </td>
                 </tr>
             </table>
@@ -143,13 +142,40 @@
 
 <script>
 export default {
-    mounted() {
+    data(){
+        return{
+            aoq: '',
+        }
+    },
+    methods:{
+        get_aoq(){
+            axios.get('../../../api/dmd_aoq/'+this.$route.params.id+'/'+this.$route.params.rfq_id).then(({data}) => {
+                this.aoq = data;
+            }).catch(() => {
 
+            });
+        },
+        print(){
+            window.print();
+            location.reload();
+        },
+    },
+    created(){
+        this.get_aoq();
     }
+    
 }
+
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+
+  @media print{
+      .orientation{
+          width: 100%;
+      }
+  }
+
 @font-face {
     font-family: 'Helvetica';
     src: url('https://fonts.googleapis.com/css?family=Helvetica');

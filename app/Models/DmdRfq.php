@@ -10,7 +10,7 @@ class DmdRfq extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'rfq_id', 'dmd_id', 'brand_id', 'manufacturer_id', 'cost_unit'
+        'rfq_id', 'dmd_id', 'brand_id', 'manufacturer_id', 'cost_unit', 'supplier_id',
     ];
 
     public function dmd(){
@@ -27,5 +27,9 @@ class DmdRfq extends Model
 
     public function manufacturer(){
         return $this->belongsTo('App\Models\Manufacturer', 'manufacturer_id', 'manufacturer_id');
+    }
+
+    public function supplier(){
+        return $this->belongsTo('App\Models\Supplier', 'supplier_id', 'supplier_id');
     }
 }

@@ -37,7 +37,7 @@
                                     <td class="text-center">
                                         {{ dmd.mode_desc }}
                                     </td>
-                                    <td class="text-right">{{ dmd.quantity }}</td>
+                                    <td class="text-right" >{{ dmd.quantity | numeral3 }}</td>
                                     <td class="text-right">
                                         <span v-if="dmd.cost">{{ dmd.cost | currency2 }}</span>
                                         <span v-else></span>
@@ -58,7 +58,7 @@
             </div>
             <div class="modal fade" id="appDmdModal" tabindex="-1" role="dialog" aria-labelledby="appDmdModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                    <div class="modal-content">
+                    <div class="modal-content" id="d_modal_content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="appDmdModalLabel">{{ form.gendesc }} {{ form.dmdnost }} {{ form.stredesc }} {{ form.formdesc }}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -75,7 +75,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control form-control-sm text-right" v-model="form.quantity" min="0" step="1">
+                                    <money class="form-control form-control-sm text-right" v-model="form.quantity" v-bind="money" min="0" step="1"></money>
                                 </div>
                                 <div>
                                     <label for="" class="form-label">Unit Cost</label>
@@ -98,10 +98,20 @@
     </div>
 </template>
 <script>
+import {Money} from 'v-money'
 import { mapGetters, mapActions } from "vuex";
 export default {
+    components: {Money},
     data(){
         return{
+        money: {
+                decimal: ',',
+                thousands: ',',
+                prefix: ' ',
+                suffix: ' ',
+                precision: 0,
+                masked: false
+            },
             editmode: false,
             form: new Form({
                 gendesc: '',
@@ -178,6 +188,18 @@ export default {
 </script>
 
 <style scoped>
+    #d_modal_content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-body{
+        background-color: white;
+        color: black;
+    }
 tr {
     width: 100%;
     display: inline-table;

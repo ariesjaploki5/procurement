@@ -2,306 +2,181 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row mb-1">
-                <div class="col-md-6">
-                    Drugs And Medicines
-                </div>
-                <div class="col-md-6 text-right">
-                    <button class="btn btn-sm btn-primary" @click="cart_modal()"><i class="fas fa-shopping-cart"></i> Purchase Requests</button>
-                    <!-- <div class="btn-group dropleft">
-                        <button type="button" :disabled="!pb_form.items.length && !sp_form.items.length" class="btn btn-dark btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i>  Purchase Requests</button>
-                        <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                            <button v-show="pb_form.items.length" class="dropdown-item" @click="public_bidding()">Public Bidding</button>
-                            <button v-show="sp_form.items.length" class="dropdown-item" @click="shopping()">Shopping</button>
-                        </div>
-                    </div> -->
+                <div class="col-md-10 text-center"><h4>Drugs And Medicines</h4></div>
+                <div class="col-md-1 text-right">
+                    <button class="btn btn-sm btn-primary" :disabled="cart_item == 0" @click="cart_modal()"><i class="fas fa-shopping-cart"></i> <span class="badge badge-light">{{ cart_item }}</span></button>
                 </div>
             </div>
             <div class="row mb-1">
-                <div class="col-md-auto text-right">Search:</div>
+                <div class="col-md-auto text-right font-weight-bold ">Search:</div>
                 <div class="col-md-4"><input type="text" class="form-control form-control-sm" v-model="search_word"></div>
-            </div>
+                <div class="col-md-auto">Legend:</div>
+                <div class="col-md-auto"><i class="fas fa-stop" style="color:yellow"></i> - Below ROP</div>
+                 <div class="col-md-auto"><i class="fas fa-stop" style="color:red"></i> - No SSL</div>
+                <div class="col-md-auto"><i class="fas fa-stop" style="color:green"></i> - Above SSL</div>
+                 <div class="col-md-auto"><i class="fas fa-stop" style="color:blue"></i> - Item in Transit</div>
+            </div><br>
             <div class="table-responsive-sm">
-                <table class="table table-fixed table-sm table-hover">
+                <table class="table table-fixed table-sm table-hover table-condensed">
                     <thead>
                         <tr>
-                            <th width="5%">#</th>
-                            <th width="10%">ID</th>
-                            <th width="30%">Description</th>
-                            <th width="10%" class="text-center">Balance On Hand</th>
-                            <th class="text-center">SSL</th>
-                            <th class="text-center">ROP</th>
-                            <th class="text-center">Item In Transit</th>
-                            <th class="text-center">Last PR</th>
-                            <th class="text-center" width="8%">Action</th>
+                            <th width="2%" class="text-center">#</th>
+                            <th width="30%" class="text-left">Description</th>
+                            <th width="5%" class="text-center">Balance On Hand</th>
+                            <th width="5%" class="text-center">SSL</th>
+                            <th width="5%" class="text-center">ROP</th>
+                            <th width="5%" class="text-center">Item In Transit</th>
+                            <th width="5%" class="text-center">Last PR</th>
+                            <th width="2%" class="text-center"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'table-warning' : d.boh_iit < d.ssl/2 , 'table-danger' : d.ssl == 0 , 'table-success' : d.boh > d.ssl/2, 'table-primary' : d.boh_iit > d.ssl/2}" >
-                            <td width="5%">{{ index + 1}}</td>
-                            <td width="10%">{{ d.dmdcomb }}-{{ d.dmdctr}}</td>
-                            <td width="30%">{{ d.gendesc }} {{ d.dmdnost }} {{ d.stredesc }} {{ d.formdesc }} {{ d.brandname }}</td>
-                            <td width="10%" class="text-right">{{ d.boh | numeral3 }}</td>
-                            <td class="text-right">{{ d.ssl | numeral3 }}</td>
-                            <td class="text-right">{{ d.rop | numeral3 }}</td>
-                            <td class="text-right">{{ d.item_in_transit | numeral3 }}</td>
-                            <td class="text-center">
-                                <span v-if="d.last_pr">{{ d.last_pr | myDate3 }}</span>
-                                <span v-else></span>
-                            </td>
-                            <td class="text-left" width="8%">
-                                <button type="button" class="btn btn-sm btn-light btn-outline-dark" @click="edit_ssl(d)">
-                                    <i class="fas fa-pen"></i>
-                                </button>
-                                <span v-show="(d.dmd_price_schedule !== null || d.cost)  && d.ssl != 0"  :disabled="d.cart_dmd_id != null">
-                                    <button class="btn btn-sm btn-primary" v-if="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)">
-                                    <i class="fas fa-cart-plus"></i> 
-                                    <!-- Public Bidding -->
-                                    </button>
-                                    <button class="btn btn-sm btn-primary" v-else @click="add_item_2(d, 4)">
-                                        <i class="fas fa-cart-plus"></i> 
-                                        <!-- Shopping -->
-                                    </button>
+                    <tbody class="table-bordered">
+                        <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'table-warning' : d.boh_iit < d.rop , 'table-danger' : d.ssl == 0 , 'table-success' : d.boh > d.ssl/2, 'table-primary' : d.boh_iit > d.ssl/2}" >
+                            <td width="2%" class="text-right bg-white">{{ index + 1}}</td>
+                            <td width="30%" class="text-left">{{ d.gendesc }} {{ d.dmdnost }} {{ d.stredesc }} {{ d.formdesc }} {{ d.brandname }}</td>
+                            <td width="5%" class="text-right">{{ d.boh | numeral3 }}</td>
+                            <td width="5%" class="text-right">{{ d.ssl | numeral3 }} <button class="fas fa-pen text-dark" data-toggle="tooltip" data-placement="top" title="Edit SSL" @click="edit_ssl(d)"></button></td>
+                            <td width="5%" class="text-right">{{ d.rop | numeral3 }}</td>
+                            <td width="5%" class="text-right">{{ d.item_in_transit | numeral3 }}</td>
+                            <td width="5%" class="text-center"><span v-if="d.last_pr">{{ d.last_pr | myDate3 }}</span><span v-else></span></td>
+                            <td class="text-center" width="2%">
+                                <span v-show="(d.dmd_price_schedule !== null || d.cost)  && d.ssl != 0 && !d.cart_dmd_id">
+                                    <!-- public bidding -->
+                                    <a href class="fas fa-plus text-primary fa-lg" v-if="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)"></a>
+                                    <!-- shopping -->
+                                    <a href class="fas fa-plus text-primary fa-lg" v-else @click="add_item_2(d, 4)"></a>                                 
                                 </span>
-                                <!-- <div class="btn-group dropleft btn-sm">
-                                    <button  v-show="d.boh_iit <= d.ssl/2 && d.ssl != 0" :disabled="d.cart_dmd_id != null" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cart-plus"></i></button>
-                                    <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                                        <button class="dropdown-item" v-show="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)"><i class="fas fa-cart-plus"></i> Public Bidding</button>
-                                        <button class="dropdown-item" v-show="d.cost" @click="add_item_2(d, 4)"><i class="fas fa-cart-plus"></i> Shopping</button>
-                                    </div>
-                                </div> -->
-                                <!-- <button type="button" class="btn btn-sm btn-primary" @click="add_item_3(d.dmd_id)">
-                                    <i class="fas fa-plus"></i>
-                                    <i class="fas fa-cart-plus"></i>
-                                </button> -->
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="modal fade" id="sslModal" tabindex="-1" role="dialog" aria-labelledby="sslModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h6  class="modal-title text-bold" id="sslModalLabel">Edit SSL</h6>
+                            <h5  class="modal-title text-bold" id="sslModalLabel">Edit SSL</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+                        <form  @submit.prevent="update_ssl()">
                         <div class="modal-body">
-                            <form  @submit.prevent="update_ssl()">
-                                <div>
-                                    {{ ssl_form.gendesc }} {{ ssl_form.dmdnost }} {{ ssl_form.stredesc }} {{ ssl_form.formdesc }} {{ ssl_form.brandname }}
+                            <label class="form-label text-bold"><h4>
+                                {{ ssl_form.gendesc }} {{ ssl_form.dmdnost }} {{ ssl_form.stredesc }} {{ ssl_form.formdesc }} {{ ssl_form.brandname }}
+                                </h4>
+                            </label>
+                            <div class="form-group row">
+                                <div class="col">
+                                    <label for="ssl" class="form-label"><h5>Standard Stock Level</h5></label>
                                 </div>
-                                <div class="form-group">
-                                    <label for="ssl" class="form-label">Standard Stock Level</label>
-                                    <input type="number" class="form-control form-control-sm text-right" v-model="ssl_form.ssl">
+                                <div class="col">
+                                    <money class="form-control form-control-sm text-right" v-model="ssl_form.ssl" v-bind="money"></money>
                                 </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <!-- <div class="modal fade" id="pbModal" tabindex="-1" role="dialog" aria-labelledby="pbModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            Public Bidding
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form  @submit.prevent="pb_submit()">
-                                <table class="table table-sm table-hover">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>#</th>
-                                            <th width="20%">Description</th>
-                                            <th>SSL</th>
-                                            <th>BOH</th>
-                                            <th>Item In Transit</th>
-                                            <th width="10%">Quantity</th>
-                                            <th>Unit Cost</th>
-                                            <th>Estimated Cost</th>
-                                            <th class="text-center">
-                                                Action
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(item,index) in pb_form.items" :key="item.dmd_id">
-                                            <td>{{ index + 1}}</td>
-                                            <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
-                                            <td class="text-right">{{ item.ssl }}</td>
-                                            <td class="text-right">{{ item.boh }}</td>
-                                            <td class="text-right"></td>
-                                            <td width="10%" class="text-right">
-                                                <input type="number" class="form-control form-control-sm text-right" v-model="item.quantity">
-                                            </td>
-                                            <td class="text-right">
-                                                {{ item.dmd_price_schedule.bid_price | currency2 }}
-                                            </td>
-                                            <td class="text-right">
-                                                {{ item.dmd_price_schedule.bid_price * item.quantity | currency2 }}
-                                            </td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.id)">
-                                                    <i class="fas fa-times-circle"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div class="form-group">
-                                    <label class="form-label">Purpose: </label>
-                                    <textarea type="text" class="form-control" rows="5" v-model="pb_form.purpose"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="spModal" tabindex="-1" role="dialog" aria-labelledby="spModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            Shopping
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form @submit.prevent="sp_submit()">
-                                <table class="table table-sm table-hover">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>#</th>
-                                            <th width="20%">Description</th>
-                                            <th>SSL</th>
-                                            <th>BOH</th>
-                                            <th>Item In Transit</th>
-                                            <th width="10%">Quantity</th>
-                                            <th>Unit Cost</th>
-                                            <th>Estimated Cost</th>
-                                            <th class="text-center">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(item,index) in sp_form.items" :key="item.dmd_id">
-                                            <td>{{ index + 1}}</td>
-                                            <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
-                                            <td class="text-right">{{ item.ssl }}</td>
-                                            <td class="text-right">{{ item.boh }}</td>
-                                            <td class="text-right">{{ item.app_dmd.item_in_transit }}</td>
-                                            <td width="10%" class="text-right">
-                                                <input type="number" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" min="1" v-model="item.quantity">
-                                            </td>
-                                            <td class="text-right">{{ item.app_dmd.cost | currency2 }}</td>
-                                            <td class="text-right">{{ item.app_dmd.cost * item.quantity | currency2 }}</td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.id)">
-                                                    <i class="fas fa-times-circle"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div class="form-group">
-                                    <label class="form-label">Purpose: </label>
-                                    <textarea type="text" class="form-control" rows="5" v-model="pb_form.purpose"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
             <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
-                    <div class="modal-content">
+                    <div class="modal-content" id="d_modal_content">
                         <div class="modal-header">
                             Purchase Request
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            <form @submit.prevent="pr_submit()">
-                                <table class="table table-sm table-hover">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>#</th>
-                                            <th width="20%">Description</th>
-                                            <th>SSL</th>
-                                            <th>BOH</th>
-                                            <th>Item In Transit</th>
-                                            <th width="10%">Quantity</th>
-                                            <th>Unit Cost</th>
-                                            <th>Estimated Cost</th>
-                                            <th class="text-center">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        public bidding
-                                        <tr v-for="(item,index) in pb_form.items" :key="item.dmd_id">
-                                            <td>{{ index + 1}}</td>
-                                            <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
-                                            <td class="text-right">{{ item.ssl }}</td>
-                                            <td class="text-right">{{ item.boh }}</td>
-                                            <td class="text-right">{{ item.item_in_transit }}</td>
-                                            <td width="10%" class="text-right">
-                                                <input type="number" class="form-control form-control-sm text-right" v-model="item.quantity">
-                                            </td>
-                                            <td class="text-right">
-                                                {{ item.dmd_price_schedule.bid_price | currency2 }}
-                                            </td>
-                                            <td class="text-right">
-                                                {{ item.dmd_price_schedule.bid_price * item.quantity | currency2 }}
-                                            </td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.id)">
-                                                    <i class="fas fa-times-circle"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        shopping
-                                        <tr v-for="(item,index) in sp_form.items" :key="item.dmd_id">
-                                            <td>{{ index + 1}}</td>
-                                            <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
-                                            <td class="text-right">{{ item.ssl }}</td>
-                                            <td class="text-right">{{ item.boh }}</td>
-                                            <td class="text-right">{{ item.item_in_transit }}</td>
-                                            <td width="10%" class="text-right">
-                                                <input type="number" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" min="1" v-model="item.quantity">
-                                            </td>
-                                            <td class="text-right">{{ item.app_dmd.cost | currency2 }}</td>
-                                            <td class="text-right">{{ item.app_dmd.cost * item.quantity | currency2 }}</td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.id)">
-                                                    <i class="fas fa-times-circle"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        
-                                    </tbody>
-                                </table>
+                        <form @submit.prevent="pr_submit()">
+                            <div class="modal-body">
+                                <div v-show="pb_form.items.length">
+                                   <span class="font-weight-bold">With Bidder</span>
+                                    <table class="table table-sm table-hover table-bordered" style="height: 13rem; display: -moz-groupbox;">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th width="4%">#</th>
+                                                <th width="20%">Description</th>
+                                                <th>SSL</th>
+                                                <th>BOH</th>
+                                                <th>Item In Transit</th>
+                                                <th width="10%">Quantity</th>
+                                                <th>Unit Cost</th>
+                                                <th>Estimated Cost</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="overflow-y: scroll;height: 12rem; width: 98.5%; position: absolute;">
+                                            <tr v-for="(item,index) in pb_form.items" :key="item.dmd_id">
+                                                <td width="4%">{{ index + 1}}</td>
+                                                <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
+                                                <td class="text-right">{{ item.ssl | numeral3 }}</td>
+                                                <td class="text-right">{{ item.boh | numeral3 }}</td>
+                                                <td class="text-right">{{ item.item_in_transit }}</td>
+                                                <td width="10%" class="text-right">
+                                                    <input type="number" class="form-control form-control-sm text-right" v-model="item.quantity">
+                                                </td>
+                                                <td class="text-right">{{ item.dmd_price_schedule.bid_price | currency2 }}</td>
+                                                <td class="text-right">{{ item.dmd_price_schedule.bid_price * item.quantity | currency2 }}</td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.id)">
+                                                        <i class="fas fa-times-circle"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div v-show="sp_form.items.length">
+                                    <span class="font-weight-bold">For Shopping</span>
+                                    <table class="table table-sm table-hover" style="height: 13rem; display: -moz-groupbox;">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th width="4%">#</th>
+                                                <th width="20%">Description</th>
+                                                <th>SSL</th>
+                                                <th>BOH</th>
+                                                <th>Item In Transit</th>
+                                                <th width="10%">Quantity</th>
+                                                <th>Unit Cost</th>
+                                                <th>Estimated Cost</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="overflow-y: scroll;height: 12rem; width: 98.5%; position: absolute;">
+                                            <tr v-for="(item,index) in sp_form.items" :key="item.dmd_id">
+                                                <td width="4%">{{ index + 1}}</td>
+                                                <td width="20%">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
+                                                <td class="text-right">{{ item.ssl }}</td>
+                                                <td class="text-right">{{ item.boh }}</td>
+                                                <td class="text-right">{{ item.item_in_transit }}</td>
+                                                <td width="10%" class="text-right">
+                                                    <input type="number" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" min="1" v-model="item.quantity">
+                                                </td>
+                                                <td class="text-right">{{ item.app_dmd.cost | currency2 }}</td>
+                                                <td class="text-right">{{ item.app_dmd.cost * item.quantity | currency2 }}</td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.id)">
+                                                        <i class="fas fa-times-circle"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <div class="form-group">
                                     <label class="form-label">Purpose: </label>
-                                    <textarea type="text" class="form-control" rows="5" v-model="form.purpose"></textarea>
+                                    <textarea type="text" class="form-control form-control-sm" rows="2" v-model="form.purpose"></textarea>
                                 </div>
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-sm btn-success" @click="pr_submit()">Submit</button>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-success" @click="pr_submit()">Submit</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -309,20 +184,24 @@
     </div>
 </template>
 <script>
+import {Money} from 'v-money'
 export default {
+    components: {Money},
     data(){
         return{
+            money: {
+                decimal: ',',
+                thousands: ',',
+                prefix: ' ',
+                suffix: ' ',
+                precision: 0,
+                masked: false
+            },
             dmds: [],
             search_word: '',
             ssl_form: new Form({
-                dmd_id: '',
-                gendesc: '',
-                dmdnost: '',
-                stredesc: '',
-                formdesc: '',
-                brandname: '',
-                dmdcomb: '',
-                dmdctr: '',
+                dmd_id: '',gendesc: '',dmdnost: '',stredesc: '',formdesc: '',brandname: '',
+                dmdcomb: '',dmdctr: '',
                 ssl: '',
             }),
             form: new Form({
@@ -431,7 +310,7 @@ export default {
                 this.get_sp_items();
                 toast.fire({
                     type: 'success',
-                    title: 'Item added',
+                    title: 'Item Added',
                 });
             }).catch(() => {
 
@@ -507,13 +386,43 @@ export default {
                 return matcher.test(dmd.gendesc)
             });
         },
+        cart_item: function(){
+            let sum = 0;
+            sum += (parseFloat(this.pb_form.items.length) + parseFloat(this.sp_form.items.length));
+            return sum;
+        }
+        
     },
     mounted(){
         
+        
     },
-}
+
+}   
+
 </script>
 <style scoped>
+@media (min-width: 768px) {
+    .modal-xl {
+            width: 90%;
+            max-width:1400px;
+        }
+    }
+tbody.table-bordered > tr > td{
+    border:1px solid black;
+}
+    #d_modal_content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-body{
+        background-color: white;
+        color: black;
+    }
     tr {
         width: 100%;
         display: inline-table;

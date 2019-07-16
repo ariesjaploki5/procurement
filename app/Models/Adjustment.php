@@ -10,7 +10,9 @@ class Adjustment extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'itemType', 'dmdComb', 'dmdCtr', 'dmhdrsub', 
-        'stockB4Adjust', 'operation', 'transQty', 'remarks',
+        'itemType', 'dmdcomb', 
+        'dmdctr', 'dmhdrsub', 
+        'stockB4Adjust', 'operation', 
+        'transQty', 'remarks',
     ];
 }

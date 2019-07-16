@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row mb-1">
-                <div class="col-md-6">
+                <div class="col-md-6 font-weight-bold">
                     Drugs And Medicines
                 </div>
             </div>
@@ -11,30 +11,57 @@
                     <table class="table table-sm table-hover">
                         <thead>
                             <tr>
-                                <th width="5%">ID</th>
-                                <th width="30%">Description</th>
-                                <th>SSL</th>
-                                <th>ROP</th>
-                                <th>BOH</th>
-                                <th>Item in Transit</th>
+                                <th>#</th>
+                                <th width="35%">Item Description</th>
+                                <th>Beginning Balance</th>
+                                <th>Stock</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(d, index) in dmds" :key="d.dmd_id">
-                                <td width="5%">{{ index + 1}}</td>
-                                <td width="30%">{{ d.gendesc }} {{ d.dmdnost }} {{ d.stredesc }} {{ d.formdesc }}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                            <tr v-for="(dmd, index) in dmds" :key="dmd.dmd_id">
+                                <td>{{ index++ }}</td>
+                                <td width="35%">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
+                                <td>{{ dmd.begbal }}</td>
+                                <td>{{ dmd.mmo_stock }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-success" @click="edit_beg_bal(dmd)">Edit</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="modal fade" id="begbalModal" tabindex="-1" role="dialog" aria-labelledby="begbalModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    {{ form.gendesc }} {{ form.dmdnost }} {{ form.stredesc }} {{ form.formdesc }} {{ form.brandname }}
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div> 
+                                <form action="" @submit.prevent="submit_beg_bal()">
+                                    <div class="modal-body">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="" class="form-label">Beginning Balance</label>
+                                                    <input type="number" class="form-control form-control-sm" v-model="form.begbal">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-sm btn-warning">Cancel</button>
+                                        <button type="submit" class="btn btn-sm btn-danger">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -43,16 +70,43 @@ export default {
     data(){
         return{
             dmds: {},
+            form: new Form({
+                gendesc: '',
+                formdesc: '',
+                stredesc: '',
+                dmdnost: '',
+                brandname: '',
+                dmdctr: '',
+                dmdcomb: '',
+                begbal: '',
+            }),
         }
     },
     methods:{
         get_dmds(){
-            axios.get('../../api/dmd').then(({data}) => {
+            axios.get('../../api/for_mmo').then(({data}) => {
                 this.dmds = data;
+
             }).catch(() => {
 
             });
         },
+        edit_beg_bal(dmd){
+            this.form.fill(dmd);
+            $('#begbalModal').modal('show');
+        },
+        submit_beg_bal(){
+            axios.post('../../api/beg_bal',{
+                dmdcomb: this.form.dmdcomb,
+                dmdctr: this.form.dmdctr,
+                begbal: this.form.begbal,
+            }).then(() => {
+                this.get_dmds();
+                $('#begbalModal').modal('hide');
+            }).catch(() => {
+
+            });
+        }
     },
     created(){
         this.get_dmds();

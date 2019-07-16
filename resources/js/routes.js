@@ -40,11 +40,13 @@ import adjustment_list from './components/pages/adjustments/list';
 import purchase_request2 from './components/pharmacy/purchase_request.vue';
 import purchase_order2 from './components/pharmacy/purchase_order.vue';
 
+
 import request_for_quotation from './components/pages/rfq/main.vue';
 import request_for_quotation_list from './components/pages/rfq/list.vue';
 import request_for_quotation_show from './components/pages/rfq/show.vue';
 
 import drugs_and_medicines from './components/pharmacy/drugs_and_medicines.vue';
+import verified_reports from './components/mmo/verified_reports.vue';
 
 import suppliers from './components/pages/supplier/main';
 import supplier_list from './components/pages/supplier/list';
@@ -53,10 +55,15 @@ import accounting_po from './components/accounting/purchase_order.vue';
 import accounting_dmd from './components/accounting/drugs_and_medicines.vue';
 
 import budget_po from './components/budget/purchase_order.vue';
+import budget_dmd from './components/budget/drugs_and_medicines.vue';
+
 import div_head_po from './components/div_head/purchase_order.vue';
 
 import fmo_po from './components/fmo/purchase_order.vue';
+
 import pmo_po from './components/pmo/purchase_order.vue';
+import pmo_pr from './components/pmo/purchase_request.vue';
+import pmo_rfq from './components/pmo/request_for_quotation.vue';
 
 import mmo_po from './components/mmo/purchase_order.vue';
 import mmo_dmd from './components/mmo/drugs_and_medicines.vue';
@@ -69,14 +76,41 @@ import ppmp from './components/print/ppmp';
 import pr from './components/print/pr';
 import rfq from './components/print/rfq';
 import sps from './components/print/sps';
+import ntt from './components/print/ntt';
+
+import cpr from './components/print/cpr';
 
 import consignments from './components/pages/consignments/main.vue';
 
+import mds_consignments from './components/pharmacy/mds_consignment.vue';
+import consignment_requests from './components/pharmacy/consignment_request.vue';
+
+import others from './components/others/main.vue';
+
 export const routes = [
+    {
+        path: '/others',
+        component: others,
+        name: 'others',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/consignment_requests',
+        component: consignment_requests,
+        name: 'consignment_requests',
+        meta: { requiresAuth: true }
+    },
     {
         path: '/consignments',
         component: consignments,
         name: 'consignments',
+        meta: { requiresAuth: true }
+    },
+
+    {
+        path: '/mds_consignments',
+        component: mds_consignments,
+        name: 'mds_consignments',
         meta: { requiresAuth: true }
     },
 
@@ -111,6 +145,18 @@ export const routes = [
         meta: { requiresAuth: true }
     },
     {
+        path: '/pmo_pr',
+        component: pmo_pr,
+        name: 'pmo_pr',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/pmo_rfq',
+        component: pmo_rfq,
+        name: 'pmo_rfq',
+        meta: { requiresAuth: true }
+    },
+    {
         path: '/fmo_po',
         component: fmo_po,
         name: 'fmo_po',
@@ -129,7 +175,7 @@ export const routes = [
         meta: { requiresAuth: true }
     },
     {
-        path: '/aoq/:id',
+        path: '/aoq/:id/:rfq_id',
         component: aoq,
         name: 'aoq',
         meta: { requiresAuth: true }
@@ -165,6 +211,12 @@ export const routes = [
         meta: { requiresAuth: true }
     },
     {
+        path: '/cpr/:id',
+        component: cpr,
+        name: 'cpr',
+        meta: { requiresAuth: true }
+    },
+    {
         path: '/rfq/:id',
         component: rfq,
         name: 'rfq',
@@ -174,6 +226,12 @@ export const routes = [
         path: '/sps/:id',
         component: sps,
         name: 'sps',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/ntt/:id',
+        component: ntt,
+        name: 'ntt',
         meta: { requiresAuth: true }
     },
     {
@@ -202,8 +260,18 @@ export const routes = [
         meta: { requiresAuth: true }
     },
     {
+        path: '/verified_reports',
+        component: verified_reports,
+        meta: { requiresAuth: true }
+    },
+    {
         path: '/drugs_and_medicines',
         component: drugs_and_medicines,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/budget_dmd',
+        component: budget_dmd,
         meta: { requiresAuth: true }
     },
 

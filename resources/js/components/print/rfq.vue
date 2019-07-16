@@ -5,8 +5,8 @@
             <div class="col-lg-12">
                 <table class="table table-condensed table-sm a" style="margin-top: 1%">
                     <tr>
-                        <td class="pr1 border-top-0 border-right-0" rowspan="8"><img :src="'/img/bghmc.png'" style="margin-left: 15%; margin-top: 10%" width="150" height="150"></td>
-                        <td class="pr1 border-top-0 border-bottom-0 text-center" colspan="5" id="pr1">Republic of the Philippines</td>
+                        <td class="pr1 border-right-0" rowspan="8"><img :src="'/img/bghmc.png'" style="margin-left: 15%; margin-top: 10%" width="150" height="150"></td>
+                        <td class="pr1 border-bottom-0 text-center" colspan="5" id="pr1">Republic of the Philippines</td>
                     </tr>
                     <td class="pr1 border-top-0 border-bottom-0 text-center" colspan="5">Department of Health</td>
                     <tr>
@@ -30,7 +30,7 @@
                         <td class="pr1 border-top-0 border-right-0 border-left-0"></td>
                         <!--{{-- NAME OF COMPANY --}}-->
                         <td width="15%">Date Prepared:</td>
-                        <td width="20%"></td>
+                        <td width="20%">{{ rfq.created_at | myDate3 }}</td>
                     </tr>
                     <tr>
                         <td class="pr1 border-top-0 border-right-0 border-left-0"></td>
@@ -40,7 +40,7 @@
                     <tr>
                         <td class="border-bottom-0"></td>
                         <td width="15%">R.F.Q. No.:</td>
-                        <td width="20%"></td>
+                        <td width="20%">{{ rfq.created_at | myDate }} - {{ rfq.id | numeral2 }}</td>
                     </tr>
                 </table>
                 <table class="table table-condensed table-borderless border-0 table-sm" style="margin-top:-1.2%">
@@ -67,26 +67,26 @@
                         <td class="pr1 text-center" rowspan="2" width="5%">ITEM NO.</td>
                         <td class="pr1 text-center" rowspan="2" width="5%"><br>QTY</td>
                         <td class="pr1 text-center" rowspan="2" width="5%"><br>UNIT</td>
-                        <td class="pr1 text-center" rowspan="2"><h5><br><b>ARTICLE AND DESCRIPTION</b></h5></td>
+                        <td class="pr1 text-center" rowspan="2" width="35"><h5><br><b>ARTICLE AND DESCRIPTION</b></h5></td>
                         <td class="pr1 text-center" rowspan="2" width="10%"><small>Approved Budget for the Contact</small></td>
                         <td class="pr1 text-center" rowspan="2" width="10%"><br>Brand Name</td>
                         <td class="pr1 text-center" rowspan="2" width="10%"><br>Manufacturer</td>
-                        <td class="pr1 text-center" colspan="2" width="10%">PRICE</td>
+                        <td class="pr1 text-center" colspan="2" width="20%">PRICE</td>
                     </tr>
                     <tr>
-                        <td class="pr1 text-center">UNIT</td>
-                        <td class="pr1 text-center">TOTAL</td>
+                        <td class="pr1 text-center" width="10%">UNIT</td>
+                        <td class="pr1 text-center" width="10%">TOTAL</td>
                     </tr>
                     <tr>
                         <td class="pr1 text-center">1</td>
+                        <td class="pr1 text-center">{{ rfq.request_quantity | numeral3 }}</td>
                         <td class="pr1 text-center"> </td>
-                        <td class="pr1 text-center"> </td>
-                        <td class="pr1 text-center"> </td>
-                        <td class="pr1 text-center"> </td>
-                        <td class="pr1 text-center"> </td>
-                        <td class="pr1 text-center"> </td>
-                        <td class="pr1 text-center"> </td>
-                        <td class="pr1 text-center"> </td>
+                        <td class="pr1 text-center">{{ rfq.dmddesc }}</td>
+                        <td class="pr1 text-center">{{ rfq.cost | currency2 }}</td>
+                        <td class="pr1 text-center">{{ rfq.brand_desc }}</td>
+                        <td class="pr1 text-center">{{ rfq.manufacturer_desc }}</td>
+                        <td class="pr1 text-center">{{ rfq.cost_unit | currency2 }}</td>
+                        <td class="pr1 text-center">{{ rfq.cost_unit * rfq.request_quantity |currency2 }}</td>
                     </tr>
                 </table>
                 <table class="table table-condensed table-borderless border-0 table-sm">
@@ -131,7 +131,7 @@
                     </tr>
                     <tr>
                         <td style="text-indent: 100px"><h5> </h5></td>
-                        <td><h6>Address: <u></u></h6></td>
+                        <td><h6>Address: <u>{{ rfq.supplier_address }}</u></h6></td>
                     </tr>
                     <tr>
                         <td>___________________________________________________________</td>
@@ -142,7 +142,7 @@
                                 <h5>Canvasser</h5>
                             </b></td>
                         <td>
-                            <h6>Telephone Number: <u></u></h6>
+                            <h6>Telephone Number: <u>{{ rfq.tel_no }}</u></h6>
                         </td>
                     </tr>
                     <tr>
@@ -158,14 +158,20 @@
     export default {
         data(){
             return{
-
+                rfq: '',
             }
         },
         methods:{
+            get_rfq(){
+                axios.get('../../api/dmd_rfq/'+this.$route.params.id).then(({data}) => {
+                    this.rfq = data;
+                }).catch(() => {
 
+                });
+            },
         },
         created(){
-
+            this.get_rfq();
         },
         mounted() {
 
@@ -175,6 +181,7 @@
         window.print();
         location.reload();
     }
+
 </script>
 
 <style lang="scss" scoped>

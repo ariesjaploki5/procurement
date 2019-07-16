@@ -1,25 +1,22 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="col-md-12">
-                        <h3>
-                            {{ price_schedule.category.category_desc }} - {{ price_schedule.price_schedule_year }}
-                        </h3>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-auto text-right">
-                                Search:
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control form-control-sm" v-model="search_word">
-                            </div>
+            <div class="col-md-12">
+                <h3>
+                    {{ price_schedule.category.category_desc }} - {{ price_schedule.price_schedule_year }}
+                </h3>
+            </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-AUTO text-right">
+                            Search:
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control form-control-sm" v-model="search_word">
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="col-md-12 mt-1">
                     <div class="table-responsive-sm" id="price_schedule">
                         <table class="table table-sm table-hover table-bordered" id="price_schedule_table_2">
                             <thead id="price_schedule_thead">
@@ -49,7 +46,7 @@
                                     <td id="ps_id">{{ index+1 }}</td>
                                     <td id="ps_desc">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
                                     <td id="ps_unit">{{ dmd.app_dmd.unit_desc }}</td>
-                                    <td id="ps_qty">{{ dmd.app_dmd.quantity }}</td>
+                                    <td id="ps_qty">{{ dmd.app_dmd.quantity | numeral3 }}</td>
                                     <td id="ps_abc">{{ dmd.app_dmd.cost | currency2 }}</td>
                                     <td id="ps_bid">
                                         <p v-show="!dmd.dmd_price_schedules.length">No Bidder</p>
@@ -84,10 +81,9 @@
                         </table>
                     </div>
                 </div>
-            </div>
             <div class="modal fade" id="bidderModal" tabindex="-1" role="dialog" aria-labelledby="bidderModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
-                    <div class="modal-content text-left">
+                    <div class="modal-content text-left" id="d_modal_content">
                         <div class="modal-header">
                             <h5 v-show="!editmode" class="modal-title" id="bidderModalLabel">New Bidder</h5>
                             <h5 v-show="editmode" class="modal-title" id="bidderModalLabel">Update Bidder</h5>
@@ -98,13 +94,15 @@
                         <form @submit.prevent="editmode ? update_bidder() : store_bidder()">
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <div class="col">
+                                    <div class="col-lg-AUTO">
                                         <h4>{{ form.dmddesc }}</h4>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="cat" class="col col-form-label">Bidder</label>
-                                    <div class="col">
+                                <div class="form-group row">
+                                    <div class="col-lg-2 text-right">
+                                        <label for="cat" class="form-label">Bidder</label>
+                                    </div>
+                                    <div class="col-lg-10">
                                         <select class="from-control form-control-sm" v-model="form.supplier_id" required>
                                             <option v-for="s in suppliers" :key="s.supplier_id" :value="s.supplier_id">
                                                 {{ s.supplier_name }}
@@ -112,39 +110,49 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="cat" class="col-sm-2 col-form-label">Bid Price</label>
-                                    <div class="col">
+                                <div class="form-group row">
+                                    <div class="col-lg-2 text-right">
+                                        <label for="cat" class="form-label">Bid Price</label>
+                                    </div>
+                                    <div class="col-lg-10">
                                         <input type="float" class="form-control form-control-sm" v-model="form.bid_price" required>  
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="cat" class="col col-form-label">Brand</label>
-                                    <div class="col">
+                                <div class="form-group row">
+                                    <div class="col-lg-2 text-right">
+                                        <label for="cat" class="form-label">Brand</label>
+                                    </div>
+                                    <div class="col-lg-10">
                                         <select class="from-control form-control-sm" v-model="form.brand_id" required>
                                             <option v-for="b in brands" :key="b.brand_id" :value="b.brand_id">{{ b.brand_desc }}</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="cat" class="col col-form-label">Packaging</label>
-                                    <div class="col">
+                                <div class="form-group row">
+                                    <div class="col-lg-2 text-right">
+                                        <label for="cat" class="form-label">Packaging</label>
+                                    </div>
+                                    <div class="col-lg-10">
                                         <select class="from-control form-control-sm" v-model="form.packaging_id" required>
                                             <option v-for="p in packagings" :key="p.packaging_id" :value="p.packaging_id">{{ p.packaging_desc }}</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="cat" class="col col-form-label">Manufacturer</label>
-                                    <div class="col">
+                                <div class="form-group row">
+                                    <div class="col-lg-2 text-right">
+                                        <label for="cat" class="form-label">Manufacturer</label>
+                                    </div>
+                                    <div class="col-lg-10">
                                         <select class="from-control form-control-sm" v-model="form.manufacturer_id" required>
                                             <option v-for="m in manufacturers" :key="m.manufacturer_id" :value="m.manufacturer_id">{{ m.manufacturer_desc }}</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="cat" class="col col-form-label">Country of Origin</label>
-                                    <div class="col">
+                                <div class="form-group row">
+                                    <div class="col-lg-2 text-right">
+                                        <label for="cat" class="form-label">Country of Origin</label>
+                                    </div>
+                                    <div class="col-lg-10">
                                         <select class="from-control form-control-sm" v-model="form.country_id" required>
                                             <option v-for="c in countries" :key="c.country_id" :value="c.country_id">{{ c.country_desc }}</option>
                                         </select>
@@ -152,8 +160,10 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button v-show="!editmode" type="submit" class="btn btn-primary">Submit</button>
-                                <button v-show="editmode" type="submit" class="btn btn-primary">Update</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                                <button v-show="!editmode" type="submit" class="btn btn-success btn-sm">Submit</button>
+                                <button v-show="editmode" type="submit" class="btn btn-success btn-sm">Update</button>
+                                
                             </div>
                         </form>
                     </div>
@@ -202,9 +212,10 @@ export default {
         },
         store_bidder(){
             this.form.post('../../api/dmd_price_schedule/'+this.$route.params.id).then(() => {
-                
+                    
                 $('#bidderModal').modal('hide');
             });
+            
         },
         edit_bidder(dmd, ps){
             this.editmode = true;
@@ -280,6 +291,18 @@ export default {
 </script>
 
 <style scoped>
+    #d_modal_content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-body{
+        background-color: white;
+        color: black;
+    }
     tr {
         width: 100%;
         display: inline-table;

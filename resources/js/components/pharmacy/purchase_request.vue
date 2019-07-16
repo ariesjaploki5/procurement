@@ -1,9 +1,12 @@
 <template>
     <div class="row">
         <div class="col-md-12">
+             <div class="col-md-6">
+                    <h3>Purchase Request</h3>
+                </div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new" aria-selected="true">New</a>
+                    <a class="nav-link active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new" aria-selected="true" >New</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false">All</a>
@@ -16,37 +19,41 @@
                             <thead>
                                 <tr>
                                     <th>PR #</th>
+                                    <th>Date Created</th>
+                                    <th>Status</th>
                                     <th>Mode</th>
                                     <th>Supplier</th>
-                                    <th>Date Created</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="prs in new_purchase_requests" :key="prs.purchase_request_id" v-show="prs.view_dmd_purchase_requests.length">
-                                    <td>{{ prs.created_at | myDate }} - {{ prs.purchase_request_id | numeral2 }}</td>
+                                <tr v-for="prs in new_purchase_requests" :key="prs.purchase_request_id" v-show="prs.view_dmd_purchase_requests.length" :class="{ 'table-danger' : prs.status == 2, 'table-success' : prs.status == 1 }">
+                                    <td>{{ prs.created_at | myDate }} - {{ prs.purchase_request_id | numeral2 }}</td> 
+                                    <td>{{ prs.created_at | myDate4}} - {{ prs.created_at | time1}}</td>
+                                    <td>
+                                        <span v-show="prs.status == 0">Pending</span>
+                                        <span v-show="prs.status == 1">Approved</span>
+                                        <span v-show="prs.status == 2">Disapproved</span>
+                                    </td>
                                     <td>{{ prs.mode.mode_desc }}</td>
-
                                     <td>
                                         <span v-if="!prs.supplier"></span>
                                         <span v-else>{{ prs.supplier.supplier_name }}</span>
                                     </td>
-                                    <td>{{ prs.created_at }}</td>
                                     <td>
                                         <div id="print" class="mb-2">
-                                            <button type="button" class="btn btn-sm btn-primary" @click="view_pr(prs.purchase_request_id)"><i class="fas fa-eye"></i></button>
-                                            <button type="button" class="btn btn-sm btn-success" @click="track_pr(prs)"><i class="fas fa-truck"></i></button>
-                                            <router-link class="btn btn-sm btn-info" :to="{ name: 'pr', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> PR</router-link>
-                                            <router-link class="btn btn-sm btn-info" :to="{ name: 'sps', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> SPS</router-link>
+                                            <button type="button" class="btn btn-sm btn-primary" @click="view_pr(prs.purchase_request_id)">View <i class="fas fa-eye"></i></button>
+                                            <button type="button" class="btn btn-sm btn-success" @click="track_pr(prs)">Track <i class="fas fa-truck"></i></button>
+                                            <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-success" :to="{ name: 'pr', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> PR</router-link>
+                                            <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-success" :to="{ name: 'sps', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> SPS</router-link>
                                         </div>
                                         <div id="document_tracking" class="">
                                             <div v-show="current_user.role_id == 5">
                                                 <button type="button" class="btn btn-sm btn-success" v-show="!prs.div_head_rcv" @click="div_head_rcv(prs.purchase_request_id)">Received From End User <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.div_head_rcv && !prs.div_head_rls" @click="div_head_rls(prs.purchase_request_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
+                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.div_head_rcv && !prs.div_head_rls && prs.status == 1" @click="div_head_rls(prs.purchase_request_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
                                             </div>
                                             <div v-show="current_user.role_id == 3">
                                                 <button type="button" class="btn btn-sm btn-success" v-show="!prs.pmo_rcv" @click="pmo_rcv(prs.purchase_request_id)">Received From CMPS <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.pmo_rcv && !prs.pmo_rls" @click="pmo_rls(prs.purchase_request_id)"><i class="fas fa-file-upload"></i></button>
                                             </div>
                                         </div>
                                     </td>
@@ -61,36 +68,38 @@
                             <thead>
                                 <tr>
                                     <th>PR #</th>
+                                    <th>Date Created</th>
+                                    <th>Status</th>
                                     <th>Mode</th>
                                     <th>Supplier</th>
-                                    <th>Date Created</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="prs in purchase_requests" :key="prs.purchase_request_id" v-show="prs.view_dmd_purchase_requests.length">
+                                <tr v-for="prs in purchase_requests" :key="prs.purchase_request_id" v-show="prs.view_dmd_purchase_requests.length"  :class="{ 'table-danger' : prs.status == 2, 'table-success' : prs.status == 1 }">
                                     <td>{{ prs.created_at | myDate }} - {{ prs.purchase_request_id | numeral2 }}</td>
-                                    <td>{{ prs.mode.mode_desc }}</td>
+                                    <td>{{ prs.created_at | myDate4}} - {{ prs.created_at | time1}}</td>
                                     <td>
-                                        <span v-if="!prs.supplier"></span>
-                                        <span v-else>{{ prs.supplier.supplier_name }}</span>
+                                        <span v-show="prs.status == 0">Pending</span>
+                                        <span v-show="prs.status == 1">Approved</span>
+                                        <span v-show="prs.status == 2">Disapproved</span>
                                     </td>
-                                    <td>{{ prs.created_at }}</td>
+                                    <td>{{ prs.mode.mode_desc }}</td>
+                                    <td><span v-if="!prs.supplier"></span><span v-else>{{ prs.supplier.supplier_name }}</span></td>
                                     <td>
                                         <div id="print" class="mb-2">
                                             <button type="button" class="btn btn-sm btn-primary" @click="view_pr(prs.purchase_request_id)"><i class="fas fa-eye"></i></button>
                                             <button type="button" class="btn btn-sm btn-success" @click="track_pr(prs)"><i class="fas fa-truck"></i></button>
-                                            <router-link class="btn btn-sm btn-info" :to="{ name: 'pr', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> PR</router-link>
-                                            <router-link class="btn btn-sm btn-info" :to="{ name: 'sps', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> SPS</router-link>
+                                            <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-success" :to="{ name: 'pr', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> PR</router-link>
+                                            <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-success" :to="{ name: 'sps', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> SPS</router-link>
                                         </div>
                                         <div id="document_tracking" class="">
                                             <div v-show="current_user.role_id == 5">
                                                 <button type="button" class="btn btn-sm btn-success" v-show="!prs.div_head_rcv" @click="div_head_rcv(prs.purchase_request_id)">Received From End User <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.div_head_rcv && !prs.div_head_rls" @click="div_head_rls(prs.purchase_request_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
+                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.div_head_rcv && !prs.div_head_rls && prs.status == 1" @click="div_head_rls(prs.purchase_request_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
                                             </div>
                                             <div v-show="current_user.role_id == 3">
                                                 <button type="button" class="btn btn-sm btn-success" v-show="!prs.pmo_rcv" @click="pmo_rcv(prs.purchase_request_id)">Received From CMPS <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="prs.pmo_rcv && !prs.pmo_rls" @click="pmo_rls(prs.purchase_request_id)"><i class="fas fa-file-upload"></i></button>
                                             </div>
                                         </div>
                                     </td>
@@ -111,7 +120,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="table-responsive-sm">
-                                <table class="table table-sm table-hover">
+                                <table class="table table-sm table-hover" id="pr_table">
                                     <thead>
                                         <tr class="text-center">
                                             <th width="5%">#</th>
@@ -125,7 +134,7 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody v-if="!isLoading">
+                                    <tbody v-if="!isLoading" id="pr_tbody">
                                         <tr v-for="(dmd,index) in view_pr_form.view_dmd_purchase_requests" :key="dmd.dmd_id">
                                             <td width="5%">{{ index + 1}}</td>
                                             <td width="20%">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
@@ -133,8 +142,8 @@
                                             <td class="text-right table-danger">{{ dmd.boh }}</td>
                                             <td class="text-right table-danger"></td>
                                             <td width="10%" class="text-right">
-                                                <input v-if="!view_pr_form.purchase_order_id" type="number" class="form-control form-control-sm text-right" v-model="dmd.request_quantity">
-                                                <div v-else>{{ dmd.order_quantity }}</div>
+                                                <input v-if="!view_pr_form.send" type="number" class="form-control form-control-sm text-right" v-model="dmd.request_quantity">
+                                                <div v-else>{{ dmd.request_quantity }}</div>
                                             </td>
                                             <td class="text-right">
                                                 <div v-if="view_pr_form.mode_id == 1">{{ dmd.dmd_price_schedule.bid_price | currency2}}</div>
@@ -157,12 +166,26 @@
                                         </div>
                                     </tbody>
                                 </table>
+                                <span v-if="view_pr_form.purchase_request_remarks != null">Remarks: {{ view_pr_form.purchase_request_remarks.remarks }}</span>
+                                <span v-else></span>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button v-show="view_pr_form.mode_id == 4 && view_pr_form.rfq === null && current_user.role_id == 3" class="btn btn-primary" type="button" @click="store_rfq(view_pr_form.purchase_request_id)">Request for Quotation</button>
-                            <button v-show="!view_pr_form.purchase_order_id && view_pr_form.mode_id == 1 && current_user.role_id == 3" class="btn btn-primary" type="button" @click="store_po(view_pr_form.purchase_request_id)">Purchase Order</button>
-                            <button v-show="!view_pr_form.purchase_order_id && view_pr_form.mode_id == 1 && current_user.role_id == 2 && !view_pr_form.send" type="button" class="btn btn-sm btn-primary" @click="send_to_cmps(view_pr_form.purchase_request_id)">Send to CMPS</button>
+                            <button v-show="current_user.role_id == 5 && view_pr_form.status == 0" type="button" class="btn btn-sm btn-success" @click="approved_pr()">
+                                Approved
+                            </button>
+                            <button v-show="current_user.role_id == 5 && view_pr_form.status == 0" type="button" class="btn btn-sm btn-danger" @click="disapproved_modal()">
+                                Disapproved
+                            </button>
+                            <button v-show="current_user.role_id == 2 && !view_pr_form.send" type="button" class="btn btn-sm btn-success" @click="send_to_cmps(view_pr_form.purchase_request_id)">
+                                Send to CMPS
+                            </button>
+                            <button v-show="view_pr_form.mode_id == '4' && view_pr_form.rfq === null && current_user.role_id == 3" type="button" class="btn btn-light btn-sm" @click="store_rfq(view_pr_form.purchase_request_id)">
+                                Request for Quotation
+                            </button>
+                            <button v-show="!view_pr_form.purchase_order_id && view_pr_form.mode_id == 1 && current_user.role_id == 3" type="button" class="btn btn-success btn-sm" @click="store_po(view_pr_form.purchase_request_id)">
+                                Purchase Order
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -217,13 +240,45 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="disapprovedModal" tabindex="-1" role="dialog" aria-labelledby="disapprovedModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" id="d_modal_content">
+                        <div class="modal-header">
+                            Remarks
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row justify-content-center">
+                                <div class="col-md-12">
+                                    <form>
+                                        <div class="form-group">
+                                            <textarea rows="4" class="form-control form-control-sm" v-model="pr_remarks">
+                                            </textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button"  class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-success" @click="store_pr_remarks()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
+import {Money} from 'v-money'
 export default {
+    components: {Money},
     data(){
         return{
+            
+            pr_remarks: '',
             purchase_requests: [],
             new_purchase_requests: [],
             view_pr_form: new Form({
@@ -234,11 +289,14 @@ export default {
                rfq: {},
                created_at: '',
                send: '',
+               status: '',
+               purchase_request_remarks: {},
+               send: '',
             }),
             isLoading: false,
             track_pr_modal: {},
             selected_id: '',
-        }   
+        }
     },
     methods:{
         send_to_cmps(id){
@@ -267,9 +325,9 @@ export default {
             });
         },
         view_pr(id){
+            this.view_pr_form.reset();
             axios.get('../../api/purchase_request/'+id).then(({data}) => {
                     this.selected_id = id;
-                    this.view_pr_form.reset();
                     this.isLoading = true;
                     this.view_pr_form.fill(data);
                     this.isLoading = false;
@@ -277,6 +335,27 @@ export default {
 
                 });
             $('#prModal').modal('show')
+        },
+        disapproved_modal(){
+            $('#disapprovedModal').modal('show');
+        },
+        store_pr_remarks(){
+            axios.post('../../api/pr_remarks', {
+                remarks: this.pr_remarks,
+                purchase_request_id: this.view_pr_form.purchase_request_id,
+                user_id: this.current_user.user_id,
+            }).then(() => {
+                $('#disapprovedModal').modal('hide');
+            }).catch(() => {
+
+            });
+        },
+        approved_pr(){
+            axios.put('../../api/approved_pr/'+this.view_pr_form.purchase_request_id).then(() => {
+                $('#prModal').modal('hide');
+            }).catch(() => {
+
+            });
         },
         track_pr(prs){
             this.track_pr_modal = prs;
@@ -351,7 +430,7 @@ export default {
             }).catch(()=> {
 
             });
-        }
+        },
     },
     computed: {
         current_user() {
@@ -371,10 +450,30 @@ export default {
             this.get_prs();
             this.get_new_prs();
         });
-    }
+    },
 }
 </script>
 <style scoped>
+    #disapprovedModal{
+        background-color: #0606067a;
+    }
+    #d_modal_content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-body{
+        background-color: white;
+        color: black;
+    }
+    .nav-tabs .nav-link.active{
+        color: white;
+        background-color: #4a5ea5fa;
+        
+    }
     ul{
         display: flex;
         align-items: center;
@@ -399,6 +498,18 @@ export default {
     tbody {
         overflow-y: scroll;      
         height: 31rem;           
+        width: 98.5%;
+        position: absolute;
+    }
+
+    #pr_table{
+        height: 20rem;             
+        display: -moz-groupbox; 
+    }
+
+    #pr_tbody{
+        overflow-y: scroll;      
+        height: 18rem;           
         width: 98.5%;
         position: absolute;
     }

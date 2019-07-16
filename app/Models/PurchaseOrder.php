@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Events\PurchaseOrderUpdated;
+use App\Events\PurchaseOrderCreated;
 
 class PurchaseOrder extends Model
 {
@@ -11,30 +12,59 @@ class PurchaseOrder extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'created_at', 'allotment_id', 'uacs_id', 'fund_source_id', 'amount', 'obrs_date', 'date_of_delivery'
+        'created_at', 'allotment_id', 'uacs_id', 
+        'fund_source_id', 'amount', 'obrs_date', 
+        'date_of_delivery', 'terminated',
+
+        'div_head_rcv', 'div_head_rls',
+        'pmo_rcv', 'pmo_rls',
+        'accntng_rcv', 'accntng_rls',
+        'fmo_rcv', 'fmo_rls',
+        'mcc_rcv', 'mcc_rls',
+        'mmo_rcv', 'mmo_rls', 
+        'current_status',
+
+        'supplier_id',
     ];
 
     protected $dispatchesEvents = [
         'updated' => PurchaseOrderUpdated::class,
+        'created' => PurchaseOrderCreated::class,
     ];
 
     public function items(){
+        
         return $this->belongsToMany('App\Models\Item');
+
     }
 
     public function purchase_request(){
+
         return $this->hasOne('App\Models\PurchaseRequest', 'purchase_order_id', 'purchase_order_id');
+
     }
 
     public function uacs(){
+
         return $this->belongsTo('App\Models\Uacs', 'uacs_id', 'id');
+
     }
 
     public function fund_source(){
+
         return $this->belongsTo('App\Models\FundSource', 'fund_source_id', 'id');
+
     }
 
     public function allotment(){
+
         return $this->belongsTo('App\Models\Allotment', 'allotment_id', 'allotment_id');
+
+    }
+
+    public function dmd_purchase_order(){
+
+        return $this->hasMany('App\Models\DmdPurchaseOrder', 'purchase_order_id', 'purchase_order_id');
+
     }
 }

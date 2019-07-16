@@ -61,11 +61,11 @@
                         <td class="pr1 text-center" width="15%"><b>Estimated Cost</b></td>
                     </tr>
                     <!--Line 1 -->
-                    <tr class="prpr" v-for="item in pr.view_dmd_purchase_requests" :key="item.dmd_id">
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ item.dmd_id }}</td>
+                    <tr class="prpr" v-for="(item, index) in pr.view_dmd_purchase_requests" :key="item.dmd_id">
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ index+1 }}</td>
                         <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ item.request_quantity }}</td>
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="7%">(unit_of_issue)</td>
-                        <td class="pr border-top-0 border-bottom-0 text-center">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="7%">{{ item.app_dmd.unit_desc }}</td>
+                        <td class="pr border-top-0 border-bottom-0 text-center"><h6>{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</h6></td>
                         <td class="pr border-top-0 border-bottom-0 text-center" width="7%"></td>
                         <td class="pr border-top-0 border-bottom-0 text-center" width="15%">
                             <span v-if="pr.mode_id == 1">{{ item.dmd_price_schedule.bid_price | currency2 }}</span>
@@ -104,7 +104,7 @@
                     </tr>
                     <tr>
                         <td class="pr1 border-right-0 border-top-0">Purpose:</td>
-                        <td class="pr1 border-left-0 border-top-0 text-center" colspan="5"><b>{{ pr.purpose }}</b></td>
+                        <td class="pr1 border-left-0 border-top-0 text-center text-uppercase" colspan="5"><b>{{ pr.purpose }}</b></td>
                     </tr>
                     <tr>
                         <td class="pr1 border-top-0" colspan="6"><b>Required Attachments:</b> <i class="text-primary">(For Procurement Management Office use only)</i></td>
@@ -154,13 +154,13 @@
                     </tr>
                     <tr>
                         <td class="pr1">Printed Name:</td>
-                        <td class="pr1 text-center"><b><!-- Active User--></b></td>
-                        <td class="pr1 text-center"><b>RICARDO B. RUNEZ, J.R., MD,FPCS,MHA,CESE</b></td>
+                        <td class="pr1 text-center"><b>RISCILLA E. LAZATIN, MPA</b></td>
+                        <td class="pr1 text-center"><b>RAY P. SUANDING, MD, FPCP, FPCCP</b></td>
                     </tr>
                     <tr>
                         <td class="pr1">Designation:</td>
-                        <td class="pr1 text-center"><!--Position -->, MIS Division</td>
-                        <td class="pr1 text-center">Medical Center Chief II</td>
+                        <td class="pr1 text-center">Pharmacist IV</td>
+                        <td class="pr1 text-center">Chief Medical Professional Staff II</td>
                     </tr>
                 </table>
             </div>

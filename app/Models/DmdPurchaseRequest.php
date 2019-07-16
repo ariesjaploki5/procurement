@@ -10,7 +10,11 @@ class DmdPurchaseRequest extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'dmd_id', 'purchase_request_id', 'request_quantity', 'order_quantity', 'status', 'received_quantity'
+        'dmd_id', 'purchase_request_id',
+        'request_quantity', 'cost_price',
+        'purchase_order_id', 'order_quantity',
+        'status', 'received_quantity',
+        'terminated',
     ];
 
     public function purchase_request(){

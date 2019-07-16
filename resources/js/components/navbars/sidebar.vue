@@ -9,7 +9,8 @@
             <div class="image">
             </div>
             <div class="dark">
-                {{ current_user.username }}
+            <span v-if="user.employee">{{ user.employee.firstname }} {{ user.employee.lastname }}</span>
+              <span v-else></span>
             </div>
           </div>
           <nav class="mt-2">
@@ -20,18 +21,29 @@
                         <p>Dashboard</p>
                     </router-link>
                 </li>
-
+                <li class="nav-item">
+                    <router-link to='../../mds_consignments' class="nav-link">
+                        <i class="nav-icon fas fa-notes-medical"></i>
+                        <p>Med.Supplies Consignment</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../consignment_requests' class="nav-link">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>Consignment Requests</p>
+                    </router-link>
+                </li>
             </ul>
             <ul v-show="user.role_id === '2'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <router-link to='../../purchase_request2' class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-shopping-cart"></i>
                         <p>Purchase Request</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link to='../../drugs_and_medicines' class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-capsules"></i>
                         <p>Drugs And Medicines</p>
                     </router-link>
                 </li>
@@ -41,24 +53,36 @@
                         <p>APP</p>
                     </router-link>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <router-link to='../../ppmps' class="nav-link">
                         <i class="nav-icon fas fa-balance-scale"></i>
                         <p>PPMP</p>
                     </router-link>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <router-link to='../../price_schedules' class="nav-link">
-                        <i class="nav-icon fas fa-balance-scale"></i>
+                        <i class="nav-icon fas fa-book"></i>
                         <p>Price Schedules</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
+                    <router-link to='../../mds_consignments' class="nav-link">
+                        <i class="nav-icon fas fa-medkit"></i>
+                        <p>Med.Supplies Consignment</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../consignment_requests' class="nav-link">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>Consignment Requests</p>
+                    </router-link>
+                </li>
+                <!-- <li class="nav-item">
                     <router-link to='../../consignments' class="nav-link">
                         <i class="nav-icon fas fa-balance-scale"></i>
                         <p>Consignments</p>
                     </router-link>
-                </li>
+                </li> -->
                 <!-- <li class="nav-item">
                     <router-link to='../../suppliers' class="nav-link">
                         <i class="nav-icon fas fa-wallet"></i>
@@ -69,7 +93,7 @@
             </ul>
             <ul v-show="user.role_id === '3'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <router-link to='../../purchase_request2' class="nav-link">
+                    <router-link to='../../pmo_pr' class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Purchase Request</p>
                     </router-link>
@@ -81,7 +105,7 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='../../purchase_order2' class="nav-link">
+                    <router-link to='../../pmo_po' class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Purchase Order</p>
                     </router-link>
@@ -114,8 +138,20 @@
             <ul v-show="user.role_id === '4'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <router-link to='../../mmo_po' class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-cart-arrow-down"></i>
                         <p>Purchase Order</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../mmo_dmd' class="nav-link">
+                        <i class="nav-icon fas fa-file-prescription"></i>
+                        <p>Drugs and Medicines</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../verified_reports' class="nav-link">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>Terminated</p>
                     </router-link>
                 </li>
             </ul>
@@ -141,18 +177,40 @@
                         <p>Purchase Order</p>
                     </router-link>
                 </li>
+                <li class="nav-item">
+                    <router-link to='../../budget_dmd' class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Drugs And Medicines</p>
+                    </router-link>
+                </li>
             </ul>
             <ul v-show="user.role_id === '7'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <router-link to='../../purchase_order2' class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-cart-arrow-down"></i>
                         <p>Purchase Order</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link to='../../accounting_dmd' class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <i class="nav-icon fas fa-file-prescription"></i>
                         <p>Drugs and Medicines</p>
+                    </router-link>
+                </li>
+            </ul>
+            <ul v-show="user.role_id === '8'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <router-link to='../../purchase_order2' class="nav-link">
+                        <i class="nav-icon fas fa-cart-arrow-down"></i>
+                        <p>Purchase Order</p>
+                    </router-link>
+                </li>
+            </ul>
+            <ul v-show="user.role_id === '9'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <router-link to='../../purchase_order2' class="nav-link">
+                        <i class="nav-icon fas fa-cart-arrow-down"></i>
+                        <p>Purchase Order</p>
                     </router-link>
                 </li>
             </ul>

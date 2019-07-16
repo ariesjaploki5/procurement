@@ -42,7 +42,9 @@ class UserController extends Controller
 
 
     public function show($id){
-        $user = User::findOrFail($id);
+        $user = User::with([
+            'employee'
+        ])->where('user_id', $id)->first();
 
         return response()->json($user);
     }

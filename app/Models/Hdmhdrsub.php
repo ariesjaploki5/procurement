@@ -12,7 +12,7 @@ class Hdmhdrsub extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'dmdcomb', 'dmdctr', 'dmhdrsub', 'stockbal', 'statusMed', 'baldteasof'
+        'dmdcomb', 'dmdctr', 'dmhdrsub', 'stockbal', 'statusMed', 'baldteasof', 'begbal'
     ];
 
 }

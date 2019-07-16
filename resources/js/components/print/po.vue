@@ -1,11 +1,12 @@
 <template>
 <div id="f01">
+     <button class="btn btn-primary d-print-none button" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
     <div id="content-wrapper">
         <div class="col-lg-12">
 
-            <table class="table table-condensed table-sm">
+            <table class="table table-condensed table-sm" style="margin-top: 1%">
                 <tr>
-                    <td rowspan="8" class="pr1"><img :src="'/img/bghmc.png'" style="margin-left: 1.5%; margin-top: 20%" width="150" height="150"></td>
+                    <td rowspan="8" class="pr1"><img :src="'/img/bghmc.png'" style="margin-left: 5%; margin-top: 7%" width="150" height="150"></td>
                     <td colspan="5" class="pr1 border-bottom-0">
                         <center>Republic of the Philippines</center>
                     </td>
@@ -50,11 +51,11 @@
                     </b></td>
                     <td class="pr1 border-right-0 border-bottom-0" width="20%">Purchase Order Number:</td>
                     <td class="pr1 border-left-0" width="20%">
-                        <center><b>{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2}}</b></center>
+                        <center><b>{{ po.created_date | myDate}}-{{ po.purchase_order_id | numeral2}}</b></center>
                     </td>
                 </tr>
                 <td class="pr1 border-top-0 border-bottom-0" colspan="2"></td>
-                <td class="pr1 border-top-0 border-right-0 border-bottom-0"> Pruchase Order Date</td>
+                <td class="pr1 border-top-0 border-right-0 border-bottom-0"> Purchase Order Date</td>
                 <td class="pr1 border-left-0">
                     <center><b>{{ po.created_at | myDate3 }}</b></center>
                 </td>
@@ -100,35 +101,47 @@
 
             <table v-if="po.purchase_request" class="table table-condensed table-sm" style="margin-top:-2%">
                 <tr>
-                    <td class="pr1" width="10%"><b><center>Stock Number</center></b></td>
-                    <td class="pr1" width="10%"><b><center>UNIT</center></b></td>
-                    <td class="pr1" width="10%"><b><center>QUANTITY</center></b></td>
-                    <td class="pr1" width="30%"><b><center>DESCRIPTION</center></b></td>
-                    <td class="pr1" width="10%"><b><center>UNIT COST</center></b></td>
-                    <td class="pr1" width="10%"><b><center>AMOUNT</center></b></td>
+                    <td class="pr1" width="5%"><b><center>Stock Number</center></b></td>
+                    <td class="pr1" width="5%"><b><center>UNIT</center></b></td>
+                    <td class="pr1" width="5%"><b><center>QUANTITY</center></b></td>
+                    <td class="pr1" width="25%"><b><center>DESCRIPTION</center></b></td>
+                    <td class="pr1" width="9%"><b><center>UNIT COST</center></b></td>
+                    <td class="pr1" width="9%"><b><center>AMOUNT</center></b></td>
                 </tr>
               
                 <tr v-for="item in po.purchase_request.view_dmd_purchase_requests" :key="item.id">
-                    <td class="pr1"><center></center></td>
-                    <td class="pr1"></td>
-                    <td class="pr1"><center>{{ item.order_quantity }}</center></td>
-                    <td class="pr1">
-                        <div class="row">
+                    <td class="pr1 border-bottom-0 border-top-0"><center></center></td>
+                    <td class="pr1 border-bottom-0 border-top-0 text-center">{{ item.dmd_price_schedule.packaging_desc }}</td>
+                    <td class="pr1 border-bottom-0 border-top-0"><center>{{ item.order_quantity }}</center></td>
+                    <td class="pr1 border-bottom-0 border-top-0">
+                        <div class="row" style="margin-left:3%">
                             {{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }}
                         </div>
-                        <div class="row">
-                            {{ item.dmd_price_schedule.brand_desc }}
+                        <div class="row" style="margin-left:3%">
+                            <tr><td class="border-top-0 border-bottom-0">Brand:</td><td class="border-top-0 border-bottom-0">{{ item.dmd_price_schedule.brand_desc }}</td></tr>
+                        </div>
+                        <div class="row" style="margin-left:3%">
+                            <tr><td class="border-top-0 border-bottom-0">Packaging:</td><td class="border-top-0 border-bottom-0">{{ item.dmd_price_schedule.packaging_desc }}</td></tr>
+                        </div>
+                        <div class="row" style="margin-left:3%">
+                            <tr><td class="border-top-0 border-bottom-0">Manufacturer:</td><td class="border-top-0 border-bottom-0">{{ item.dmd_price_schedule.manufacturer_desc }}</td></tr>
+                        </div>
+                        <div class="row" style="margin-left:3%">
+                            <tr><td class="border-top-0 border-bottom-0">Country of Origin:</td><td class="border-top-0 border-bottom-0"> {{ item.dmd_price_schedule.country_desc }}</td></tr>
+                        </div>
+                        <div class="row" style="margin-left:3%">
+                            <tr><td class="border-top-0 border-bottom-0">CPR:</td><td class="border-top-0 border-bottom-0"> </td></tr>
                         </div>
                     </td>
-                    <td class="pr1">
+                    <td class="pr1 align-middle border-bottom-0 border-top-0">
                         <center>{{ item.dmd_price_schedule.bid_price | currency2}}</center>
                     </td>
-                    <td class="pr1">
+                    <td class="pr1 align-middle border-bottom-0 border-top-0">
                         <center>{{ item.dmd_price_schedule.bid_price * item.order_quantity | currency2}}</center>
                     </td>
                 </tr>
                
-                <td class="pr1 text-center border-0" colspan="6">
+                <td class="pr1 text-center border-left-0 border-right-0 border-bottom-0" colspan="6">
                     <h6><b><i>***Remarks<!-- Remarks-->***</i></b></h6>
                 </td>
             </table>
@@ -162,7 +175,7 @@
                 </tr>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0" width="-10%">
-                        <center>______________________________________________________</center>
+                        <!-- <center>{{po.purchase_request.user.user}}</center> -->
                     </td>
                     <td class="pr1 border-left-0 border-top-0 border-bottom-0">
                         <center><b><u>RICARDO B. RUNEZ JR.,MD,FPCS,MHA,CESE</u></b></center>
@@ -178,7 +191,7 @@
                 </tr>
                 <tr>
                     <td width="-10%" class="pr1 border-right-0 border-top-0 border-bottom-0">
-                        <center><b><u>(Current Date)</u></b></center>
+                        <center><b><u>{{ po.created_date | myDate3}}</u></b></center>
                     </td>
                     <td class="pr1 border-left-0 border-top-0 border-bottom-0"></td>
                 </tr>
@@ -223,7 +236,10 @@
                     </td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="15%">Date of ORS / BURS:</td>
                     <td class="pr1 border-left-0">
-                        <center><b>{{ po.obrs_date | myDate3 }}</b></center>
+                        <center><b>
+                            <span v-if="po.obrs_date ">{{ po.obrs_date | myDate3 }}</span>
+                            
+                            </b></center>
                     </td>
                 </tr>
                 <tr>
@@ -232,7 +248,7 @@
                         <center><small>Accountant IV</small></center>
                     </td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0">Amount:</td>
-                    <td class="pr1 border-left-0">{{ estimated_cost | currency2}}</td>
+                    <td class="pr1 border-left-0 text-center font-weight-bold">{{ estimated_cost | currency2}}</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0"></td>
@@ -265,6 +281,10 @@ export default {
                 });
             }
         },
+        print(){
+            window.print();
+            location.reload();
+            },
         created(){
             this.get_po();
         },

@@ -46,6 +46,7 @@ class AuthController extends Controller
             $new->username = $username;
             $new->password = Hash::make($password);
             $new->employee_id = $emp_id;
+            $new->role_id = 1;
             $new->save();
         }
 

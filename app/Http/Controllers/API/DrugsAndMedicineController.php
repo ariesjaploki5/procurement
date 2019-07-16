@@ -10,6 +10,7 @@ use DB;
 use App\Events\DmdUpdated;
 use Carbon\Carbon;
 use App\Views\AppDmd;
+use App\Models\Hdmhdrsub;
 
 class DrugsAndMedicineController extends Controller
 {
@@ -24,6 +25,47 @@ class DrugsAndMedicineController extends Controller
                 ]);
             },
         ])->where('app_year', $year)->orderBy('gendesc', 'asc')->get();
+
+        return response()->json($data);
+    }
+
+    public function beg_bal(Request $request){
+
+        $check = Hdmhdrsub::where('dmdctr', $request->dmdctr)
+        ->where('dmdcomb', $request->dmdcomb)
+        ->where('dmhdrsub', 'DRUM4')
+        ->where('statusMed', 'A')
+        ->get();
+
+        $count = count($check);
+
+        if($count > 0){
+
+            DB::UPDATE("UPDATE Hospital.dbo.Hdmhdrsub SET begbal = $request->begbal
+            WHERE dmdcomb = CAST('$request->dmdcomb' as varchar(12)) AND dmdctr = $request->dmdctr AND dmhdrsub = 'DRUM4'; ");
+        } else {
+
+            DB::INSERT("INSERT INTO Hospital.dbo.Hdmhdrsub(dmdctr, dmdcomb, dmhdrsub, begbal, statusMed) 
+            VALUES ($request->dmdctr, CAST('$request->dmdcomb' as varchar(12)), 'DRUM4', $request->begbal, 'A');");
+        }
+
+        return response()->json();
+    }
+
+    public function for_mmo(){
+        $data = DB::SELECT("SELECT * FROM procurement.dbo.view_for_mmo_inventory order by gendesc");
+
+        return response()->json($data);
+    }
+
+    public function terminated(){
+        $data = DB::SELECT("SELECT * FROM procurement.dbo.view_terminated");
+
+        return response()->json($data);
+    }
+
+    public function need_to_receive(){
+        $data = DB::SELECT("SELECT * FROM dbo.view_need_to_receive");
 
         return response()->json($data);
     }

@@ -81,3 +81,10 @@ Broadcast::channel('dmd_price_schedule_updated', function(){
 Broadcast::channel('dmd_price_schedule_created', function(){
     return true;
 });
+
+Broadcast::channel('dmd_purchase_request_updated', function(){
+    return true;
+});
+Broadcast::channel('dmd_purchase_request_created', function(){
+    return true;
+});

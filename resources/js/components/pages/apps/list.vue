@@ -5,7 +5,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
-                            APP
+                            <h3 class="card-title"> Annual Procurement Plan</h3>
                         </div>
                         <div class="col-md-6 text-right">
                             <button type="button" class="btn btn-sm btn-primary" @click="create_app()"><i class="fas fa-plus"></i> Create</button>
@@ -17,11 +17,11 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <td>ID</td>
-                                    <td>Year</td>
-                                    <td>Category</td>
-                                    <td class="text-center">Budget</td>
-                                    <td class="text-center">Action</td>
+                                    <td class="font-weight-bold">ID</td>
+                                    <td class="font-weight-bold">Year</td>
+                                    <td class="font-weight-bold">Category</td>
+                                    <td class="text-center font-weight-bold">Budget</td>
+                                    <td class="text-center font-weight-bold">Action</td>
                                 </tr>
                             </thead>
                             <tbody>

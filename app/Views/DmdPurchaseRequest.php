@@ -20,4 +20,5 @@ class DmdPurchaseRequest extends Model
     public function dmd_rfqs(){
         return $this->hasMany('App\Models\DmdRfq', 'dmd_id', 'dmd_id');
     }
+
 }

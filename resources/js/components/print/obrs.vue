@@ -1,11 +1,12 @@
 <template>
 <div id="f01">
+  <button class="btn btn-primary d-print-none button" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
     <div id="content-wrapper">
         <div class="col-lg-12">
-            <table class="table table-condensed table-sm a">
+            <table class="table table-condensed table-sm a" style="margin-top: 1%">
                 <tr>
-                    <td rowspan="8" class="pr1 border-top-0 border-right-0"><img :src="'/img/bghmc.png'" style="margin-left: 15%; margin-top: 15%" width="150" height="150"></td>
-                    <td colspan="5" class="pr1 border-top-0 border-bottom-0" id="pr1"><center>Republic of the Philippines</center></td>
+                    <td rowspan="8" class="pr1 border-right-0"><img :src="'/img/bghmc.png'" style="margin-left: 12%; margin-top: 8%" width="150" height="150"></td>
+                    <td colspan="5" class="pr1 border-bottom-0" id="pr1"><center>Republic of the Philippines</center></td>
                 </tr>
                 <td colspan="5" class="pr1 border-top-0 border-bottom-0"><center>Department of Health</center></td>
                 <tr>
@@ -16,7 +17,7 @@
                 </tr>
                 <tr>
                     <td class="border-bottom-0"><h5><input type="checkbox" style="width: 25px; height: 20px"> <b>OBLIGATION REQUEST AND STATUS</b></h5></td>
-                    <td class="pr1 align-bottom">Form No.: <b>FS-BUD-001</b></td>
+                    <td class="pr1 align-bottom">Form No.: FS-BUD-001</td>
                 </tr>
                 <tr>
                     <td rowspan="3" class="border-top-0" width="50%"><h5><input type="checkbox" style="width: 25px; height: 20px"> <b>BUDGET UTILIZATION REQUEST AND STATUS</b></h5></td>
@@ -31,67 +32,60 @@
             <table class="table table-condensed table-sm" style="margin-top:-1.6%">
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0" width="8%"><b>Payee:</b></td>
-                    <td class="pr1 border-left-0 border-top-0" width="45%"></td>
+                    <td class="pr1 border-left-0 border-top-0" width="45%">{{ po.purchase_request.supplier.supplier_name }}</td>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0" width="10%"> <b>Serial No:</b></td>
-                    <td class="pr1 border-left-0 border-top-0" width="25%">{{ po.fund_source.acronym }}-0{{ po.allotment.allotment_code }}-{{ po.uacs.current_appropriations }}-{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2}}</td>
+                    <td class="pr1 border-left-0 border-top-0 font-weight-bold" width="25%">{{ po.fund_source.acronym }}-0{{ po.allotment.allotment_code }}-{{ po.uacs.current_appropriations }}-{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2}}</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0"><b>Office:</b></td>
                     <td class="pr1 border-left-0 border-top-0"></td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0"> <b>Date:</b></td>
-                    <td class="pr1 border-left-0"></td>
+                    <td class="pr1 border-left-0 font-weight-bold">{{po.created_at | myDate3}}</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0"><b>Address:</b></td>
-                    <td class="pr1 border-left-0 border-top-0"></td>
+                    <td class="pr1 border-left-0 border-top-0">{{ po.purchase_request.supplier.supplier_address }}</td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0"> <b>Fund Cluster:</b></td>
-                    <td class="pr1 border-left-0">0{{ po.fund_source.id }}</td>
+                    <td class="pr1 border-left-0 font-weight-bold">0{{ po.fund_source.id }}</td>
                 </tr>
                 <td colspan="7" class="pr1 border-top-0 border-bottom-0"></td>
             </table>
 
             <table class="table table-condensed table-sm" style="margin-top:-1.6%">
                 <thead>
-                    <td class="pr1" width="10%"><b><center>Responsibility Center</center></b></td>
-                    <td class="pr1" width="30%"><b><center>Particulars</center></b></td>
-                    <td class="pr1" width="10%"><b><center>MFO/PAP</center></b></td>
-                    <td class="pr1" width="10%"><b><center>UACS Object Code/Expenditures</center></b></td>
-                    <td class="pr1" width="10%"><b><center>Amount</center></b></td>
+                    <td class="pr1 text-center font-weight-bold" width="10%">Responsibility Center</td>
+                    <td class="pr1 text-center font-weight-bold" width="30%">Particulars</td>
+                    <td class="pr1 text-center font-weight-bold" width="10%">MFO/PAP</td>
+                    <td class="pr1 text-center font-weight-bold" width="10%">UACS Object Code/Expenditures</td>
+                    <td class="pr1 text-center font-weight-bold" width="10%">Amount</td>
                 </thead>
-                <tr>
-                    <td class="pr1 border-bottom-0"><center>1</center></td>
-                    <td class="pr1 border-bottom-0"></td>
-                    <td class="pr1 border-bottom-0"></td>
-                    <td class="pr1 border-bottom-0"></td>
-                    <td class="pr1 border-bottom-0"></td>
-                </tr>
-                <tr>
-                    <td class="pr1 border-top-0 border-bottom-0"><center>2</center></td>
-                    <td class="pr1 border-top-0 border-bottom-0"></td>
-                    <td class="pr1 border-top-0 border-bottom-0"></td>
-                    <td class="pr1 border-top-0 border-bottom-0"></td>
-                    <td class="pr1 border-top-0 border-bottom-0"></td>
-                </tr>
-                <tr>
-                    <td class="pr1 border-top-0 border-bottom-0"><center>3</center></td>
-                    <td class="pr1 border-top-0 border-bottom-0"></td>
-                    <td class="pr1 border-top-0 border-bottom-0"></td>
-                    <td class="pr1 border-top-0 border-bottom-0"></td>
-                    <td class="pr1 border-top-0 border-bottom-0"></td>
+                <tr v-for="item in po.purchase_request.view_dmd_purchase_requests" :key="item.id">
+                    <td class="pr1 border-bottom-0 border-top-0 text-center">MAIN PHARMACY</td>
+                    <td class="pr1border-bottom-0 border-top-0">
+                        <div class="font-weight-bold border-bottom-0 text-center">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }}</div>
+                        <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Brand:</td><td class="border-bottom-0 border-top-0"> {{ item.dmd_price_schedule.brand_desc }} </td></tr>
+                        <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Packaging:</td><td class="border-bottom-0 border-top-0">{{ item.dmd_price_schedule.packaging_desc }}</td></tr>
+                        <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Manufacturer:</td><td class="border-bottom-0 border-top-0">{{ item.dmd_price_schedule.manufacturer_desc }}</td></tr>
+                        <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Country of Origin:</td><td class="border-bottom-0 border-top-0">{{ item.dmd_price_schedule.country_desc }}</td></tr>
+                        <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">CPR:</td><td class="border-bottom-0 border-top-0"></td></tr>
+                    </td>
+                    <td class="pr1 border-bottom-0 border-top-0 text-center">002</td>
+                    <td class="pr1 border-bottom-0 border-top-0 text-center"></td>
+                    <td class="pr1 border-bottom-0 border-top-0 text-center">{{ estimated_cost | currency2 }}</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-top-0"><center></center></td>
                     <td class="pr1 border-top-0" style="text-align:right"><b>Total</b></td>
                     <td class="pr1 border-top-0"></td>
                     <td class="pr1 border-top-0"></td>
-                    <td class="pr1 border-top-0 "><center><b>(-)</b></center></td>
+                    <td class="pr1 border-top-0 text-center font-weight-bold">{{ estimated_cost | currency2 }}</td>
                 </tr>
             </table>
             <table class="table table-condensed border-top-0 border-bottom-0 table-sm" style="margin-top:-1.7%">
                 <tr>
-                    <td class="pr1 border-top-0" width="3%"><center><b>A</b></center></td>
+                    <td class="pr1 align-middle border-top-0" width="3%"><center><b>A</b></center></td>
                     <td class="pr1 border-top-0 border-bottom-0" width="40%"></td>
-                    <td class="pr1 border-top-0" width="3%"><center><b>B</b></center></td>
+                    <td class="pr1 align-middle border-top-0" width="3%"><center><b>B</b></center></td>
                     <td class="pr1 border-top-0 border-bottom-0" width="40%"></td>
                 </tr>
                 <tr>
@@ -110,21 +104,21 @@
                 </tr>
                 <tr>
                     <td class="pr1 border-0pr1 border-top-0 border-right-0 border-bottom-0"><h5>Printed Name:</h5></td>
-                    <td class="pr1 border-left-0 border-top-0 align-bottom" width="30%"></td>
+                    <td class="pr1 border-left-0 border-top-0 align-bottom text-center font-weight-bold" width="30%">RAY P. SUANDING, MD, FPCP, FPCCP</td>
                     <td class="pr1 border-0"><h5>Printed Name:</h5></td>
-                    <td class="pr1 border-left-0 border-top-0 align-bottom" width="30%"><center><b>EDNA L. MOGAMOG, CPA, MBA</b></center></td>
+                    <td class="pr1 border-left-0 border-top-0 align-bottom text-center font-weight-bold" width="30%">EDNA L. MOGAMOG, CPA, MBA</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0"><h5>Position:</h5></td>
-                    <td class="pr1 border-left-0"></td>
+                    <td class="pr1 border-left-0 text-center align-middle">Chief Medical Professional Staff II</td>
                     <td class="pr1 border-0"><h5>Position:</h5></td>
-                    <td class="pr1 border-left-0"><center>Supervising Administrative Officer<br>Head, Budget Office</center></td>
+                    <td class="pr1 border-left-0 text-center">Supervising Administrative Officer<br>Head, Budget Office</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0"><h5>Date:</h5></td>
-                    <td class="pr1 border-left-0"></td>
+                    <td class="pr1 border-left-0 text-center align-middle">{{ po.created_at | myDate3 }}</td>
                     <td class="pr1 border-0"><h5>Date:</h5></td>
-                    <td class="pr1 border-left-0"></td>
+                    <td class="pr1 border-left-0 text-center align-middle">{{ po.created_at | myDate3 }}</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-top-0 border-bottom-0" colspan="4"></td>
@@ -132,8 +126,8 @@
             </table>
             <table class="table table-condensed border-top-0 border-bottom-0 table-sm" style="margin-top:-1.5%">
                 <tr>
-                    <td class="pr1" width="3%"><center><b>C</b></center></td>
-                    <td class="pr1 text-center align-bottom" width="80%"><b><h5>STATUS OF OBLIGATION / UTILIZATION</h5></b></td>
+                    <td class="pr1 align-middle" width="3%"><center><b>C</b></center></td>
+                    <td class="pr1 text-center align-middle" width="80%"><b><h5>STATUS OF OBLIGATION / UTILIZATION</h5></b></td>
                 </tr>
             </table>
             <table class="table table-condensed table-sm" style="margin-top:-2%">
@@ -151,7 +145,7 @@
                     <td class="pr1" colspan="2"><center><b>Balance</b></center></td>
                 </tr>
                 <tr>
-                    <td class="pr1" width="8%"><center><b>Not Yet Due</b></center></td>
+                    <td class="pr1" width="10%"><center><b>Not Yet Due</b></center></td>
                     <td class="pr1" width="5%"><center><b>Due and Demandable</b></center></td>
                 </tr>
                 <tr>
@@ -162,36 +156,36 @@
                     <td class="pr1"><center><small>(b-c)</small></center></td>
                 </tr>
                 <tr>
-                    <td class="pr1"><center><b>1</b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b>(-)</b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b>(-)</b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
+                    <td class="pr1"><center>{{ po.created_at | myDate3 }}</center></td>
+                    <td class="pr1"><center>Obligation</center></td>
+                    <td class="pr1"><center>{{ po.fund_source.acronym }}-0{{ po.allotment.allotment_code }}-{{ po.uacs.current_appropriations }}-{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2 }}</center></td>
+                    <td class="pr1"><center>{{ estimated_cost | currency2 }}</center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center>{{ estimated_cost | currency2 }}</center></td>
+                    <td class="pr1"><center></center></td>
                 </tr>
                 <!-- -->
                 <tr>
-                    <td class="pr1"><center><b>2</b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b>(-)</b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b>(-)</b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center>(-)</center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center>(-)</center></td>
+                    <td class="pr1"><center></center></td>
                 </tr>
                 <!-- -->
                 <tr>
-                    <td class="pr1"><center><b>3</b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b>(-)</b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
-                    <td class="pr1"><center><b>(-)</b></center></td>
-                    <td class="pr1"><center><b></b></center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center>(-)</center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center></center></td>
+                    <td class="pr1"><center>(-)</center></td>
+                    <td class="pr1"><center></center></td>
                 </tr>
             </table>
         </div>
@@ -202,8 +196,7 @@
     export default {
         data(){
             return{
-                po: {},
-                
+                po: {}               
             }
         },
         methods:{

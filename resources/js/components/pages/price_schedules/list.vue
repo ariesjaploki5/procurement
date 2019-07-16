@@ -5,7 +5,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
-                            Price Schedules
+                            <h3 class="card-title">Price Schedules</h3>
                         </div>
                         <div class="col-md-6 text-right">
                             <button type="button" class="btn btn-sm btn-primary" @click="create_ps()">
@@ -36,7 +36,7 @@
                                     <td>{{ ps.created_at }}</td>
                                     <td class="text-center" width="20%">
                                         <router-link class="btn btn-sm btn-primary" :to="{ name: 'price_schedule_show', params: { id: ps.price_schedule_id }}"><i class="fas fa-eye"></i></router-link>
-                                        <button type="button" class="btn btn-sm btn-success" @click="edit_ps(ps)"><i class="fas fa-edit"></i></i></button>
+                                        <button type="button" class="btn btn-sm btn-success" @click="edit_ps(ps)"><i class="fas fa-edit"></i></button>
                                         <button type="button" class="btn btn-sm btn-danger" @click="delete_ps(ps.price_schedule_id)"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
@@ -173,6 +173,18 @@ export default {
 
 
 <style scoped>
+#d_modal_content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-body{
+        background-color: white;
+        color: black;
+    }
 tr {
     width: 100%;
     display: inline-table;

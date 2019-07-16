@@ -9,11 +9,14 @@ use App\Models\DmdRfq;
 use Carbon\Carbon;
 use App\Views\Dmds;
 use DB;
+use App\Views\DmdRfq2;
+use App\Views\HomisDmd;
 
 class RfqController extends Controller
 {
     public function index(){
         $year = Carbon::now()->year;  
+
         $data = Rfq::with([
             'purchase_request' => function($query) use($year){
                 $query->with([
@@ -24,7 +27,7 @@ class RfqController extends Controller
                             },
                             'dmd_rfqs' => function ($query){
                                 $query->with([
-                                    'brand', 'manufacturer',
+                                    'brand', 'manufacturer', 'supplier'
                                 ]);
                             }
                         ]);
@@ -76,6 +79,7 @@ class RfqController extends Controller
         $rfq = DmdRfq::create([
             'rfq_id' => $rfq_id,
             'dmd_id' => $request->dmd_id,
+            'supplier_id' => $request->supplier_id,
             'brand_id' => $request->brand_id,
             'manufacturer_id' => $request->manufacturer_id,
             'cost_unit' => $request->cost_unit,
@@ -86,7 +90,9 @@ class RfqController extends Controller
 
     public function update(Request $request, $id){
         $rfq = DmdRfq::findOrFail($id);
+
         $rfq->update([
+            'supplier_id' => $request->supplier_id,
             'brand_id' => $request->brand_id,
             'manufacturer_id' => $request->manufacturer_id,
             'cost_unit' => $request->cost_unit,
@@ -100,5 +106,23 @@ class RfqController extends Controller
         $rfq->delete();
 
         return response()->json();
+    }
+
+    public function dmd_rfq($id){
+
+        
+        $data = DmdRfq2::findOrFail($id);
+
+        return response()->json($data);
+    }
+
+    public function dmd_aoq($id, $rfq_id){
+        $data = HomisDmd::with([
+            'dmd_rfqs' => function ($query) use ($rfq_id){
+                $query->where('rfq_id', $rfq_id)->take(5);
+            },
+        ])->where('dmd_id', $id)->first();
+
+        return response()->json($data);
     }
 }

@@ -22,4 +22,9 @@ class Dmds extends Model
         return $this->hasMany('App\Views\DmdRfq', 'dmd_id', 'dmd_id');
     }
 
+    public function dmd_remarks(){
+        return $this->hasMany('App\Models\DmdRemarks', 'dmd_id', 'dmd_id');
+    }
+
+
 }

@@ -128,7 +128,8 @@ class CartController extends Controller
     }
 
     public function destroy($id){
+        $data = Cart::truncate();
 
-
+        return response()->json();
     }
 }
