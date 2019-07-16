@@ -219,6 +219,14 @@ export default {
         }
     },
     methods:{
+        terminate_po(id){
+            axios.put('../../api/terminate_po/'+id).then(() => {
+                this.get_pos();
+                $('#poModal').modal('hide');
+            }).catch(() => {
+
+            });
+        },
         receive_dmd(dmd){
             this.dmd = dmd;
             $('#receiveModal').modal('show');
