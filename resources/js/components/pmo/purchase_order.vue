@@ -1,77 +1,47 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="font-weight-bold">
-                        <h3 class="card-title"> Purchase Orders</h3>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive-sm">
-                        <table class="table table-sm table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Date Created</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="pos in purchase_orders" :key="pos.purchase_order_id">
-                                    <td>{{ pos.created_at | myDate }} - {{ pos.purchase_order_id | numeral2 }}</td>
-                                    <td>{{ pos.created_at }}</td>
-                                    <td>
-                                        <div id="print" class="mb-2">
-                                            <button type="button" class="btn btn-sm btn-primary" @click="view_po(pos)"><i class="fas fa-eye"></i></button>
-                                            <button type="button" class="btn btn-sm btn-success" @click="track_po(pos)"><i class="fas fa-truck"></i></button>
-                                            <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
-                                            <router-link class="btn btn-sm btn-success" v-show="pos.obrs_date" :to="{ name: 'obrs', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
-                                        </div>
-                                        <div id="document_tracking" class="">
-                                            <div v-show="current_user.role_id == 5">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.div_head_rcv_2" @click="div_head_rcv_2(pos.purchase_order_id)">Received From PMO <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.div_head_rcv_2 && !pos.purchase_request.div_head_rls_2" @click="div_head_rls_2(pos.purchase_order_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
-                                            </div>
-                                            <div v-show="current_user.role_id == 3 && pos.purchase_request.div_rls_2">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.pmo_rcv_2" @click="pmo_rcv_2(pos.purchase_order_id)">Received From Division Head <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.pmo_rcv_2 && !pos.purchase_request.pmo_rls_2" @click="pmo_rls_2(pos.purchase_order_id)">Send To Budget <i class="fas fa-file-upload"></i></button>
-                                            </div>
-                                            <div v-show="current_user.role_id == 6 && pos.purchase_request.pmo_rls_2">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.budget_rcv" @click="budget_rcv(pos.purchase_order_id)">Received From PMO <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.budget_rcv && !pos.purchase_request.budget_rls" @click="budget_rls(pos.purchase_order_id)">Send To Accounting <i class="fas fa-file-upload"></i></button>
-                                            </div>
-                                            <div v-show="current_user.role_id == 7 && pos.purchase_request.budget_rls">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.accounting_rcv" @click="accounting_rcv(pos.purchase_order_id)">Received From Budget <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.accounting_rcv && !pos.purchase_request.accounting_rls" @click="accounting_rls(pos.purchase_order_id)">Send To FMO <i class="fas fa-file-upload"></i></button>
-                                            </div>
-                                            
-                                            <div v-show="current_user.role_id == 8 && pos.purchase_request.accounting_rls">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.fmo_rcv" @click="fmo_rcv(pos.purchase_order_id)">Received From Accounting <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.fmo_rcv && !pos.purchase_request.fmo_rls" @click="fmo_rls(pos.purchase_order_id)">Send To MCC <i class="fas fa-file-upload"></i></button>
-                                            </div>
 
-                                            <div v-show="current_user.role_id == 9 && pos.purchase_request.fmo_rls">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.mcc_rcv" @click="mcc_rcv(pos.purchase_order_id)">Received From FMO <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.mcc_rcv && !pos.purchase_request.mcc_rls" @click="mcc_rls(pos.purchase_order_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
-                                            </div>
-
-                                            <div v-show="current_user.role_id == 3 && pos.purchase_request.mcc_rls">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.pmo_rcv_3" @click="pmo_rcv_3(pos.purchase_order_id)">Received From MCC <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.pmo_rcv_3 && !pos.purchase_request.pmo_rls_3" @click="pmo_rls_3(pos.purchase_order_id)">Send To MMO <i class="fas fa-file-upload"></i></button>
-                                            </div>
-                                            <div v-show="current_user.role_id == 4 && pos.purchase_request.pmo_rls_3">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.mmo_rcv" @click="mmo_rcv(pos.purchase_order_id)">Received From PMO <i class="fas fa-file-download"></i></button>
-                                                <!-- <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.mmo_rcv && !pos.purchase_request.mmo_rls" @click="mmo_rls(pos.purchase_order_id)"><i class="fas fa-file-upload"></i></button> -->
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+                <h4><i class="fas fa-cart-arrow-down"></i> Purchase Order</h4>
             </div>
+
+            <div class="table-responsive-sm">
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Mode</th>
+                            <th>Date Created</th>
+                            <th>Date of Delivery</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="pos in purchase_orders" :key="pos.purchase_order_id">
+                            <td>{{ pos.created_at | myDate }} - {{ pos.purchase_order_id | numeral2 }}</td>
+                            <td>
+                                <span v-if="pos.mode_id">{{ pos.mode.mode_desc }}</span>
+                            </td>
+                            <td>{{ pos.created_at | myDate3 }}, {{ pos.created_at | time1 }}</td>
+                            <td>{{ pos.date_of_delivery | myDate3 }}, {{ pos.date_of_delivery | time1 }} </td>
+                            <td>
+                                <div id="print" class="mb-2">
+                                    <button type="button" class="btn btn-sm btn-primary" @click="view_po(pos)"><i class="fas fa-eye"></i></button>
+                                    <button type="button" class="btn btn-sm btn-success" @click="track_po(pos)"><i class="fas fa-truck"></i></button>
+                                    <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
+                                    <router-link class="btn btn-sm btn-success" v-show="pos.obrs_date" :to="{ name: 'obrs', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
+                                </div>
+                                <div id="document_tracking" class="">
+                                    <button type="button" v-show="pos.date_of_delivery && !pos.pmo_rls" class="btn btn-sm btn-danger" @click="pmo_rls_2(pos.purchase_order_id)">Send To Budget</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+                
+         
             <div class="modal fade" id="poModal" tabindex="-1" role="dialog" aria-labelledby="poModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
@@ -83,33 +53,44 @@
                         </div>
                         <div class="modal-body">
                             <div class="table-responsive-sm">
-                                <table class="table table-sm table-hover" style="height: 20rem !important;">
+                                <table class="table table-sm table-hover" style="height: 23rem !important;">
                                     <thead>
                                         <tr class="text-center">
-                                            <th width="5%">#</th>
-                                            <th width="70%">Description</th>
+                                            <th width="10%">#</th>
+                                            <th width="60%">Description</th>
                                             <th width="10%">Quantity</th>
-                                            <th>Unit Cost</th>
-                                            <th>Estimated Cost</th>
+                                            <th width="10%">Unit Cost</th>
+                                            <th width="10%">Estimated Cost</th>
                                         </tr>
                                     </thead>
                                     <tbody  style="height: 20rem !important;">
-                                        <tr v-for="(dmd,index) in view_po_form.purchase_request.view_dmd_purchase_requests" :key="dmd.dmd_id">
-                                            <td width="5%">{{ index + 1}}</td>
-                                            <td width="70%">
-                                                <div class="font-weight-bold border-bottom-0 text-center">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</div>
-                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Brand:</td><td class="border-bottom-0 border-top-0">{{ dmd.dmd_price_schedule.brand_desc }}</td></tr>
-                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Packaging:</td><td class="border-bottom-0 border-top-0">{{ dmd.dmd_price_schedule.packaging_desc }}</td></tr>
-                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Manufacturer:</td><td class="border-bottom-0 border-top-0">{{ dmd.dmd_price_schedule.manufacturer_desc }}</td></tr>
-                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Country of Origin:</td><td class="border-bottom-0 border-top-0">{{ dmd.dmd_price_schedule.country_desc }}</td></tr>
-                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">CPR:</td><td class="border-bottom-0 border-top-0"></td></tr>
+                                        <tr v-for="(item,index) in view_po_form.dmd_purchase_orders" :key="index">
+                                            <td width="10%">{{ index + 1}}</td>
+                                            <td width="60%">
+                                                <tr>
+                                                    <td class="text-bold">{{ item.new_dmd.dmddesc }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-bold text-right">Brand: </td><td class="text-left">{{ item.brand.brand_desc }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-bold text-right">Packaging: </td><td class="text-left" v-if="item.packaging_id">{{ item.packaging.packaging_desc }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-bold text-right">Manufacturer: </td><td class="text-left">{{ item.manufacturer.manufacturer_desc }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-bold text-right">Country of Origin: </td><td class="text-left" v-if="item.country_id">{{ item.country.country_desc }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-bold text-right">CPR: </td><td class="text-left"></td>
+                                                </tr>
                                             </td>
                                             <td width="10%" class="text-right">
-                                                <span v-if="current_user.roled_id = '5'">{{ dmd.order_quantity }}</span>
-                                                <span v-else><input type="number" class="form-control form-control-sm text-right" v-model="dmd.request_quantity"></span>
+                                                <span>{{ item.order_quantity }}</span>
                                             </td>
-                                            <td class="text-right">{{ dmd.dmd_price_schedule.bid_price | currency2}}</td>
-                                            <td class="text-right">{{ dmd.request_quantity * dmd.dmd_price_schedule.bid_price | currency2 }}</td>
+                                            <td width="10%" class="text-right">{{ item.cost_price | currency2}}</td>
+                                            <td width="10%" class="text-right">{{ item.order_quantity * item.cost_price | currency2 }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -117,18 +98,36 @@
                             <div v-if="view_po_form.date_of_delivery">
                                <b> Date of Delivery:</b> {{ view_po_form.date_of_delivery}}
                             </div>
+                            
                             <div v-else></div>
                             <div class="container" v-show="current_user.role_id == 3">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
+
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="card">
                                             <div class="card-body">
                                                 <form action="">
-                                                    <div class="form-group">
-                                                        <div class="form-label">Date of Delivery:</div>
-                                                        <input type="date" class="form-control form-control-sm" v-model="view_po_form.date_of_delivery">
-                                                        <button class="btn btn-sm btn-success" type="button" @click="store_dod()">Save</button>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-label">Date of Delivery:</div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="date" class="form-control form-control-sm" v-model="view_po_form.date_of_delivery">
+                                                        </div>
                                                     </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-label">
+                                                                Delivery Term: <small>(Days)</small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="number" class="form-control form-control-sm" v-model="view_po_form.delivery_term">
+                                                        </div>
+                                                    </div>
+                                                    <button class="btn btn-sm btn-success" type="button" @click="store_dod()">Save</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -153,7 +152,6 @@
                                                         <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.fund_source_id">
                                                             <option v-for="fs in fund_sources" :key="fs.id" :value="fs.id">{{ fs.description }}</option>
                                                         </select>
-
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-label">Allotment</div>
@@ -241,17 +239,17 @@ export default {
             view_po_form: new Form({
                 purchase_order_id: '',
                 purchase_request_id: '',
-                uacs_code_id: '',
-                uacs: '',
-                allotment_id: '',
-                allotment: '',
-                uacs_id: '',
+                supplier_id: '',
+                supplier:{},
                 fund_source_id: '',
-                fund_source: '',
+                fund_source:{},
+                amount: '',
+                obrs_date: '',
                 date_of_delivery: '',
-                purchase_request:{
-                   view_dmd_purchase_requests:[],
-               },
+                terminated: '',
+                dmd_purchase_orders: [],
+                current_status: '',
+                delivery_term: '',
             }),
             track_po_modal: {},
             fund_cluster_form: new Form({
@@ -269,6 +267,7 @@ export default {
             axios.post('../../api/date_of_delivery', {
                 purchase_order_id: this.view_po_form.purchase_order_id,
                 date_of_delivery: this.view_po_form.date_of_delivery,
+                delivery_term: this.view_po_form.delivery_term,
             }).then(() => {
                 $('#poModal').modal('hide');
                 toast.fire({
@@ -534,10 +533,10 @@ export default {
         this.get_uacs();
     },
     mounted(){
-        window.Echo.channel("pr_created").listen(".purchase_order.created", (e) => {
+        window.Echo.channel("po_created").listen(".purchase_order.created", (e) => {
             this.get_pos();
         });
-        window.Echo.channel("pr_updated").listen(".purchase_order.updated", (e) => {
+        window.Echo.channel("po_updated").listen(".purchase_order.updated", (e) => {
             this.get_pos();
         });
     }

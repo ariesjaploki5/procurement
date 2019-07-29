@@ -1,10 +1,8 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="row mb-1">
-                <div class="col-md-6 font-weight-bold">
-                    Drugs And Medicines
-                </div>
+            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+                <h4><i class="fas fa-capsules"></i> Drugs and Medicines</h4>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -25,7 +23,7 @@
                                 <td>{{ dmd.begbal }}</td>
                                 <td>{{ dmd.mmo_stock }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-success" @click="edit_beg_bal(dmd)">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-success" @click="edit_beg_bal(dmd)"><i class="fas fa-edit"></i></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -61,7 +59,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -119,21 +116,21 @@ export default {
 
 <style scoped>
 
-tr {
-    width: 100%;
-    display: inline-table;
-    table-layout: fixed;
-}
+    tr {
+        width: 100%;
+        display: inline-table;
+        table-layout: fixed;
+    }
 
-table {
-    height:36rem;             
-    display: -moz-groupbox;    
-}
+    table {
+        height:36rem;             
+        display: -moz-groupbox;    
+    }
 
-tbody {
-    overflow-y: scroll;      
-    height: 34rem;           
-    width: 98.5%;
-    position: absolute;
-}
+    tbody {
+        overflow-y: scroll;      
+        height: 34rem;           
+        width: 98.5%;
+        position: absolute;
+    }
 </style>

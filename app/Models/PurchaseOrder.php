@@ -16,15 +16,27 @@ class PurchaseOrder extends Model
         'fund_source_id', 'amount', 'obrs_date', 
         'date_of_delivery', 'terminated',
 
-        'div_head_rcv', 'div_head_rls',
-        'pmo_rcv', 'pmo_rls',
+        'div_head_rcv_po', 'div_head_rls_po',
+
+        'pmo_rcv_po', 'pmo_rls_po',
+
+        'budget_rcv', 'budget_rls',
+
         'accntng_rcv', 'accntng_rls',
+
         'fmo_rcv', 'fmo_rls',
+
         'mcc_rcv', 'mcc_rls',
+
         'mmo_rcv', 'mmo_rls', 
+        
         'current_status',
 
         'supplier_id',
+        'purchase_request_id',
+        'mode_id',
+        'delivery_term',
+        'updated_at',
     ];
 
     protected $dispatchesEvents = [
@@ -62,9 +74,21 @@ class PurchaseOrder extends Model
 
     }
 
-    public function dmd_purchase_order(){
+    public function dmd_purchase_orders(){
 
         return $this->hasMany('App\Models\DmdPurchaseOrder', 'purchase_order_id', 'purchase_order_id');
 
+    }
+
+    public function supplier(){
+        return $this->belongsTo('App\Models\Supplier', 'supplier_id', 'supplier_id');
+    }
+
+    public function mode(){
+        return $this->belongsTo('App\Models\Mode','mode_id', 'mode_id');
+    }
+
+    public function purchase_order_statuses(){
+        return $this->hasMany('App\Models\PurchaseOrderStatus', 'purchase_order_id', 'purchase_order_id');
     }
 }

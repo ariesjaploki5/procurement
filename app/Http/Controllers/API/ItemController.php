@@ -22,8 +22,9 @@ class ItemController extends Controller
     public function store(Request $request){
         $item = Item::create([
             'item_desc' => $request->item_desc,
-            'category_id' => $request->category_id,
-            'beginning_balance' => $request->beginning_balance,
+            'item_specs' => $request->item_specs,
+            'cat_id' => $request->cat_id,
+            'beg_bal' => $request->beg_bal,
             'unit_id' => $request->unit_id,
         ]);
 
@@ -40,6 +41,7 @@ class ItemController extends Controller
 
         $item->update([
             'item_desc' => $request->item_desc,
+
             'category_id' => $request->category_id,
             'beginning_balance' => $request->beginning_balance,
             'unit_id' => $request->unit_id,

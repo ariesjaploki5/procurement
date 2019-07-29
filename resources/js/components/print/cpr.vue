@@ -1,6 +1,13 @@
 <template>
     <div id="pr1">
-      <button class="btn btn-primary d-print-none button" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+      <div class="row">
+            <div class="col">
+                <router-link to="/consignment_requests" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+            </div>
+        </div>
         <div id="content-wrapper">
             <div class="col-lg-12">
                 <table class="table table-condensed table-sm a" style="margin-top: 1%">
@@ -101,7 +108,7 @@
                     </tr>
                     <tr>
                         <td class="pr1 border-right-0 border-top-0">Purpose:</td>
-                        <td class="pr1 border-left-0 border-top-0 text-center text-uppercase" colspan="5"><b>{{ cpr.purpose }}</b></td>
+                        <td class="pr1 border-left-0 border-top-0 text-center text-uppercase" colspan="5"><b>{{ cpr.purpose }} - {{ cpr.hperson.patfirst }} {{ cpr.hperson.patmiddle }} {{ cpr.hperson.patlast }} - {{ cpr.hperson.hpercode }}</b></td>
                     </tr>
                     <tr>
                         <td class="pr1 border-top-0" colspan="6"><b>Required Attachments:</b> <i class="text-primary">(For Procurement Management Office use only)</i></td>

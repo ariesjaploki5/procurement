@@ -1,6 +1,13 @@
 <template>
     <div id="pr1">
-      <button class="btn btn-primary d-print-none button" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+        <div class="row">
+            <div class="col">
+                <router-link to="/purchase_request2" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+            </div>
+        </div>
         <div id="content-wrapper">
             <div class="col-lg-12">
                 <table class="table table-condensed table-sm a" style="margin-top: 1%">
@@ -61,19 +68,18 @@
                         <td class="pr1 text-center" width="15%"><b>Estimated Cost</b></td>
                     </tr>
                     <!--Line 1 -->
-                    <tr class="prpr" v-for="(item, index) in pr.view_dmd_purchase_requests" :key="item.dmd_id">
+                    <tr class="prpr" v-for="(item, index) in pr.dmd_purchase_requests" :key="item.id">
                         <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ index+1 }}</td>
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ item.request_quantity }}</td>
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="7%">{{ item.app_dmd.unit_desc }}</td>
-                        <td class="pr border-top-0 border-bottom-0 text-center"><h6>{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</h6></td>
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ item.request_quantity | numeral3 }}</td>
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="7%">{{ item.dmd.formdesc }}</td>
+                        <td class="pr border-top-0 border-bottom-0 text-center"><h6>{{ item.dmd.dmddesc }}</h6></td>
                         <td class="pr border-top-0 border-bottom-0 text-center" width="7%"></td>
                         <td class="pr border-top-0 border-bottom-0 text-center" width="15%">
-                            <span v-if="pr.mode_id == 1">{{ item.dmd_price_schedule.bid_price | currency2 }}</span>
-                            <span v-else></span>
+                            <span >{{ item.cost_price | currency2 }}</span>
                         </td>
                         <td class="pr border-top-0 border-bottom-0 text-center" width="15%">
-                            <span v-if="pr.mode_id == 1">{{ item.request_quantity * item.dmd_price_schedule.bid_price | currency2 }}</span>
-                            <span v-else></span>
+                            
+                            <span >{{ item.request_quantity * item.cost_price | currency2 }}</span>
                         </td>
                     </tr>
                      <!--Name of Supplier  -->
@@ -110,7 +116,9 @@
                         <td class="pr1 border-top-0" colspan="6"><b>Required Attachments:</b> <i class="text-primary">(For Procurement Management Office use only)</i></td>
                     </tr>
                     <tr>
-                        <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
+                        <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="3%">
+                            <input type="checkbox" style="width: 25px; height: 25px">
+                        </td>
                         <td class="pr1 border-0">Stock Position Sheet for Consumables</td>
                         <td width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
                         <td>Acknowledgement Receipt for Equipment</td>
@@ -190,13 +198,13 @@
         },
         computed:{
             estimated_cost(){
-                if(this.pr.mode_id == 1){
-                    let sum = 0;
-                    this.pr.view_dmd_purchase_requests.forEach(function(item) {
-                        sum += (parseFloat(item.dmd_price_schedule.bid_price) * parseFloat(item.request_quantity));
-                    });
-                        return sum;
-                }
+                
+                let sum = 0;
+                this.pr.dmd_purchase_requests.forEach(function(item) {
+                    sum += (parseFloat(item.cost_price) * parseFloat(item.request_quantity));
+                });
+                    return sum;
+                
             
             },
 

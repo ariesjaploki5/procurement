@@ -1,11 +1,18 @@
 <template>
     <div id="f01">
-      <button class="btn btn-primary d-print-none button" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+      <div class="row">
+            <div class="col">
+                <router-link to="/purchase_request2" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+            </div>
+        </div>
         <div id="content-wrapper">
             <div class="col-lg-12">
                 <table class="table table-condensed table-sm a" style="margin-top: 1%">
                     <tr>
-                        <td class="pr1 border-right-0" rowspan="8"><img :src="'/img/bghmc.png'" style="margin-left: 15%; margin-top: 10%" width="150" height="150"></td>
+                        <td class="pr1 border-right-0" rowspan="8"><img :src="'/img/bghmc.png'" style="margin-left: 15%; margin-top: 3%" width="150" height="150"></td>
                         <td class="pr1 border-bottom-0 text-center" colspan="5" id="pr1">Republic of the Philippines</td>
                     </tr>
                     <td class="pr1 border-top-0 border-bottom-0 text-center" colspan="5">Department of Health</td>

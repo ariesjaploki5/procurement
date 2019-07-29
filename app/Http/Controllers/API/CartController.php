@@ -9,6 +9,7 @@ use App\Models\CartDmd;
 use App\Views\Carts;
 use DB;
 use Carbon\Carbon;
+use App\Views\NewCart;
 
 class CartController extends Controller
 {
@@ -23,6 +24,8 @@ class CartController extends Controller
 
         return response()->json();
     }
+
+
 
     public function add_dmd(Request $request, $user_id){
         $mode_id = $request->mode_id;
@@ -71,9 +74,13 @@ class CartController extends Controller
     }
 
     public function remove_dmd($id){
-        $cart_dmd = CartDmd::where('id', $id)->delete();
+
+        $cart_dmd = CartDmd::where('id', $id)->first();
+        
+        $cart_dmd->delete();
 
         return response()->json($cart_dmd);
+
     }
 
     public function show($id){
@@ -81,24 +88,43 @@ class CartController extends Controller
 
     }
 
+
     public function shopping(){
-        $data = Carts::with([
-                'app_dmd'
-            ])->where('mode_id', 4)
-            ->where('app_year', $this->year_now())
-            ->where('status', 0)
-            ->orderBy('gendesc', 'asc')
-            ->get();
+        
+        // $data = NewCart::where('status', 0)
+        // ->where('mode_id', 4)
+        // ->where('app_year', Carbon::now()->year)
+        // ->orderBy('dmddesc', 'asc')
+        // ->get();
+
+        $data = Cart::with([
+            'cart_dmds' => function($query){
+                $query->with([
+                    'app_dmd_year'
+                ]);
+            }
+        ])
+        ->where('mode_id',4)
+        ->where('status', 0)
+        ->first();
+
 
         return response()->json($data);
     }
 
     public function public_bidding(){
-        $data = Carts::with(['dmd_price_schedule'])->where('mode_id', '1')
-            ->where('app_year', $this->year_now())
-            ->where('status', 0)
-            ->orderBy('gendesc', 'asc')
-            ->get();
+        
+        $data = Cart::with([
+            'cart_dmds' => function($query){
+                $query->with([
+                    'dmd_price_schedule', 
+                    'app_dmd_year',
+                ]);
+            }
+        ])
+        ->where('mode_id', 1)
+        ->where('status', 0)
+        ->first();
 
         return response()->json($data);
     }

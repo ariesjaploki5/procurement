@@ -16,4 +16,8 @@ class Carts extends Model
     public function app_dmd(){
         return $this->belongsTo('App\Views\AppDmd', 'dmd_id', 'dmd_id');
     }
+
+    public function new_app_dmd(){
+        return $this->belongsTo('App\Views\NewAppDmd', 'dmd_id', 'dmd_id');
+    }
 }

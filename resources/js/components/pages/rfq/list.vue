@@ -1,10 +1,9 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"> Request for Quotation</h3>  
-                </div>
+            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+                <h4><i class="fas fa-wallet"></i> Request for Quotation</h4>
+            </div>
                 <div class="card-body">
                     <table class="table table-sm table-hover">
                         <thead>
@@ -29,7 +28,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
             <div class="modal fade" id="viewRfqModal" tabindex="-1" role="dialog" aria-labelledby="viewRfqModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
@@ -60,7 +58,7 @@
                                                         <div id="rfq_total">Total</div>
                                                     </div>
                                                 </div>
-                                                <div  id="rfq_act">Action</div>
+                                                <div id="rfq_act">Action</div>
                                             </div>
                                         </th>
                                         <th id="rfq_act_2">
@@ -98,11 +96,9 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td id="rfq_act_2">
-                                            <button class="btn btn-sm btn-primary" type="button" @click="create_rfq(item)">
-                                                Add
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-success" @click="print_aoq(item.dmd_id)"><i class="fas fa-print"></i> Print AOQ</button>
+                                        <td id="rfq_act_2" class="row">
+                                            <button class="btn btn-sm btn-primary" data-toggle="tooltip" title="Add" type="button" @click="create_rfq(item)"><i class="fas fa-plus"></i> </button>
+                                            <button type="button" data-toggle="tooltip" title="Print AOQ" class="btn btn-sm btn-success" @click="print_aoq(item.dmd_id)"><i class="fas fa-print"></i> </button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -302,7 +298,7 @@ export default {
         background-color: white;
         color: black;
     }
-    @media (min-width: 768px) {
+    @media (min-width: 770px) {
     .modal-xl {
             width: 95%;
             max-width:1500px;
@@ -333,15 +329,11 @@ export default {
     #rfq_2{
         display: flex;
         flex-wrap: wrap;
-        /* margin-right: -15px;
-        margin-left: -15px; */
         width: 100%;
     }
     #rfq_3{
         display: flex;
         flex-wrap: wrap;
-        /* margin-right: -15px;
-        margin-left: -15px; */
         width: 100%;
     }
     #rfq_num{
@@ -385,17 +377,17 @@ export default {
     }
     #rfq_unit{
         position: relative;
-        width: 50%;
+        width: 45%;
         text-align: right;
     }
     #rfq_total{
         position: relative;
-        width: 50%;
+        width: 45%;
         text-align: right;
     }   
     #rfq_act_2{
         position: relative;
         width: 5%;
-        text-align: right;
+        text-align: center;
     }
 </style>

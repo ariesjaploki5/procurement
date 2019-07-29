@@ -1,10 +1,10 @@
 <template>
     <div class="row">
         <div class="col-md-12 mb-1">
-            Others
+            Other Items
         </div>
         <div class="col-md-12">
-
+            
         </div>
     </div>
 </template>

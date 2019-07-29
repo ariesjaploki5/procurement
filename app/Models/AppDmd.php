@@ -19,5 +19,9 @@ class AppDmd extends Model
         'budget', 'mode_id', 'quantity', 'unit_id', 'cost'
     ];
 
+
+    public function dmd(){
+        return $this->hasOne('App\Views\NewHomisDmd', 'dmd_id', 'dmd_id');
+    }
     
 }

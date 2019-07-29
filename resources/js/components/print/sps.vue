@@ -1,7 +1,14 @@
     <template>
     <div id="f01">
-        <button class="btn btn-primary d-print-none button" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
-        <div id="content-wrapper" v-for="item in pr.view_dmd_purchase_requests" :key="item.dmd_id">
+        <div class="row">
+            <div class="col">
+                <router-link to="/purchase_request2" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+            </div>
+        </div>
+        <div id="content-wrapper" v-for="item in pr.dmd_purchase_requests" :key="item.dmd_id">
             <div class="col-lg-12" style="height: 43rem">
                 <table class="table table-condensed table-sm a" style="margin-top: 1%">
                     <tr>
@@ -37,15 +44,15 @@
                 <table class="table table-condensed border-0 table-sm" style="margin-top:-1%">
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0" width="5%" style="text-align: center">Articles:</td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-primary align-middle text-bold" rowspan="2" width="25%"><h5>{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</h5></td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-primary align-middle text-bold" rowspan="2" width="25%"><h5>{{ item.dmd.dmddesc }}</h5></td>
                         <td class="border-top-0 border-bottom-0" width="10%" style="text-align: right"><strong>UNIT:</strong></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-center align-bottom" width="10%"><b>{{ item.formdesc }}</b></td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-center align-bottom" width="10%"><b>{{ item.dmd.formdesc }}</b></td>
                 
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0"></td>
                         <td class="border-top-0 border-bottom-0" width="10%" style="text-align: right"><strong>SSL:</strong></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-center align-bottom text-bold" width="10%">{{ item.ssl }}</td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-center align-bottom text-bold" width="10%">{{ item.dmd.ssl }}</td>
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0"></td>
@@ -59,7 +66,10 @@
                         </td>
                         <td class="border-top-0 border-bottom-0">Balance on Hand</td>
                         <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.boh }}</td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">
+                            <span v-if="item.dmd.boh == .00">0</span>
+                            <span v-else>{{ item.dmd.boh }}</span>
+                        </td>
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0">
@@ -67,7 +77,9 @@
                         </td>
                         <td class="border-top-0 border-bottom-0">Item in Transit</td>
                         <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">0</td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">
+                            {{ item.dmd.iit }}
+                        </td>
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0">
@@ -75,7 +87,7 @@
                         </td>
                         <td class="border-top-0 border-bottom-0">This Requisition</td>
                         <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.request_quantity }}</td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.dmd.tr }}</td>
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0">
@@ -83,7 +95,7 @@
                         </td>
                         <td class="border-top-0 border-bottom-0">Total Expected Stocks (Sum of Lines 1 to 3)</td>
                         <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.expected_stocks }}</td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.dmd.es }}</td>
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0">
@@ -91,7 +103,7 @@
                         </td>
                         <td class="border-top-0 border-bottom-0">Monthly Average Consumption</td>
                         <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.request_quantity / 2 }}</td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.dmd.tr / 2 }}</td>
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0">

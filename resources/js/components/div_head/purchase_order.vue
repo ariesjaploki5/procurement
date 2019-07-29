@@ -1,75 +1,71 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="col-md-6">
-                        Purchase Orders
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive-sm">
-                        <table class="table table-sm table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Date Created</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="pos in purchase_orders" :key="pos.purchase_order_id">
-                                    <td>{{ pos.created_at | myDate }} - {{ pos.purchase_order_id | numeral2 }}</td>
-                                    <td>{{ pos.created_at }}</td>
-                                    <td>
-                                        <div id="print" class="mb-2">
-                                            <button type="button" class="btn btn-sm btn-primary" @click="view_po(pos)"><i class="fas fa-eye"></i></button>
-                                            <button type="button" class="btn btn-sm btn-success" @click="track_po(pos)"><i class="fas fa-truck"></i></button>
-                                            <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
-                                            <router-link class="btn btn-sm btn-success" :to="{ name: 'obrs', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
+            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+                <h4><i class="fas fa-cart-arrow-down"></i> Purchase Order</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive-sm">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="pos in purchase_orders" :key="pos.purchase_order_id">
+                                <td>{{ pos.created_at | myDate }} - {{ pos.purchase_order_id | numeral2 }}</td>
+                                <td>{{ pos.created_at }}</td>
+                                <td>
+                                    <div id="print" class="mb-2">
+                                        <button type="button" class="btn btn-sm btn-primary" @click="view_po(pos)"><i class="fas fa-eye"></i></button>
+                                        <button type="button" class="btn btn-sm btn-success" @click="track_po(pos)"><i class="fas fa-truck"></i></button>
+                                        <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
+                                        <router-link class="btn btn-sm btn-success" :to="{ name: 'obrs', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
+                                    </div>
+                                    <div id="document_tracking" class="">
+                                        <div v-show="current_user.role_id == 5">
+                                            <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.div_head_rcv_2" @click="div_head_rcv_2(pos.purchase_order_id)">Received From Pharmacy <i class="fas fa-file-download"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.div_head_rcv_2 && !pos.purchase_request.div_head_rls_2" @click="div_head_rls_2(pos.purchase_order_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
                                         </div>
-                                        <div id="document_tracking" class="">
-                                            <div v-show="current_user.role_id == 5">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.div_head_rcv_2" @click="div_head_rcv_2(pos.purchase_order_id)">Received From Pharmacy <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.div_head_rcv_2 && !pos.purchase_request.div_head_rls_2" @click="div_head_rls_2(pos.purchase_order_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
-                                            </div>
-                                            <div v-show="current_user.role_id == 3 && pos.purchase_request.div_rls_2">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.pmo_rcv_2" @click="pmo_rcv_2(pos.purchase_order_id)">Received From Division Head <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.pmo_rcv_2 && !pos.purchase_request.pmo_rls_2" @click="pmo_rls_2(pos.purchase_order_id)">Send To Budget <i class="fas fa-file-upload"></i></button>
-                                            </div>
-                                            <div v-show="current_user.role_id == 6 && pos.purchase_request.pmo_rls_2">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.budget_rcv" @click="budget_rcv(pos.purchase_order_id)">Received From PMO <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.budget_rcv && !pos.purchase_request.budget_rls" @click="budget_rls(pos.purchase_order_id)">Send To Accounting <i class="fas fa-file-upload"></i></button>
-                                            </div>
-                                            <div v-show="current_user.role_id == 7 && pos.purchase_request.budget_rls">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.accounting_rcv" @click="accounting_rcv(pos.purchase_order_id)">Received From Budget <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.accounting_rcv && !pos.purchase_request.accounting_rls" @click="accounting_rls(pos.purchase_order_id)">Send To FMO <i class="fas fa-file-upload"></i></button>
-                                            </div>
-                                            
-                                            <div v-show="current_user.role_id == 8 && pos.purchase_request.accounting_rls">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.fmo_rcv" @click="fmo_rcv(pos.purchase_order_id)">Received From Accounting <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.fmo_rcv && !pos.purchase_request.fmo_rls" @click="fmo_rls(pos.purchase_order_id)">Send To MCC <i class="fas fa-file-upload"></i></button>
-                                            </div>
-
-                                            <div v-show="current_user.role_id == 9 && pos.purchase_request.fmo_rls">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.mcc_rcv" @click="mcc_rcv(pos.purchase_order_id)">Received From FMO <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.mcc_rcv && !pos.purchase_request.mcc_rls" @click="mcc_rls(pos.purchase_order_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
-                                            </div>
-
-                                            <div v-show="current_user.role_id == 3 && pos.purchase_request.mcc_rls">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.pmo_rcv_3" @click="pmo_rcv_3(pos.purchase_order_id)">Received From MCC <i class="fas fa-file-download"></i></button>
-                                                <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.pmo_rcv_3 && !pos.purchase_request.pmo_rls_3" @click="pmo_rls_3(pos.purchase_order_id)">Send To MMO <i class="fas fa-file-upload"></i></button>
-                                            </div>
-                                            <div v-show="current_user.role_id == 4 && pos.purchase_request.pmo_rls_3">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.mmo_rcv" @click="mmo_rcv(pos.purchase_order_id)">Received From PMO <i class="fas fa-file-download"></i></button>
-                                                <!-- <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.mmo_rcv && !pos.purchase_request.mmo_rls" @click="mmo_rls(pos.purchase_order_id)"><i class="fas fa-file-upload"></i></button> -->
-                                            </div>
+                                        <div v-show="current_user.role_id == 3 && pos.purchase_request.div_rls_2">
+                                            <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.pmo_rcv_2" @click="pmo_rcv_2(pos.purchase_order_id)">Received From Division Head <i class="fas fa-file-download"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.pmo_rcv_2 && !pos.purchase_request.pmo_rls_2" @click="pmo_rls_2(pos.purchase_order_id)">Send To Budget <i class="fas fa-file-upload"></i></button>
                                         </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                        <div v-show="current_user.role_id == 6 && pos.purchase_request.pmo_rls_2">
+                                            <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.budget_rcv" @click="budget_rcv(pos.purchase_order_id)">Received From PMO <i class="fas fa-file-download"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.budget_rcv && !pos.purchase_request.budget_rls" @click="budget_rls(pos.purchase_order_id)">Send To Accounting <i class="fas fa-file-upload"></i></button>
+                                        </div>
+                                        <div v-show="current_user.role_id == 7 && pos.purchase_request.budget_rls">
+                                            <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.accounting_rcv" @click="accounting_rcv(pos.purchase_order_id)">Received From Budget <i class="fas fa-file-download"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.accounting_rcv && !pos.purchase_request.accounting_rls" @click="accounting_rls(pos.purchase_order_id)">Send To FMO <i class="fas fa-file-upload"></i></button>
+                                        </div>
+                                        
+                                        <div v-show="current_user.role_id == 8 && pos.purchase_request.accounting_rls">
+                                            <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.fmo_rcv" @click="fmo_rcv(pos.purchase_order_id)">Received From Accounting <i class="fas fa-file-download"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.fmo_rcv && !pos.purchase_request.fmo_rls" @click="fmo_rls(pos.purchase_order_id)">Send To MCC <i class="fas fa-file-upload"></i></button>
+                                        </div>
+
+                                        <div v-show="current_user.role_id == 9 && pos.purchase_request.fmo_rls">
+                                            <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.mcc_rcv" @click="mcc_rcv(pos.purchase_order_id)">Received From FMO <i class="fas fa-file-download"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.mcc_rcv && !pos.purchase_request.mcc_rls" @click="mcc_rls(pos.purchase_order_id)">Send To PMO <i class="fas fa-file-upload"></i></button>
+                                        </div>
+
+                                        <div v-show="current_user.role_id == 3 && pos.purchase_request.mcc_rls">
+                                            <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.pmo_rcv_3" @click="pmo_rcv_3(pos.purchase_order_id)">Received From MCC <i class="fas fa-file-download"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.pmo_rcv_3 && !pos.purchase_request.pmo_rls_3" @click="pmo_rls_3(pos.purchase_order_id)">Send To MMO <i class="fas fa-file-upload"></i></button>
+                                        </div>
+                                        <div v-show="current_user.role_id == 4 && pos.purchase_request.pmo_rls_3">
+                                            <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.mmo_rcv" @click="mmo_rcv(pos.purchase_order_id)">Received From PMO <i class="fas fa-file-download"></i></button>
+                                            <!-- <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.mmo_rcv && !pos.purchase_request.mmo_rls" @click="mmo_rls(pos.purchase_order_id)"><i class="fas fa-file-upload"></i></button> -->
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="modal fade" id="poModal" tabindex="-1" role="dialog" aria-labelledby="poModalLabel" aria-hidden="true">

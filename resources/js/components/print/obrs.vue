@@ -1,6 +1,13 @@
 <template>
 <div id="f01">
-  <button class="btn btn-primary d-print-none button" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+  <div class="row">
+        <div class="col">
+            <router-link to="/budget_po" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+        </div>
+    </div>
     <div id="content-wrapper">
         <div class="col-lg-12">
             <table class="table table-condensed table-sm a" style="margin-top: 1%">
@@ -32,9 +39,16 @@
             <table class="table table-condensed table-sm" style="margin-top:-1.6%">
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0" width="8%"><b>Payee:</b></td>
-                    <td class="pr1 border-left-0 border-top-0" width="45%">{{ po.purchase_request.supplier.supplier_name }}</td>
+                    <td class="pr1 border-left-0 border-top-0" width="45%">
+                        <span v-if="po.supplier_id">{{ po.supplier.supplier_name }}</span>
+                        
+                    </td>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0" width="10%"> <b>Serial No:</b></td>
-                    <td class="pr1 border-left-0 border-top-0 font-weight-bold" width="25%">{{ po.fund_source.acronym }}-0{{ po.allotment.allotment_code }}-{{ po.uacs.current_appropriations }}-{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2}}</td>
+                    <td class="pr1 border-left-0 border-top-0 font-weight-bold" width="25%">
+                        <span v-if="po.fund_source_id && po.allotment_id && po.uacs_id">
+                        {{ po.fund_source.acronym }}-0{{ po.allotment.allotment_code }}-{{ po.uacs.current_appropriations }}-{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2}}
+                        </span>
+                    </td>
                 </tr>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0"><b>Office:</b></td>
@@ -44,9 +58,12 @@
                 </tr>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0"><b>Address:</b></td>
-                    <td class="pr1 border-left-0 border-top-0">{{ po.purchase_request.supplier.supplier_address }}</td>
+                    <td class="pr1 border-left-0 border-top-0">
+                        <span v-if="po.supplier_id">{{ po.supplier.supplier_address }}</span>
+                        
+                    </td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0"> <b>Fund Cluster:</b></td>
-                    <td class="pr1 border-left-0 font-weight-bold">0{{ po.fund_source.id }}</td>
+                    <td class="pr1 border-left-0 font-weight-bold">0{{ po.fund_source_id }}</td>
                 </tr>
                 <td colspan="7" class="pr1 border-top-0 border-bottom-0"></td>
             </table>
@@ -59,14 +76,30 @@
                     <td class="pr1 text-center font-weight-bold" width="10%">UACS Object Code/Expenditures</td>
                     <td class="pr1 text-center font-weight-bold" width="10%">Amount</td>
                 </thead>
-                <tr v-for="item in po.purchase_request.view_dmd_purchase_requests" :key="item.id">
+                <tr v-for="item in po.dmd_purchase_orders" :key="item.id">
                     <td class="pr1 border-bottom-0 border-top-0 text-center">MAIN PHARMACY</td>
                     <td class="pr1border-bottom-0 border-top-0">
-                        <div class="font-weight-bold border-bottom-0 text-center">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }}</div>
-                        <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Brand:</td><td class="border-bottom-0 border-top-0"> {{ item.dmd_price_schedule.brand_desc }} </td></tr>
-                        <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Packaging:</td><td class="border-bottom-0 border-top-0">{{ item.dmd_price_schedule.packaging_desc }}</td></tr>
-                        <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Manufacturer:</td><td class="border-bottom-0 border-top-0">{{ item.dmd_price_schedule.manufacturer_desc }}</td></tr>
-                        <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Country of Origin:</td><td class="border-bottom-0 border-top-0">{{ item.dmd_price_schedule.country_desc }}</td></tr>
+                        <div class="font-weight-bold border-bottom-0 text-center">{{ item.new_dmd.dmddesc }}</div>
+                        <tr>
+                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Brand:</td><td class="border-bottom-0 border-top-0">
+                                <span v-if="item.brand_id">{{ item.brand.brand_desc }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Packaging:</td><td class="border-bottom-0 border-top-0">
+                                 <span v-if="item.packaging_id">{{ item.packaging.packaging_desc }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Manufacturer:</td><td class="border-bottom-0 border-top-0">
+                                 <span v-if="item.manufacturer_id">{{ item.manufacturer.manufacturer_desc }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Country of Origin:</td><td class="border-bottom-0 border-top-0">
+                                 <span v-if="item.country_id">{{ item.country.country_desc }}</span>
+                            </td>
+                        </tr>
                         <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">CPR:</td><td class="border-bottom-0 border-top-0"></td></tr>
                     </td>
                     <td class="pr1 border-bottom-0 border-top-0 text-center">002</td>
@@ -158,7 +191,11 @@
                 <tr>
                     <td class="pr1"><center>{{ po.created_at | myDate3 }}</center></td>
                     <td class="pr1"><center>Obligation</center></td>
-                    <td class="pr1"><center>{{ po.fund_source.acronym }}-0{{ po.allotment.allotment_code }}-{{ po.uacs.current_appropriations }}-{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2 }}</center></td>
+                    <td class="pr1">
+                        <center v-if="po.fund_source_id && po.allotment_id && po.uacs_id && po.obrs_date">
+                        {{ po.fund_source.acronym }}-0{{ po.allotment.allotment_code }}-{{ po.uacs.current_appropriations }}-{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2 }}
+                        </center>
+                    </td>
                     <td class="pr1"><center>{{ estimated_cost | currency2 }}</center></td>
                     <td class="pr1"><center></center></td>
                     <td class="pr1"><center></center></td>
@@ -196,7 +233,9 @@
     export default {
         data(){
             return{
-                po: {}               
+                po: {
+                    dmd_purchase_orders: [],
+                }               
             }
         },
         methods:{
@@ -214,8 +253,8 @@
         computed:{
             estimated_cost(){
             let sum = 0;
-            this.po.purchase_request.view_dmd_purchase_requests.forEach(function(item) {
-                sum += (parseFloat(item.dmd_price_schedule.bid_price) * parseFloat(item.order_quantity));
+            this.po.dmd_purchase_orders.forEach(function(item) {
+                sum += (parseFloat(item.cost_price) * parseFloat(item.order_quantity));
             });
                 return sum;
             },

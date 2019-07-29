@@ -21,21 +21,21 @@
               <span v-show="current_user.role_id == 6">Budget Office</span>
               <span v-show="current_user.role_id == 7">Accounting Office</span>
               <span v-show="current_user.role_id == 8">Finance Management Office</span>
-              <span v-show="current_user.role_id == 9">MCC</span>
+              <span v-show="current_user.role_id == 9">Medical Center Chief</span>
             </h5>
           </div>
         </ul>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
-              <span v-if="user.employee">{{ user.employee.firstname }} {{ user.employee.lastname }}</span>
+              <i class="fas fa-user-alt mr-2"></i><span v-if="user.employee">{{ user.employee.firstname }} {{ user.employee.lastname }}</span>
               <span v-else></span>
               <i class="fa fa-bell-o"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
               <div class="dropdown-divider"></div>
               <a href="logout" @click.prevent="logout" class="dropdown-item">
-                  <i class="nav-icon fas fa-power-off"></i>
+                  <i class="fas fa-sign-out-alt"></i>
                   Logout
               </a>
             </div>

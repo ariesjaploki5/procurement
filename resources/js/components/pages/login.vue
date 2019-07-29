@@ -10,20 +10,21 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="card-title text-center">
-                                Procurement
+                            <div class="card-title text-center font-weight-bold mt-2">
+                                Procurement Management Information System
                             </div>
+                                <hr>
                             <form @submit.prevent="authenticate">
                                 <div class="form-group">
                                     <label for="username">Username</label>
-                                    <input type="username" v-model="form.username" class="form-control form-control-sm" placeholder="Username" required autofocus>
+                                    <input type="username" v-model="form.username" class="form-control form-control" placeholder="Username" required autofocus>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password</label>
-                                    <input type="password" v-model="form.password" class="form-control form-control-sm" placeholder="Password" required>
+                                    <input type="password" v-model="form.password" class="form-control form-control" placeholder="Password" required>
                                 </div>
                                 <div class="form-group text-center">
-                                    <input type="submit" value="Login" class="btn btn-primary btn-sm">
+                                    <button type="submit" class="btn btn-primary">Login <i class="fas fa-sign-in-alt"></i></button>
                                 </div>
                             </form>
                         </div>

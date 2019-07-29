@@ -46,6 +46,8 @@ import request_for_quotation_list from './components/pages/rfq/list.vue';
 import request_for_quotation_show from './components/pages/rfq/show.vue';
 
 import drugs_and_medicines from './components/pharmacy/drugs_and_medicines.vue';
+import pr_dmd from './components/pharmacy/pr_dmd.vue';
+
 import verified_reports from './components/mmo/verified_reports.vue';
 
 import suppliers from './components/pages/supplier/main';
@@ -60,10 +62,13 @@ import budget_dmd from './components/budget/drugs_and_medicines.vue';
 import div_head_po from './components/div_head/purchase_order.vue';
 
 import fmo_po from './components/fmo/purchase_order.vue';
+import mcc_po from './components/mcc/purchase_order.vue';
 
 import pmo_po from './components/pmo/purchase_order.vue';
 import pmo_pr from './components/pmo/purchase_request.vue';
 import pmo_rfq from './components/pmo/request_for_quotation.vue';
+
+import cmps_pr from './components/div_head/purchase_request.vue';
 
 import mmo_po from './components/mmo/purchase_order.vue';
 import mmo_dmd from './components/mmo/drugs_and_medicines.vue';
@@ -163,9 +168,21 @@ export const routes = [
         meta: { requiresAuth: true }
     },
     {
+        path: '/mcc_po',
+        component: mcc_po,
+        name: 'mcc_po',
+        meta: { requiresAuth: true }
+    },
+    {
         path: '/mmo_po',
         component: mmo_po,
         name: 'mmo_po',
+        meta: { requiresAuth: true }
+    },
+    {    
+        path: '/cmps_pr',
+        component: cmps_pr,
+        name: 'cmps_pr',
         meta: { requiresAuth: true }
     },
     {
@@ -267,6 +284,11 @@ export const routes = [
     {
         path: '/drugs_and_medicines',
         component: drugs_and_medicines,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/pr_dmd',
+        component: pr_dmd,
         meta: { requiresAuth: true }
     },
     {

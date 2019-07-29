@@ -121,6 +121,7 @@ class RfqController extends Controller
             'dmd_rfqs' => function ($query) use ($rfq_id){
                 $query->where('rfq_id', $rfq_id)->take(5);
             },
+            'pr'
         ])->where('dmd_id', $id)->first();
 
         return response()->json($data);

@@ -1,9 +1,9 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-             <div class="col-md-6">
-                    <h3>Purchase Request</h3>
-                </div>
+             <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+                <h4><i class="fas fa-shopping-cart"></i> Purchase Request</h4>
+            </div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new" aria-selected="true" >New</a>
@@ -23,11 +23,11 @@
                                     <th>Status</th>
                                     <th>Mode</th>
                                     <th>Supplier</th>
-                                    <th>Action</th>
+                                    <th width="30%" class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="prs in new_purchase_requests" :key="prs.purchase_request_id" v-show="prs.view_dmd_purchase_requests.length" :class="{ 'table-danger' : prs.status == 2, 'table-success' : prs.status == 1 }">
+                                <tr v-for="prs in new_purchase_requests" :key="prs.purchase_request_id" v-show="prs.dmd_purchase_requests.length" :class="{ 'table-danger' : prs.status == 2, 'table-success' : prs.status == 1 }">
                                     <td>{{ prs.created_at | myDate }} - {{ prs.purchase_request_id | numeral2 }}</td> 
                                     <td>{{ prs.created_at | myDate4}} - {{ prs.created_at | time1}}</td>
                                     <td>
@@ -40,10 +40,10 @@
                                         <span v-if="!prs.supplier"></span>
                                         <span v-else>{{ prs.supplier.supplier_name }}</span>
                                     </td>
-                                    <td>
+                                    <td width="30%" class="text-center">
                                         <div id="print" class="mb-2">
-                                            <button type="button" class="btn btn-sm btn-primary" @click="view_pr(prs.purchase_request_id)">View <i class="fas fa-eye"></i></button>
-                                            <button type="button" class="btn btn-sm btn-success" @click="track_pr(prs)">Track <i class="fas fa-truck"></i></button>
+                                            <button type="button" class="btn btn-sm btn-primary" @click="view_pr(prs.purchase_request_id)"><i class="fas fa-eye"></i></button>
+                                            <button type="button" class="btn btn-sm btn-success" @click="track_pr(prs)"><i class="fas fa-truck"></i></button>
                                             <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-success" :to="{ name: 'pr', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> PR</router-link>
                                             <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-success" :to="{ name: 'sps', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> SPS</router-link>
                                         </div>
@@ -72,11 +72,11 @@
                                     <th>Status</th>
                                     <th>Mode</th>
                                     <th>Supplier</th>
-                                    <th>Action</th>
+                                    <th width="30%" class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="prs in purchase_requests" :key="prs.purchase_request_id" v-show="prs.view_dmd_purchase_requests.length"  :class="{ 'table-danger' : prs.status == 2, 'table-success' : prs.status == 1 }">
+                                <tr v-for="prs in purchase_requests" :key="prs.purchase_request_id" v-show="prs.dmd_purchase_requests.length"  :class="{ 'table-danger' : prs.status == 2, 'table-success' : prs.status == 1 }">
                                     <td>{{ prs.created_at | myDate }} - {{ prs.purchase_request_id | numeral2 }}</td>
                                     <td>{{ prs.created_at | myDate4}} - {{ prs.created_at | time1}}</td>
                                     <td>
@@ -86,10 +86,10 @@
                                     </td>
                                     <td>{{ prs.mode.mode_desc }}</td>
                                     <td><span v-if="!prs.supplier"></span><span v-else>{{ prs.supplier.supplier_name }}</span></td>
-                                    <td>
+                                    <td width="30%" class="text-center">
                                         <div id="print" class="mb-2">
                                             <button type="button" class="btn btn-sm btn-primary" @click="view_pr(prs.purchase_request_id)"><i class="fas fa-eye"></i></button>
-                                            <button type="button" class="btn btn-sm btn-success" @click="track_pr(prs)"><i class="fas fa-truck"></i></button>
+                                            <button type="button" class="btn btn-sm btn-success" @click="track_pr(prs)"> <i class="fas fa-truck"></i></button>
                                             <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-success" :to="{ name: 'pr', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> PR</router-link>
                                             <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-success" :to="{ name: 'sps', params: { id: prs.purchase_request_id }}"><i class="fas fa-print"></i> SPS</router-link>
                                         </div>
@@ -113,7 +113,7 @@
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            {{ view_pr_form.created_at | myDate }} - {{ view_pr_form.purchase_request_id | numeral2 }}
+                            <!-- {{ view_pr_form.created_at | myDate }} - {{ view_pr_form.purchase_request_id | numeral2 }} -->
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -125,6 +125,7 @@
                                         <tr class="text-center">
                                             <th width="5%">#</th>
                                             <th width="20%">Description</th>
+                                            <th>Packaging</th>
                                             <th>SSL</th>
                                             <th>BOH</th>
                                             <th>Item In Transit</th>
@@ -135,24 +136,23 @@
                                         </tr>
                                     </thead>
                                     <tbody v-if="!isLoading" id="pr_tbody">
-                                        <tr v-for="(dmd,index) in view_pr_form.view_dmd_purchase_requests" :key="dmd.dmd_id">
+                                        <tr v-for="(dmd,index) in view_pr_form.dmd_purchase_requests" :key="dmd.dmd_id">
                                             <td width="5%">{{ index + 1}}</td>
-                                            <td width="20%">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
-                                            <td class="text-right table-danger">{{ dmd.ssl }}</td>
-                                            <td class="text-right table-danger">{{ dmd.boh }}</td>
+                                            <td width="20%">{{ dmd.dmd.dmddesc }}</td>
+                                            <td class="text-right table-danger">{{  }}</td>
+                                            <td class="text-right table-danger">{{ dmd.dmd.ssl | numeral3 }}</td>
+                                            <td class="text-right table-danger">{{ dmd.dmd.boh | numeral3 }}</td>
                                             <td class="text-right table-danger"></td>
                                             <td width="10%" class="text-right">
                                                 <input v-if="!view_pr_form.send" type="number" class="form-control form-control-sm text-right" v-model="dmd.request_quantity">
                                                 <div v-else>{{ dmd.request_quantity }}</div>
                                             </td>
                                             <td class="text-right">
-                                                <div v-if="view_pr_form.mode_id == 1">{{ dmd.dmd_price_schedule.bid_price | currency2}}</div>
-                                                <div v-else>{{ dmd.app_dmd.cost | currency2}}</div>
+                                                <span>{{ dmd.cost_price | currency2 }}</span>
                                             </td>
                                             <td  class="text-right">
-                                                <div v-if="view_pr_form.mode_id == 1">{{ dmd.request_quantity * dmd.dmd_price_schedule.bid_price | currency2}}</div>
-                                                <div v-else>{{ dmd.request_quantity * dmd.app_dmd.cost | currency2}}</div>
-                                            </td>
+                                                
+                                                <span>{{ dmd.request_quantity * dmd.cost_price | currency2}}</span></td>
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-sm btn-danger" @click="remove_item(dmd.id)">
                                                     <i class="fas fa-times-circle"></i>
@@ -203,36 +203,36 @@
                             <div class="row justify-content-center">
                                 <div class="col-md-12">
                                     <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rcv }">Division Head Received <div>{{ track_pr_modal.div_head_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rls }">Division Head Released <div>{{ track_pr_modal.div_head_rcv }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rcv  }">Division Head Received <div v-show="track_pr_modal.div_head_rcv">{{ track_pr_modal.div_head_rcv | myDate3 }}, {{ track_pr_modal.div_head_rcv | time1 }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rls }">Division Head Released <div v-show="track_pr_modal.div_head_rls">{{ track_pr_modal.div_head_rls | myDate3 }}, {{ track_pr_modal.div_head_rls | time1 }}</div></li>
                                     </ul>
                                     <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rcv }">PMO Received <div>{{ track_pr_modal.pmo_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rls }">PMO Released <div>{{ track_pr_modal.pmo_rls }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rcv }">PMO Received <div v-show="track_pr_modal.pmo_rcv">{{ track_pr_modal.pmo_rcv | myDate3 }}, {{ track_pr_modal.pmo_rcv | time1 }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rls }">PMO Released <div v-show="track_pr_modal.pmo_rls">{{ track_pr_modal.pmo_rls | myDate3 }}, {{ track_pr_modal.pmo_rls | time1 }} </div></li>
                                     </ul>
                                     <ul class="list-group list-group-horizontal">  
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rcv_2 }">Division Head Received <div>{{ track_pr_modal.div_head_rcv_2 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rls_2 }">Division Head Released <div>{{ track_pr_modal.div_head_rls_2 }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rcv_2 }">Division Head Received <div v-show="track_pr_modal.div_head_rcv_2">{{ track_pr_modal.div_head_rcv_2 | myDate3 }}, {{ track_pr_modal.div_head_rcv_2 | time1 }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rls_2 }">Division Head Released <div v-show="track_pr_modal.div_head_rls_2">{{ track_pr_modal.div_head_rls_2 | myDate3 }}, {{ track_pr_modal.div_head_rls_2 | time1 }} </div></li>
                                     </ul>
                                     <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rcv_2 }">PMO Received <div>{{ track_pr_modal.pmo_rcv_2 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rls_2 }">PMO Released <div>{{ track_pr_modal.pmo_rls_2 }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rcv_2 }">PMO Received <div v-show="track_pr_modal.pmo_rcv_2">{{ track_pr_modal.pmo_rcv_2 | myDate3 }}, {{ track_pr_modal.pmo_rcv_2 | time1 }} </div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rls_2 }">PMO Released <div v-show="track_pr_modal.pmo_rls_2">{{ track_pr_modal.pmo_rls_2 | myDate3 }}, {{ track_pr_modal.pmo_rls_2 | time1 }}</div></li>
                                     </ul>
                                     <ul class="list-group list-group-horizontal">  
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.budget_rcv }">Budget Received <div>{{ track_pr_modal.budget_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.budget_rls }">Budget Released <div>{{ track_pr_modal.budget_rls }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.budget_rcv }">Budget Received <div v-show="track_pr_modal.budget_rcv">{{ track_pr_modal.budget_rcv | myDate3 }}, {{ track_pr_modal.budget_rcv | time1 }} </div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.budget_rls }">Budget Released <div v-show="track_pr_modal.budget_rls">{{ track_pr_modal.budget_rls | myDate3 }}, {{ track_pr_modal.budget_rls | time1 }} </div></li>
                                     </ul>
                                     <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.mcc_rcv }">MCC Received <div>{{ track_pr_modal.mcc_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.mcc_rls }">MCC Released <div>{{ track_pr_modal.mcc_rls }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.mcc_rcv }">MCC Received <div v-show="track_pr_modal.mcc_rcv">{{ track_pr_modal.mcc_rcv | myDate3 }}, {{ track_pr_modal.mcc_rcv | time1 }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.mcc_rls }">MCC Released <div v-show="track_pr_modal.mcc_rls">{{ track_pr_modal.mcc_rls | myDate3 }}, {{ track_pr_modal.mcc_rls | time1 }} </div></li>
                                     </ul>
                                     <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.fmo_rcv }">FMO Received <div>{{ track_pr_modal.fmo_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.fmo_rls }">FMO Released <div>{{ track_pr_modal.fmo_rls }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.fmo_rcv }">FMO Received <div v-show="track_pr_modal.fmo_rcv">{{ track_pr_modal.fmo_rcv | myDate3 }}, {{ track_pr_modal.fmo_rcv | time1 }} </div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.fmo_rls }">FMO Released <div v-show="track_pr_modal.fmo_rls">{{ track_pr_modal.fmo_rls | myDate3 }}, {{ track_pr_modal.fmo_rls | time1 }}</div></li>
                                     </ul>
                                     <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rcv_3 }">PMO Received <div>{{ track_pr_modal.pmo_rcv_3 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rls_3 }">PMO Released <div>{{ track_pr_modal.pmo_rls_3 }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rcv_3 }">PMO Received <div v-show="track_pr_modal.pmo_rcv_3">{{ track_pr_modal.pmo_rcv_3 | myDate3 }}, {{ track_pr_modal.pmo_rcv_3 | time1 }}</div></li>
+                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rls_3 }">PMO Released <div v-show="track_pr_modal.pmo_rls_3">{{ track_pr_modal.pmo_rls_3 | myDate3 }}, {{ track_pr_modal.pmo_rls_3 | time1 }}</div></li>
                                     </ul>
                                 </div>
                             </div>
@@ -268,6 +268,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -283,7 +284,7 @@ export default {
             new_purchase_requests: [],
             view_pr_form: new Form({
                purchase_request_id: '',
-               view_dmd_purchase_requests: [],
+               dmd_purchase_requests: [],
                purchase_order_id: '',
                mode_id: '',
                rfq: {},

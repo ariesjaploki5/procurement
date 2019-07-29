@@ -1,20 +1,21 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-12">
+            <div class="col-md-12 b-1 shadow p-3 mb-3 bg-white rounded">
                 <h3>
-                    {{ price_schedule.category.category_desc }} - {{ price_schedule.price_schedule_year }}
+                    <i class="fas fa-capsules mr-2"></i><span v-if="price_schedule.category_id">{{ price_schedule.category.category_desc }} - {{ price_schedule.price_schedule_year }}</span>
                 </h3>
             </div>
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-AUTO text-right">
+                        <div class="col-md-auto text-right font-weight-bold">
                             Search:
                         </div>
                         <div class="col-md-6">
                             <input type="text" class="form-control form-control-sm" v-model="search_word">
                         </div>
                     </div>
+                    
                 </div>
                 <div class="col-md-12 mt-1">
                     <div class="table-responsive-sm" id="price_schedule">
@@ -35,10 +36,10 @@
                                             <div id="ps_bid_pack_head">Packaging</div>
                                             <div id="ps_bid_manu_head">Manufacturer</div>
                                             <div id="ps_bid_co_head">Country of Origin</div>
-                                            <div id="ps_bid_mod_head">Modify</div>
+                                            <div id="ps_bid_mod_head" v-show="current_user.role_id == 3">Modify</div>
                                         </div>
                                     </th>
-                                    <th id="ps_act" class="text-center">Action</th>
+                                    <th id="ps_act" class="text-center" v-show="current_user.role_id == 3">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="price_schedule_tbody">
@@ -52,14 +53,14 @@
                                         <p v-show="!dmd.dmd_price_schedules.length">No Bidder</p>
                                         <div id="ps_bid_2" v-show="dmd.dmd_price_schedules != null" v-for="(ps, index) in dmd.dmd_price_schedules" :key="ps.dps_id"  v-bind:class="{ 'table-success' : index == 0, 'bg-danger': ps.terminated == 1}">
                                             <div id="ps_bid_rank">{{ ps.rank }}</div>
-                                            <div id="ps_bid_bidder">{{ ps.supplier_name }}</div>
-                                            <div id="ps_bid_price">{{ ps.bid_price | currency2 }}</div>
-                                            <div id="ps_bid_brand">{{ ps.brand_desc }}</div>
-                                            <div id="ps_bid_pack">{{ ps.packaging_desc }}</div>
-                                            <div id="ps_bid_manu">{{ ps.manufacturer_desc }}</div>
-                                            <div id="ps_bid_co">{{ ps.country_desc }}</div>
+                                            <div class="text-right" id="ps_bid_bidder">{{ ps.supplier_name }}</div>
+                                            <div class="text-right" id="ps_bid_price">{{ ps.bid_price | currency2 }}</div>
+                                            <div class="text-right" id="ps_bid_brand">{{ ps.brand_desc }}</div>
+                                            <div class="text-right" id="ps_bid_pack">{{ ps.packaging_desc }}</div>
+                                            <div class="text-right" id="ps_bid_manu">{{ ps.manufacturer_desc }}</div>
+                                            <div class="text-right" id="ps_bid_co">{{ ps.country_desc }}</div>
                                             <div id="ps_bid_mod">
-                                                <div class="btn-group dropleft btn-sm">
+                                                <div class="btn-group dropleft btn-sm" v-show="current_user.role_id == 3" >
                                                     <button id="btn_custom" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                                     <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                                         <button class="dropdown-item" @click="edit_bidder(dmd, ps)"><i class="fas fa-pen"></i> Edit</button>
@@ -71,7 +72,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td  id="ps_act" class="text-center">
+                                    <td  id="ps_act" class="text-center" v-show="current_user.role_id == 3">
                                         <button class="btn btn-primary btn-sm" @click="add_bidder(dmd)" id="btn_custom">
                                             <i class="fas fa-plus"></i> Bidder
                                         </button>
@@ -278,6 +279,9 @@ export default {
                 return matcher.test(dmd.gendesc)
             })
         },
+         current_user() {
+            return this.$store.getters.current_user;
+        }
     },
     mounted(){
         window.Echo.channel("dmd_price_schedule_created").listen(".dmd_price_schedule.created", (e) => {

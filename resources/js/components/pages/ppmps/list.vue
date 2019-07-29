@@ -1,45 +1,41 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-6">
-                            PPMP
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <button type="button" class="btn btn-sm btn-primary" @click="create_ppmp()"><i class="fas fa-plus"></i> Create</button>
-                        </div>
-                    </div>
+            <div class="row b-1 shadow p-3 mb-3 bg-white rounded">
+                <div class="col-md-6">
+                     <h4><i class="fas fa-tasks"></i> Project Procurement Management Plan</h4>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive-sm">
-                        <table class="table table-sm table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Year</th>
-                                    <th>Created At</th>
-                                    <th>Category</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="ppmp in ppmps" :key="ppmp.id">
-                                    <td>{{ ppmp.ppmp_id }}</td>
-                                    <td>{{ ppmp.ppmp_year }}</td>
-                                    <td>{{ ppmp.created_at }}</td>
-                                    <td>{{ ppmp.category.category_desc }}</td>
-                                    <td>
-                                        <router-link class="btn btn-sm btn-primary" :to="{ name: 'ppmp_show', params: { id: ppmp.ppmp_id }}"><i class="fas fa-eye"></i></router-link>
-                                        <button type="button" class="btn btn-sm btn-success" @click="edit_ppmp(ppmp)"><i class="fas fa-pen"></i></button>
-                                        <button type="button" class="btn btn-sm btn-danger" @click="delete_ppmp(ppmp.ppmp_id)"><i class="fas fa-trash"></i></button>
-                                        <router-link class="btn btn-sm btn-primary" :to="{ name: 'ppmp_print', params: { id: ppmp.ppmp_id }}"><i class="fas fa-print"></i></router-link>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="col-md-6 text-right">
+                    <button type="button" class="btn btn-sm btn-primary" @click="create_ppmp()"><i class="fas fa-plus"></i> Create</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive-sm">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Year</th>
+                                <th>Created At</th>
+                                <th>Category</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="ppmp in ppmps" :key="ppmp.id">
+                                <td>{{ ppmp.ppmp_id }}</td>
+                                <td>{{ ppmp.ppmp_year }}</td>
+                                <td>{{ ppmp.created_at }}</td>
+                                <td>{{ ppmp.category.category_desc }}</td>
+                                <td>
+                                    <router-link class="btn btn-sm btn-primary" :to="{ name: 'ppmp_show', params: { id: ppmp.ppmp_id }}"><i class="fas fa-eye"></i></router-link>
+                                    <button type="button" class="btn btn-sm btn-success" @click="edit_ppmp(ppmp)"><i class="fas fa-pen"></i></button>
+                                    <button type="button" class="btn btn-sm btn-danger" @click="delete_ppmp(ppmp.ppmp_id)"><i class="fas fa-trash"></i></button>
+                                    <router-link class="btn btn-sm btn-primary" :to="{ name: 'ppmp_print', params: { id: ppmp.ppmp_id }}"><i class="fas fa-print"></i></router-link>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="modal fade" id="ppmpModal" tabindex="-1" role="dialog" aria-labelledby="ppmpModalLabel" aria-hidden="true">
@@ -70,8 +66,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-success btn-sm">Save</button>
-                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times-circle"></i> Close</button>
                             </div>
                         </form>
                     </div>
@@ -164,6 +160,20 @@ export default {
 }
 </script>
 <style scoped>
+    #d_modal_content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+
+    .modal-content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+
+    .modal-body{
+        background-color: white;
+        color: black;
+    }
     tr {
         width: 100%;
         display: inline-table;

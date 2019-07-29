@@ -36,4 +36,8 @@ class DmdPriceSchedule extends Model
     public function packaging(){
         return $this->belongsTo('App\Models\Packaging', 'packaging_id', 'packaging_id');
     }
+
+    public function new_dmd(){
+        return $this->belongsTo('App\Views\NewHomisDmd', 'dmd_id', 'dmd_id');
+    }
 }

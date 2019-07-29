@@ -17,18 +17,18 @@ class PurchaseOrderController extends Controller
 
     public function index(){
         $data = PurchaseOrder::with([
-            'allotment', 'fund_source', 'uacs',
-            'purchase_request' => function ($query){
+            'mode',
+            'allotment', 'fund_source', 'uacs', 'supplier',
+            'purchase_request', 'dmd_purchase_orders' => function($query){
                 $query->with([
-                    'view_dmd_purchase_requests.dmd_price_schedule', 
-                    'supplier', 
-                    'mode'
-                    ]);
-            }
+                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd',
+                ]);
+            },
         ])->get();
 
         return response()->json($data);
     }
+
 
     public function terminate_po($id){
         $po = PurchaseOrder::findOrFail($id);
@@ -43,6 +43,40 @@ class PurchaseOrderController extends Controller
         $po = DB::SELECT("SELECT * FROM procurement.dbo.view_for_pr");
 
         return response()->json($po);
+    }
+
+    public function get_po($id){
+        $data = PurchaseOrder::with([
+            'mode',
+            'allotment', 'fund_source', 'uacs', 'supplier',
+            'purchase_request', 'dmd_purchase_orders' => function($query){
+                $query->with([
+                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd', 'dmd_receiveds',
+                ]);
+            },
+        ])
+        ->whereNotNull('date_of_delivery')
+        ->whereNotNull('delivery_term')
+        ->whereNotNull('fund_source_id')
+        ->whereNotNull('allotment_id')
+        ->whereNotNull('uacs_id')
+        ->whereNotNull('obrs_date')
+        ->whereNotNull('budget_rls')
+        ->whereNotNull('pmo_rls')
+        ->whereNotNUll('accntng_rls')
+        ->whereNotNull('fmo_rls')
+        ->whereNotNull('mcc_rls')
+        ->where('purchase_order_id', $id)->first();
+
+        // $data = PurchaseOrder::with([
+        //     'dmd_purchase_orders' => function($query){
+        //         $query->with([
+        //             'brand', 'manufacturer', 'packaging', 'country', 'new_dmd'
+        //         ]);
+        //     }, 'supplier'
+        // ])->where('purchase_order_id', $id)->first();
+
+        return response()->jsoN($data);
     }
 
     public function receive_dmd(Request $request){
@@ -130,6 +164,7 @@ class PurchaseOrderController extends Controller
         $po = PurchaseOrder::findOrFail($request->purchase_order_id);
         $po->update([
             'date_of_delivery' => $request->date_of_delivery,
+            'delivery_term' => $request->delivery_term,
         ]);
 
         return response()->json();
@@ -159,6 +194,7 @@ class PurchaseOrderController extends Controller
 
         return response()->json($data);
     }
+    
     public function for_div_heads(){
         $data = PurchaseOrder::with([
             'purchase_request' => function ($query){
@@ -168,39 +204,121 @@ class PurchaseOrderController extends Controller
 
         return response()->json($data);
     }
+
     public function for_budget(){
         $data = PurchaseOrder::with([
-            'purchase_request' => function ($query){
-                $query->with(['view_dmd_purchase_requests']);
-            }
-        ])->get();
+            'mode',
+            'allotment', 'fund_source', 'uacs', 'supplier',
+            'purchase_request', 'dmd_purchase_orders' => function($query){
+                $query->with([
+                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd',
+                ]);
+            },
+        ])
+        ->whereNotNull('date_of_delivery')
+        ->whereNotNull('delivery_term')
+        ->whereNotNull('pmo_rls')
+        ->get();
+
 
         return response()->json($data);
     }
+
     public function for_accounting(){
         $data = PurchaseOrder::with([
-            'purchase_request' => function ($query){
-                $query->with(['view_dmd_purchase_requests']);
-            }
-        ])->get();
+            'mode',
+            'allotment', 'fund_source', 'uacs', 'supplier',
+            'purchase_request', 'dmd_purchase_orders' => function($query){
+                $query->with([
+                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd',
+                ]);
+            },
+        ])
+        ->whereNotNull('date_of_delivery')
+        ->whereNotNull('delivery_term')
+        ->whereNotNull('fund_source_id')
+        ->whereNotNull('allotment_id')
+        ->whereNotNull('uacs_id')
+        ->whereNotNull('obrs_date')
+        ->whereNotNull('budget_rls')
+        ->whereNotNull('pmo_rls')
+        ->get();
+
 
         return response()->json($data);
     }
+
     public function for_fmo(){
         $data = PurchaseOrder::with([
-            'purchase_request' => function ($query){
-                $query->with(['view_dmd_purchase_requests']);
-            }
-        ])->get();
+            'mode',
+            'allotment', 'fund_source', 'uacs', 'supplier',
+            'purchase_request', 'dmd_purchase_orders' => function($query){
+                $query->with([
+                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd',
+                ]);
+            },
+        ])
+        ->whereNotNull('date_of_delivery')
+        ->whereNotNull('delivery_term')
+        ->whereNotNull('fund_source_id')
+        ->whereNotNull('allotment_id')
+        ->whereNotNull('uacs_id')
+        ->whereNotNull('obrs_date')
+        ->whereNotNull('budget_rls')
+        ->whereNotNull('pmo_rls')
+        ->whereNotNUll('accntng_rls')
+        ->get();
 
         return response()->json($data);
     }
+
+    public function for_mcc(){
+        $data = PurchaseOrder::with([
+            'mode',
+            'allotment', 'fund_source', 'uacs', 'supplier',
+            'purchase_request', 'dmd_purchase_orders' => function($query){
+                $query->with([
+                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd',
+                ]);
+            },
+        ])
+        ->whereNotNull('date_of_delivery')
+        ->whereNotNull('delivery_term')
+        ->whereNotNull('fund_source_id')
+        ->whereNotNull('allotment_id')
+        ->whereNotNull('uacs_id')
+        ->whereNotNull('obrs_date')
+        ->whereNotNull('budget_rls')
+        ->whereNotNull('pmo_rls')
+        ->whereNotNull('accntng_rls')
+        ->whereNotNull('fmo_rls')
+        ->get();
+
+        return response()->json($data);
+    }
+
     public function for_mmo(){
         $data = PurchaseOrder::with([
-            'purchase_request' => function ($query){
-                $query->with(['view_dmd_purchase_requests']);
-            }
-        ])->get();
+            'mode',
+            'allotment', 'fund_source', 'uacs', 'supplier',
+            'purchase_request', 'dmd_purchase_orders' => function($query){
+                $query->with([
+                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd', 'dmd_receiveds',
+                ]);
+            },
+        ])
+        ->whereNotNull('date_of_delivery')
+        ->whereNotNull('delivery_term')
+        ->whereNotNull('fund_source_id')
+        ->whereNotNull('allotment_id')
+        ->whereNotNull('uacs_id')
+        ->whereNotNull('obrs_date')
+        ->whereNotNull('budget_rls')
+        ->whereNotNull('pmo_rls')
+        ->whereNotNUll('accntng_rls')
+        ->whereNotNull('fmo_rls')
+        ->whereNotNull('mcc_rls')
+        ->get();
 
         return response()->json($data);
     }
@@ -233,21 +351,17 @@ class PurchaseOrderController extends Controller
     public function show($id){
 
         $data = PurchaseOrder::with([
-            'allotment', 'fund_source', 'uacs',
-            'purchase_request' => function ($query){
+            'mode',
+            'allotment', 'fund_source', 'uacs', 'supplier',
+            'purchase_request', 'dmd_purchase_orders' => function($query){
                 $query->with([
-                    'view_dmd_purchase_requests' => function($query){
-                        $query->with([
-                            'dmd_price_schedule'
-                        ])->first();
-                    }, 
-                    'supplier', 
-                    'mode'
-                    ]);
-            }
-        ])->where('purchase_order_id', $id)->first();
+                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd',
+                ])->select(["*", 
+                DB::raw("CAST((order_quantity * cost_price) as decimal(18, 2)) as amount"),]);
+            },
+            ])->where('purchase_order_id', $id)->first();
 
-        return response()->json($data);
+            return response()->json($data);
     }
 
     public function update(Request $request, $id){
@@ -263,118 +377,197 @@ class PurchaseOrderController extends Controller
     public function date_now(){
         return Carbon::now();
     }
-    public function pmo_rcv_2($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'pmo_rcv_2' => $this->date_now(),
-            'current_status' => 'Received by PMO'
-        ]);
-        return response()->json();
-    }
-    public function pmo_rls_2($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'pmo_rls_2' => $this->date_now(),
-            'current_status' => 'Release by PMO'
+    
+    
+    public function pmo_rls_po($id){
+
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 5
         ]);
 
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
 
         return response()->json();
     }
+    
     public function budget_rcv($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'budget_rcv' => $this->date_now(),
-            'current_status' => 'Received by Budget'
+
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 6
         ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+
         return response()->json();
+
     }
+    
     public function budget_rls($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'budget_rls' => $this->date_now(),
-            'current_status' => 'Release by Budget'
+
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 7
         ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+
+        return response()->json();
+
+    }
+    
+    public function cmps_rcv_po($id){
+    
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 8
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
         return response()->json();
     }
+    
+    public function cmps_rls_po($id){
+    
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 9
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    
+    }
+    
     public function accounting_rcv($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'accounting_rcv' => $this->date_now(),
-            'current_status' => 'Received by Accounting'
+
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 10
         ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+
         return response()->json();
+
     }
+    
     public function accounting_rls($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'accounting_rls' => $this->date_now(),
-            'current_status' => 'Release by Accounting'
+
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 11
         ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+
         return response()->json();
     }
-    public function mcc_rcv($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'mcc_rcv' => $this->date_now(),
-            'current_status' => 'Received by MCC'
-        ]);
-        return response()->json();
-    }
-    public function mcc_rls($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'mcc_rls' => $this->date_now(),
-            'current_status' => 'Release by MCC'
-        ]);
-        return response()->json();
-    }
+
+
+    
     public function fmo_rcv($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'fmo_rcv' => $this->date_now(),
-            'current_status' => 'Received by FMO'
+        
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 12
         ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+
         return response()->json();
     }
+    
     public function fmo_rls($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'fmo_rls' => $this->date_now(),
-            'current_status' => 'Release by FMO'
+    
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 13
         ]);
-        return response()->json();
-    }
-    public function pmo_rcv_3($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'pmo_rcv_3' => $this->date_now(),
-            'current_status' => 'Received by PMO'
+
+        $po->update([
+            'updated_at' => $this->date_now(),
         ]);
+    
         return response()->json();
+    
     }
-    public function pmo_rls_3($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->update([
-            'pmo_rls_3' => $this->date_now(),
-            'current_status' => 'Release by PMO'
+    
+    public function mcc_rcv($id){
+        
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 14
         ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
         return response()->json();
+    
     }
+    
+    public function mcc_rls($id){
+        
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 15
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    
+    }
+    
+    
     public function mmo_rcv($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->purchase_request()->update([
-            'mmo_rcv' => $this->date_now(),
-            'current_status' => 'Received by MMO'
+    
+        $po = PurchaseOrder::findOrFail($id);
+        
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 16
         ]);
-        return response()->json();
-    }
-    public function mmo_rls($id){
-        $pr = PurchaseOrder::findOrFail($id);
-        $pr->purchase_request()->update([
-            'mmo_rls' => $this->date_now(),
-            'current_status' => 'Release by MMO'
+
+        $po->update([
+            'updated_at' => $this->date_now(),
         ]);
+    
         return response()->json();
+    
     }
+    
 }

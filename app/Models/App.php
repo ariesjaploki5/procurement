@@ -27,4 +27,8 @@ class App extends Model
     public function dmds(){
         return $this->belongsToMany('App\Models\Dmd', 'app_dmd', 'app_id', 'dmd_id');
     }
+
+    public function app_dmds(){
+        return $this->hasMany('App\Models\AppDmd', 'app_id', 'app_id');
+    }
 }

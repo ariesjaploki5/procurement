@@ -58,7 +58,7 @@ Vue.filter('numeral3', function(val){return numeral(val).format('0,0');});
 Vue.filter('num_words', function(val){return converter.toWords(val);});
 
 Vue.filter('currency', function(val){return accounting.formatMoney(val, {symbol: '',});});
-Vue.filter('currency2', function(val){return accounting.formatMoney(val, {symbol: '₱  ',decimals: 2,});});
+Vue.filter('currency2', function(val){return accounting.formatMoney(val, {symbol: '₱ ',decimals: 2,});});
 Vue.filter('decimal_to_whole', function(val){return accounting.formatMoney(val, {symbol: '',precision: 0,});});
 
 Vue.use(VueProgressBar, {
@@ -88,3 +88,4 @@ const app = new Vue({
         appvue
     }
 });
+

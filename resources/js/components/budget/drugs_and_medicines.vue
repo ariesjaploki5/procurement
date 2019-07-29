@@ -1,15 +1,12 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="row mb-1">
-                <div class="col-md-6">
-                    Drugs And Medicines
-                </div>
-
+            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+                <h4><i class="fas fa-capsules"></i> Drugs and Medicines</h4>
             </div>
             <div class="row mb-1">
-                <div class="col-md-auto text-right">Search:</div>
-                <div class="col-md-4"><input type="text" class="form-control form-control-sm" v-model="search_word"></div>
+                <div class="col-md-auto text-right font-weight-bold">Search:</div>
+                <div class="col-md-4"><input type="text" class="form-control form-control-sm mb-2" v-model="search_word"></div>
             </div>
             <div class="table-responsive-sm">
                 <table class="table table-fixed table-sm table-hover table-condensed">

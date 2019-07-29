@@ -1,44 +1,40 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header font-weight-bold">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h3 class="card-title"> Suppliers</h3>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <button type="button" class="btn btn-primary" @click="create_supplier()">Add <i
-                                    class="fas fa-truck-pickup"></i></button>
-                        </div>
-                    </div>
+            <div class="row b-1 shadow p-3 mb-3 bg-white rounded">
+                <div class="col-md-6">
+                    <h4><i class="fas fa-warehouse mr-2"></i>Suppliers</h4>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive-sm">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th width="5%">ID</th>
-                                    <th width="40%">Name</th>
-                                    <th width="45%">Address</th>
-                                    <th width="10%" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="s in suppliers" :key="s.supplier_id">
-                                    <td width="5%">{{ s.supplier_id}}</td>
-                                    <td width="40%">{{ s.supplier_name }}</td>
-                                    <td width="45%">{{ s.supplier_address }}</td>
-                                    <td width="10%">
-                                        <button type="button" class="btn btn-sm btn-success"
-                                            @click="edit_supplier(s)">Edit</button>
-                                        <button type="button" class="btn btn-sm btn-danger"
-                                            @click="delete_supplier(s.supplier_id)">Delete</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="col-md-6 text-right">
+                    <button type="button" class="btn btn-primary" @click="create_supplier()">Add <i
+                            class="fas fa-truck-pickup"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive-sm">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th width="5%">ID</th>
+                                <th width="40%">Name</th>
+                                <th width="45%">Address</th>
+                                <th width="10%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="s in suppliers" :key="s.supplier_id">
+                                <td width="5%">{{ s.supplier_id}}</td>
+                                <td width="40%">{{ s.supplier_name }}</td>
+                                <td width="45%">{{ s.supplier_address }}</td>
+                                <td width="10%">    
+                                    <button type="button" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-sm btn-success"
+                                        @click="edit_supplier(s)"><i class="fas fa-edit"></i></button>
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Delete" class="btn btn-sm btn-danger"
+                                        @click="delete_supplier(s.supplier_id)"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="modal fade" id="supplierModal" tabindex="-1" role="dialog" aria-labelledby="supplierModalLabel"
@@ -127,8 +123,9 @@
                 }).catch(() => {
 
                 });
-            }
+            },
         },
+
         created() {
             this.get_suppliers();
         },
@@ -141,6 +138,7 @@
 
         }
     }
+    
 
 </script>
 
@@ -160,7 +158,6 @@
         background-color: white;
         color: black;
     }
-
     tr {
         width: 100%;
         display: inline-table;

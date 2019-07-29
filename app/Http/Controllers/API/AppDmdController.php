@@ -33,7 +33,15 @@ class AppDmdController extends Controller
     }
 
     public function show($id){
-        $data = DB::SELECT("SELECT * FROM procurement.dbo.view_app_dmd where app_id = $id order by gendesc asc");
+
+        $data = DB::table('procurement.dbo.apps as tb1')
+        ->join('procurement.dbo.app_dmd as tb2', 'tb1.app_id', '=','tb2.app_id')
+        ->join('procurement.dbo.view_new_dmds as tb3', 'tb2.dmd_id', '=', 'tb3.dmd_id')
+        ->leftjoin('procurement.dbo.units as tb4', 'tb2.unit_id', '=', 'tb4.unit_id')
+        ->where('tb1.app_id', $id)
+        ->orderBy('tb3.dmddesc', 'asc')
+        ->get();
+
         return response()->json($data);
     }
 

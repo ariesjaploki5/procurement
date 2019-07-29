@@ -11,10 +11,49 @@ use App\Events\DmdUpdated;
 use Carbon\Carbon;
 use App\Views\AppDmd;
 use App\Models\Hdmhdrsub;
+use App\Views\NewHomisDmd;
+use App\Models\App;
+use App\Views\NewAppDmd;
 
 class DrugsAndMedicineController extends Controller
 {
     public function index(){
+
+        $now = Carbon::now();
+        $year = $now->year;
+
+        $data = NewAppDmd::with([
+            'dmd_price_schedule', 'last_pr'
+        ])->whereNotNull('cost')
+        ->where('app_year', $year)
+        ->where('cost', '<>', '')
+        ->orderBy('dmddesc', 'asc')
+        ->get();
+
+        return response()->json($data);
+    }
+
+    
+
+
+    public function need_to_pr(){
+        $now = Carbon::now();
+        $year = $now->year;
+
+        $data = NewAppDmd::with([
+            'dmd_price_schedule', 'last_pr'
+        ])->whereColumn('rop', '>=', 'boh')
+        ->where('ssl', '<>', 0)
+        ->where('cost', '<>', '')
+        ->where('app_year', $year)
+        ->orderBy('dmddesc', 'asc')
+        ->get();
+
+        return response()->json($data);
+    }
+
+    public function index_2(){
+
         $now = Carbon::now();
         $year = $now->year;
 
@@ -27,6 +66,7 @@ class DrugsAndMedicineController extends Controller
         ])->where('app_year', $year)->orderBy('gendesc', 'asc')->get();
 
         return response()->json($data);
+
     }
 
     public function beg_bal(Request $request){
@@ -43,28 +83,33 @@ class DrugsAndMedicineController extends Controller
 
             DB::UPDATE("UPDATE Hospital.dbo.Hdmhdrsub SET begbal = $request->begbal
             WHERE dmdcomb = CAST('$request->dmdcomb' as varchar(12)) AND dmdctr = $request->dmdctr AND dmhdrsub = 'DRUM4'; ");
+
         } else {
 
             DB::INSERT("INSERT INTO Hospital.dbo.Hdmhdrsub(dmdctr, dmdcomb, dmhdrsub, begbal, statusMed) 
             VALUES ($request->dmdctr, CAST('$request->dmdcomb' as varchar(12)), 'DRUM4', $request->begbal, 'A');");
+            
         }
 
         return response()->json();
     }
 
     public function for_mmo(){
+
         $data = DB::SELECT("SELECT * FROM procurement.dbo.view_for_mmo_inventory order by gendesc");
 
         return response()->json($data);
     }
 
     public function terminated(){
+
         $data = DB::SELECT("SELECT * FROM procurement.dbo.view_terminated");
 
         return response()->json($data);
     }
 
     public function need_to_receive(){
+
         $data = DB::SELECT("SELECT * FROM dbo.view_need_to_receive");
 
         return response()->json($data);
@@ -76,9 +121,11 @@ class DrugsAndMedicineController extends Controller
         $data = DB::SELECT("SELECT * FROM procurement.dbo.view_dmds WHERE gendesc LIKE '$word%' ORDER BY gendesc ASC");
 
         return response()->json($data);
+
     }
 
     public function update_ssl(Request $request, $id){
+
         $ssl = $request->ssl;
 
         $update = DB::UPDATE("UPDATE procurement.dbo.dmds SET ssl = $ssl WHERE dmd_id = $id");
@@ -86,6 +133,7 @@ class DrugsAndMedicineController extends Controller
         broadcast(new DmdUpdated($update));
 
         return response()->json();
+
     }
 
     public function dmd_pr(Request $request, $id){
@@ -96,22 +144,30 @@ class DrugsAndMedicineController extends Controller
     }
 
     public function public_bidding(){
-        return DB::SELECT("SELECT *, CAST(quantity as int) as int_quantity FROM procurement.dbo.view_dmd_for_pr_public_bidding ORDER BY gendesc ASC");
+        
+        $data = DB::SELECT("SELECT *, CAST(quantity as int) as int_quantity FROM procurement.dbo.view_dmd_for_pr_public_bidding ORDER BY gendesc ASC");
+        
+        return response()->json($data);
     }
 
     public function shopping(){
+
+
         return response()->json();
     }
 
     public function store(Request $request){
         
+
     }
 
     public function update(){
 
+
     }
 
     public function destroy(){
+
 
     }
 }

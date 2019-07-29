@@ -20,4 +20,8 @@ class DmdRemark extends Model
     public function dmd(){
         return $this->belongsTo('App\Views\Dmds', 'dmd_id', 'dmd_id');
     }
+
+    public function new_dmd_homis(){
+        return $this->hasOne('App\Views\NewDmdHomis', 'dmd_id', 'dmd_id');
+    }
 }

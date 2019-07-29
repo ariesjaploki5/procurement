@@ -32,4 +32,12 @@ class DmdRfq extends Model
     public function supplier(){
         return $this->belongsTo('App\Models\Supplier', 'supplier_id', 'supplier_id');
     }
+
+    public function packaging(){
+        return $this->belongsTo('App\Models\Packaging', 'packaging_id', 'packaging_id');
+    }
+
+    public function new_dmd_homis(){
+        return $this->hasOne('App\Views\NewDmdHomis', 'dmd_id', 'dmd_id');
+    }
 }

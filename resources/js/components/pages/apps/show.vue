@@ -1,13 +1,14 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h3>Drugs And Medicine APP</h3>
+                <div class="row b-1 shadow p-3 mb-3 bg-white rounded">
+                <div class="col-md-6">
+                     <h4><i class="fas fa-list"></i> Annual Procurement Plan</h4>
                 </div>
+            </div>
                 <div class="card-body">
                     <div class="row mb-2">
-                        <div class="col-md-auto text-right">
+                        <div class="col-md-auto text-right font-weight-bold">
                             Search:
                         </div>
                         <div class="col-md-4">
@@ -26,13 +27,13 @@
                                     <th>Quantity</th>
                                     <th>Unit Cost</th>
                                     <th>Budget</th>
-                                    <th>Action</th>
+                                    <th v-show="current_user.role_id == 3">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(dmd, index) in filteredDmds" :key="dmd.dmd_id" id="app_data" :class="{ 'table-danger' : !dmd.cost && !dmd.quantity }">
+                                <tr v-for="(dmd, index) in filteredDmds" :key="dmd.id" id="app_data" :class="{ 'table-danger' : !dmd.cost && !dmd.quantity }">
                                     <td width="5%">{{ index + 1}}</td>
-                                    <td width="45%">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
+                                    <td width="45%">{{ dmd.dmddesc }}</td>
                                     <td class="text-center">{{ dmd.unit_desc }}</td>
                                     <td class="text-center">
                                         {{ dmd.mode_desc }}
@@ -46,7 +47,7 @@
                                         <span v-if="dmd.cost && dmd.quantity">{{ dmd.cost * dmd.quantity | currency2 }}</span>
                                         <span v-else></span>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center" v-show="current_user.role_id == 3">
                                         <button type="button" class="btn btn-sm btn-primary" @click="edit_app_dmd(dmd)">Edit</button>
                                     </td>
                                 </tr>
@@ -55,7 +56,6 @@
                         
                     </div>
                 </div>
-            </div>
             <div class="modal fade" id="appDmdModal" tabindex="-1" role="dialog" aria-labelledby="appDmdModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content" id="d_modal_content">
@@ -172,6 +172,9 @@ export default {
                 return matcher.test(dmd.gendesc)
             })
         },
+        current_user() {
+        return this.$store.getters.current_user;
+    }
     },
     created(){
         this.get_dmds();

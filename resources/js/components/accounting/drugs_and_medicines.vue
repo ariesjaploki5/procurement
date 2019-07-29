@@ -1,9 +1,9 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="row mb-1">
-                <div class="col-md-6">
-                    Drugs And Medicines
+            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+                <div class="col-md-5">
+                    <h4> <i class="fas fa-capsules"></i> Drugs And Medicines</h4>
                 </div>
             </div>
             <div class="row">
@@ -57,7 +57,7 @@
                         <div class="modal-body">
                             <form @submit.prevent="store_uacs()">
                                 <div class="form-group">
-                                    <label class="form-label">{{ form.gendesc }} {{ form.dmdnost }} {{ form.stredesc }} {{ form.formdesc }}</label>
+                                    <h4><label class="form-label">{{ form.gendesc }} {{ form.dmdnost }} {{ form.stredesc }} {{ form.formdesc }}</label></h4>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">UACS CODE</label>
@@ -149,6 +149,19 @@
     }
 </script>
 <style scoped>
+
+#d_modal_content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-body{
+        background-color: white;
+        color: black;
+    }
 #uacs_1{
     width: 40%;
     font-size: 12px;

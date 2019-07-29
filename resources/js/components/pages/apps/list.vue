@@ -1,17 +1,14 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h3 class="card-title"> Annual Procurement Plan</h3>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <button type="button" class="btn btn-sm btn-primary" @click="create_app()"><i class="fas fa-plus"></i> Create</button>
-                        </div>
-                    </div>
+            <div class="row b-1 shadow p-3 mb-3 bg-white rounded">
+                <div class="col-md-6">
+                   <h4><i class="fas fa-list"></i> Annual Procurement Plan</h4>
                 </div>
+                <div class="col-md-6 text-right">
+                    <button type="button" class="btn btn-sm btn-primary" @click="create_app()"><i class="fas fa-plus"></i> Create</button>
+                </div>
+            </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -31,16 +28,15 @@
                                     <td>{{ app.category.category_desc }}</td>
                                     <td class="text-right">{{ app.app_budget | currency2 }}</td>
                                     <td class="text-center">
-                                        <router-link class="btn btn-sm btn-primary" :to="{ name: 'app_show', params: { id: app.app_id }}"><i class="fas fa-eye"></i></router-link>
-                                        <button type="button" class="btn btn-sm btn-success" @click="edit_app(app)"><i class="fas fa-pen"></i></button>
-                                        <button type="button" class="btn btn-sm btn-danger" @click="delete_app(app.app_id)"><i class="fas fa-trash"></i></button>
+                                        <router-link class="btn btn-sm btn-primary" data-toggle="tooltip" title="View" :to="{ name: 'app_show', params: { id: app.app_id }}"><i class="fas fa-eye"></i></router-link>
+                                        <button type="button" class="btn btn-sm btn-success" data-toggle="tooltip" title="Update" @click="edit_app(app)"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete" @click="delete_app(app.app_id)"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
             <div class="modal fade" id="appModal" tabindex="-1" role="dialog" aria-labelledby="appModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -75,8 +71,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-success btn-sm">Save</button>
-                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times-circle"></i> Close</button>
                             </div>
                         </form>
                     </div>
@@ -168,6 +164,20 @@ export default {
 </script>
 
 <style scoped>
+ #d_modal_content {
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+
+    .modal-content {
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+
+    .modal-body {
+        background-color: white;
+        color: black;
+    }
 tr {
     width: 100%;
     display: inline-table;

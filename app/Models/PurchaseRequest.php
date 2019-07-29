@@ -17,22 +17,16 @@ class PurchaseRequest extends Model
         'category_id',
         'purpose',
         'purchase_order_id',
+        'cart_id',
 
         'send',
         'current_status',
         'status',
 
-        'div_head_rcv', 'div_head_rls',
-        'div_head_rcv_2', 'div_head_rls_2',
-        'pmo_rcv','pmo_rls',
-        'pmo_rcv_2','pmo_rls_2',
-        'pmo_rcv_3', 'pmo_rls_3',
+        'cmps_rcv', 'cmps_rls',
+        'pmo_rcv',
 
-        'budget_rcv', 'budget_rls',
-        'accounting_rcv', 'accounting_rls',
-        'mcc_rcv', 'mcc_rls',
-        'fmo_rcv', 'fmo_rls',
-        'mmo_rcv', 'mmo_rls',
+        'updated_at',
     ];
 
     protected $dispatchesEvents = [
@@ -81,5 +75,14 @@ class PurchaseRequest extends Model
 
     public function purchase_request_remarks(){
         return $this->hasOne('App\Models\PurchaseRequestRemark', 'purchase_request_id', 'purchase_request_id');
+    }
+
+    public function purchase_request_statuses(){
+        return $this->hasMany('App\Models\PurchaseRequestStatus', 'purchase_request_id', 'purchase_request_id');
+    }
+
+    public function last_status(){
+        return $this->hasOne("App\Models\PurchaseRequestStatus", 'purchase_request_id', 'purchase_request_id')
+        ->orderBy('id', 'desc');
     }
 }

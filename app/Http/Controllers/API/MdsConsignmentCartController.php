@@ -23,17 +23,43 @@ class MdsConsignmentCartController extends Controller
         return response()->json($cart);
     }
 
+    public function search_patient(Request $request){
+
+        $data = DB::table('hospital.dbo.hperson')
+        ->where('hpercode', 'like', "%$request->hospnumber")
+        ->where('patlast', 'like', "%$request->patlast%")
+        ->where('patfirst', 'like', "%$request->patfirst%")
+        ->where('patmiddle', 'like', "%$request->patmiddle%")
+        ->orderBy('patlast', 'asc')
+        ->orderBy('patfirst', 'asc')
+        ->orderBy('patmiddle', 'asc')
+        ->get();
+
+        return response()->json($data);
+
+    }
+
+    public function select_enccode(Request $request){
+
+        $data = DB::SELECT("SELECT * FROM hospital.les.allencounters ('$request->hospnumber')  order by admdate desc");
+        return response()->json($data);
+
+    }
+
     public function store(Request $request, $cl2comb, $costprc){
+
         $cart = MdsConsignmentCart::firstOrCreate(
             ['cl2comb' => $cl2comb, 'costprc' => $costprc]
         );
 
-
         return response()->json();
+
     }
 
     public function crID(){
+
         return Carbon::today()->format('dmY');
+        
     }
 
     public function date_time(){
@@ -45,11 +71,15 @@ class MdsConsignmentCartController extends Controller
         $item = $request->items;
         $count = count($item);
 
+
         $cr = ConsignmentRequest::create([
             'crDate' => $this->date_time(),
             'purpose' => $request->purpose,
             'entryby' => $request->employee_id,
+            'enccode' => $request->enccode,
+            'hpercode' => $request->hpercode,
         ]);
+
 
         $cr->crID = 'ENTHN'.''.$this->crID().''.$cr->id;
         $cr->save();
@@ -67,7 +97,9 @@ class MdsConsignmentCartController extends Controller
 
         $this->destroy();
 
-        return response()->json();
+        $cr_id = $cr->crID;
+
+        return response()->json($cr_id);
     }
 
     public function destroy(){

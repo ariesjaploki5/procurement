@@ -37,22 +37,19 @@ class DmdPurchaseRequestController extends Controller
     }
 
     public function store(Request $request){
-
         $dmd = $request->items;
         $count = count($dmd);
-        $cart_id = $dmd[0]['cart_id'];
 
-        $cart = Cart::findOrFail($cart_id);
-        $cart->update([
-            'status' => 1
-        ]);  
+        $cart = Cart::where('status', 0)->where('mode_id', 1)->first();
+        
 
         for($i = 0; $i < $count; $i++){
 
             $dmd_id = $dmd[$i]['dmd_id'];
-            $quantity = $dmd[$i]['quantity'];
+            $quantity = $dmd[$i]['request_quantity'];
             $supplier_id = $dmd[$i]['dmd_price_schedule']['supplier_id'];
-            $cost = $dmd[$i]['dmd_price_schedule']['bid_price'];
+
+            $cost = $dmd[$i]['app_dmd_year']['cost'];
 
             $pr = PurchaseRequest::firstOrCreate([
                 'mode_id' => $request->mode_id,
@@ -61,6 +58,7 @@ class DmdPurchaseRequestController extends Controller
                 'user_id' => $request->user_id,
                 'status' => 0,
                 'purpose' => $request->purpose,
+                'cart_id' => $cart->id,
             ]);
 
             $pr->dmd_purchase_requests()->create([
@@ -70,17 +68,20 @@ class DmdPurchaseRequestController extends Controller
             ]);
         }
 
-        return response()->json();
+        $cart->update([
+            'status' => 1
+        ]);  
 
+        return response()->json();
     }
 
     public function shopping(Request $request){
         
         $dmd = $request->items;
         $count = count($dmd);
-        $cart_id = $dmd[0]['cart_id'];
 
-        $cart = Cart::findOrFail($cart_id);
+        $cart = Cart::where('status', 0)->where('mode_id', 4)->first();
+
 
         $pr = PurchaseRequest::create([
             'mode_id' => $request->mode_id,
@@ -88,16 +89,19 @@ class DmdPurchaseRequestController extends Controller
             'user_id' => $request->user_id, 
             'status' => 0,
             'purpose' => $request->purpose,
+            'cart_id' => $cart->id,
         ]);
 
         for($i = 0; $i < $count; $i++){
 
             $dmd_id = $dmd[$i]['dmd_id'];
-            $quantity = $dmd[$i]['quantity'];
+            $quantity = $dmd[$i]['request_quantity'];
+            $cost = $dmd[$i]['app_dmd_year']['cost'];
             
             $pr->dmd_purchase_requests()->create([
                 'dmd_id' => $dmd_id,
                 'request_quantity' => $quantity,
+                'cost_price' => $cost,
             ]);
         }
 

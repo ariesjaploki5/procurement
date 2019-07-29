@@ -10,34 +10,69 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
 });
 
 Route::apiResources([
-    'uacs' => 'API\UacsController',
-    'fund_source' => 'API\FundSourceController',
-    'uacs_code' => 'API\UacsCodeController', 
+
     'allotment' => 'API\AllotmentController',
     'app' => 'API\AppController',
-    'unit' => 'API\UnitController',
+    'app_dmd' => 'API\AppDmdController',
+
     'brand' => 'API\BrandController',
+
+    'cart'=> 'API\CartController',
     'category' => 'API\CategoryController',
     'country' => 'API\CountryController',
+
+    'dmd' => 'API\DrugsAndMedicineController',
+    'dmd_pr' => 'API\DmdPurchaseRequestController',
+    'dmd_price_schedule' => 'API\DmdPriceScheduleController',
+
     'end_user' => 'API\EndUserController',
+
+    'fund_source' => 'API\FundSourceController',
+
     'item' => 'API\ItemController',
+    'item_price_schedule' => 'API\ItemPriceScheduleController',
+
+    'manufacturer' => 'API\ManufacturerController',
     'mode' => 'API\ModeController',
+
     'packaging' => 'API\PackagingController',
     'ppmp' => 'API\PpmpController',
     'price_schedule' => 'API\PriceScheduleController',
     'purchase_order' => 'API\PurchaseOrderController',
     'purchase_request' => 'API\PurchaseRequestController',
-    'supplier' => 'API\SupplierController',
-    'manufacturer' => 'API\ManufacturerController',
-    'item_price_schedule' => 'API\ItemPriceScheduleController',
-    'dmd_price_schedule' => 'API\DmdPriceScheduleController',
-    'app_dmd' => 'API\AppDmdController',
-    'user' => 'API\UserController',
-    'dmd' => 'API\DrugsAndMedicineController',
-    'dmd_pr' => 'API\DmdPurchaseRequestController',
-    'cart'=> 'API\CartController',
+
     'rfq' => 'API\RfqController',
+
+    'supplier' => 'API\SupplierController',
+    
+    'uacs' => 'API\UacsController',
+    'uacs_code' => 'API\UacsCodeController', 
+    'unit' => 'API\UnitController',
+    'user' => 'API\UserController',
+    
 ]);
+
+Route::get('all_dmd_pr', 'API\PurchaseRequestController@dmd_pr');
+
+Route::get('for_mmo_po', 'API\PurchaseOrderController@for_mmo');
+Route::get('for_fmo', 'API\PurchaseOrderController@for_fmo');
+Route::get('for_accounting', 'API\PurchaseOrderController@for_accounting');
+Route::get('for_budget', 'API\PurchaseOrderController@for_budget');
+
+Route::get('get_po/{id}', 'API\PurchaseOrderController@get_po');
+
+Route::post('received_po_dmd', 'API\DmdReceivedController@store');
+
+Route::put('notify_terminate_po/{id}', 'API\PurchaseOrderController@notify_terminate_po');
+
+Route::post('rfq_to_po', 'API\PurchaseRequestController@rfq_to_po');
+
+Route::get('pr_dmd_rqf/{id}', 'API\PurchaseRequestController@pr_dmd_rqf');
+Route::post('pr_to_po', 'API\PurchaseRequestController@pr_to_po');
+
+Route::put('change_patient/{id}/{hpercode}','API\ConsignmentRequestController@change_patient');
+
+Route::get('need_to_pr', 'API\DrugsAndMedicineController@need_to_pr');
 
 Route::post('receive_dmd', 'API\PurchaseOrderController@receive_dmd');
 
@@ -48,8 +83,10 @@ Route::post('rfq_to_po', 'API\PurchaseRequestController@rfq_to_po');
 
 Route::get('mds_consignment', 'API\MdsConsignmentController@index');
 Route::get('add_to_mds_cart/{cl2comb}/{costprc}', 'API\MdsConsignmentCartController@store');
+
 Route::get('mds_cart', 'API\MdsConsignmentCartController@index');
 Route::post('mds_c_pr_submit', 'API\MdsConsignmentCartController@submit_cart');
+
 Route::get('cpr/{id}', 'API\ConsignmentRequestController@show');
 Route::get('cprs', 'API\ConsignmentRequestController@index');
 
@@ -70,54 +107,74 @@ Route::post('store_po', 'API\PurchaseOrderController@store');
 
 Route::put('approved_pr/{id}', 'API\PurchaseRequestController@approved');
 Route::post('pr_remarks', 'API\PurchaseRequestRemarksController@store');
+
 Route::post('dmd_remarks', 'API\DmdRemarksController@store');
 Route::put('send_to_cmps/{id}', 'API\PurchaseRequestController@send_to_cmps');
+
 Route::post('date_of_delivery', 'API\PurchaseOrderController@store_date_of_delivery');
 Route::get('new_purchase_request', 'API\PurchaseRequestController@new');
 Route::get('consignment/{id}', 'API\ConsignmentController@search');
 
 Route::post('received_dmd', 'API\PurchaseOrderController@received_dmd');
 
+Route::post('search_patient', 'API\MdsConsignmentCartController@search_patient');
+Route::post('select_enccode', 'API\MdsConsignmentCartController@select_enccode');
+
 Route::post('add_rfq/{id}', 'API\RfqController@add_rfq');
 Route::get('pr_shopping', 'API\PurchaseRequestController@shopping');
+
 Route::get('pr_public_bidding', 'API\PurchaseRequestController@public_bidding');
 Route::post('pr_submit', 'API\PurchaseRequestController@pr_submit');
+
 Route::get('pr_items', 'API\CartController@pr_items');
 Route::get('shopping', 'API\CartController@shopping');
+
 Route::post('shopping', 'API\DmdPurchaseRequestController@shopping');
 Route::post('obrs', 'API\PurchaseOrderController@store_update_obrs');
-Route::put('div_head_rcv/{id}', 'API\PurchaseRequestController@div_head_rcv');
-Route::put('div_head_rls/{id}', 'API\PurchaseRequestController@div_head_rls');
+
+Route::put('div_head_rcv/{id}', 'API\PurchaseRequestController@cmps_rcv');
+Route::put('div_head_rls/{id}', 'API\PurchaseRequestController@cmps_rls');
+
 Route::put('pmo_rcv/{id}', 'API\PurchaseRequestController@pmo_rcv');
 Route::put('pmo_rls/{id}', 'API\PurchaseRequestController@pmo_rls');
 
+
+
 Route::put('div_head_rcv_2/{id}', 'API\PurchaseOrderController@div_head_rcv_2');
 Route::put('div_head_rls_2/{id}', 'API\PurchaseOrderController@div_head_rls_2');
-Route::put('pmo_rcv_2/{id}', 'API\PurchaseOrderController@pmo_rcv_2');
-Route::put('pmo_rls_2/{id}', 'API\PurchaseOrderController@pmo_rls_2');
+
+Route::put('pmo_rcv_2/{id}', 'API\PurchaseOrderController@pmo_rcv_po');
+Route::put('pmo_rls_2/{id}', 'API\PurchaseOrderController@pmo_rls_po');
+
 Route::put('budget_rcv/{id}', 'API\PurchaseOrderController@budget_rcv');
 Route::put('budget_rls/{id}', 'API\PurchaseOrderController@budget_rls');
+
 Route::put('accounting_rcv/{id}', 'API\PurchaseOrderController@accounting_rcv');
 Route::put('accounting_rls/{id}', 'API\PurchaseOrderController@accounting_rls');
 
 Route::put('mcc_rcv/{id}', 'API\PurchaseOrderController@mcc_rcv');
 Route::put('mcc_rls/{id}', 'API\PurchaseOrderController@mcc_rls');
+
+
 Route::put('fmo_rcv/{id}', 'API\PurchaseOrderController@fmo_rcv');
 Route::put('fmo_rls/{id}', 'API\PurchaseOrderController@fmo_rls');
-Route::put('pmo_rcv_3/{id}', 'API\PurchaseOrderController@pmo_rcv_3');
-Route::put('pmo_rls_3/{id}', 'API\PurchaseOrderController@pmo_rls_3');
-Route::put('pmo_rcv_3/{id}', 'API\PurchaseOrderController@pmo_rcv_3');
-Route::put('pmo_rls_3/{id}', 'API\PurchaseOrderController@pmo_rls_3');
+
+
 Route::put('mmo_rcv/{id}', 'API\PurchaseOrderController@mmo_rcv');
 Route::put('mmo_rls/{id}', 'API\PurchaseOrderController@mmo_rls');
+
 
 Route::get('public_bidding', 'API\CartController@public_bidding');
 Route::post('dmd_uacs', 'API\DmdUacsController@store');
 Route::put('dmd_uacs/{id}', 'API\DmdUacsController@update');
+
+
 Route::post('cart_dmd/{user_id}', 'API\CartController@add_dmd');
 Route::post('cart_dmd_2/{user_id}', 'API\CartController@add_dmd_2');
 Route::post('cart_dmd_3/{user_id}', 'API\CartController@add_p_3');
 Route::delete('cart_dmd/{id}', 'API\CartController@remove_dmd');
+
+
 Route::post('dmd_search', 'API\DrugsAndMedicineController@search');
 Route::put('dmd_ssl_update/{id}', 'API\DrugsAndMedicineController@update_ssl');
 Route::get('dmd_mode/{id}', 'API\DrugsAndMedicineController@dmd_pr');
@@ -128,6 +185,7 @@ Route::post('item_price_schedule/{id}', 'API\ItemPriceScheduleController@store')
 Route::put('item_price_schedule/{id}/terminate', 'API\ItemPriceScheduleController@terminate');
 Route::put('item_price_schedule/{id}/unterminate', 'API\ItemPriceScheduleController@unterminate');
 Route::get('price_schedule_get/{id}', 'API\PriceScheduleController@price_schedule_get');
+
 
 Route::get('inventory/{id}', 'API\InventoryController@index');
 Route::get('get_ppmp/{id}', 'API\PpmpController@get_ppmp');

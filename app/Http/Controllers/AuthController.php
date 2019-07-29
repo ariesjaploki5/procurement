@@ -11,25 +11,22 @@ use DB;
 
 class AuthController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(){
+
         $this->middleware('auth:api', ['except' => ['login', 'refresh']]);
     }
 
-    public function error()
-    {
+    public function error(){
+
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
+    public function login(Request $request){
 
-    public function login(Request $request)
-    {
         $credentials = request(['username', 'password']);
 
         $username = $request->username;
         $password = $request->password;
-
-        
 
         $select = DB::select("Select top 1 employeeid from hospital.dbo.user_acc where user_name = '$username' and user_pass = webapp.dbo.ufn_crypto('$password',1)");
 
@@ -46,7 +43,7 @@ class AuthController extends Controller
             $new->username = $username;
             $new->password = Hash::make($password);
             $new->employee_id = $emp_id;
-            $new->role_id = 1;
+            $new->role_id = 10;
             $new->save();
         }
 
@@ -57,25 +54,25 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    public function me()
-    {
+    public function me(){
+
         return response()->json(auth('api')->user());
     }
  
-    public function logout()
-    {
+    public function logout(){
+
         auth('api')->logout();
         
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    public function refresh()
-    {
+    public function refresh(){
+
         return $this->respondWithToken(auth('api')->refresh());
     }
 
-    protected function respondWithToken($token)
-    {
+    protected function respondWithToken($token){
+
         return response()->json([
             'access_token' => $token,
             'user' => $this->guard()->user(),

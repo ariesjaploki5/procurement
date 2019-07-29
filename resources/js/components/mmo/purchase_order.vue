@@ -1,45 +1,35 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="font-weight-bold">
-                        <h3 class="card-title"> Purchase Orders</h3>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive-sm">
-                        <table class="table table-sm table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Date Created</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="pos in purchase_orders" :key="pos.purchase_order_id">
-                                    <td>{{ pos.created_at | myDate }} - {{ pos.purchase_order_id | numeral2 }}</td>
-                                    <td>{{ pos.created_at }}</td>
-                                    <td>
-                                        <div id="print" class="mb-2">
-                                            <button type="button" class="btn btn-sm btn-primary" @click="view_po(pos)"><i class="fas fa-eye"></i></button>
-                                            <button type="button" class="btn btn-sm btn-success" @click="track_po(pos)"><i class="fas fa-truck"></i></button>
-                                            <!-- <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
-                                            <router-link class="btn btn-sm btn-success" v-show="pos.obrs_date" :to="{ name: 'obrs', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link> -->
-                                        </div>
-                                        <div id="document_tracking" class="">
-                                            
-                                            <div v-show="current_user.role_id == 4 && pos.purchase_request.pmo_rls_3">
-                                                <button type="button" class="btn btn-sm btn-success" v-show="!pos.purchase_request.mmo_rcv" @click="mmo_rcv(pos.purchase_order_id)">Received From PMO <i class="fas fa-file-download"></i></button>
-                                                <!-- <button type="button" class="btn btn-sm btn-danger" v-show="pos.purchase_request.mmo_rcv && !pos.purchase_request.mmo_rls" @click="mmo_rls(pos.purchase_order_id)"><i class="fas fa-file-upload"></i></button> -->
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+                <h4><i class="fas fa-cart-arrow-down"></i> Purchase Order</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive-sm">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="pos in purchase_orders" :key="pos.purchase_order_id">
+                                <td>{{ pos.created_at | myDate }} - {{ pos.purchase_order_id | numeral2 }}</td>
+                                <td>{{ pos.created_at }}</td>
+                                <td>
+                                    <div id="print" class="mb-2">
+                                        <button type="button" class="btn btn-sm btn-primary" @click="view_po(pos.purchase_order_id)"><i class="fas fa-eye"></i></button>
+                                        <button type="button" class="btn btn-sm btn-success" @click="track_po(pos)"><i class="fas fa-truck"></i></button>
+                                        <!-- <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
+                                        <router-link class="btn btn-sm btn-success" v-show="pos.obrs_date" :to="{ name: 'obrs', params: { id: pos.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link> -->
+                                    </div>
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="modal fade" id="poModal" tabindex="-1" role="dialog" aria-labelledby="poModalLabel" aria-hidden="true">
@@ -58,35 +48,37 @@
                                         <tr class="text-center">
                                             <th width="5%">#</th>
                                             <th width="40%">Description</th>
-                                            <th width="10%">Quantity</th>
+                                            <th width="5%">Quantity</th>
                                             <th width="10%">Unit Cost</th>
                                             <th width="10%">Estimated Cost</th>
-                                            <th width="10%">Received Quantity</th>
+                                            <th width="15%">Received Quantity</th>
                                             <th width="10%"></th>
                                         </tr>
                                     </thead>
-                                    <tbody  style="height: 20rem !important;">
-                                        <tr v-for="(dmd,index) in view_po_form.purchase_request.view_dmd_purchase_requests" :key="dmd.dmd_id">
+                                    <tbody  style="height: 20rem !important;" class="table-bordered">
+                                        <tr v-for="(item,index) in view_po_form.dmd_purchase_orders" :key="item.dmd_id">
                                             <td width="5%">{{ index + 1}}</td>
                                             <td width="40%">
-                                                <div class="font-weight-bold border-bottom-0 text-center">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</div>
-                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Brand:</td><td class="border-bottom-0 border-top-0">{{ dmd.dmd_price_schedule.brand_desc }}</td></tr>
-                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Packaging:</td><td class="border-bottom-0 border-top-0">{{ dmd.dmd_price_schedule.packaging_desc }}</td></tr>
-                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Manufacturer:</td><td class="border-bottom-0 border-top-0">{{ dmd.dmd_price_schedule.manufacturer_desc }}</td></tr>
-                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Country of Origin:</td><td class="border-bottom-0 border-top-0">{{ dmd.dmd_price_schedule.country_desc }}</td></tr>
+                                                <div class="font-weight-bold border-bottom-0 text-center">{{ item.new_dmd.dmddesc }}</div>
+                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Brand:</td><td class="border-bottom-0 border-top-0">{{ item.brand.brand_desc }}</td></tr>
+                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Packaging:</td><td class="border-bottom-0 border-top-0">{{ item.packaging.packaging_desc }}</td></tr>
+                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Manufacturer:</td><td class="border-bottom-0 border-top-0">{{ item.manufacturer.manufacturer_desc }}</td></tr>
+                                                <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">Country of Origin:</td><td class="border-bottom-0 border-top-0">{{ item.country.country_desc }}</td></tr>
                                                 <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">CPR:</td><td class="border-bottom-0 border-top-0"></td></tr>
                                             </td>
-                                            <td width="10%" class="text-right">
-                                                <span v-if="current_user.roled_id = '5'">{{ dmd.order_quantity }}</span>
-                                                <span v-else><input type="number" class="form-control form-control-sm text-right" v-model="dmd.request_quantity"></span>
+                                            <td width="5%" class="text-right">
+                                                <span v-if="current_user.roled_id = '5'">{{ item.order_quantity }}</span>
+                                                <span v-else><input type="number" class="form-control form-control-sm text-right" v-model="item.order_quantity"></span>
                                             </td>
-                                            <td width="10%" class="text-right">{{ dmd.dmd_price_schedule.bid_price | currency2}}</td>
-                                            <td width="10%" class="text-right">{{ dmd.request_quantity * dmd.dmd_price_schedule.bid_price | currency2 }}</td>
-                                            <td width="10%" class="text-right">
-                                                {{ dmd.received_quantity }}
+                                            <td width="10%" class="text-right">{{ item.cost_price | currency2}}</td>
+                                            <td width="10%" class="text-right">{{ item.order_quantity * item.cost_price | currency2 }}</td>
+                                            <td width="15%" class="text-left">
+                                                <div v-for="rcv in item.dmd_receiveds" :key="rcv.id">
+                                                    Date : {{ rcv.date_received | myDate4 }}  - Quantity: {{ rcv.received_quantity }}
+                                                </div>
                                             </td>
                                             <td width="10%" class="text-center">
-                                                <button type="button" class="btn btn-sm btn-success" @click="receive_dmd(dmd)" v-show="!dmd.received_quantity">Received</button>
+                                                <button type="button" class="btn btn-sm btn-success" @click="receive_dmd(item)" v-show="!item.received_quantity">Received</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -104,7 +96,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-danger" @click="terminate_po(view_po_form.purchase_order_id)">Terminate</button>
+                            <button type="button" class="btn btn-sm btn-danger" @click="notify_terminate_po(view_po_form.purchase_order_id)">Notify to Terminate</button>
                         </div>
                     </div>
                 </div>
@@ -122,38 +114,7 @@
                         <div class="modal-body">
                             <div class="row justify-content-center">
                                 <div class="col-md-12">
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rcv }">Division Head Received <div>{{ track_po_modal.div_head_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rls }">Division Head Released <div>{{ track_po_modal.div_head_rcv }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rcv }">PMO Received <div>{{ track_po_modal.pmo_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rls }">PMO Released <div>{{ track_po_modal.pmo_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">  
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rcv_2 }">Division Head Received <div>{{ track_po_modal.div_head_rcv_2 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rls_2 }">Division Head Released <div>{{ track_po_modal.div_head_rls_2 }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rcv_2 }">PMO Received <div>{{ track_po_modal.pmo_rcv_2 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rls_2 }">PMO Released <div>{{ track_po_modal.pmo_rls_2 }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">  
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.budget_rcv }">Budget Received <div>{{ track_po_modal.budget_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.budget_rls }">Budget Released <div>{{ track_po_modal.budget_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.mcc_rcv }">MCC Received <div>{{ track_po_modal.mcc_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.mcc_rls }">MCC Released <div>{{ track_po_modal.mcc_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.fmo_rcv }">FMO Received <div>{{ track_po_modal.fmo_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.fmo_rls }">FMO Released <div>{{ track_po_modal.fmo_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rcv_3 }">PMO Received <div>{{ track_po_modal.pmo_rcv_3 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rls_3 }">PMO Released <div>{{ track_po_modal.pmo_rls_3 }}</div></li>
-                                    </ul>
+
                                 </div>
                             </div>
                         </div>
@@ -164,15 +125,27 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4>{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</h4>
+                            <h4>{{ dmd.dmddesc }}</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
+                                <label for="" class="form-label">Received Type</label>
+                                <select class="form-control form-control-sm" v-model="received_form.received_type_id">
+                                    <option value=""></option>
+                                    <option value="1">Complete</option>
+                                    <option value="2">Partial</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="" class="form-label">Received Quantity</label>
-                                <input type="number" class="form-control form-control-sm text-right" v-model="received_quantity" :max='dmd.request_quantity'>
+                                <input type="number" class="form-control form-control-sm text-right" v-model="received_form.received_quantity" :max='dmd.order_quantity'>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="form-label">Expiration Date</label>
+                                <input type="date" class="form-control from-control-sm text-right" v-model="received_form.received_exp">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -194,16 +167,17 @@ export default {
                 purchase_order_id: '',
                 purchase_request_id: '',
                 uacs_code_id: '',
-                uacs: '',
+                uacs: {},
                 allotment_id: '',
-                allotment: '',
+                allotment: {},
                 uacs_id: '',
                 fund_source_id: '',
-                fund_source: '',
+                fund_source: {},
                 date_of_delivery: '',
                 purchase_request:{
                    view_dmd_purchase_requests:[],
                },
+               dmd_purchase_orders: [],
             }),
             track_po_modal: {},
             fund_cluster_form: new Form({
@@ -216,11 +190,22 @@ export default {
             uacs:{},
             dmd: {},
             received_quantity: '',
+            received_form: new Form({
+                dmd_id: '',
+                dmdctr: '',
+                dmdcomb: '',
+                purchase_request_id: '',
+                purchase_order_id: '',
+                received_quantity: '',
+                received_type_id: '',
+                received_exp: '',
+                dmd_po_id: '',
+            }),
         }
     },
     methods:{
-        terminate_po(id){
-            axios.put('../../api/terminate_po/'+id).then(() => {
+        notify_terminate_po(id){
+            axios.put('../../api/notify_terminate_po/'+id).then(() => {
                 this.get_pos();
                 $('#poModal').modal('hide');
             }).catch(() => {
@@ -229,35 +214,41 @@ export default {
         },
         receive_dmd(dmd){
             this.dmd = dmd;
+            this.received_form.dmd_id = null;
+            this.received_form.dmd_id = this.dmd.dmd_id;
+            this.received_form.dmd_po_id = this.dmd.dmd_po_id;
+
             $('#receiveModal').modal('show');
         },
         store_received(){
-            axios.post('../../api/receive_dmd',{
-                id: this.dmd.id,
-                dmd_id: this.dmd.dmd_id,
-                dmdctr: this.dmd.dmdctr,
-                dmdcomb: this.dmd.dmdcomb,
-                purchase_request_id : this.view_po_form.purchase_request.purchase_request_id,
-                received_quantity: this.received_quantity
-            }).then(() =>{
+            this.received_form.post('../../api/received_po_dmd').then(() => {
                 this.get_pos();
-                
                 $('#receiveModal').modal('hide');
                 $('#poModal').modal('hide');
+
             }).catch(() => {
 
             });
         },
         get_pos(){
-            axios.get('../../api/purchase_order').then(({data}) => {
+            axios.get('../../api/for_mmo_po').then(({data}) => {
                 this.purchase_orders = data;
             }).catch(() => {
 
             });
         },
-        view_po(pos){
-            this.view_po_form.fill(pos);
-            $('#poModal').modal('show');
+        view_po(id){
+            // this.view_po_form.fill(pos);
+            axios.get('../../api/get_po/'+id).then(({data}) => {
+                this.view_po_form = data;
+                $('#poModal').modal('show');
+            }).catch(() => {
+
+            });
+            
+            this.received_form.purchase_request_id = this.view_po_form.purchase_request_id;
+            this.received_form.purchase_order_id = this.view_po_form.purchase_order_id;
+
         },
         track_po(pos){
             this.track_po_modal = pos;
@@ -274,6 +265,7 @@ export default {
 
             });
         },
+
         mmo_rls(id){
             axios.put('../../api/mmo_rls/'+id).then(() => {
                 toast.fire({
@@ -284,6 +276,7 @@ export default {
 
             });
         },
+
     },
     
     computed: {
@@ -300,9 +293,11 @@ export default {
         window.Echo.channel("pr_created").listen(".purchase_order.created", (e) => {
             this.get_pos();
         });
+
         window.Echo.channel("pr_updated").listen(".purchase_order.updated", (e) => {
             this.get_pos();
         });
+
     }
 }
 </script>
@@ -354,4 +349,5 @@ export default {
         width: 98.5%;
         position: absolute;
     }
+    
 </style>

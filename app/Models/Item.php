@@ -12,7 +12,7 @@ class Item extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'item_desc', 'category_id', 'unit_id', 'standard_stock_level', 'beginning_balance',
+        'item_desc', 'cat_id', 'unit_id', 'ssl', 'beg_bal', 'item_specs'
     ];
 
     public function ppmps(){
@@ -24,7 +24,7 @@ class Item extends Model
     }
 
     public function category(){
-        return $this->hasOne('App\Models\Category');
+        return $this->hasOne('App\Models\Category', 'cat_id', 'category_id');
     }
 
     public function unit(){

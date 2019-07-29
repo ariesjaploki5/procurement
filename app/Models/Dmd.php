@@ -21,6 +21,12 @@ class Dmd extends Model
 
     public function dmd_price_schedules(){
         return $this->hasMany('App\Models\DmdPriceSchedule', 'dmd_id', 'dmd_id');
+    }   
+
+    public function dmd_price_schedule(){
+        return $this->hasOne('App\Models\DmdPriceSchedule', 'dmd_id', 'dmd_id')
+        ->where('terminated', 0)
+        ->orderBy('rank', 'desc');
     }
 
     public function apps(){
@@ -37,5 +43,9 @@ class Dmd extends Model
 
     public function rfqs(){
         return $this->hasMany('App\Models\RequestForQuotation', 'dmd_id', 'dmd_id');
+    }
+
+    public function new_app_dmd(){
+        return $this->hasOne('App\Views\NewAppDmd', 'dmd_id', 'dmd_id');
     }
 }

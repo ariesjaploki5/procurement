@@ -1,6 +1,13 @@
 <template>
 <div id="f01">
-     <button class="btn btn-primary d-print-none button" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+     <div class="row">
+            <div class="col">
+                <router-link to="/budget_po" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+            </div>
+        </div>
     <div id="content-wrapper">
         <div class="col-lg-12">
 
@@ -46,7 +53,7 @@
                 <tr>
                     <td class="pr1 border-right-0 border-bottom-0" width="8%">Supplier:</td>
                     <td class="pr1 border-left-0" width="45%"><b>
-                        <span v-if="po.purchase_request">{{ po.purchase_request.supplier.supplier_name }}</span>
+                        <span v-if="po.supplier_id">{{ po.supplier.supplier_name }}</span>
                         <span v-else></span>
                     </b></td>
                     <td class="pr1 border-right-0 border-bottom-0" width="20%">Purchase Order Number:</td>
@@ -62,13 +69,13 @@
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0">Address:</td>
                     <td class="pr1 border-left-0 border-top-0"><b>
-                        <span v-if="po.purchase_request">{{ po.purchase_request.supplier.supplier_address }}</span>
+                        <span v-if="po.supplier_id">{{ po.supplier.supplier_address }}</span>
                         <span v-else></span>
                     </b></td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0">Mode of Procurement:</td>
                     <td class="pr1 border-left-0">
                         <center><b>
-                            <span v-if="po.purchase_request">{{ po.purchase_request.mode.mode_desc }}</span>
+                            <span v-if="po.mode_id">{{ po.mode.mode_desc }}</span>
                             <span v-else></span>
                             
                         </b></center>
@@ -85,13 +92,15 @@
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0" width="8%">Place of Delivery:</td>
                     <td class="pr1 border-left-0 border-top-0" width="25%"><b><center>BAGUIO GENERAL HOSPITAL AND MEDICAL CENTER</center></b></td>
                     <td class="pr1 border-right-0 border-bottom-0 border-top-0" width="10%">Delivery Term:</td>
-                    <td class="pr1 border-left-0 border-top-0" width="15%"><b><center>10 Working Days</center></b></td>
+                    <td class="pr1 border-left-0 border-top-0" width="15%"><b><center>
+                        <span v-if="po.delivery_term">{{ po.delivery_term }} Days</span>
+                    </center></b></td>
                 </tr>
                 <tr>
                     <td class=" pr1 border-top-0 border-right-0 border-bottom-0">Date of Delivery:</td>
                     <td class=" pr1 border-left-0"><b><center>
-                        <span v-if="po.date_of_delivery">{{ po.date_of_delivery }}</span>
-                        <span v-else></span>
+                        <span v-if="!po.date_of_delivery | myDate3"></span>
+                        <span v-else>{{ po.date_of_delivery | myDate3 }}</span>
                     </center></b></td>
                     <td class=" pr1 border-top-0 border-right-0 border-bottom-0">Payment Term:</td>
                     <td class=" pr1 border-left-0"><b><center></center></b></td>
@@ -99,7 +108,7 @@
                 <td class="pr1 border-top-0" colspan="7"> </td>
             </table>
 
-            <table v-if="po.purchase_request" class="table table-condensed table-sm" style="margin-top:-2%">
+            <table v-if="po" class="table table-condensed table-sm" style="margin-top:-2%">
                 <tr>
                     <td class="pr1" width="5%"><b><center>Stock Number</center></b></td>
                     <td class="pr1" width="5%"><b><center>UNIT</center></b></td>
@@ -109,35 +118,35 @@
                     <td class="pr1" width="9%"><b><center>AMOUNT</center></b></td>
                 </tr>
               
-                <tr v-for="item in po.purchase_request.view_dmd_purchase_requests" :key="item.id">
+                <tr v-for="item in po.dmd_purchase_orders" :key="item.id">
                     <td class="pr1 border-bottom-0 border-top-0"><center></center></td>
-                    <td class="pr1 border-bottom-0 border-top-0 text-center">{{ item.dmd_price_schedule.packaging_desc }}</td>
+                    <td class="pr1 border-bottom-0 border-top-0 text-center"><span v-if="item.packaging_id">{{ item.packaging.packaging_desc }}</span></td>
                     <td class="pr1 border-bottom-0 border-top-0"><center>{{ item.order_quantity }}</center></td>
                     <td class="pr1 border-bottom-0 border-top-0">
                         <div class="row" style="margin-left:3%">
-                            {{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }}
+                            {{ item.new_dmd.dmddesc }}
                         </div>
                         <div class="row" style="margin-left:3%">
-                            <tr><td class="border-top-0 border-bottom-0">Brand:</td><td class="border-top-0 border-bottom-0">{{ item.dmd_price_schedule.brand_desc }}</td></tr>
+                            <tr><td class="border-top-0 border-bottom-0">Brand:</td><td class="border-top-0 border-bottom-0">{{ item.brand.brand_desc }}</td></tr>
                         </div>
                         <div class="row" style="margin-left:3%">
-                            <tr><td class="border-top-0 border-bottom-0">Packaging:</td><td class="border-top-0 border-bottom-0">{{ item.dmd_price_schedule.packaging_desc }}</td></tr>
+                            <tr><td class="border-top-0 border-bottom-0">Packaging:</td><td class="border-top-0 border-bottom-0"><span v-if="item.packaging_id">{{ item.packaging.packaging_desc }}</span></td></tr>
                         </div>
                         <div class="row" style="margin-left:3%">
-                            <tr><td class="border-top-0 border-bottom-0">Manufacturer:</td><td class="border-top-0 border-bottom-0">{{ item.dmd_price_schedule.manufacturer_desc }}</td></tr>
+                            <tr><td class="border-top-0 border-bottom-0">Manufacturer:</td><td class="border-top-0 border-bottom-0">{{ item.manufacturer.manufacturer_desc }}</td></tr>
                         </div>
                         <div class="row" style="margin-left:3%">
-                            <tr><td class="border-top-0 border-bottom-0">Country of Origin:</td><td class="border-top-0 border-bottom-0"> {{ item.dmd_price_schedule.country_desc }}</td></tr>
+                            <tr><td class="border-top-0 border-bottom-0">Country of Origin:</td><td class="border-top-0 border-bottom-0"><span v-if="item.country_id"> {{ item.country.country_desc }}</span></td></tr>
                         </div>
                         <div class="row" style="margin-left:3%">
                             <tr><td class="border-top-0 border-bottom-0">CPR:</td><td class="border-top-0 border-bottom-0"> </td></tr>
                         </div>
                     </td>
                     <td class="pr1 align-middle border-bottom-0 border-top-0">
-                        <center>{{ item.dmd_price_schedule.bid_price | currency2}}</center>
+                        <center>{{ item.cost_price | currency2}}</center>
                     </td>
                     <td class="pr1 align-middle border-bottom-0 border-top-0">
-                        <center>{{ item.dmd_price_schedule.bid_price * item.order_quantity | currency2}}</center>
+                        <center>{{ item.cost_price * item.order_quantity | currency2}}</center>
                     </td>
                 </tr>
                
@@ -175,7 +184,7 @@
                 </tr>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0" width="-10%">
-                        <!-- <center>{{po.purchase_request.user.user}}</center> -->
+                        <!-- <center>{{po.user.user}}</center> -->
                     </td>
                     <td class="pr1 border-left-0 border-top-0 border-bottom-0">
                         <center><b><u>RICARDO B. RUNEZ JR.,MD,FPCS,MHA,CESE</u></b></center>
@@ -238,7 +247,6 @@
                     <td class="pr1 border-left-0">
                         <center><b>
                             <span v-if="po.obrs_date ">{{ po.obrs_date | myDate3 }}</span>
-                            
                             </b></center>
                     </td>
                 </tr>
@@ -268,7 +276,9 @@
 export default {
     data(){
             return{
-                po: {},
+                po: {
+                    dmd_purchase_orders: [],
+                },
 
             }
         },
@@ -290,14 +300,14 @@ export default {
         },
         computed:{
             estimated_cost(){
-            let sum = 0;
-            if(this.po.purchase_request){
-                this.po.purchase_request.view_dmd_purchase_requests.forEach(function(item) {
-                    sum += (parseFloat(item.dmd_price_schedule.bid_price) * parseFloat(item.order_quantity));
-                });
-                    return sum;
-                }
+                let sum = 0;
+                    this.po.dmd_purchase_orders.forEach(function(item) {
+                        sum += (parseFloat(item.cost_price) * parseFloat(item.order_quantity));
+                    });
+                return sum;
             }
+
+            
         },
     mounted() {
 
