@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DmdPurchaseRequest;
 use App\Models\PurchaseRequest;
 use App\Models\Cart;
+use Carbon\Carbon;
 
 class DmdPurchaseRequestController extends Controller
 {
@@ -37,6 +38,12 @@ class DmdPurchaseRequestController extends Controller
     }
 
     public function store(Request $request){
+
+        // $month = Carbon::now()->format('YmdH')->month;
+        // $year = Carbon::now()->format('YmdH')->year;
+
+        $year_month = Carbon::now()->format('Y-m');
+
         $dmd = $request->items;
         $count = count($dmd);
 
@@ -61,6 +68,14 @@ class DmdPurchaseRequestController extends Controller
                 'cart_id' => $cart->id,
             ]);
 
+            
+            if(!$pr->pr_id){
+                $zero_id = sprintf("%04d", $pr->purchase_request_id);
+                
+                $pr->pr_id = $year_month.'-'.$zero_id;
+                $pr->save();
+            }
+
             $pr->dmd_purchase_requests()->create([
                 'dmd_id' => $dmd_id,
                 'request_quantity' => $quantity,
@@ -76,7 +91,9 @@ class DmdPurchaseRequestController extends Controller
     }
 
     public function shopping(Request $request){
-        
+
+        $year_month = Carbon::now()->format('Y-m');
+
         $dmd = $request->items;
         $count = count($dmd);
 
@@ -91,6 +108,13 @@ class DmdPurchaseRequestController extends Controller
             'purpose' => $request->purpose,
             'cart_id' => $cart->id,
         ]);
+
+        if(!$pr->pr_id){
+            $zero_id = sprintf("%04d", $pr->purchase_request_id);
+
+            $pr->pr_id = $year_month.'-'.$zero_id;
+            $pr->save();
+        }
 
         for($i = 0; $i < $count; $i++){
 
@@ -166,4 +190,6 @@ class DmdPurchaseRequestController extends Controller
         $dmd->delete();
         return response()->json();
     }
+
+
 }

@@ -36,7 +36,10 @@ class PurchaseOrder extends Model
         'purchase_request_id',
         'mode_id',
         'delivery_term',
+
         'updated_at',
+        'po_id',
+        'dod',
     ];
 
     protected $dispatchesEvents = [
@@ -52,7 +55,7 @@ class PurchaseOrder extends Model
 
     public function purchase_request(){
 
-        return $this->hasOne('App\Models\PurchaseRequest', 'purchase_order_id', 'purchase_order_id');
+        return $this->hasOne('App\Models\PurchaseRequest', 'purchase_request_id', 'purchase_request_id');
 
     }
 
@@ -90,5 +93,10 @@ class PurchaseOrder extends Model
 
     public function purchase_order_statuses(){
         return $this->hasMany('App\Models\PurchaseOrderStatus', 'purchase_order_id', 'purchase_order_id');
+    }
+
+    public function last_status(){
+        return $this->hasOne('App\Models\PurchaseOrderStatus', 'purchase_order_id', 'purchase_order_id')
+        ->orderBy('id', 'desc');
     }
 }

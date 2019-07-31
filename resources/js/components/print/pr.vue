@@ -2,7 +2,7 @@
     <div id="pr1">
         <div class="row">
             <div class="col">
-                <router-link to="/purchase_request2" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
+                <router-link to="/pr_dmd" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
             </div>
             <div class="col">
                 <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
@@ -35,7 +35,7 @@
                         <td class="pr1 border-right-0 border-bottom-0" colspan="1" width="15%">Department: </td>
                         <td class="pr1 border-left-0 border-right-0" width="10%"><b>MEDICAL SERVICES</b></td>
                         <td class="pr1 border-left-0 border-right-0 border-bottom-0" width="12.5%">PR No.:</td>
-                        <td class="pr1 border-left-0 border-right-0 text-left" width="11%"><b>{{ pr.created_at | myDate }} - {{ pr.purchase_request_id | numeral2 }}</b></td>
+                        <td class="pr1 border-left-0 border-right-0 text-left" width="11%"><b>{{ pr.pr_id }}</b></td>
                         <td class="pr1 border-left-0 border-right-0 border-bottom-0" width="1%">Date: </td>
                         <td class="pr1 border-left-0" width=""><b>{{ pr.created_at | myDate3 }}</b></td>
                     </tr>

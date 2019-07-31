@@ -27,6 +27,7 @@ class PurchaseRequest extends Model
         'pmo_rcv',
 
         'updated_at',
+        'pr_id',
     ];
 
     protected $dispatchesEvents = [

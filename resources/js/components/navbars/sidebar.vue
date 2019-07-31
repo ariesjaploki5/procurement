@@ -163,7 +163,7 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to='../../purchase_order2' class="nav-link">
+                    <router-link to='../../cmps_po' class="nav-link">
                         <i class="nav-icon fas fa-cart-arrow-down"></i>
                         <p>Purchase Order</p>
                     </router-link>

@@ -52,7 +52,21 @@ Route::apiResources([
     
 ]);
 
+Route::get('budget_show/{id}', 'API\PurchaseOrderController@budget_show');
+
+Route::post('search_pr', 'API\PurchaseRequestController@search_pr');
+Route::post('search_po', 'API\PurchaseOrderController@search_po');
+
 Route::get('all_dmd_pr', 'API\PurchaseRequestController@dmd_pr');
+Route::get('pr_for_cmps', 'API\PurchaseRequestController@for_cmps');
+Route::get('pr_for_pmo', 'API\PurchaseRequestController@for_pmo');
+
+Route::get('po_for_pmo', 'API\PurchaseOrderController@for_pmo');
+Route::get('po_for_budget', 'API\PurchaseOrderController@for_budget');
+
+Route::get('po_for_cmps', 'API\PurchaseOrderController@for_cmps');
+
+
 
 Route::get('for_mmo_po', 'API\PurchaseOrderController@for_mmo');
 Route::get('for_fmo', 'API\PurchaseOrderController@for_fmo');
@@ -132,19 +146,20 @@ Route::get('shopping', 'API\CartController@shopping');
 Route::post('shopping', 'API\DmdPurchaseRequestController@shopping');
 Route::post('obrs', 'API\PurchaseOrderController@store_update_obrs');
 
-Route::put('div_head_rcv/{id}', 'API\PurchaseRequestController@cmps_rcv');
-Route::put('div_head_rls/{id}', 'API\PurchaseRequestController@cmps_rls');
+Route::put('cmps_rcv/{id}', 'API\PurchaseRequestController@cmps_rcv');
+Route::put('cmps_rls/{id}', 'API\PurchaseRequestController@cmps_rls');
 
 Route::put('pmo_rcv/{id}', 'API\PurchaseRequestController@pmo_rcv');
 Route::put('pmo_rls/{id}', 'API\PurchaseRequestController@pmo_rls');
 
 
+Route::put('cmps_rcv_po/{id}', 'API\PurchaseOrderController@cmps_rcv_po');
+Route::put('cmps_rls_po/{id}', 'API\PurchaseOrderController@cmps_rls_po');
 
-Route::put('div_head_rcv_2/{id}', 'API\PurchaseOrderController@div_head_rcv_2');
-Route::put('div_head_rls_2/{id}', 'API\PurchaseOrderController@div_head_rls_2');
 
-Route::put('pmo_rcv_2/{id}', 'API\PurchaseOrderController@pmo_rcv_po');
-Route::put('pmo_rls_2/{id}', 'API\PurchaseOrderController@pmo_rls_po');
+Route::put('pmo_rls_po/{id}', 'API\PurchaseOrderController@pmo_rls_po');
+Route::put('pmo_rcv_po_2/{id}', 'API\PurchaseOrderController@pmo_rcv_po_2');
+Route::put('pmo_rls_po_2/{id}', 'API\PurchaseOrderController@pmo_rls_po_2');
 
 Route::put('budget_rcv/{id}', 'API\PurchaseOrderController@budget_rcv');
 Route::put('budget_rls/{id}', 'API\PurchaseOrderController@budget_rls');

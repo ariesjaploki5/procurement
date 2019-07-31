@@ -58,13 +58,16 @@
                     </b></td>
                     <td class="pr1 border-right-0 border-bottom-0" width="20%">Purchase Order Number:</td>
                     <td class="pr1 border-left-0" width="20%">
-                        <center><b>{{ po.created_date | myDate}}-{{ po.purchase_order_id | numeral2}}</b></center>
+                        <center><b>{{ po.po_id }}</b></center>
                     </td>
                 </tr>
                 <td class="pr1 border-top-0 border-bottom-0" colspan="2"></td>
                 <td class="pr1 border-top-0 border-right-0 border-bottom-0"> Purchase Order Date</td>
                 <td class="pr1 border-left-0">
-                    <center><b>{{ po.created_at | myDate3 }}</b></center>
+                    <center><b>
+                        <span v-if="po.created_at">{{ po.created_at | myDate3 }}</span>
+                        
+                    </b></center>
                 </td>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0">Address:</td>

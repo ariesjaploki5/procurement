@@ -282,7 +282,6 @@ export default {
     components: {Money},
     data(){
         return{
-            
             pr_remarks: '',
             purchase_requests: [],
             new_purchase_requests: [],
@@ -513,6 +512,7 @@ export default {
     },
 }
 </script>
+
 <style scoped>
     #disapprovedModal{
         background-color: #0606067a;

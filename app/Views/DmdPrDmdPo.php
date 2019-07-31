@@ -18,4 +18,9 @@ class DmdPrDmdPo extends Model
         return $this->hasOne("App\Views\PrCurrentStatus", 'purchase_request_id', 'purchase_request_id')
         ->orderBy('current_status_id', 'desc');
     }
+
+    public function last_po_status(){
+        return $this->hasOne("App\Models\PurchaseOrderStatus", 'purchase_order_id', 'purchase_order_id')
+        ->orderBy('id', 'desc');
+    }
 }

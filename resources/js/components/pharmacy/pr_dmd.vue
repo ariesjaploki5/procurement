@@ -1,7 +1,11 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <span>Item Purchase Requests</span>
+            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+                <h4>
+                    <i class="fas fa-capsules"></i> Purchase Request
+                </h4>
+            </div>
         </div>
         <div class="col-md-12">
             <div class="form-group row">
@@ -20,13 +24,13 @@
                         <th width="3%" class="text-left">#</th>
                         <th width="24%" class="text-left">Item Desc</th>
                         <th width="5%" class="text-left">Unit</th>
-                        <th width="10%" class="text-left">PR #</th>
-                        <th width="10%" class="text-left">Date of PR</th>
-                        <th width="10%" class="text-center">Status</th>
-                        <th width="10%" class="text-center">Date(Status)</th>
-                        <th width="13%" class="text-left">Date(Whole)</th>
-                        <th width="7%" class="text-center">Qty Ordered</th>
-                        <th width="5%" class="text-left"></th>
+                        <th width="9%" class="text-left">PR #</th>
+                        <th width="9%" class="text-left">Date of PR</th>
+                        <th width="9%" class="text-center">Status</th>
+                        <th width="9%" class="text-center">Date (Status)</th>
+                        <th width="13%" class="text-left">Date (Whole)</th>
+                        <th width="7%">Qty Ordered</th>
+                        <th width="9%" class="text-left">Action</th>
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
@@ -40,40 +44,47 @@
                         <td width="5%" class="text-left">
                             {{ item.unit_id }}
                         </td>
-                        <td width="10%" class="text-center">
+                        <td width="9%" class="text-center">
                             <span class="text-link btn" @click="view_pr(item.purchase_request_id)">
                                 {{ item.created_at | myDate }} - {{ item.purchase_request_id | numeral2 }}
                             </span>
                         </td>  
-                        <td width="10%" class="text-center">
+                        <td width="9%" class="text-center">
                             <span>
                                 {{ item.pr_date | myDate3 }}
                             </span>
                         </td>
-                        <td width="10%" class="text-center">
-                            <span v-if="item.last_status"  class="badge badge-pill"
+                        <td width="9%" class="text-center">
+                            <span v-if="item.last_po_status" class="badge badge-pill" v-bind:class="[
+                            { 'badge-success' : item.last_po_status.current_status_id == 5 },
+                                { 'badge-success' : item.last_po_status.current_status_id == 6 },
+                                { 'badge-danger' : item.last_po_status.current_status_id == 7 },
+                                { 'badge-danger' : item.last_po_status.current_status_id == 8 },
+                                { 'badge-warning' : item.last_po_status.current_status_id == 9 },
+                                { 'badge-warning' : item.last_po_status.current_status_id == 10 },
+                                { 'badge-info' : item.last_po_status.current_status_id == 11 },
+                                { 'badge-info' : item.last_po_status.current_status_id == 12 },
+                                { 'badge-light' : item.last_po_status.current_status_id == 13 },
+                                { 'badge-light' : item.last_po_status.current_status_id == 14 },
+                                { 'badge-dark' : item.last_po_status.current_status_id == 15 },
+                                { 'badge-dark' : item.last_po_status.current_status_id == 16 },
+                            ]">{{ item.last_po_status.current_status.current_status_desc }}
+                            </span>
+                            <span v-else>
+                                <span v-if="item.last_status" class="badge badge-pill"
                             v-bind:class="[
                                 { 'badge-primary' : item.last_status.current_status_id == 1 },
                                 { 'badge-primary' : item.last_status.current_status_id == 2 },
                                 { 'badge-secondary' : item.last_status.current_status_id == 3 },
                                 { 'badge-secondary' : item.last_status.current_status_id == 4 },
-                                { 'badge-success' : item.last_status.current_status_id == 5 },
-                                { 'badge-success' : item.last_status.current_status_id == 6 },
-                                { 'badge-danger' : item.last_status.current_status_id == 7 },
-                                { 'badge-danger' : item.last_status.current_status_id == 8 },
-                                { 'badge-warning' : item.last_status.current_status_id == 9 },
-                                { 'badge-warning' : item.last_status.current_status_id == 10 },
-                                { 'badge-info' : item.last_status.current_status_id == 11 },
-                                { 'badge-info' : item.last_status.current_status_id == 12 },
-                                { 'badge-light' : item.last_status.current_status_id == 13 },
-                                { 'badge-light' : item.last_status.current_status_id == 14 },
-                                { 'badge-dark' : item.last_status.current_status_id == 15 },
-                                { 'badge-dark' : item.last_status.current_status_id == 16 },
+                                
                                 ]">
-                                {{ item.last_status.current_status.current_status_desc }}
+                                    {{ item.last_status.current_status.current_status_desc }}
+                                </span>
+                                
                             </span>
                         </td>
-                        <td width="10%" class="text-center">
+                        <td width="9%" class="text-center">
                             <span v-if="item.last_status">
                                 {{ item.last_status.status_date_time | myDate3 }}
                             </span>
@@ -91,8 +102,9 @@
                                 {{ item.request_quantity | numeral3 }}
                             </span>
                         </td>
-                        <td width="5%">
-                            
+                        <td width="9%" class="text-center">
+                            <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-primary" :to="{ name: 'pr', params: { id: item.purchase_request_id }}">PR</router-link>
+                            <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-success" :to="{ name: 'sps', params: { id: item.purchase_request_id }}">SPS</router-link>
                         </td>
                     </tr>
                 </tbody>
@@ -217,7 +229,24 @@ export default {
                 return matcher.test(dmd.dmddesc)
             });
         },
+        current_user() {
+            return this.$store.getters.current_user;
+        }
 
+    },
+    mounted(){
+        window.Echo.channel("pr_created").listen(".purchase_request.created", (e) => {
+            this.get_dmd_pr();
+        });
+        window.Echo.channel("pr_updated").listen(".purchase_request.updated", (e) => {
+            this.get_dmd_pr();
+        });
+        window.Echo.channel("pr_created").listen(".purchase_order.created", (e) => {
+            this.get_dmd_pr();
+        });
+        window.Echo.channel("pr_updated").listen(".purchase_order.updated", (e) => {
+            this.get_dmd_pr();
+        });
     }
 }
 </script>
@@ -235,6 +264,8 @@ export default {
         color: rgba(#5093df93) !important;
         text-decoration:underline;
         display:inline-block;
+        /* background: #38c172;
+        color: white; */
     }
 
     

@@ -331,7 +331,7 @@ export default {
                 }).catch(() => {
 
                 });
-            $('#prModal').modal('show')
+            $('#prModal').modal('show');
         },
         disapproved_modal(){
             $('#disapprovedModal').modal('show');

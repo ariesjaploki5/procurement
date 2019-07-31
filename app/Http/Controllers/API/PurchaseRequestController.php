@@ -20,23 +20,33 @@ class PurchaseRequestController extends Controller
 
     public function index(){
 
-        // $data = PurchaseRequest::with([
-        //     'last_status.current_status',
-        //     'supplier', 
-        //     'user', 
-        //     'mode', 
-        //     'rfq', 
-        //     'purchase_request_remarks',
-        //     'dmd_purchase_requests' => function($query){
-        //         $query->with([
-        //             'dmd_price_schedule.new_dmd', 'dmd', 'new_app_dmd' => function($query){
-        //                 $query->where('app_year', Carbon::now()->year)->first();
-        //             }
-        //         ]);
-        //     },
-        // ])->orderBy('created_at', 'desc')->get();
+        $data = PurchaseRequest::has('last_status.current_status')->with([
+            'purchase_order',
+            'last_status.current_status', 
+            'supplier', 
+            'user', 
+            'mode', 'rfq', 
+            'purchase_request_remarks',
+            'dmd_purchase_requests' => function($query){
+                $query->with([
+                    'dmd_price_schedule.new_dmd', 'dmd', 'new_app_dmd' => function($query){
+                        $query->where('app_year', Carbon::now()->year)->first();
+                    }
+                ]);
+            },
+        ])->orderBy('created_at', 'desc')
+        ->leftjoin('purchase_orders as po', 'purchase_requests.purchase_request_id', '=', 'po.purchase_request_id')
+        ->leftjoin('purchase_order_status as pos', 'po.purchase_order_id', '=', 'pos.purchase_order_id')
+        ->take(20)
+        ->get();
+
+        return response()->json($data);
+    }
+
+    public function search_pr(Request $request){
 
         $data = PurchaseRequest::has('last_status.current_status')->with([
+            'last_status.current_status',
             'supplier',
             'user', 
             'mode', 
@@ -50,6 +60,8 @@ class PurchaseRequestController extends Controller
                 ]);
             },
         ])->orderBy('created_at', 'desc')
+        ->where('pr_id', 'like', "%$request->word%")
+        ->take(50)
         ->get();
 
         return response()->json($data);
@@ -73,7 +85,8 @@ class PurchaseRequestController extends Controller
         // ->get(); 
 
         $data = DmdPrDmdPo::with([
-            'last_status.current_status'
+            'last_status.current_status',
+            'last_po_status.current_status',
         ])
         ->orderBY('purchase_request_id', 'desc')
         ->orderBY('dmddesc', 'asc')
@@ -86,21 +99,66 @@ class PurchaseRequestController extends Controller
 
     }
 
-    public function for_pmo(){
-        $data = PurchaseRequest::with([
-            'supplier', 
-            'user', 'mode', 'rfq', 'purchase_request_remarks',
-            'view_dmd_purchase_requests' => function($query){
+    public function for_cmps(){
+        $data = PurchaseRequest::whereHas('last_status')->with([
+            'last_status.current_status',
+            'supplier',
+            'user', 
+            'mode', 
+            'rfq', 
+            'purchase_request_remarks',
+            'dmd_purchase_requests' => function($query){
                 $query->with([
-                    'dmd_price_schedule' => function($query){
-                        $query->first();
-                    },
+                    'dmd_price_schedule.new_dmd', 'dmd', 'new_app_dmd' => function($query){
+                        $query->where('app_year', Carbon::now()->year)->first();
+                    }
                 ]);
             },
-        ])
-        ->whereNotNull('div_head_rcv')
-        ->whereNotNull('div_head_rls')
-        ->orderBy('created_at', 'desc')
+        ])->orderBy('created_at', 'desc')
+        ->take(20)
+        ->get();
+
+        return response()->json($data);
+    }
+
+    public function for_pmo(){
+
+        $latestPoStatus = DB::table('purchase_order_status')
+        ->select('purchase_order_id', DB::raw('MAX(current_status_id) as current_status_id'))
+        ->groupBy('purchase_order_id');
+
+        $purchaseOrders = DB::table('purchase_orders as po')
+        ->joinSub($latestPoStatus, 'latest_po_status', function($join){
+            $join->on('po.purchase_order_id', '=', 'latest_po_status.purchase_order_id');
+        })->select('po.purchase_order_id', 'po.purchase_request_id','latest_po_status.current_status_id');
+
+        $data = PurchaseRequest::has('last_status.current_status')->with([
+            'last_status.current_status', 
+            'supplier', 
+            'user', 
+            'mode', 
+            'rfq', 
+            'purchase_request_remarks',
+            'dmd_purchase_requests' => function($query){
+                $query->with([
+                    'dmd_price_schedule.new_dmd', 'dmd', 'new_app_dmd' => function($query){
+                        $query->where('app_year', Carbon::now()->year)->first();
+                    }
+                ]);
+            },
+        ])->orderBy('created_at', 'desc')
+        ->leftjoin('purchase_request_status as prs', function($join){
+            $join->on('purchase_requests.purchase_request_id', '=', 'prs.purchase_request_id')->orderBy('prs.current_status_id', 'desc');
+        })
+        ->joinSub($purchaseOrders, 'po', function($join){
+            $join->on('purchase_requests.purchase_request_id', '=', 'po.purchase_request_id');
+        })
+        ->where('prs.current_status_id', '>', 3)
+        ->where('prs.current_status_id', '<', 5)
+        ->where('po.current_status_id', '<', 5)
+        ->where('status', 1)
+        ->take(20)
+        ->select('purchase_requests.*', 'prs.current_status_id', 'po.current_status_id as current_po_status')
         ->get();
 
         return response()->json($data);
@@ -237,31 +295,24 @@ class PurchaseRequestController extends Controller
     }
 
     public function show($id){
-
         $data = PurchaseRequest::with([
             'last_status.current_status',
-            'supplier', 
-            'user.employee', 
+            'supplier',
+            'user', 
             'mode', 
             'rfq', 
             'purchase_request_remarks',
             'dmd_purchase_requests' => function($query){
                 $query->with([
-                    'new_app_dmd',
-                    'dmd_price_schedule' => function($query){
-                        $query->orderBy('rank', 'asc')->first();
-                    }, 
-                    'dmd', 
-                    'new_app_dmd' => function($query){
+                    'dmd_price_schedule.new_dmd', 'dmd', 'new_app_dmd' => function($query){
                         $query->where('app_year', Carbon::now()->year)->first();
-                    },
+                    }
                 ]);
             },
-        ])
-        ->where('purchase_request_id', $id)->first();
-        
+        ])->where('purchase_request_id', $id)->first();
 
         return response()->json($data);
+
     }
 
     public function show_2($id){
@@ -311,6 +362,8 @@ class PurchaseRequestController extends Controller
 
     public function pr_to_po(Request $request){
         
+        $year_month = Carbon::now()->format('Y-m');
+
         $item = $request->items;
         $count = count($item);
         $purchase_request_id = $request->purchase_request_id;
@@ -319,19 +372,6 @@ class PurchaseRequestController extends Controller
 
             $dmd_id = $item[$i]['dmd_id'];
             $quantity = $item[$i]['request_quantity'];
-            // $supplier_id = $item[$i]['dmd_price_schedule']['supplier_id'];
-            // $manufacturer_id = $item[$i]['dmd_price_schedule']['manufacturer_id'];
-            // $brand_id = $item[$i]['dmd_price_schedule']['brand_id'];
-            // $country_id = $item[$i]['dmd_price_schedule']['country_id'];
-            // $packaging_id = $item[$i]['dmd_price_schedule']['packaging_id'];
-            // $bid_price = $item[$i]['dmd_price_schedule']['bid_price'];
-            
-            // $dmd = DmdPriceSchedule::with(['price_schedule' => function($query){
-            //         $query->where('price_schedule_year', Carbon::now()->year);
-            //     },])
-            // ->where('terminated', 0)
-            // ->orderBy('rank', 'desc')
-            // ->first();
             
             $dmd = DB::table('procurement.dbo.dmd_price_schedule as tb1')
             ->join('procurement.dbo.price_schedules as tb2', 'tb1.price_schedule_id', '=', 'tb2.price_schedule_id')
@@ -347,6 +387,13 @@ class PurchaseRequestController extends Controller
                 'mode_id' => 1,
             ]);
 
+            if(!$po->po_id){
+                $zero_id = sprintf("%04d", $po->purchase_order_id);
+    
+                $po->po_id = $year_month.'-'.$zero_id;
+                $po->save();
+            }
+
             $po->dmd_purchase_orders()->create([
                 'dmd_id' => $dmd_id,
                 'order_quantity' => $quantity,
@@ -355,7 +402,6 @@ class PurchaseRequestController extends Controller
                 'country_id' => $dmd->country_id,
                 'packaging_id' => $dmd->packaging_id,
                 'manufacturer_id' => $dmd->manufacturer_id,
-                // 'purchase_order_id' => $po->purchase_order_id,
             ]);
             
         }
@@ -365,6 +411,8 @@ class PurchaseRequestController extends Controller
 
 
     public function rfq_to_po(Request $request){
+
+        $year_month = Carbon::now()->format('Y-m');
 
         $item = $request->items;
         $count = count($item);
@@ -378,11 +426,18 @@ class PurchaseRequestController extends Controller
 
             $dmd = DmdRfq::findOrFail($dmd_rfq_id);
 
-            $po = PurchaseOrder::firstOrCreate([
+            $po = PurchaseOrder::create([
                 'supplier_id' => $dmd->supplier_id,
                 'purchase_request_id' => $purchase_request_id,
                 'mode_id' => 4,
             ]);
+
+            if(!$po->po_id){
+                $zero_id = sprintf("%04d", $po->purchase_order_id);
+    
+                $po->po_id = $year_month.'-'.$zero_id;
+                $po->save();
+            }
 
             $po->dmd_purchase_orders()->create([
                 'dmd_id' => $dmd_id,

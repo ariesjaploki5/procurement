@@ -18,6 +18,7 @@ class PurchaseRequestStatus extends Model
     }
 
     public function current_status(){
-        return $this->belongsTo('App\Models\CurrentStatus');
+        return $this->belongsTo('App\Models\CurrentStatus', 'current_status_id', 'id');
     }
+
 }
