@@ -80,6 +80,7 @@ class PurchaseOrderController extends Controller
     }
 
     public function receive_dmd(Request $request){
+
         $id = $request->id;
         $dmd_id = $request->dmd_id;
         $purchase_request = $request->purchase_request_id;
@@ -112,6 +113,7 @@ class PurchaseOrderController extends Controller
         }
 
         return response()->json();
+
     }
 
     public function received_dmd(Request $request){
@@ -182,162 +184,82 @@ class PurchaseOrderController extends Controller
             'fund_source_id' => $request->fund_source_id,
             'amount' => $request->amount,
             'obrs_date' => $date,
+            'uacs_code_id' => $request->uacs_code_id
         ]);
 
         return response()->json($po);
     }
 
+    
 
+    public function pmo_show($id){
 
-    public function for_pmo(){
-        
-        $latestPoStatus = DB::table('purchase_order_status')
-        ->select('purchase_order_id', DB::raw('MAX(current_status_id) as current_status_id'))
-        ->groupBy('purchase_order_id');
-
-        $purchaseOrders = DB::table('purchase_orders as po')
-        ->joinSub($latestPoStatus, 'latest_po_status', function($join){
-            $join->on('po.purchase_order_id', '=', 'latest_po_status.purchase_order_id');
-        })->select('po.purchase_order_id', 'po.purchase_request_id','latest_po_status.current_status_id');
-
-        $data = PurchaseOrder::with([
-            'last_status.current_status',
-            'mode',
-            'allotment', 'fund_source', 'uacs', 'supplier',
-            'purchase_request.last_status.current_status', 
-            'dmd_purchase_orders' => function($query){
-                $query->with([
-                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd',
-                ]);
-            },
-        ])
-        ->joinSub($latestPoStatus, 'latest_po_status', function($join){
-            $join->on('purchase_orders.purchase_order_id', '=', 'latest_po_status.purchase_order_id');
-        })
-        ->where('current_status_id', '<', 5)
+        $data = DB::table('purchase_orders as po')
+        ->join('dmd_purchase_orders as dpo', 'po.purchase_order_id', '=', 'dpo.purchase_order_id')
+        ->where('po.purchase_order_id', $id)
         ->get();
+        
+        return response()->json($data);
+    }
+    
+    
+
+    public function search_po(Request $request){
+
+        $word = $request->word;
+
+        $data = DB::SELECT("SELECT * FROM fn_filter_purchase_orders_search($word) order by purchase_order_id");
 
         return response()->json($data);
+    }
 
+    public function for_pmo(){
+
+        $data = DB::table('fn_purchase_orders()')->get();
+
+        return response()->json($data);
     }
     
     public function for_cmps(){
-        $data = PurchaseOrder::with([
-            'purchase_request' => function ($query){
-                $query->with(['view_dmd_purchase_requests']);
-            }
-        ])->get();
 
-        return response()->json($data);
-    }
-
-    public function search_po(Request $request){
-        $data = PurchaseOrder::whereHas('last_status')
-        ->with([
-            'last_status.current_status',
-            'mode',
-            'allotment', 'fund_source', 'uacs', 'supplier',
-            'purchase_request.last_status.current_status', 
-            'dmd_purchase_orders' => function($query){
-                $query->with([
-                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd',
-                ]);
-            },
-        ])
-        ->where('po_id', 'like', "%$request->word%")
-        ->take(50)
-        ->get();
-
+        $data = DB::table('fn_filter_purchase_orders(4, 7)')->get();
 
         return response()->json($data);
     }
 
     public function for_budget(){
-        $data = PurchaseOrder::whereHas('last_status')
-        ->with([
-            'last_status.current_status',
-            'mode',
-            'allotment', 'fund_source', 'uacs', 'supplier',
-            'purchase_request.last_status.current_status', 
-            'dmd_purchase_orders' => function($query){
-                $query->with([
-                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd', 'new_dmd_homis'
-                ]);
-            },
-        ])->get();
-
+        
+        $data = DB::table('fn_filter_purchase_orders(6, 9)')->get();
 
         return response()->json($data);
     }
 
-    public function for_accounting(){
-        $data = PurchaseOrder::whereHas('last_status')
-        ->with([
-            'last_status.current_status',
-            'mode',
-            'allotment', 'fund_source', 'uacs', 'supplier',
-            'purchase_request.last_status.current_status', 
-            'dmd_purchase_orders' => function($query){
-                $query->with([
-                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd', 'new_dmd_homis'
-                ]);
-            },
-        ])->get();
 
+
+    public function for_accounting(){
+
+        $data = DB::table('fn_filter_purchase_orders(8, 11)')->get();
 
         return response()->json($data);
     }
 
     public function for_fmo(){
-        $data = PurchaseOrder::whereHas('last_status')
-        ->with([
-            'last_status.current_status',
-            'mode',
-            'allotment', 'fund_source', 'uacs', 'supplier',
-            'purchase_request.last_status.current_status', 
-            'dmd_purchase_orders' => function($query){
-                $query->with([
-                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd', 'new_dmd_homis'
-                ]);
-            },
-        ])->get();
 
+        $data = DB::table('fn_filter_purchase_orders(10, 13)')->get();
 
         return response()->json($data);
     }
 
     public function for_mcc(){
-        $data = PurchaseOrder::whereHas('last_status')
-        ->with([
-            'last_status.current_status',
-            'mode',
-            'allotment', 'fund_source', 'uacs', 'supplier',
-            'purchase_request.last_status.current_status', 
-            'dmd_purchase_orders' => function($query){
-                $query->with([
-                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd', 'new_dmd_homis'
-                ]);
-            },
-        ])->get();
 
+        $data = DB::table('fn_filter_purchase_orders(12, 15)')->get();
 
         return response()->json($data);
     }
 
     public function for_mmo(){
-        $data = PurchaseOrder::whereHas('last_status')
-        ->with([
-            'last_status.current_status',
-            'mode',
-            'allotment', 'fund_source', 'uacs', 'supplier',
-            'purchase_request.last_status.current_status', 
-            'dmd_purchase_orders' => function($query){
-                $query->with([
-                    'manufacturer', 'brand', 'country', 'packaging', 'new_dmd', 'new_dmd_homis'
-                ]);
-            },
-        ])->get();
 
+        $data = DB::table('fn_filter_purchase_orders(14, 17)')->get();
 
         return response()->json($data);
     }
@@ -376,6 +298,7 @@ class PurchaseOrderController extends Controller
         // $twoMonths = DB::SELECT("SELECT tb1.dmd_id, SUM(tb2.qtyissued) as cons FROM procurement.dbo.dmds as tb1 inner join hospital.dbo.hrxo as tb2 on tb1.dmdcomb COLLATE DATABASE_DEFAULT = tb2.dmdcomb and tb1.dmdctr = tb2.dmdctr where tb2.dodate > DATEADD(month, -2, GETDATE()) GROUP BY tb1.dmd_id");
 
         $twoMonths = DB::table('hospital.dbo.hrxo as tb1')
+
         ->join('procurement.dbo.dmds as tb2', function($join) use($carbon_two){
             $join->on(DB::raw('tb1.dmdcomb collate Latvian_BIN'), '=', 'tb2.dmdcomb')->on('tb1.dmdctr', '=', 'tb1.dmdctr')
             ->where('tb1.dodate', '>', $carbon_two)
@@ -386,79 +309,37 @@ class PurchaseOrderController extends Controller
         })->select('tb2.dmd_id', DB::raw('SUM(tb1.qtyissued) as consumption'))
         // ->whereBetween('tb1.dodate', [$carbon_two, $carbon_now])
         ->where('tb1.orderfrom', 'DRUME')->where('tb1.orderfrom', 'DRUMO')->groupBy('tb2.dmd_id');
-
-        // $data = DB::table('purchase_orders as po')
-        // ->join('dmd_purchase_order as dpo', 'po.purchase_order_id', '=', 'dpo.purchase_order_id')
-        // ->leftjoin('allotments as al', 'po.allotment_id', '=', 'al.allotment_id')
-        // ->leftjoin('fund_sources as fs', 'po.fund_source_id', '=', 'fs.id')
-        // ->leftjoin('uacs as u', 'po.uacs_id', '=', 'u.id')
-        // ->leftjoin('suppliers as s', 'po.supplier_id', '=', 's.supplier_id')
-        // ->join('purchase_requests as pr', 'po.purchase_request_id', '=', 'pr.purchase_request_id')
-        // ->leftjoin('modes as m', 'po.mode_id', '=', 'm.mode_id')
-        // ->joinSub($twoMonths, 'two_months', function($join){
-        //     $join->on('dpo.dmd_id', '=', 'two_months.dmd_id');
-        // })
-        // ->where('po.purchase_order_id', $id)
-        // ->select('po.*', 'm.mode_desc', 'fs.*', 'u.*')
-        // ->first();
-
+        
         $data = PurchaseOrder::with([
             'last_status.current_status',
             'mode',
-            'allotment', 'fund_source', 'uacs', 'supplier',
-            'purchase_request', 'dmd_purchase_orders' => function($query) use ($twoMonths){
+            'allotment', 
+            'fund_source', 
+            'uacs', 
+            'supplier',
+            'fund_source_code',
+            'purchase_request', 'dmd_purchase_orders' => function($query){
                     $query->with([
                         'manufacturer', 'brand', 'country', 'packaging', 'new_dmd_homis', 'new_dmd'
-                    ])->select(["dmd_purchase_order.*", 
-                    "two_months.consumption", 
-                    DB::raw("CAST((order_quantity * cost_price) as decimal(18, 2)) as amount"),])
-                    // ->leftJoinSub($twoMonths, 'two_months', function($join){
-                    //     $join->on('dmd_purchase_order.dmd_id', '=', 'two_months.dmd_id');
-                    // })
-                    ;
+                    ])->select(["dmd_purchase_order.*",
+                    DB::raw("CAST((order_quantity * cost_price) as decimal(18, 2)) as amount"),]);
                 },
             ])
             ->where('purchase_order_id', $id)
             ->first();
 
-            return response()->json($data);
+        return response()->json($data);
     }
 
 
     public function budget_show($id){
-        $data = DB::SELECT("SELECT tb3.*, tb5.po_id, tb4.cons, tb6.boh, tb6.dmddesc, tb6.ssl  FROM procurement.dbo.dmd_purchase_order as tb3 left join 
-        (SELECT SUM(tb1.qtyissued) as cons, tb2.dmd_id
-        FROM hospital.dbo.hrxo as tb1
-        inner join procurement.dbo.dmds as tb2 on tb1.dmdcomb COLLATE DATABASE_DEFAULT = tb2.dmdcomb and tb1.dmdctr = tb2.dmdctr
-        where tb1.dodate > DATEADD(month, -2, GETDATE()) and
-        tb1.orderfrom not in ('DRUMO','DRUMF','DRUMK')
-        GROUP BY tb2.dmd_id) as tb4 on tb3.dmd_id = tb4.dmd_id
-        left join purchase_orders as tb5 on tb3.purchase_order_id = tb5.purchase_order_id
-        left outer join (
-        SELECT atable.dmddesc, btable.boh, btable.dmdcomb, btable.dmdctr, ctable.dmd_id, ctable.ssl FROM (
-        SELECT b.dmdctr, b.dmdcomb,
-        CONVERT(varchar, c.gendesc) + ' ' +
-        CONVERT(varchar, b.dmdnost) + ' ' + 
-        CONVERT(varchar, f.stredesc) + ' ' + 
-        CONVERT(varchar, d.formdesc) + ' ' + 
-        CONVERT(varchar, COALESCE (b.brandname, '')) AS dmddesc 
-        FROM
-        hospital.dbo.hdruggrp AS a INNER JOIN
-        hospital.dbo.hdmhdr AS b ON a.grpcode = b.grpcode INNER JOIN
-        hospital.dbo.hgen AS c ON a.gencode = c.gencode INNER JOIN
-        hospital.dbo.hform AS d ON b.formcode = d.formcode INNER JOIN
-        hospital.dbo.hroute AS e ON b.rtecode = e.rtecode INNER JOIN
-        hospital.dbo.hstre AS f ON b.strecode = f.strecode 
-        WHERE (a.grpstat = 'A') AND (c.genstat = 'A') AND (b.dmdstat = 'A') AND (d.formstat = 'A') AND (e.rtestat = 'A') AND (b.dmdstat = 'A') AND (c.genstat = 'A') AND (f.strestat = 'A')) as atable
-        LEFT OUTER JOIN
-        (SELECT SUM(hs.stockbal) AS boh, hs.dmdctr, hs.dmdcomb FROM hospital.dbo.hdmhdrsub AS hs INNER JOIN hospital.dbo.hcharge AS hc ON hs.dmhdrsub = hc.chrgcode WHERE 
-        (hs.statusMed = 'A') AND (hc.chrgcode = 'DRUM1') OR(hc.chrgcode = 'DRUM2') OR(hc.chrgcode = 'DRUM3') OR(hc.chrgcode = 'DRUMA') OR(hc.chrgcode = 'DRUMC') OR(hc.chrgcode = 'DRUMD') OR(hc.chrgcode = 'DRUME') OR(hc.chrgcode = 'DRUMF') OR(hc.chrgcode = 'DRUMG') OR(hc.chrgcode = 'DRUMH') OR(hc.chrgcode = 'DRUMI') OR(hc.chrgcode = 'DRUMK') OR(hc.chrgcode = 'DRUML') OR(hc.chrgcode = 'DRUMM') OR(hc.chrgcode = 'DRUMN') OR(hc.chrgcode = 'DRUMO') OR(hc.chrgcode = 'DRUM4')
-        GROUP BY hs.dmdcomb, hs.dmdctr) as btable on atable.dmdctr = btable.dmdctr and atable.dmdcomb = btable.dmdcomb
-        inner join procurement.dbo.dmds as ctable on atable.dmdcomb COLLATE DATABASE_DEFAULT = ctable.dmdcomb and atable.dmdctr = ctable.dmdctr) as tb6 on tb3.dmd_id = tb6.dmd_id
-         WHERE tb5.purchase_order_id = '$id'");
 
+        $data = DB::SELECT("exec procurement.dbo.sp_cons $id");
+    
         return response()->json($data);
+    
     }
+
     public function update(Request $request, $id){
         
 
@@ -472,7 +353,6 @@ class PurchaseOrderController extends Controller
     public function date_now(){
         return Carbon::now();
     }
-    
     
     public function pmo_rls_po($id){
 
@@ -519,12 +399,43 @@ class PurchaseOrderController extends Controller
         return response()->json();
     }
     
+    public function cmps_rcv_po($id){
+    
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 6
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    }
+    
+    public function cmps_rls_po($id){
+    
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 7
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    
+    }
+
     public function budget_rcv($id){
 
         $po = PurchaseOrder::findOrFail($id);
 
         $po->purchase_order_statuses()->create([
-            'current_status_id' => 6
+            'current_status_id' => 8
         ]);
 
         $po->update([
@@ -540,47 +451,18 @@ class PurchaseOrderController extends Controller
         $po = PurchaseOrder::findOrFail($id);
 
         $po->purchase_order_statuses()->create([
-            'current_status_id' => 7
-        ]);
-
-        $po->update([
-            'updated_at' => $this->date_now(),
-        ]);
-
-        return response()->json();
-
-    }
-    
-    public function cmps_rcv_po($id){
-    
-        $po = PurchaseOrder::findOrFail($id);
-
-        $po->purchase_order_statuses()->create([
-            'current_status_id' => 8
-        ]);
-
-        $po->update([
-            'updated_at' => $this->date_now(),
-        ]);
-    
-        return response()->json();
-    }
-    
-    public function cmps_rls_po($id){
-    
-        $po = PurchaseOrder::findOrFail($id);
-
-        $po->purchase_order_statuses()->create([
             'current_status_id' => 9
         ]);
 
         $po->update([
             'updated_at' => $this->date_now(),
         ]);
-    
+
         return response()->json();
-    
+
     }
+    
+    
     
     public function accounting_rcv($id){
 
@@ -612,8 +494,6 @@ class PurchaseOrderController extends Controller
 
         return response()->json();
     }
-
-
     
     public function fmo_rcv($id){
         

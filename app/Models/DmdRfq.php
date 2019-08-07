@@ -10,7 +10,7 @@ class DmdRfq extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'rfq_id', 'dmd_id', 'brand_id', 'manufacturer_id', 'cost_unit', 'supplier_id',
+        'rfq_id', 'dmd_id', 'brand_id', 'manufacturer_id', 'cost_unit', 'supplier_id', 'packaging_id', 'country_id',
     ];
 
     public function dmd(){

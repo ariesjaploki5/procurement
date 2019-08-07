@@ -34,7 +34,9 @@ class RfqController extends Controller
                     },
                 ])->get();
             },
-        ])->get();
+        ])
+        ->orderBy('rfq_id', 'desc')
+        ->get();
 
         return response()->json($data);
     }
@@ -83,6 +85,8 @@ class RfqController extends Controller
             'brand_id' => $request->brand_id,
             'manufacturer_id' => $request->manufacturer_id,
             'cost_unit' => $request->cost_unit,
+            'packaging_id' => $request->packaging_id,
+            'country_id' => $request->country_id,
         ]);
         
         return response()->json();
@@ -96,6 +100,8 @@ class RfqController extends Controller
             'brand_id' => $request->brand_id,
             'manufacturer_id' => $request->manufacturer_id,
             'cost_unit' => $request->cost_unit,
+            'packaging_id' => $request->packaging_id,
+            'country_id' => $request->country_id,
         ]);
         
         return response()->json();

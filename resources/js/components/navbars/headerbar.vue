@@ -9,9 +9,9 @@
           </li> -->
           
         </ul>
-        <h3><span class="ml-2 mr-2 text-right">Office:</span></h3>
+        <!-- <h3><span class="ml-2 mr-2 text-right">Office:</span></h3> -->
         <ul class="navbar-nav">
-          <div class="badge badge-success text-wrap text-center align-bottom">
+          <div class="">
             <h5>
               <span v-show="current_user.role_id == 1">Administrator</span>
               <span v-show="current_user.role_id == 2">Pharmacy</span>

@@ -19,16 +19,18 @@ class DrugsAndMedicineController extends Controller
 {
     public function index(){
 
-        $now = Carbon::now();
-        $year = $now->year;
+        // $now = Carbon::now();
+        // $year = $now->year;
 
-        $data = NewAppDmd::with([
-            'dmd_price_schedule', 'last_pr'
-        ])->whereNotNull('cost')
-        ->where('app_year', $year)
-        ->where('cost', '<>', '')
-        ->orderBy('dmddesc', 'asc')
-        ->get();
+        // $data = NewAppDmd::with([
+        //     'dmd_price_schedule', 'last_pr'
+        // ])->whereNotNull('cost')
+        // ->where('app_year', $year)
+        // ->where('cost', '<>', '')
+        // ->orderBy('dmddesc', 'asc')
+        // ->get();
+
+        $data = DB::SELECT("SELECT * from fn_dmd() order by dmddesc asc");
 
         return response()->json($data);
     }
@@ -37,17 +39,19 @@ class DrugsAndMedicineController extends Controller
 
 
     public function need_to_pr(){
-        $now = Carbon::now();
-        $year = $now->year;
+        // $now = Carbon::now();
+        // $year = $now->year;
 
-        $data = NewAppDmd::with([
-            'dmd_price_schedule', 'last_pr'
-        ])->whereColumn('rop', '>=', 'boh')
-        ->where('ssl', '<>', 0)
-        ->where('cost', '<>', '')
-        ->where('app_year', $year)
-        ->orderBy('dmddesc', 'asc')
-        ->get();
+        // $data = NewAppDmd::with([
+        //     'dmd_price_schedule', 'last_pr'
+        // ])->whereColumn('rop', '>=', 'boh')
+        // ->where('ssl', '<>', 0)
+        // ->where('cost', '<>', '')
+        // ->where('app_year', $year)
+        // ->orderBy('dmddesc', 'asc')
+        // ->get();
+
+        $data = DB::SELECT("SELECT * from procurement.dbo.fn_dmd() where rop > (boh + iit) order by dmddesc asc");
 
         return response()->json($data);
     }

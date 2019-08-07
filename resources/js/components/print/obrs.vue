@@ -81,28 +81,35 @@
                     <td class="pr1border-bottom-0 border-top-0">
                         <div class="font-weight-bold border-bottom-0 text-center">{{ item.new_dmd.dmddesc }}</div>
                         <tr>
-                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Brand:</td><td class="border-bottom-0 border-top-0">
+                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Brand:</td>
+                            <td class="border-bottom-0 border-top-0">
                                 <span v-if="item.brand_id">{{ item.brand.brand_desc }}</span>
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Packaging:</td><td class="border-bottom-0 border-top-0">
+                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Packaging:</td>
+                            <td class="border-bottom-0 border-top-0">
                                  <span v-if="item.packaging_id">{{ item.packaging.packaging_desc }}</span>
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Manufacturer:</td><td class="border-bottom-0 border-top-0">
+                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Manufacturer:</td>
+                            <td class="border-bottom-0 border-top-0">
                                  <span v-if="item.manufacturer_id">{{ item.manufacturer.manufacturer_desc }}</span>
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Country of Origin:</td><td class="border-bottom-0 border-top-0">
+                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Country of Origin:</td>
+                            <td class="border-bottom-0 border-top-0">
                                  <span v-if="item.country_id">{{ item.country.country_desc }}</span>
                             </td>
                         </tr>
-                        <tr><td class="text-right border-bottom-0 border-top-0 font-weight-bold">CPR:</td><td class="border-bottom-0 border-top-0"></td></tr>
+                        <tr>
+                            <td class="text-right border-bottom-0 border-top-0 font-weight-bold">CPR:</td>
+                            <td class="border-bottom-0 border-top-0"></td>
+                        </tr>
                     </td>
-                    <td class="pr1 border-bottom-0 border-top-0 text-center">002</td>
+                    <td class="pr1 border-bottom-0 border-top-0 text-center">3</td>
                     <td class="pr1 border-bottom-0 border-top-0 text-center"></td>
                     <td class="pr1 border-bottom-0 border-top-0 text-center">{{ estimated_cost | currency2 }}</td>
                 </tr>

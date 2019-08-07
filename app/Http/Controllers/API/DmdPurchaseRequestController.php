@@ -66,6 +66,7 @@ class DmdPurchaseRequestController extends Controller
                 'status' => 0,
                 'purpose' => $request->purpose,
                 'cart_id' => $cart->id,
+
             ]);
 
             
@@ -80,6 +81,10 @@ class DmdPurchaseRequestController extends Controller
                 'dmd_id' => $dmd_id,
                 'request_quantity' => $quantity,
                 'cost_price' => $cost,
+            ]);
+
+            $pr->purchase_request_statuses()->create([
+                'current_status_id' => 1
             ]);
         }
 
@@ -99,24 +104,22 @@ class DmdPurchaseRequestController extends Controller
 
         $cart = Cart::where('status', 0)->where('mode_id', 4)->first();
 
-
-        $pr = PurchaseRequest::create([
-            'mode_id' => $request->mode_id,
-            'category_id' => $request->category_id,
-            'user_id' => $request->user_id, 
-            'status' => 0,
-            'purpose' => $request->purpose,
-            'cart_id' => $cart->id,
-        ]);
-
-        if(!$pr->pr_id){
-            $zero_id = sprintf("%04d", $pr->purchase_request_id);
-
-            $pr->pr_id = $year_month.'-'.$zero_id;
-            $pr->save();
-        }
-
         for($i = 0; $i < $count; $i++){
+
+            $pr = PurchaseRequest::create([
+                'mode_id' => $request->mode_id,
+                'category_id' => $request->category_id,
+                'user_id' => $request->user_id, 
+                'status' => 0,
+                'purpose' => $request->purpose,
+                'cart_id' => $cart->id,
+            ]);
+    
+            if(!$pr->pr_id){
+                $zero_id = sprintf("%04d", $pr->purchase_request_id);
+                $pr->pr_id = $year_month.'-'.$zero_id;
+                $pr->save();
+            }
 
             $dmd_id = $dmd[$i]['dmd_id'];
             $quantity = $dmd[$i]['request_quantity'];
@@ -126,6 +129,10 @@ class DmdPurchaseRequestController extends Controller
                 'dmd_id' => $dmd_id,
                 'request_quantity' => $quantity,
                 'cost_price' => $cost,
+            ]);
+
+            $pr->purchase_request_statuses()->create([
+                'current_status_id' => 1
             ]);
         }
 
@@ -137,6 +144,7 @@ class DmdPurchaseRequestController extends Controller
     }
 
     public function rfq(Request $request){
+        
         $dmd = $request->items;
         $count = count($dmd);
         $cart_id = $dmd[0]['cart_id'];

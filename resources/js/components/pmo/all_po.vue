@@ -26,32 +26,27 @@
                         <th width="15%">Date Created</th>
                         <th width="18%">Track</th>
                         <th width="10%">Mode</th>
-                        <th width="40%">Supplier</th>
-                        <th width="7%"></th>
+                        <th width="32%">Supplier</th>
+                        <th width="15%"></th>
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="po in pos" :key="po.purchase_order_id">
                         <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.po_id }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="15%">{{ po.created_at }}</th>
+                        <th @click="view_po(po.purchase_order_id)" width="15%">{{ po.created_at | myDate3 }}</th>
                         <th @click="view_po(po.purchase_order_id)" width="18%">
-                            <span v-if="po.last_status">
-                                {{ po.last_status.current_status.current_status_desc }}
-                            </span>
-                            <span v-else>
-                                {{ po.purchase_request.last_status.current_status.current_status_desc }}
-                            </span>
+                            <span v-if="po.csd">{{ po.csd }}</span>
                         </th>
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode.mode_desc }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="40%">{{ po.supplier.supplier_name }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="7%">
-                            <span v-if="!po.last_status">
+                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode_desc }}</th>
+                        <th @click="view_po(po.purchase_order_id)" width="32%">{{ po.supplier_name }}</th>
+                        <th width="15%">
+                            <span v-if="!po.csd">
                                 <button type="button" class="btn btn-sm btn-danger" @click="pmo_rls_po(po.purchase_order_id)">
                                     <i class="fas fa-file-upload"></i>
                                 </button>
                             </span>
                             <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: po.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
-                            <router-link class="btn btn-sm btn-success" v-show="po.obrs_date" :to="{ name: 'obrs', params: { id: po.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
+                            <router-link class="btn btn-sm btn-success" :to="{ name: 'obrs', params: { id: po.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
                         </th>
                     </tr>
                 </tbody>
@@ -89,8 +84,7 @@
                                             <td class="text-right table-danger">{{ dmd.new_dmd_homis.boh | numeral3 }}</td>
                                             <td class="text-right table-danger"></td>
                                             <td width="10%" class="text-right">
-                                                <input v-if="!view_po_form.last_status" type="number" class="form-control form-control-sm text-right" v-model="dmd.order_quantity">
-                                                <div v-else>{{ dmd.order_quantity | numeral3 }}</div>
+                                                <span>{{ dmd.order_quantity | numeral3 }}</span>
                                             </td>
                                             <td class="text-right">
                                                 <span>{{ dmd.cost_price | currency2 }}</span>
@@ -255,7 +249,7 @@ export default {
             this.track_po_modal = pos;
             $('#trackModal').modal('show')
         },
-        pmo_rls_po(id){
+        pmo_rls_po(id){ 
             axios.put('../../api/pmo_rls_po/'+id).then(() => {
                 toast.fire({
                     type: 'success',

@@ -19,6 +19,7 @@ export default {
         apps: {},
         units: {},
         users: {},
+        fund_source_codes: {},
     },
     getters: {
         isLoading(state) {
@@ -62,6 +63,9 @@ export default {
         },
         users(state){
             return state.users;
+        },
+        fund_source_codes(state){
+            return state.fund_source_codes;
         },
     },
     mutations: {
@@ -124,6 +128,9 @@ export default {
         set_users(state, payload){
             state.users = payload;
         },
+        set_fund_source_codes(state, payload){
+            state.fund_source_codes = payload;
+        },
     },
     actions: {
         login(context) {
@@ -182,6 +189,11 @@ export default {
         get_users(context){
             axios.get('../../api/user').then(({data}) => {
                 context.commit('set_users', data);
+            })
+        },
+        get_fund_source_codes(context){
+            axios.get('../../api/fund_source_code').then(({data}) => {
+                context.commit('set_fund_source_codes', data);
             })
         },
     }

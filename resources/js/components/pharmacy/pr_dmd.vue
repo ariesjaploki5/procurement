@@ -1,10 +1,8 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
-                <h4>
-                    <i class="fas fa-capsules"></i> Purchase Request
-                </h4>
+            <div class="row mb-2 bg-white">
+                <h6><i class="fas fa-capsules"></i> Purchase Requests</h6>
             </div>
         </div>
         <div class="col-md-12">
@@ -35,71 +33,84 @@
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="(item, index) in filteredPrs" :key="item.dmd_pr_id">
-                        <td width="3%" class="text-left">{{ index + 1 }}</td>
-                        <td width="24%" class="text-left">
-                            <span class="text-link btn" @click="view_pr(item.purchase_request_id)">
+                        <td width="3%" class="text-left" @click="view_pr(item.purchase_request_id)">{{ index + 1 }}</td>
+                        <td width="24%" class="text-left" @click="view_pr(item.purchase_request_id)">
+                            <span class="text-link btn" >
                                 {{ item.dmddesc }}
                             </span>
                         </td>
-                        <td width="5%" class="text-left">
+                        <td width="5%" class="text-left" @click="view_pr(item.purchase_request_id)">
                             {{ item.unit_id }}
                         </td>
-                        <td width="9%" class="text-center">
-                            <span class="text-link btn" @click="view_pr(item.purchase_request_id)">
-                                {{ item.created_at | myDate }} - {{ item.purchase_request_id | numeral2 }}
+                        <td width="9%" class="text-center" @click="view_pr(item.purchase_request_id)">
+                            <span class="text-link btn">
+                                {{ item.pr_id }}
                             </span>
                         </td>  
-                        <td width="9%" class="text-center">
+                        <td width="9%" class="text-center" @click="view_pr(item.purchase_request_id)">
                             <span>
-                                {{ item.pr_date | myDate3 }}
+                                {{ item.pr_date_time | myDate4 }}
                             </span>
                         </td>
-                        <td width="9%" class="text-center">
-                            <span v-if="item.last_po_status" class="badge badge-pill" v-bind:class="[
-                            { 'badge-success' : item.last_po_status.current_status_id == 5 },
-                                { 'badge-success' : item.last_po_status.current_status_id == 6 },
-                                { 'badge-danger' : item.last_po_status.current_status_id == 7 },
-                                { 'badge-danger' : item.last_po_status.current_status_id == 8 },
-                                { 'badge-warning' : item.last_po_status.current_status_id == 9 },
-                                { 'badge-warning' : item.last_po_status.current_status_id == 10 },
-                                { 'badge-info' : item.last_po_status.current_status_id == 11 },
-                                { 'badge-info' : item.last_po_status.current_status_id == 12 },
-                                { 'badge-light' : item.last_po_status.current_status_id == 13 },
-                                { 'badge-light' : item.last_po_status.current_status_id == 14 },
-                                { 'badge-dark' : item.last_po_status.current_status_id == 15 },
-                                { 'badge-dark' : item.last_po_status.current_status_id == 16 },
-                            ]">{{ item.last_po_status.current_status.current_status_desc }}
+                        <td width="9%" class="text-center" @click="view_pr(item.purchase_request_id)">
+                            <span v-if="item.csid2" class="badge badge-pill" v-bind:class="[
+                                { 'badge-success' : item.csid2 == 5 },
+                                { 'badge-success' : item.csid2 == 6 },
+                                { 'badge-danger' : item.csid2 == 7 },
+                                { 'badge-danger' : item.csid2 == 8 },
+                                { 'badge-warning' : item.csid2 == 9 },
+                                { 'badge-warning' : item.csid2 == 10 },
+                                { 'badge-info' : item.csid2 == 11 },
+                                { 'badge-info' : item.csid2 == 12 },
+                                { 'badge-light' : item.csid2 == 13 },
+                                { 'badge-light' : item.csid2 == 14 },
+                                { 'badge-dark' : item.csid2 == 15 },
+                                { 'badge-dark' : item.csid2 == 16 },
+                                ]">{{ item.csd2 }}
                             </span>
                             <span v-else>
-                                <span v-if="item.last_status" class="badge badge-pill"
-                            v-bind:class="[
-                                { 'badge-primary' : item.last_status.current_status_id == 1 },
-                                { 'badge-primary' : item.last_status.current_status_id == 2 },
-                                { 'badge-secondary' : item.last_status.current_status_id == 3 },
-                                { 'badge-secondary' : item.last_status.current_status_id == 4 },
-                                
-                                ]">
-                                    {{ item.last_status.current_status.current_status_desc }}
+                                <span v-if="item.csid" class="badge badge-pill" v-bind:class="[
+                                    { 'badge-primary' : item.csid == 1 },
+                                    { 'badge-primary' : item.csid == 2 },
+                                    { 'badge-secondary' : item.csid == 3 },
+                                    { 'badge-secondary' : item.csid == 4 },
+                                    ]">
+                                    {{ item.csd }}
                                 </span>
-                                
                             </span>
                         </td>
-                        <td width="9%" class="text-center">
-                            <span v-if="item.last_status">
-                                {{ item.last_status.status_date_time | myDate3 }}
+                        <td width="9%" class="text-center" @click="view_pr(item.purchase_request_id)">
+                            <span v-if="item.csid2">
+                                {{ item.lpos_datetime | myDate4 }}
+                            </span>
+                            <span v-else>
+                                <span v-if="item.lprs_datetime">
+                                    {{ item.lprs_datetime | myDate4 }}
+                                </span>
+                                <span v-else>
+                                    {{ item.pr_date_time | myDate4 }}
+                                </span>
                             </span>
                         </td>
-                        <td width="13%" class="text-left">
-                            {{ item.pr_date | myDate3 }}
-                            <span v-if="item.last_status">
-                                 - {{ item.last_status.status_date_time | myDate3 }}
+                        <td width="13%" class="text-center" @click="view_pr(item.purchase_request_id)">
+                            {{ item.pr_date_time | myDate4 }}
+                            <span v-if="item.lprs_datetime"> - 
+                                <span v-if="item.lpos_datetime">
+                                    {{ item.lpos_datetime | myDate4 }}
+                                </span>
+                                <span v-else>
+                                    {{ item.lprs_datetime | myDate4 }}
+                                </span>
                             </span>
                             <span v-else>
                             </span>
                         </td>
-                        <td width="7%" class="text-right">
-                            <span>
-                                {{ item.request_quantity | numeral3 }}
+                        <td width="7%" class="text-right" @click="view_pr(item.purchase_request_id)">
+                            <span v-if="item.o_qty">
+                                {{ item.o_qty | numeral3 }}
+                            </span>
+                            <span v-else>
+                                {{ item.r_qty | numeral3 }}
                             </span>
                         </td>
                         <td width="9%" class="text-center">
@@ -148,8 +159,7 @@
                                         <td class="text-right table-danger">{{ dmd.dmd.boh | numeral3 }}</td>
                                         <td class="text-right table-danger"></td>
                                         <td width="10%" class="text-right">
-                                            <input v-if="!pr.send" type="number" class="form-control form-control-sm text-right" v-model="dmd.request_quantity">
-                                            <div v-else>{{ dmd.request_quantity }}</div>
+                                            <span>{{ dmd.request_quantity | numeral3 }}</span>
                                         </td>
                                         <td class="text-right">
                                             <span>{{ dmd.cost_price | currency2 }}</span>

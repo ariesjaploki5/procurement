@@ -32,7 +32,7 @@
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
-                    <tr v-for="pr in prs" :key="pr.purchase_request_id" :class="{ 'table-danger' : pr.status == 2, 'table-warning' : pr.status == 0, 'table-success' : pr.status == 1 }">
+                    <tr v-for="pr in prs" :key="pr.purchase_request_id" >
                         <td @click="view_pr(pr.purchase_request_id)" width="10%">{{ pr.pr_id }}</td> 
                         <td @click="view_pr(pr.purchase_request_id)" width="12%">{{ pr.created_at | myDate4}} - {{ pr.created_at | time1}}</td>
                         <td @click="view_pr(pr.purchase_request_id)" width="8%" class="text-center">
@@ -40,14 +40,17 @@
                             <span v-show="pr.status == 1">Approved</span>
                             <span v-show="pr.status == 0">Pending</span>
                         </td>
-                        <td @click="view_pr(pr.purchase_request_id)" width="15%">{{ pr.last_status.current_status.current_status_desc }}</td>
-                        <td @click="view_pr(pr.purchase_request_id)" width="10%">{{ pr.mode.mode_desc }}</td>
+                        <td @click="view_pr(pr.purchase_request_id)" width="15%">
+                            <span v-if="pr.cdi2">{{ pr.csd2 }}</span>
+                            <span v-else>{{ pr.csd }}</span>
+                        </td>
+                        <td @click="view_pr(pr.purchase_request_id)" width="10%">{{ pr.mode_desc }}</td>
                         <td @click="view_pr(pr.purchase_request_id)" width="45%">
-                            <span v-if="pr.supplier">{{ pr.supplier.supplier_name }}</span>
+                            <span v-if="pr.supplier_name">{{ pr.supplier_name }}</span>
                         </td>
                         <td width="5%">
-                            <span v-if="pr.last_status">
-                                <button type="button" class="btn btn-sm btn-success" v-if="pr.last_status.current_status_id == 3" @click="pmo_rcv(pr.purchase_request_id)">
+                            <span v-if="pr.csi">
+                                <button type="button" class="btn btn-sm btn-success" v-if="pr.csi == 3" @click="pmo_rcv(pr.purchase_request_id)">
                                     <i class="fas fa-file-download"></i>
                                 </button>
                             </span>
@@ -77,7 +80,6 @@
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
-                                            
                                         </tr>
                                     </thead>
                                     <tbody id="pr_tbody">
@@ -88,8 +90,7 @@
                                             <td class="text-right table-danger">{{ dmd.dmd.boh | numeral3 }}</td>
                                             <td class="text-right table-danger"></td>
                                             <td width="10%" class="text-right">
-                                                <input v-if="!view_pr_form.send" type="number" class="form-control form-control-sm text-right" v-model="dmd.request_quantity">
-                                                <div v-else>{{ dmd.request_quantity | numeral3 }}</div>
+                                                <span>{{ dmd.request_quantity | numeral3 }}</span>
                                             </td>
                                             <td class="text-right">
                                                 <span>{{ dmd.cost_price | currency2 }}</span>

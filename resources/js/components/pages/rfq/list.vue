@@ -92,7 +92,7 @@
                                                             <button class="dropdown-item" @click="delete_rfq(rfq.id)"><i class="fas fa-trash"></i> Delete</button>
                                                         </div>
                                                     </div>
-                                                    <button type="button" class="btn btn-sm btn-success" @click="print_rfq(rfq.id)"><i class="fas fa-print"></i> Print Rfq</button>
+                                                    <!-- <button type="button" class="btn btn-sm btn-success" @click="print_rfq(rfq.id)"><i class="fas fa-print"></i> Print Rfq</button> -->
                                                 </div>
                                             </div>
                                         </td>
@@ -105,7 +105,7 @@
                             </table>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-sm btn-success" type="button" @click="create_po()">Create PO</button>
+                            <!-- <button class="btn btn-sm btn-success" type="button" @click="create_po()">Create PO</button> -->
                         </div>
                     </div>
                 </div>
@@ -144,6 +144,12 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <div class="form-label font-weight-bold">Packaging</div>
+                                    <select class="form-control form-control-sm" v-model="form.packaging_id">
+                                        <option v-for="p in packagings" :key="p.packaging_id" :value="p.packaging_id">{{ p.packaging_desc }}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <div class="form-label font-weight-bold">Cost</div>
                                    <input type="number" v-model="form.cost_unit" class="form-control form-control-sm">
                                 </div>
@@ -177,6 +183,7 @@ export default {
                 supplier_id: '',
                 brand_id: '',
                 manufacturer_id: '',
+                packaging_id: '',
                 cost_unit: '',
                 dmd_id: '',
                 gendesc: '',
@@ -189,7 +196,7 @@ export default {
     },
     methods:{
         ...mapActions([
-            'get_brands', 'get_manufacturers', 'get_suppliers'
+            'get_brands', 'get_manufacturers', 'get_suppliers', 'get_packagings', 'get_countries',
         ]),
         create_rfq(item){
             this.editmode = false;
@@ -255,15 +262,14 @@ export default {
         get_rfq(){
             axios.get('../../api/rfq/'+this.selected_id).then(({data}) => {
                 this.rfq = data;
-                
             }).catch(() => {
 
             });
         },
-        print_rfq(rfq_id){
-            $('#viewRfqModal').modal('hide');
-            this.$router.push({name: 'rfq', params:{ id: rfq_id }});
-        },
+        // print_rfq(rfq_id){
+        //     $('#viewRfqModal').modal('hide');
+        //     this.$router.push({name: 'rfq', params:{ id: rfq_id }});
+        // },
         print_aoq(dmd_id){
             $('#viewRfqModal').modal('hide');
             this.$router.push({name: 'aoq', params:{ id: dmd_id, rfq_id: this.rfq.rfq_id }});
@@ -274,10 +280,12 @@ export default {
         this.get_manufacturers();
         this.get_brands();
         this.get_suppliers();
+        this.get_packagings();
+        this.get_countries();
     },
     computed:{
         ...mapGetters([
-            'brands', 'manufacturers', 'suppliers'
+            'brands', 'manufacturers', 'suppliers', 'packagings', 'countries',
         ]),
     }
 }

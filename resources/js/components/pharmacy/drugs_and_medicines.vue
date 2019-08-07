@@ -1,9 +1,9 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="row shadow mb-3 bg-white rounded">
-                <div class="col-md-5">
-                    <h4> <i class="fas fa-capsules"></i> Drugs And Medicines</h4>
+            <div class="row mb-2 bg-white rounded">
+                <div class="col">
+                    <h6> <i class="fas fa-capsules"></i> Drugs And Medicines</h6>
                 </div>
                 <div class="col-md-auto">Legend:</div>
                 <div class="col-md-auto"><i class="fas fa-stop" style="color:yellow"></i> - Below ROP</div>
@@ -14,13 +14,12 @@
                     <button class="btn btn-sm btn-primary" :disabled="cart_item == 0" @click="cart_modal()"><i class="fas fa-shopping-cart"></i> <span class="badge badge-light">{{ cart_item }}</span></button>
                 </div>
             </div>
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <div class="mt-2 mr-2 font-weight-bold">View:</div>
+            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#ntpr" role="tab" aria-controls="ntpr" aria-selected="true">Need To PR</a>
+                    <a class="nav-link active" id="tabs-home-tab" data-toggle="tab" href="#ntpr" role="tab" aria-controls="ntpr" aria-selected="true">Need To PR</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#all" role="tab" aria-controls="all" aria-selected="false">All</a>
+                    <a class="nav-link" id="tabs-home-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false">All</a>
                 </li>
             </ul>
                 <div class="tab-content" id="myTabContent">
@@ -53,23 +52,26 @@
                                         </button>
                                     </td>
                                     <td width="5%" class="text-right">{{ d.rop | numeral3 }}</td>
-                                    <td width="5%" class="text-right">{{ d.item_in_transit | numeral3 }}</td>
+                                    <td width="5%" class="text-right">{{ d.iit | numeral3 }}</td>
                                     <td width="5%" class="text-center"><span v-if="d.last_pr">{{ d.last_pr | myDate3 }}</span><span v-else></span></td>
                                     <td class="text-center" width="5%">
-                                        <span v-show="(d.cost)  && d.ssl != 0 && !d.cart_dmd_id">
+                                        <span v-show="(d.dps_id || d.ad_id)  && d.ssl != 0 && !d.cart_dmd_id">
                                             <!-- public bidding -->
-                                            <button class="custom-btn text-primary" v-if="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)">
+                                            <button class="custom-btn text-primary" v-if="d.dps_id !== null" @click="add_item_2(d.dmd_id, 1)">
                                                 <i class="fas fa-shopping-cart fa-lg"></i>
                                                 <i class="fas fa-plus fa-lg"></i>
                                             </button>
                                             <!-- shopping -->
-                                            <button class="custom-btn text-primary" v-else @click="add_item_2(d, 4)">
+                                            <button class="custom-btn text-primary" v-else @click="add_item_2(d.dmd_id, 4)">
                                                 <i class="fas fa-shopping-cart fa-lg"></i>
                                                 <i class="fas fa-plus fa-lg"></i>
                                             </button>                                 
                                         </span>
-                                        <span v-show="(d.cost)  && d.ssl != 0 && d.cart_dmd_id">
+                                        <span v-show="(d.dps_id !== null || d.ad_id)  && d.ssl != 0 && d.cart_dmd_id">
                                             <span class="badge badge-light">in cart</span>    
+                                        </span>
+                                        <span v-show="!d.dps_id && !d.ad_id">
+                                           N/A
                                         </span>
                                     </td>
                                 </tr>
@@ -106,22 +108,22 @@
                                         </button>
                                     </td>
                                     <td width="5%" class="text-right">{{ d.rop | numeral3 }}</td>
-                                    <td width="5%" class="text-right">{{ d.item_in_transit | numeral3 }}</td>
+                                    <td width="5%" class="text-right">{{ d.iit | numeral3 }}</td>
                                     <td width="5%" class="text-center"><span v-if="d.last_pr">{{ d.last_pr | myDate3 }}</span><span v-else></span></td>
                                     <td class="text-center" width="5%">
-                                        <span v-show="(d.dmd_price_schedule !== null || d.cost)  && d.ssl != 0 && !d.cart_dmd_id">
+                                        <span v-show="(d.dps_id || d.ad_id)  && d.ssl != 0 && !d.cart_dmd_id">
                                             <!-- public bidding -->
-                                            <button class="custom-btn text-primary" v-if="d.dmd_price_schedule !== null" @click="add_item_2(d, 1)">
+                                            <button class="custom-btn text-primary" v-if="d.dps_id !== null" @click="add_item_2(d.dmd_id, 1)">
                                                 <i class="fas fa-shopping-cart fa-lg"></i>
                                                 <i class="fas fa-plus fa-lg"></i>
                                             </button>
                                             <!-- shopping -->
-                                            <button class="custom-btn text-primary" v-else @click="add_item_2(d, 4)">
+                                            <button class="custom-btn text-primary" v-else @click="add_item_2(d.dmd_id, 4)">
                                                 <i class="fas fa-shopping-cart fa-lg"></i>
                                                 <i class="fas fa-plus fa-lg"></i>
                                             </button>                                 
                                         </span>
-                                        <span v-show="(d.dmd_price_schedule !== null || d.cost)  && d.ssl != 0 && d.cart_dmd_id">
+                                        <span v-show="(d.dps_id !== null || d.ad_id)  && d.ssl != 0 && d.cart_dmd_id">
                                             <span class="badge badge-light">in cart</span>    
                                         </span>
                                     </td>
@@ -362,7 +364,7 @@ export default {
             this.get_dmds();
             this.get_pb_items();
             this.get_sp_items();
-            this.$router.push({path: '/pr_dmd'});
+            this.$router.push({path: 'pr_dmd'});
         },
         sp_submit(){
             axios.post('../../api/shopping', {
@@ -378,10 +380,10 @@ export default {
             });
         }, 
 
-        add_item_2(dmd, mode_id){
+        add_item_2(dmd_id, mode_id){
             axios.post('../../api/cart_dmd_2/'+this.current_user.user_id, {
                 mode_id: mode_id,
-                dmd_id: dmd.dmd_id,
+                dmd_id: dmd_id,
             }).then(() => {
                 this.get_dmds();
                 this.get_pb_items();
@@ -476,7 +478,7 @@ export default {
 
 </script>
 <style scoped>
-.nav-tabs .nav-link.active{
+    .nav-tabs .nav-link.active{
         color: white;
         background-color: #4a5ea5fa;
         

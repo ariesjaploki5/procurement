@@ -25,7 +25,7 @@
                         <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'table-warning' : d.boh_iit < d.ssl/2 , 'table-danger' : d.ssl == 0 , 'table-success' : d.boh > d.ssl/2, 'table-primary' : d.boh_iit > d.ssl/2}" >
                             <td width="5%">{{ index + 1}}</td>
                             <!-- <td width="10%">{{ d.dmdcomb }}-{{ d.dmdctr}}</td> -->
-                            <td width="30%">{{ d.gendesc }} {{ d.dmdnost }} {{ d.stredesc }} {{ d.formdesc }} {{ d.brandname }}</td>
+                            <td width="30%">{{ d.dmddesc }}</td>
                             <td width="10%" class="text-right">{{ d.boh | numeral3 }}</td>
                             <td class="text-right">{{ d.ssl | numeral3 }}</td>
                             <td class="text-right">{{ d.rop | numeral3 }}</td>

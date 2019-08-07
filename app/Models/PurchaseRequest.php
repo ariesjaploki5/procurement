@@ -86,4 +86,5 @@ class PurchaseRequest extends Model
         return $this->hasOne("App\Models\PurchaseRequestStatus", 'purchase_request_id', 'purchase_request_id')
         ->orderBy('id', 'desc');
     }
+
 }

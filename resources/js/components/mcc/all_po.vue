@@ -26,29 +26,24 @@
                         <th width="15%">Date Created</th>
                         <th width="18%">Track</th>
                         <th width="10%">Mode</th>
-                        <th width="40%">Supplier</th>
-                        <th width="7%"></th>
+                        <th width="37%">Supplier</th>
+                        <th width="10%"></th>
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="po in pos" :key="po.purchase_order_id">
                         <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.po_id }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="15%">{{ po.created_at }}</th>
+                        <th @click="view_po(po.purchase_order_id)" width="15%">{{ po.created_at | myDate3 }}</th>
                         <th @click="view_po(po.purchase_order_id)" width="18%">
-                            <span v-if="po.last_status">
-                                {{ po.last_status.current_status.current_status_desc }}
-                            </span>
-                            <span v-else>
-                                {{ po.purchase_request.last_status.current_status.current_status_desc }}
-                            </span>
+                            <span v-if="po.csd">{{ po.csd }}</span>
                         </th>
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode.mode_desc }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="40%">{{ po.supplier.supplier_name }}</th>
-                        <th width="7%">
-                            <button type="button" class="btn btn-sm btn-success" v-if="po.last_status.current_status_id == 13" @click="mcc_rcv(po.purchase_order_id)">
+                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode_desc }}</th>
+                        <th @click="view_po(po.purchase_order_id)" width="37%">{{ po.supplier_name }}</th>
+                        <th width="10%">
+                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 13" @click="mcc_rcv(po.purchase_order_id)">
                                 <i class="fas fa-file-download"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" v-if="po.last_status.current_status_id == 14" @click="mcc_rls(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 14" @click="mcc_rls(po.purchase_order_id)">
                                 <i class="fas fa-file-upload"></i>
                             </button>
                         </th>
@@ -210,7 +205,7 @@ export default {
     methods:{
 
         get_pos(){
-            axios.get('../../api/po_for_budget').then(({data}) => {
+            axios.get('../../api/for_mcc').then(({data}) => {
                 this.pos = data;
             }).catch(() => {
 

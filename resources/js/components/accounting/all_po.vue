@@ -26,29 +26,24 @@
                         <th width="15%">Date Created</th>
                         <th width="18%">Track</th>
                         <th width="10%">Mode</th>
-                        <th width="40%">Supplier</th>
-                        <th width="7%"></th>
+                        <th width="37%">Supplier</th>
+                        <th width="10%"></th>
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="po in pos" :key="po.purchase_order_id">
                         <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.po_id }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="15%">{{ po.created_at }}</th>
+                        <th @click="view_po(po.purchase_order_id)" width="15%">{{ po.created_at | myDate3 }}</th>
                         <th @click="view_po(po.purchase_order_id)" width="18%">
-                            <span v-if="po.last_status">
-                                {{ po.last_status.current_status.current_status_desc }}
-                            </span>
-                            <span v-else>
-                                {{ po.purchase_request.last_status.current_status.current_status_desc }}
-                            </span>
+                            <span v-if="po.csd">{{ po.csd }}</span>
                         </th>
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode.mode_desc }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="40%">{{ po.supplier.supplier_name }}</th>
-                        <th width="7%">
-                            <button type="button" class="btn btn-sm btn-success" v-if="po.last_status.current_status_id == 9" @click="accounting_rcv(po.purchase_order_id)">
+                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode_desc }}</th>
+                        <th @click="view_po(po.purchase_order_id)" width="37%">{{ po.supplier_name }}</th>
+                        <th width="10%">
+                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 9" @click="accounting_rcv(po.purchase_order_id)">
                                 <i class="fas fa-file-download"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" v-if="po.last_status.current_status_id == 10" @click="accounting_rls(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 10" @click="accounting_rls(po.purchase_order_id)">
                                 <i class="fas fa-file-upload"></i>
                             </button>
                         </th>
@@ -70,10 +65,10 @@
                                     <thead>
                                         <tr class="text-center">
                                             <th width="5%">#</th>
-                                            <th width="20%">Description</th>
+                                            <th width="25%">Description</th>
                                             <th>SSL</th>
                                             <th>BOH</th>
-                                            <th>Item In Transit</th>
+                                            <!-- <th>Item In Transit</th> -->
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
@@ -82,10 +77,10 @@
                                     <tbody id="po_tbody">
                                         <tr v-for="(dmd,index) in view_po_form.dmd_purchase_orders" :key="dmd.dmd_id">
                                             <td width="5%">{{ index + 1}}</td>
-                                            <td width="20%">{{ dmd.new_dmd_homis.dmddesc }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd_homis.ssl | numeral3 }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd.boh | numeral3 }}</td>
-                                            <td class="text-right table-danger"></td>
+                                            <td width="25%">{{ dmd.new_dmd_homis.dmddesc }}</td>
+                                            <td class="text-right">{{ dmd.new_dmd_homis.ssl | numeral3 }}</td>
+                                            <td class="text-right">{{ dmd.new_dmd.boh | numeral3 }}</td>
+                                            <!-- <td class="text-right table-danger"></td> -->
                                             <td width="10%" class="text-right">
                                                 <input v-if="!view_po_form.last_status" type="number" class="form-control form-control-sm text-right" v-model="dmd.order_quantity">
                                                 <div v-else>{{ dmd.order_quantity | numeral3 }}</div>
@@ -121,58 +116,6 @@
                 </div>
             </div>
         </div> <!-- col-md-12 poModal -->
-        <div class="col-md-12">
-            <div class="modal fade" id="trackModal" tabindex="-1" role="dialog" aria-labelledby="trackModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            {{ track_po_modal.created_at | myDate }} - {{ track_po_modal.purchase_order_id | numeral2 }}
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row justify-content-center">
-                                <div class="col-md-12">
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rcv }">Division Head Received <div>{{ track_po_modal.div_head_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rls }">Division Head Released <div>{{ track_po_modal.div_head_rcv }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rcv }">PMO Received <div>{{ track_po_modal.pmo_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rls }">PMO Released <div>{{ track_po_modal.pmo_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">  
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rcv_2 }">Division Head Received <div>{{ track_po_modal.div_head_rcv_2 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rls_2 }">Division Head Released <div>{{ track_po_modal.div_head_rls_2 }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rcv_2 }">PMO Received <div>{{ track_po_modal.pmo_rcv_2 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rls_2 }">PMO Released <div>{{ track_po_modal.pmo_rls_2 }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">  
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.budget_rcv }">Budget Received <div>{{ track_po_modal.budget_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.budget_rls }">Budget Released <div>{{ track_po_modal.budget_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.mcc_rcv }">MCC Received <div>{{ track_po_modal.mcc_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.mcc_rls }">MCC Released <div>{{ track_po_modal.mcc_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.fmo_rcv }">FMO Received <div>{{ track_po_modal.fmo_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.fmo_rls }">FMO Released <div>{{ track_po_modal.fmo_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rcv_3 }">PMO Received <div>{{ track_po_modal.pmo_rcv_3 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rls_3 }">PMO Released <div>{{ track_po_modal.pmo_rls_3 }}</div></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div><!-- col-md-12 trackmodal -->
     </div>
     
 </template>
@@ -199,6 +142,7 @@ export default {
                 date_of_delivery: '',
                 dmd_purchase_orders: [],
                 last_status: {},
+                fund_source_code_id: '',
                 purchase_request:{
                    view_dmd_purchase_requests:[],
                    last_status: {},
@@ -210,7 +154,7 @@ export default {
     methods:{
 
         get_pos(){
-            axios.get('../../api/po_for_budget').then(({data}) => {
+            axios.get('../../api/for_accounting').then(({data}) => {
                 this.pos = data;
             }).catch(() => {
 

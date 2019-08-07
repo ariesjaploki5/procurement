@@ -158,19 +158,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <div class="col-md-3">
-                                                            <div class="form-label">Allotment</div>
-                                                        </div>
-                                                        
-                                                        <div class="col-md-9">
-                                                            <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.allotment_id">
-                                                                <option v-for="al in allotments" :key="al.allotment_id" :value="al.allotment_id">{{ al.allotment_desc }}</option>
-                                                            </select>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <div class="col-md-3">
-                                                            <div class="form-label">UACS</div>
+                                                            <div class="form-label">Fund Source Code</div>
                                                         </div>
                                                             
                                                         <div class="col-md-9">
@@ -179,6 +167,28 @@
                                                             </select>
                                                         </div>
                                                         
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-label">Allotment</div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-9">
+                                                            <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.allotment_id">
+                                                                <option v-for="al in allotments" :key="al.allotment_id" :value="al.allotment_id">{{ al.allotment_desc }}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-label">Allotment</div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-9">
+                                                            <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.allotment_id">
+                                                                <option v-for="al in allotments" :key="al.allotment_id" :value="al.allotment_id">{{ al.allotment_desc }}</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                     <div class="form-group-row">
                                                         <div class="col-md-12 text-right">

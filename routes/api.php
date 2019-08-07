@@ -49,6 +49,7 @@ Route::apiResources([
     'uacs_code' => 'API\UacsCodeController', 
     'unit' => 'API\UnitController',
     'user' => 'API\UserController',
+    'fund_source_code' => 'API\FundSourceCodeController',
     
 ]);
 
@@ -63,12 +64,12 @@ Route::get('pr_for_pmo', 'API\PurchaseRequestController@for_pmo');
 
 Route::get('po_for_pmo', 'API\PurchaseOrderController@for_pmo');
 Route::get('po_for_budget', 'API\PurchaseOrderController@for_budget');
-
 Route::get('po_for_cmps', 'API\PurchaseOrderController@for_cmps');
 
 
 
 Route::get('for_mmo_po', 'API\PurchaseOrderController@for_mmo');
+Route::get('for_mcc', 'API\PurchaseOrderController@for_mcc');
 Route::get('for_fmo', 'API\PurchaseOrderController@for_fmo');
 Route::get('for_accounting', 'API\PurchaseOrderController@for_accounting');
 Route::get('for_budget', 'API\PurchaseOrderController@for_budget');
@@ -221,3 +222,4 @@ Route::post('adjustment/{id}', 'API\AdjustmentController@search');
 Route::get('get_medicines', 'API\AdjustmentController@get_medicines');
 Route::post('add_medicine/{id}', 'API\AdjustmentController@add_medicine');
 Route::post('adjust_medicine', 'API\AdjustmentController@adjust_medicine');
+
