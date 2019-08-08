@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Events\CartDmdCreated;
+use App\Events\CartDmdUpdated;
 
 class Cart extends Model
 {
@@ -11,6 +13,11 @@ class Cart extends Model
 
     protected $fillable = [
         'user_id', 'status', 'mode_id',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => CartDmdCreated::class,
+        'updated' => CartDmdUpdated::class,
     ];
 
     public function dmds(){

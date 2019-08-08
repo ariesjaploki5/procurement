@@ -8,7 +8,7 @@
                 <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
             </div>
         </div>
-        <div id="content-wrapper" v-for="item in pr.dmd_purchase_requests" :key="item.dmd_id">
+        <div id="content-wrapper" v-for="item in pr" :key="item.dmd_id">
             <div class="col-lg-12" style="height: 43rem">
                 <table class="table table-condensed table-sm a" style="margin-top: 1%">
                     <tr>
@@ -44,15 +44,15 @@
                 <table class="table table-condensed border-0 table-sm" style="margin-top:-1%">
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0" width="5%" style="text-align: center">Articles:</td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-primary align-middle text-bold" rowspan="2" width="25%"><h5>{{ item.dmd.dmddesc }}</h5></td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-primary align-middle text-bold" rowspan="2" width="25%"><h5>{{ item.dmddesc }}</h5></td>
                         <td class="border-top-0 border-bottom-0" width="10%" style="text-align: right"><strong>UNIT:</strong></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-center align-bottom" width="10%"><b>{{ item.dmd.formdesc }}</b></td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-center align-bottom" width="10%"><b>{{ item.formdesc }}</b></td>
                 
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0"></td>
                         <td class="border-top-0 border-bottom-0" width="10%" style="text-align: right"><strong>SSL:</strong></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-center align-bottom text-bold" width="10%">{{ item.dmd.ssl | numeral3  }}</td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-center align-bottom text-bold" width="10%">{{ item.ssl | numeral3  }}</td>
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0"></td>
@@ -67,8 +67,8 @@
                         <td class="border-top-0 border-bottom-0">Balance on Hand</td>
                         <td class="border-top-0 border-bottom-0"></td>
                         <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">
-                            <span v-if="item.dmd.boh == .00">0</span>
-                            <span v-else>{{ item.dmd.boh | numeral3 }}</span>
+                            <span v-if="item.boh == .00">0</span>
+                            <span v-else>{{ item.boh | numeral3 }}</span>
                         </td>
                     </tr>
                     <tr class="table table-borderless">
@@ -78,7 +78,7 @@
                         <td class="border-top-0 border-bottom-0">Item in Transit</td>
                         <td class="border-top-0 border-bottom-0"></td>
                         <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">
-                            {{ item.dmd.iit | numeral3 }}
+                            {{ item.iit | numeral3 }}
                         </td>
                     </tr>
                     <tr class="table table-borderless">
@@ -87,7 +87,7 @@
                         </td>
                         <td class="border-top-0 border-bottom-0">This Requisition</td>
                         <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.dmd.tr | numeral3 }}</td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.tr | numeral3 }}</td>
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0">
@@ -95,7 +95,7 @@
                         </td>
                         <td class="border-top-0 border-bottom-0">Total Expected Stocks (Sum of Lines 1 to 3)</td>
                         <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.dmd.es | numeral3 }}</td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.es | numeral3 }}</td>
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0">
@@ -103,7 +103,7 @@
                         </td>
                         <td class="border-top-0 border-bottom-0">Monthly Average Consumption</td>
                         <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.dmd.tr / 2 | numeral3 }}</td>
+                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.tr / 2 | numeral3 }}</td>
                     </tr>
                     <tr class="table table-borderless">
                         <td class="border-top-0 border-bottom-0">

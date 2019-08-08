@@ -99,7 +99,7 @@
                                 </tr>
                             </thead>
                             <tbody class="table-bordered">
-                                <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'table-warning' : d.boh_iit < d.rop , 'table-danger' : d.ssl == 0 , 'table-success' : d.boh > d.ssl/2, 'table-primary' : d.boh_iit > d.ssl/2}" >
+                                <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'table-warning' : d.rop >= d.boh , 'table-danger' : d.ssl == 0 , 'table-success' : d.boh > d.ssl/2, 'table-primary' : d.boh > d.ssl/2}" >
                                     <td width="2%" class="text-right bg-white">{{ index + 1}}</td>
                                     <td width="30%" class="text-left">{{ d.dmddesc }}</td>
                                     <td width="5%" class="text-right">{{ d.boh | numeral3 }}</td>
@@ -176,7 +176,7 @@
                         </div>
                         <form @submit.prevent="pr_submit()">
                             <div class="modal-body">
-                                <div v-show="pb_form.items">
+                                <div v-show="pb_form.items.length">
                                    <span class="font-weight-bold">With Bidder</span>
                                     <table class="table table-sm table-hover " style="height: 12rem; display: -moz-groupbox;">
                                         <thead>
@@ -195,15 +195,15 @@
                                         <tbody style="overflow-y: scroll;height: 11rem; width: 98.5%; position: absolute;" class="table-bordered">
                                             <tr v-for="(item,index) in pb_form.items" :key="item.dmd_id">
                                                 <td width="4%">{{ index + 1}}</td>
-                                                <td width="30%">{{ item.app_dmd_year.dmddesc }}</td>
-                                                <td class="text-right">{{ item.app_dmd_year.ssl | numeral3 }}</td>
-                                                <td class="text-right">{{ item.app_dmd_year.boh | numeral3 }}</td>
-                                                <td class="text-right">{{ item.app_dmd_year.iit | numeral3}}</td>
+                                                <td width="30%">{{ item.dmddesc }}</td>
+                                                <td class="text-right">{{ item.ssl | numeral3 }}</td>
+                                                <td class="text-right">{{ item.boh | numeral3 }}</td>
+                                                <td class="text-right">{{ item.iit | numeral3}}</td>
                                                 <td width="10%" class="text-right">
-                                                    <input type="number" class="form-control form-control-sm text-right" :value="item.request_quantity = item.app_dmd_year.ssl - item.app_dmd_year.boh_iit" required>
+                                                    <input type="number" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" v-model="item.item_needed" required>
                                                 </td>
-                                                <td class="text-right">{{ item.app_dmd_year.cost | currency2 }}</td>
-                                                <td class="text-right">{{ item.app_dmd_year.cost * item.request_quantity | currency2 }}</td>
+                                                <td class="text-right">{{ item.cost | currency2 }}</td>
+                                                <td class="text-right">{{ item.cost * item.item_needed | currency2 }}</td>
                                                 <td width="6%" class="text-center">
                                                     <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.cart_dmd_id)">
                                                         <i class="fas fa-times-circle"></i>
@@ -213,7 +213,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div v-show="sp_form.items">
+                                <div v-show="sp_form.items.length">
                                     <span class="font-weight-bold">For Shopping</span>
                                     <table class="table table-sm table-hover" style="height: 12rem; display: -moz-groupbox;">
                                         <thead>
@@ -232,15 +232,15 @@
                                         <tbody style="overflow-y: scroll;height: 11rem; width: 98.5%; position: absolute;" class="table-bordered">
                                             <tr v-for="(item,index) in sp_form.items" :key="item.dmd_id">
                                                 <td width="4%">{{ index + 1}}</td>
-                                                <td width="30%">{{ item.app_dmd_year.dmddesc }}</td>
-                                                <td class="text-right">{{ item.app_dmd_year.ssl }}</td>
-                                                <td class="text-right">{{ item.app_dmd_year.boh }}</td>
-                                                <td class="text-right">{{ item.app_dmd_year.iit }}</td>
+                                                <td width="30%">{{ item.dmddesc }}</td>
+                                                <td class="text-right">{{ item.ssl }}</td>
+                                                <td class="text-right">{{ item.boh }}</td>
+                                                <td class="text-right">{{ item.iit }}</td>
                                                 <td width="10%" class="text-right">
-                                                    <input type="number" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" min="1" :value="item.request_quantity = item.app_dmd_year.ssl - item.app_dmd_year.boh_iit">
+                                                    <input type="number" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" min="1" v-model="item.item_needed">
                                                 </td>
-                                                <td class="text-right">{{ item.app_dmd_year.cost | currency2 }}</td>
-                                                <td class="text-right">{{ item.app_dmd_year.cost * item.request_quantity | currency2 }}</td>
+                                                <td class="text-right">{{ item.cost | currency2 }}</td>
+                                                <td class="text-right">{{ item.cost * item.item_needed | currency2 }}</td>
                                                 <td width="6%" class="text-center">
                                                     <button type="button" class="btn btn-sm btn-danger" @click="remove_item(item.cart_dmd_id)">
                                                         <i class="fas fa-times-circle"></i>
@@ -256,7 +256,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-success" @click="pr_submit()">Submit</button>
+                                <button type="submit" class="btn btn-sm btn-success">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -321,14 +321,14 @@ export default {
         },
         get_pb_items(){
             axios.get('../../api/public_bidding').then(({data}) => {
-                this.pb_form.items = data.cart_dmds;
+                this.pb_form.items = data;
             }).catch(() => {
                 
             });
         },
         get_sp_items(){
             axios.get('../../api/shopping').then(({data}) => {
-                this.sp_form.items = data.cart_dmds;
+                this.sp_form.items = data;
             }).catch(() => {
 
             });
@@ -379,16 +379,15 @@ export default {
 
             });
         }, 
-
         add_item_2(dmd_id, mode_id){
             axios.post('../../api/cart_dmd_2/'+this.current_user.user_id, {
                 mode_id: mode_id,
                 dmd_id: dmd_id,
             }).then(() => {
-                this.get_dmds();
-                this.get_pb_items();
-                this.get_sp_items();
-                this.get_need_to_pr();
+                // this.get_dmds();
+                // this.get_pb_items();
+                // this.get_sp_items();
+                // this.get_need_to_pr();
                 toast.fire({
                     type: 'success',
                     title: 'Item Added',
@@ -439,7 +438,6 @@ export default {
 
             });
         },
-
     },
     created(){
         this.get_need_to_pr();
@@ -470,7 +468,18 @@ export default {
         }
     },
     mounted(){
-        
+        window.Echo.channel("cart_dmd_created").listen(".cart_dmd.created", (e) => {
+            this.get_need_to_pr();
+            this.get_dmds();
+            this.get_pb_items();
+            this.get_sp_items();
+        });
+        window.Echo.channel("cart_dmd_updated").listen(".cart_dmd.updated", (e) => {
+            this.get_need_to_pr();
+            this.get_dmds();
+            this.get_pb_items();
+            this.get_sp_items();
+        });
         
     },
 

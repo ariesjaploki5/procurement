@@ -51,6 +51,14 @@ Broadcast::channel('app_updated', function(){
     return true;
 });
 
+Broadcast::channel('cart_dmd_created', function(){
+    return true;
+});
+
+Broadcast::channel('cart_dmd_updated', function(){
+    return true;
+});
+
 Broadcast::channel('ippmp_created', function(){
     return true;
 });

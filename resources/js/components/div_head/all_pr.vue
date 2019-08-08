@@ -33,19 +33,19 @@
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="pr in prs" :key="pr.purchase_request_id" >
-                        <td @click="view_pr(pr.purchase_request_id)" width="10%">{{ pr.pr_id }}</td> 
-                        <td @click="view_pr(pr.purchase_request_id)" width="12%">{{ pr.created_at | myDate4}} - {{ pr.created_at | time1}}</td>
-                        <td @click="view_pr(pr.purchase_request_id)" width="8%" class="text-center">
+                        <td @click="view_pr(pr)" width="10%">{{ pr.pr_id }}</td> 
+                        <td @click="view_pr(pr)" width="12%">{{ pr.created_at | myDate4}} - {{ pr.created_at | time1}}</td>
+                        <td @click="view_pr(pr)" width="8%" class="text-center">
                             <span v-show="pr.status == 2">Disapproved</span>
                             <span v-show="pr.status == 1">Approved</span>
                             <span v-show="pr.status == 0">Pending</span>
                         </td>
-                        <td @click="view_pr(pr.purchase_request_id)" width="15%">
+                        <td @click="view_pr(pr)" width="15%">
                             <span v-if="pr.cdi2">{{ pr.csd2 }}</span>
                             <span v-else>{{ pr.csd }}</span>
                         </td>
-                        <td @click="view_pr(pr.purchase_request_id)" width="10%">{{ pr.mode_desc }}</td>
-                        <td @click="view_pr(pr.purchase_request_id)" width="45%">
+                        <td @click="view_pr(pr)" width="10%">{{ pr.mode_desc }}</td>
+                        <td @click="view_pr(pr)" width="45%">
                             <span v-if="pr.supplier_name">{{ pr.supplier_name }}</span>
                         </td>
                         <td width="5%">
@@ -53,7 +53,7 @@
                                 <button type="button" class="btn btn-sm btn-success" v-if="pr.csi == 1" @click="cmps_rcv(pr.purchase_request_id)">
                                     <i class="fas fa-file-download"></i>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-danger" v-if="pr.csi == 2" @click="cmps_rls(pr.purchase_request_id)">
+                                <button type="button" class="btn btn-sm btn-danger" v-if="pr.csi == 2 && pr.status == 1" @click="cmps_rls(pr.purchase_request_id)">
                                     <i class="fas fa-file-upload"></i>
                                 </button>
                             </span>
@@ -79,7 +79,7 @@
                                             <th width="20%">Description</th>
                                             <th>SSL</th>
                                             <th>BOH</th>
-                                            <th>Item In Transit</th>
+                                            
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
@@ -87,12 +87,12 @@
                                         </tr>
                                     </thead>
                                     <tbody id="pr_tbody">
-                                        <tr v-for="(dmd,index) in view_pr_form.dmd_purchase_requests" :key="dmd.dmd_id">
+                                        <tr v-for="(dmd,index) in view_pr_form.dmd_purchase_requests" :key="dmd.dpr_id">
                                             <td width="5%">{{ index + 1}}</td>
-                                            <td width="20%">{{ dmd.dmd.dmddesc }}</td>
-                                            <td class="text-right table-danger">{{ dmd.dmd.ssl | numeral3 }}</td>
-                                            <td class="text-right table-danger">{{ dmd.dmd.boh | numeral3 }}</td>
-                                            <td class="text-right table-danger"></td>
+                                            <td width="20%">{{ dmd.dmddesc }}</td>
+                                            <td class="text-right">{{ dmd.ssl | numeral3 }}</td>
+                                            <td class="text-right">{{ dmd.boh | numeral3 }}</td>
+                                            
                                             <td width="10%" class="text-right">
                                                 {{ dmd.request_quantity | numeral3 }}
                                             </td>
@@ -228,6 +228,7 @@ export default {
                 purchase_order_id: '',
                 mode_id: '',
                 rfq: {},
+                rfq_id: '',
                 created_at: '',
                 send: '',
                 status: '',
@@ -252,10 +253,11 @@ export default {
 
             });
         },
-        view_pr(id){
+        view_pr(pr){
             this.view_pr_form.reset();
-            axios.get('../../api/purchase_request/'+id).then(({data}) => {
-                    this.view_pr_form.fill(data);
+            this.view_pr_form.fill(pr);
+            axios.get('../../api/purchase_request/'+pr.purchase_request_id).then(({data}) => {
+                    this.view_pr_form.dmd_purchase_requests = data;
                 }).catch(() => {
 
                 });

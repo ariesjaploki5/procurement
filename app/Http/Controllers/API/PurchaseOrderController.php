@@ -163,10 +163,14 @@ class PurchaseOrderController extends Controller
     }
 
     public function store_date_of_delivery(Request $request){
+
         $po = PurchaseOrder::findOrFail($request->purchase_order_id);
+
         $po->update([
             'date_of_delivery' => $request->date_of_delivery,
             'delivery_term' => $request->delivery_term,
+            'payment_term_id' => $request->payment_term_id,
+            'place_of_delivery' => $request->place_of_delivery,
             'dod' => 1
         ]);
 
@@ -291,42 +295,18 @@ class PurchaseOrderController extends Controller
 
     public function show($id){
 
-        // $carbon = Carbon::now()->subMonths(2);
-        $carbon_now = Carbon::now();
-        $carbon_two = Carbon::now()->subDays(60);
-
-        // $twoMonths = DB::SELECT("SELECT tb1.dmd_id, SUM(tb2.qtyissued) as cons FROM procurement.dbo.dmds as tb1 inner join hospital.dbo.hrxo as tb2 on tb1.dmdcomb COLLATE DATABASE_DEFAULT = tb2.dmdcomb and tb1.dmdctr = tb2.dmdctr where tb2.dodate > DATEADD(month, -2, GETDATE()) GROUP BY tb1.dmd_id");
-
-        $twoMonths = DB::table('hospital.dbo.hrxo as tb1')
-
-        ->join('procurement.dbo.dmds as tb2', function($join) use($carbon_two){
-            $join->on(DB::raw('tb1.dmdcomb collate Latvian_BIN'), '=', 'tb2.dmdcomb')->on('tb1.dmdctr', '=', 'tb1.dmdctr')
-            ->where('tb1.dodate', '>', $carbon_two)
-            ->where('tb1.orderfrom', '<>', 'DRUMO')
-            ->where('tb1.orderfrom', '<>', 'DRUMF')
-            ->where('tb1.orderfrom', '<>', 'DRUMK')
-            ;
-        })->select('tb2.dmd_id', DB::raw('SUM(tb1.qtyissued) as consumption'))
-        // ->whereBetween('tb1.dodate', [$carbon_two, $carbon_now])
-        ->where('tb1.orderfrom', 'DRUME')->where('tb1.orderfrom', 'DRUMO')->groupBy('tb2.dmd_id');
+        $data = DB::SELECT("SELECT * FROM fn_dmd_purchase_orders($id) order by dmddesc asc");
+        return response()->json($data);
         
-        $data = PurchaseOrder::with([
-            'last_status.current_status',
-            'mode',
-            'allotment', 
-            'fund_source', 
-            'uacs', 
-            'supplier',
-            'fund_source_code',
-            'purchase_request', 'dmd_purchase_orders' => function($query){
-                    $query->with([
-                        'manufacturer', 'brand', 'country', 'packaging', 'new_dmd_homis', 'new_dmd'
-                    ])->select(["dmd_purchase_order.*",
-                    DB::raw("CAST((order_quantity * cost_price) as decimal(18, 2)) as amount"),]);
-                },
-            ])
-            ->where('purchase_order_id', $id)
-            ->first();
+    }
+
+    public function purchase_order_obrs($id){
+        $data = DB::table("fn_dmd_purchase_orders($id)")->take(1)->get();
+        return response()->json($data);
+    }
+
+    public function po_show($id){
+        $data = DB::table("fn_purchase_orders()")->where('purchase_order_id', $id)->first();
 
         return response()->json($data);
     }
@@ -462,8 +442,6 @@ class PurchaseOrderController extends Controller
 
     }
     
-    
-    
     public function accounting_rcv($id){
 
         $po = PurchaseOrder::findOrFail($id);
@@ -557,7 +535,6 @@ class PurchaseOrderController extends Controller
         return response()->json();
     
     }
-    
     
     public function mmo_rcv($id){
     

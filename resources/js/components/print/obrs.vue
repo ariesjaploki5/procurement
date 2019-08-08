@@ -40,13 +40,13 @@
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0" width="8%"><b>Payee:</b></td>
                     <td class="pr1 border-left-0 border-top-0" width="45%">
-                        <span v-if="po.supplier_id">{{ po.supplier.supplier_name }}</span>
+                        <span v-if="purchase_order.supplier_id">{{ purchase_order.supplier_name }}</span>
                         
                     </td>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0" width="10%"> <b>Serial No:</b></td>
                     <td class="pr1 border-left-0 border-top-0 font-weight-bold" width="25%">
-                        <span v-if="po.fund_source_id && po.allotment_id && po.uacs_id">
-                        {{ po.fund_source.acronym }}-0{{ po.allotment.allotment_code }}-{{ po.uacs.current_appropriations }}-{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2}}
+                        <span v-if="purchase_order.fund_source_id && purchase_order.allotment_id && purchase_order.uacs_id">
+                            {{ purchase_order.fund_source.acronym }}-0{{ purchase_order.allotment.allotment_code }}-{{ purchase_order.uacs.current_appropriations }}-{{ purchase_order.obrs_date | myDate}}-{{ purchase_order.purchase_order_id | numeral2}}
                         </span>
                     </td>
                 </tr>
@@ -54,16 +54,16 @@
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0"><b>Office:</b></td>
                     <td class="pr1 border-left-0 border-top-0"></td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0"> <b>Date:</b></td>
-                    <td class="pr1 border-left-0 font-weight-bold">{{po.created_at | myDate3}}</td>
+                    <td class="pr1 border-left-0 font-weight-bold">{{purchase_order.created_at | myDate3}}</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-right-0 border-top-0 border-bottom-0"><b>Address:</b></td>
                     <td class="pr1 border-left-0 border-top-0">
-                        <span v-if="po.supplier_id">{{ po.supplier.supplier_address }}</span>
+                        <span v-if="purchase_order.supplier_id">{{ purchase_order.supplier_address }}</span>
                         
                     </td>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0"> <b>Fund Cluster:</b></td>
-                    <td class="pr1 border-left-0 font-weight-bold">0{{ po.fund_source_id }}</td>
+                    <td class="pr1 border-left-0 font-weight-bold">0{{ purchase_order.fund_source_id }}</td>
                 </tr>
                 <td colspan="7" class="pr1 border-top-0 border-bottom-0"></td>
             </table>
@@ -75,33 +75,33 @@
                     <td class="pr1 text-center font-weight-bold" width="10%">MFO/PAP</td>
                     <td class="pr1 text-center font-weight-bold" width="10%">UACS Object Code/Expenditures</td>
                     <td class="pr1 text-center font-weight-bold" width="10%">Amount</td>
-                </thead>
-                <tr v-for="item in po.dmd_purchase_orders" :key="item.id">
+                </thead> 
+                <tr v-for="item in dmd_purchase_orders" :key="item.id">
                     <td class="pr1 border-bottom-0 border-top-0 text-center">MAIN PHARMACY</td>
                     <td class="pr1border-bottom-0 border-top-0">
-                        <div class="font-weight-bold border-bottom-0 text-center">{{ item.new_dmd.dmddesc }}</div>
+                        <div class="font-weight-bold border-bottom-0 text-center">{{ item.dmddesc }}</div>
                         <tr>
                             <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Brand:</td>
                             <td class="border-bottom-0 border-top-0">
-                                <span v-if="item.brand_id">{{ item.brand.brand_desc }}</span>
+                                <span>{{ item.brand_desc }}</span>
                             </td>
                         </tr>
                         <tr>
                             <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Packaging:</td>
                             <td class="border-bottom-0 border-top-0">
-                                 <span v-if="item.packaging_id">{{ item.packaging.packaging_desc }}</span>
+                                 <span>{{ item.packaging_desc }}</span>
                             </td>
                         </tr>
                         <tr>
                             <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Manufacturer:</td>
                             <td class="border-bottom-0 border-top-0">
-                                 <span v-if="item.manufacturer_id">{{ item.manufacturer.manufacturer_desc }}</span>
+                                 <span>{{ item.manufacturer_desc }}</span>
                             </td>
                         </tr>
                         <tr>
                             <td class="text-right border-bottom-0 border-top-0 font-weight-bold">Country of Origin:</td>
                             <td class="border-bottom-0 border-top-0">
-                                 <span v-if="item.country_id">{{ item.country.country_desc }}</span>
+                                 <span>{{ item.country_desc }}</span>
                             </td>
                         </tr>
                         <tr>
@@ -111,14 +111,14 @@
                     </td>
                     <td class="pr1 border-bottom-0 border-top-0 text-center">3</td>
                     <td class="pr1 border-bottom-0 border-top-0 text-center"></td>
-                    <td class="pr1 border-bottom-0 border-top-0 text-center">{{ estimated_cost | currency2 }}</td>
+                    <td class="pr1 border-bottom-0 border-top-0 text-center">{{ purchase_order.total_amount | currency2 }}</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-top-0"><center></center></td>
                     <td class="pr1 border-top-0" style="text-align:right"><b>Total</b></td>
                     <td class="pr1 border-top-0"></td>
                     <td class="pr1 border-top-0"></td>
-                    <td class="pr1 border-top-0 text-center font-weight-bold">{{ estimated_cost | currency2 }}</td>
+                    <td class="pr1 border-top-0 text-center font-weight-bold">{{ purchase_order.total_amount | currency2 }}</td>
                 </tr>
             </table>
             <table class="table table-condensed border-top-0 border-bottom-0 table-sm" style="margin-top:-1.7%">
@@ -156,9 +156,9 @@
                 </tr>
                 <tr>
                     <td class="pr1 border-top-0 border-right-0 border-bottom-0"><h5>Date:</h5></td>
-                    <td class="pr1 border-left-0 text-center align-middle">{{ po.created_at | myDate3 }}</td>
+                    <td class="pr1 border-left-0 text-center align-middle">{{ purchase_order.created_at | myDate3 }}</td>
                     <td class="pr1 border-0"><h5>Date:</h5></td>
-                    <td class="pr1 border-left-0 text-center align-middle">{{ po.created_at | myDate3 }}</td>
+                    <td class="pr1 border-left-0 text-center align-middle">{{ purchase_order.created_at | myDate3 }}</td>
                 </tr>
                 <tr>
                     <td class="pr1 border-top-0 border-bottom-0" colspan="4"></td>
@@ -196,17 +196,17 @@
                     <td class="pr1"><center><small>(b-c)</small></center></td>
                 </tr>
                 <tr>
-                    <td class="pr1"><center>{{ po.created_at | myDate3 }}</center></td>
+                    <td class="pr1"><center>{{ purchase_order.created_at | myDate3 }}</center></td>
                     <td class="pr1"><center>Obligation</center></td>
                     <td class="pr1">
-                        <center v-if="po.fund_source_id && po.allotment_id && po.uacs_id && po.obrs_date">
-                        {{ po.fund_source.acronym }}-0{{ po.allotment.allotment_code }}-{{ po.uacs.current_appropriations }}-{{ po.obrs_date | myDate}}-{{ po.purchase_order_id | numeral2 }}
+                        <center v-if="purchase_order.fund_source_id && purchase_order.allotment_id && purchase_order.uacs_id && purchase_order.obrs_date">
+                        {{ purchase_order.fund_source.acronym }}-0{{ purchase_order.allotment.allotment_code }}-{{ purchase_order.uacs.current_appropriations }}-{{ purchase_order.obrs_date | myDate}}-{{ purchase_order.purchase_order_id | numeral2 }}
                         </center>
                     </td>
-                    <td class="pr1"><center>{{ estimated_cost | currency2 }}</center></td>
+                    <td class="pr1"><center>{{ purchase_order.total_amount | currency2 }}</center></td>
                     <td class="pr1"><center></center></td>
                     <td class="pr1"><center></center></td>
-                    <td class="pr1"><center>{{ estimated_cost | currency2 }}</center></td>
+                    <td class="pr1"><center>{{ purchase_order.total_amount | currency2 }}</center></td>
                     <td class="pr1"><center></center></td>
                 </tr>
                 <!-- -->
@@ -240,31 +240,45 @@
     export default {
         data(){
             return{
-                po: {
-                    dmd_purchase_orders: [],
-                }               
+                
+                dmd_purchase_orders: [],
+
+                purchase_order: '',
+
             }
         },
         methods:{
             get_po(){
-                axios.get('../../api/purchase_order/'+this.$route.params.id).then(({data}) => {
-                    this.po = data;
+                axios.get('../../api/purchase_order_obrs/'+this.$route.params.id).then(({data}) => {
+                    this.dmd_purchase_orders = data;
                 }).catch(() => {
 
                 });
             },
+            po_show(){
+                axios.get('../../api/po_show/'+this.$route.params.id).then(({data}) => {
+                    this.purchase_order = data;
+                }).catch(() => {
+
+                });
+            }
         },
+        print(){
+            window.print();
+            location.reload();
+            },
         created(){
             this.get_po();
+            this.po_show();
         },
         computed:{
-            estimated_cost(){
-            let sum = 0;
-            this.po.dmd_purchase_orders.forEach(function(item) {
-                sum += (parseFloat(item.cost_price) * parseFloat(item.order_quantity));
-            });
-                return sum;
-            },
+            // purchase_order.total_amount(){
+            // let sum = 0;
+            // this.purchase_order.dmd_purchase_orders.forEach(function(item) {
+            //     sum += (parseFloat(item.cost_price) * parseFloat(item.order_quantity));
+            // });
+            //     return sum;
+            // },
 
         },
         mounted() {

@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Events\CartDmdCreated;
+use App\Events\CartDmdUpdated;
+
 
 class CartDmd extends Model
 {
@@ -12,6 +15,11 @@ class CartDmd extends Model
 
     protected $fillable = [
         'cart_id', 'dmd_id', 'request_quantity'
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => CartDmdCreated::class,
+        'updated' => CartDmdUpdated::class,
     ];
 
     public function cart(){

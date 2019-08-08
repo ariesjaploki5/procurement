@@ -133,45 +133,45 @@
                     <form>
                     <div class="modal-body">
                         <form action="">
-                            <table class="table table-sm table-hover">
+                            <table class="table table-sm table-hover" id="pr_table">
                                 <thead>
                                     <tr>
                                         <th width="5%"  class="text-center">#</th>
-                                        <th width="20%"  class="text-center">Item Desc</th>
-                                        
-                                        <th></th>
+                                        <th width="25%"  class="text-center">Item Desc</th>
+                                        <th class="text-center">Unit</th>
                                         <th class="text-center">SSL</th>
                                         <th class="text-center">BOH</th>
-                                         <th></th>
-                                        <th width="10%" class="text-center">Request Qty</th>
-                                        <th class="text-center">Cost</th>
-                                        <th class="text-center">Estimated Cost</th>
-                                        <th></th>
-
+                                        <th width="10%" class="text-center">Quantity</th>
+                                        <th width="10%" class="text-center">Cost</th>
+                                        <th width="15%" class="text-center">Estimated Cost</th>
+                                        <!-- <th></th> -->
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="pr_tbody">
                                     <tr v-for="(dmd,index) in pr.dmd_purchase_requests" :key="dmd.dmd_id">
                                         <td width="5%">{{ index + 1}}</td>
-                                        <td width="20%">{{ dmd.dmd.dmddesc }}</td>
-                                        <td class="text-right table-danger"></td>
-                                        <td class="text-right table-danger">{{ dmd.dmd.ssl | numeral3 }}</td>
-                                        <td class="text-right table-danger">{{ dmd.dmd.boh | numeral3 }}</td>
-                                        <td class="text-right table-danger"></td>
+                                        <td width="25%">{{ dmd.dmd.dmddesc }}</td>
+                                        <td class="text-right"></td>
+                                        <td class="text-right">
+                                            <span>{{ dmd.dmd.ssl | numeral3 }}</span> 
+                                        </td>
+                                        <td class="text-right">
+                                            <span>{{ dmd.dmd.boh | numeral3 }}</span>
+                                        </td>
                                         <td width="10%" class="text-right">
                                             <span>{{ dmd.request_quantity | numeral3 }}</span>
                                         </td>
-                                        <td class="text-right">
+                                        <td width="10%" class="text-right">
                                             <span>{{ dmd.cost_price | currency2 }}</span>
                                         </td>
-                                        <td  class="text-right">
+                                        <td width="15%"  class="text-right">
                                             <span>{{ dmd.request_quantity * dmd.cost_price | currency2}}</span>
                                         </td>
-                                        <td class="text-center">
+                                        <!-- <td class="text-center">
                                             <button type="button" class="btn btn-sm btn-danger" @click="remove_item(dmd.id)">
                                                 <i class="fas fa-times-circle"></i>
                                             </button>
-                                        </td>
+                                        </td> -->
                                     </tr>
                                 </tbody>
                             </table>
@@ -318,4 +318,18 @@ export default {
         width: 98.5%;
         position: absolute;
     }
+
+    #pr_tbody {
+        overflow-y: scroll;      
+        height: 22rem;           
+        width: 98.5%;
+        position: absolute;
+    }
+
+    #pr_table {
+        height:24rem;             
+        display: -moz-groupbox;    
+    }
+
+    
 </style>

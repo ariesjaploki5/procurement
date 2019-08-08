@@ -17,6 +17,7 @@ class PurchaseOrder extends Model
         'date_of_delivery', 'terminated',
         'fund_source_code_id',
 
+        'payment_term_id', 'place_of_delivery',
 
 
         'current_status',
@@ -110,6 +111,10 @@ class PurchaseOrder extends Model
 
         return $this->hasOne('App\Models\PurchaseOrderStatus', 'purchase_order_id', 'purchase_order_id')
         ->orderBy('id', 'desc');
+    }
+
+    public function payment_term(){
+        return $this->belongsTo('App\Models\PaymentTerm', 'payment_term_id', 'id');
     }
     
 }

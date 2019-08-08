@@ -54,7 +54,7 @@ class RfqController extends Controller
                             },
                             'dmd_rfqs' => function ($query){
                                 $query->with([
-                                    'brand', 'manufacturer',
+                                    'brand', 'manufacturer', 'packaging', 'country', 'supplier'
                                 ]);
                             }
                         ]);

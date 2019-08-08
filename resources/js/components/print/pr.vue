@@ -71,8 +71,8 @@
                     <tr class="prpr" v-for="(item, index) in pr.dmd_purchase_requests" :key="item.id">
                         <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ index+1 }}</td>
                         <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ item.request_quantity | numeral3 }}</td>
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="7%">{{ item.dmd.formdesc }}</td>
-                        <td class="pr border-top-0 border-bottom-0 text-center"><h6>{{ item.dmd.dmddesc }}</h6></td>
+                        <td class="pr border-top-0 border-bottom-0 text-center" width="7%"></td>
+                        <td class="pr border-top-0 border-bottom-0 text-center"><h6>{{ item.dmddesc }}</h6></td>
                         <td class="pr border-top-0 border-bottom-0 text-center" width="7%"></td>
                         <td class="pr border-top-0 border-bottom-0 text-center" width="15%">
                             <span >{{ item.cost_price | currency2 }}</span>

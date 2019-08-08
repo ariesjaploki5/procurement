@@ -36,9 +36,16 @@ class CartController extends Controller
             'status' => 0 
         ]);
         
-        if(!CartDmd::where('cart_id', $cart->id)->where('dmd_id', $request->dmd_id)->exists()){
-            $cart->dmds()->attach($request->dmd_id);
-        }
+        // if(!CartDmd::where('cart_id', $cart->id)->where('dmd_id', $request->dmd_id)->exists()){
+        //     $cart->dmds()->attach($request->dmd_id);
+            
+        
+        // }
+
+        $cart_dmd = CartDmd::firstOrCreate([
+            'cart_id' => $cart->id,
+            'dmd_id' => $request->dmd_id,
+        ]);
         
         return response()->json($mode_id);
     }
@@ -52,9 +59,14 @@ class CartController extends Controller
             'status' => 0
         ]);
 
-        if(!CartDmd::where('cart_id', $cart->id)->where('dmd_id', $request->dmd_id)->exists()){
-            $cart->dmds()->attach($request->dmd_id);
-        }
+        // if(!CartDmd::where('cart_id', $cart->id)->where('dmd_id', $request->dmd_id)->exists()){
+        //     $cart->dmds()->attach($request->dmd_id);
+        // }
+
+        $cart_dmd = CartDmd::firstOrCreate([
+            'cart_id' => $cart->id,
+            'dmd_id' => $request->dmd_id,
+        ]);
         
         return response()->json($mode_id);
     }
@@ -97,34 +109,37 @@ class CartController extends Controller
         // ->orderBy('dmddesc', 'asc')
         // ->get();
 
-        $data = Cart::with([
-            'cart_dmds' => function($query){
-                $query->with([
-                    'app_dmd_year'
-                ]);
-            }
-        ])
-        ->where('mode_id',4)
-        ->where('status', 0)
-        ->first();
+        // $data = Cart::with([
+        //     'cart_dmds' => function($query){
+        //         $query->with([
+        //             'app_dmd_year'
+        //         ]);
+        //     }
+        // ])
+        // ->where('mode_id',4)
+        // ->where('status', 0)
+        // ->first();
 
+        $data = DB::SELECT("SELECT * FROM procurement.dbo.fn_cart_shopping()");
 
         return response()->json($data);
     }
 
     public function public_bidding(){
         
-        $data = Cart::with([
-            'cart_dmds' => function($query){
-                $query->with([
-                    'dmd_price_schedule', 
-                    'app_dmd_year',
-                ]);
-            }
-        ])
-        ->where('mode_id', 1)
-        ->where('status', 0)
-        ->first();
+        // $data = Cart::with([
+        //     'cart_dmds' => function($query){
+        //         $query->with([
+        //             'dmd_price_schedule', 
+        //             'app_dmd_year',
+        //         ]);
+        //     }
+        // ])
+        // ->where('mode_id', 1)
+        // ->where('status', 0)
+        // ->first();
+
+        $data = DB::SELECT("SELECT * FROM procurement.dbo.fn_cart_public_bidding()");
 
         return response()->json($data);
     }

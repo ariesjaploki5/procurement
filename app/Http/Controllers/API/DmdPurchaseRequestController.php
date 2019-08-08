@@ -53,10 +53,10 @@ class DmdPurchaseRequestController extends Controller
         for($i = 0; $i < $count; $i++){
 
             $dmd_id = $dmd[$i]['dmd_id'];
-            $quantity = $dmd[$i]['request_quantity'];
-            $supplier_id = $dmd[$i]['dmd_price_schedule']['supplier_id'];
+            $quantity = $dmd[$i]['item_needed'];
+            $supplier_id = $dmd[$i]['supplier_id'];
 
-            $cost = $dmd[$i]['app_dmd_year']['cost'];
+            $cost = $dmd[$i]['cost'];
 
             $pr = PurchaseRequest::firstOrCreate([
                 'mode_id' => $request->mode_id,
@@ -122,8 +122,8 @@ class DmdPurchaseRequestController extends Controller
             }
 
             $dmd_id = $dmd[$i]['dmd_id'];
-            $quantity = $dmd[$i]['request_quantity'];
-            $cost = $dmd[$i]['app_dmd_year']['cost'];
+            $quantity = $dmd[$i]['item_needed'];
+            $cost = $dmd[$i]['cost'];
             
             $pr->dmd_purchase_requests()->create([
                 'dmd_id' => $dmd_id,

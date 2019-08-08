@@ -11,19 +11,15 @@
                                 <th>ID</th>
                                 <th>PR ID</th>
                                 <th>Date Created</th>
-                                <th>Action</th>
+
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="rfq in rfqs" :key="rfq.rfq_id">
-                                <td>{{ rfq.rfq_id }}</td>
-                                <td>{{ rfq.created_at | myDate }} - {{ rfq.purchase_request_id | numeral2 }}</td>
-                                <td>{{rfq.created_at | myDate3 }} - {{rfq.created_at | time1 }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-primary" @click="view_rfq(rfq.rfq_id)"><i class="fas fa-eye"></i></button>
-                                    <!-- <router-link class="btn btn-sm btn-primary" :to="{ name: 'request_for_quotation_show', params: { id: rfq.rfq_id }}"><i class="fas fa-eye"></i> View</router-link> -->
-                                    <!-- <router-link class="btn btn-sm btn-success" :to="{ name: 'rfq', params: { id: rfq.rfq_id }}"><i class="fas fa-print"></i> Print RFQ</router-link> -->
-                                </td>
+                                <td @click="view_rfq(rfq.rfq_id)">{{ rfq.rfq_id }}</td>
+                                <td @click="view_rfq(rfq.rfq_id)">{{ rfq.created_at | myDate }} - {{ rfq.purchase_request_id | numeral2 }}</td>
+                                <td @click="view_rfq(rfq.rfq_id)">{{rfq.created_at | myDate3 }} - {{rfq.created_at | time1 }}</td>
+
                             </tr>
                         </tbody>
                     </table>
@@ -70,8 +66,8 @@
                                     <tr v-for="(item, index) in rfq.purchase_request.view_dmd_purchase_requests" :key="item.id">
                                         <td id="rfq_item">{{ index+1}}</td>
                                         <td id="rfq_qty">{{ item.request_quantity | numeral3 }}</td>
-                                        <td id="rfq_unit_1">{{item.formdesc}}</td>
-                                        <td id="rfq_desc">{{ item.gendesc }} {{ item.dmdnost }} {{ item.stredesc }} {{ item.formdesc }} {{ item.brandname }}</td>
+                                        <td id="rfq_unit_1"></td>
+                                        <td id="rfq_desc">{{ item.dmddesc }}</td>
                                         <td id="rfq_abc" class="text-right">{{ item.app_dmd.cost * item.app_dmd.quantity | currency2 }}</td>
                                         <td id="rfq_1">
                                             <div id="rfq_3"  v-for="(rfq, index) in item.dmd_rfqs" :key="rfq.id">
@@ -150,8 +146,14 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <div class="form-label font-weight-bold">Country of Origin</div>
+                                    <select class="form-control form-control-sm" v-model="form.country_id">
+                                        <option v-for="c in countries" :key="c.country_id" :value="c.country_id">{{ c.country_desc }}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <div class="form-label font-weight-bold">Cost</div>
-                                   <input type="number" v-model="form.cost_unit" class="form-control form-control-sm">
+                                   <input type="text" v-model="form.cost_unit" class="form-control form-control-sm">
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-sm btn-success">Submit</button>
@@ -184,6 +186,7 @@ export default {
                 brand_id: '',
                 manufacturer_id: '',
                 packaging_id: '',
+                country_id: '',
                 cost_unit: '',
                 dmd_id: '',
                 gendesc: '',

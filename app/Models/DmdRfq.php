@@ -25,6 +25,10 @@ class DmdRfq extends Model
         return $this->belongsTo('App\Models\Brand', 'brand_id', 'brand_id');
     }
 
+    public function country(){
+        return $this->belongsTo('App\Models\Country', 'country_id', 'country_id');
+    }
+
     public function manufacturer(){
         return $this->belongsTo('App\Models\Manufacturer', 'manufacturer_id', 'manufacturer_id');
     }

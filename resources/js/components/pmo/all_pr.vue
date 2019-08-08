@@ -33,19 +33,19 @@
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="pr in prs" :key="pr.purchase_request_id" >
-                        <td @click="view_pr(pr.purchase_request_id)" width="10%">{{ pr.pr_id }}</td> 
-                        <td @click="view_pr(pr.purchase_request_id)" width="12%">{{ pr.created_at | myDate4}} - {{ pr.created_at | time1}}</td>
-                        <td @click="view_pr(pr.purchase_request_id)" width="8%" class="text-center">
+                        <td @click="view_pr(pr)" width="10%">{{ pr.pr_id }}</td> 
+                        <td @click="view_pr(pr)" width="12%">{{ pr.created_at | myDate4}} - {{ pr.created_at | time1}}</td>
+                        <td @click="view_pr(pr)" width="8%" class="text-center">
                             <span v-show="pr.status == 2">Disapproved</span>
                             <span v-show="pr.status == 1">Approved</span>
                             <span v-show="pr.status == 0">Pending</span>
                         </td>
-                        <td @click="view_pr(pr.purchase_request_id)" width="15%">
+                        <td @click="view_pr(pr)" width="15%">
                             <span v-if="pr.cdi2">{{ pr.csd2 }}</span>
                             <span v-else>{{ pr.csd }}</span>
                         </td>
-                        <td @click="view_pr(pr.purchase_request_id)" width="10%">{{ pr.mode_desc }}</td>
-                        <td @click="view_pr(pr.purchase_request_id)" width="45%">
+                        <td @click="view_pr(pr)" width="10%">{{ pr.mode_desc }}</td>
+                        <td @click="view_pr(pr)" width="45%">
                             <span v-if="pr.supplier_name">{{ pr.supplier_name }}</span>
                         </td>
                         <td width="5%">
@@ -70,49 +70,55 @@
                         <div class="modal-body">
                             <div class="table-responsive-sm">
                                 <table class="table table-sm table-hover" id="pr_table">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th width="5%">#</th>
-                                            <th width="20%">Description</th>
-                                            <th>SSL</th>
-                                            <th>BOH</th>
-                                            <th>Item In Transit</th>
-                                            <th width="10%">Quantity</th>
-                                            <th>Unit Cost</th>
-                                            <th>Estimated Cost</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="pr_tbody">
-                                        <tr v-for="(dmd,index) in view_pr_form.dmd_purchase_requests" :key="dmd.dmd_id">
-                                            <td width="5%">{{ index + 1}}</td>
-                                            <td width="20%">{{ dmd.dmd.dmddesc }}</td>
-                                            <td class="text-right table-danger">{{ dmd.dmd.ssl | numeral3 }}</td>
-                                            <td class="text-right table-danger">{{ dmd.dmd.boh | numeral3 }}</td>
-                                            <td class="text-right table-danger"></td>
-                                            <td width="10%" class="text-right">
-                                                <span>{{ dmd.request_quantity | numeral3 }}</span>
-                                            </td>
-                                            <td class="text-right">
-                                                <span>{{ dmd.cost_price | currency2 }}</span>
-                                            </td>
-                                            <td  class="text-right">
-                                                <span>{{ dmd.request_quantity * dmd.cost_price | currency2}}</span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <thead>
+                                    <tr>
+                                        <th width="5%" class="text-center">#</th>
+                                        <th width="25%" class="text-center">Item Desc</th>
+                                        <th class="text-center">SSL</th>
+                                        <th class="text-center">BOH</th>
+                                        <th width="10%" class="text-center">Quantity</th>
+                                        <th width="10%" class="text-center">Cost</th>
+                                        <th width="15%" class="text-center">Estimated Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pr_tbody">
+                                    <tr v-for="(dmd,index) in view_pr_form.dmd_purchase_requests" :key="dmd.dmd_id">
+                                        <td width="5%" class="text-right">
+                                            {{ index + 1}}
+                                        </td>
+                                        <td width="25%">
+                                            <span>{{ dmd.dmddesc }}</span>
+                                        </td>
+                                        <td class="text-right">
+                                            <span>{{ dmd.ssl | numeral3 }}</span> 
+                                        </td>
+                                        <td class="text-right">
+                                            <span>{{ dmd.boh | numeral3 }}</span>
+                                        </td>
+                                        <td width="10%" class="text-right">
+                                            <span>{{ dmd.request_quantity | numeral3 }}</span>
+                                        </td>
+                                        <td width="10%" class="text-right">
+                                            <span>{{ dmd.cost_price | currency2 }}</span>
+                                        </td>
+                                        <td width="15%"  class="text-right">
+                                            <span>{{ dmd.request_quantity * dmd.cost_price | currency2}}</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                                 <span v-if="!view_pr_form.purchase_request_remark"></span>
                                 <span v-else>Remarks: {{ view_pr_form.purchase_request_remarks.remarks }}</span>
                             </div>
                         </div>
                         <div class="modal-footer" >
-                            <button v-show="view_pr_form.mode_id == '4' && view_pr_form.rfq === null" type="button" class="btn btn-light btn-sm" @click="store_rfq(view_pr_form.purchase_request_id)">
+                            <button v-show="view_pr_form.mode_id == '4' && view_pr_form.rfq_id == null" type="button" class="btn btn-light btn-sm" @click="store_rfq(view_pr_form.purchase_request_id)">
                                 Request for Quotation
                             </button>
                             <button v-show="!view_pr_form.purchase_order_id && view_pr_form.mode_id == 1" type="button" class="btn btn-success btn-sm" @click="store_pr_po(view_pr_form.purchase_request_id)">
                                 Purchase Order
                             </button>
-                            <button v-show="!view_pr_form.purchase_order_id && view_pr_form.mode_id == 4 && view_pr_form.rfq" type="button" class="btn btn-success btn-sm" @click="rfqPo_modal(rfq_po_form.purchase_request_id)">
+                            <button v-show="!view_pr_form.purchase_order_id && view_pr_form.mode_id == 4 && view_pr_form.rfq_id" type="button" class="btn btn-success btn-sm" @click="rfqPo_modal()">
                                 Purchase Order
                             </button>
                         </div>
@@ -236,6 +242,7 @@ export default {
                 purchase_order_id: '',
                 mode_id: '',
                 rfq: {},
+                rfq_id: '',
                 created_at: '',
                 send: '',
                 status: '',
@@ -247,9 +254,11 @@ export default {
                 purchase_request_id : '',
                 dmd_purchase_requests: [],
             }),
+            
         }
     },
     methods:{
+        
         get_prs(){
             axios.get('../../api/pr_for_pmo').then(({data}) => {
                 this.prs = data;
@@ -264,10 +273,13 @@ export default {
 
             });
         },
-        view_pr(id){
+        view_pr(pr){
             this.view_pr_form.reset();
-            axios.get('../../api/purchase_request/'+id).then(({data}) => {
-                    this.view_pr_form.fill(data);
+            this.view_pr_form.fill(pr);
+            axios.get('../../api/purchase_request/'+pr.purchase_request_id).then(({data}) => {
+                    this.view_pr_form.dmd_purchase_requests = data;
+
+                
                 }).catch(() => {
 
                 });
@@ -332,13 +344,15 @@ export default {
             });
         },
         rfqPo_modal(){
+            
             axios.get('../../api/pr_dmd_rqf/'+this.view_pr_form.purchase_request_id).then(({data}) => {
-                this.rfq_po_form = data;
+                this.rfq_po_form.dmd_purchase_requests = data;
+                this.rfq_po_form = this.view_pr_form.purchase_request_id;
                 $('#rfqPoModal').modal('show');
             }).catch(() => {
 
             });
-            
+
         },
         
         store_po(id){

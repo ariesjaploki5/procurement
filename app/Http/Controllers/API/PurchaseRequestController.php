@@ -72,14 +72,22 @@ class PurchaseRequestController extends Controller
     }
 
     public function for_cmps(){
-        $data = DB::table("fn_filter_purchase_requests()")->get();
+        $data = DB::table("fn_purchase_requests()")
+        ->where('csi', '>', 1)
+        ->where('csi2', '<', 3)
+        ->orderBy('csi', 'asc')
+        ->orderBy('csi2', 'asc')
+        ->get();
 
         return response()->json($data);
     }
 
     public function for_pmo(){
 
-        $data = DB::SELECT("SELECT * FROM procurement.dbo.fn_purchase_requests() order by purchase_request_id desc");
+        $data = DB::table("fn_filter_purchase_requests()")
+        ->orderBy('csi', 'asc')
+        ->orderBy('csi2', 'asc')
+        ->get();
 
         return response()->json($data);
 
@@ -216,22 +224,16 @@ class PurchaseRequestController extends Controller
     }
 
     public function show($id){
-        $data = PurchaseRequest::with([
-            'last_status.current_status',
-            'supplier',
-            'user', 
-            'mode', 
-            'rfq', 
-            'purchase_request_remarks',
-            'dmd_purchase_requests' => function($query){
-                $query->with([
-                    'dmd_price_schedule.new_dmd', 'dmd', 'new_app_dmd' => function($query){
-                        $query->where('app_year', Carbon::now()->year)->first();
-                    }
-                ]);
-            },
-        ])
-        ->where('purchase_request_id', $id)->first();
+
+        $data = DB::SELECT("SELECT * FROM fn_dmd_purchase_request($id)");
+
+        return response()->json($data);
+
+    }
+
+    public function pr_show($id){
+
+        $data = DB::SELECT("SELECT * FROM fn");
 
         return response()->json($data);
 
@@ -413,22 +415,24 @@ class PurchaseRequestController extends Controller
     }
 
     public function pr_dmd_rqf($id){
-        $data = PurchaseRequest::with([
-            'supplier', 'user', 'mode', 'rfq', 'purchase_request_remarks',
-            'dmd_purchase_requests' => function($query){
-                $query->with([
-                    'dmd_rfqs' => function($query) {
-                        $query->with([
-                            'supplier', 'manufacturer', 'brand', 'packaging'
-                        ]);
-                    }, 
-                    'dmd', 
-                    'new_app_dmd' => function($query){
-                        $query->where('app_year', Carbon::now()->year)->first();
-                    },
-                ]);
-            },
-        ])->where('purchase_request_id', $id)->first();
+        // $data = PurchaseRequest::with([
+        //     'supplier', 'user', 'mode', 'rfq', 'purchase_request_remarks',
+        //     'dmd_purchase_requests' => function($query){
+        //         $query->with([
+        //             'dmd_rfqs' => function($query) {
+        //                 $query->with([
+        //                     'supplier', 'manufacturer', 'brand', 'packaging'
+        //                 ]);
+        //             }, 
+        //             'dmd', 
+        //             'new_app_dmd' => function($query){
+        //                 $query->where('app_year', Carbon::now()->year)->first();
+        //             },
+        //         ]);
+        //     },
+        // ])->where('purchase_request_id', $id)->first();
+
+        $data = DB::table("fn_get_pr_dmd_rqf($id)")->get();
         
         return response()->json($data);
     }

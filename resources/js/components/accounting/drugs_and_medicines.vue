@@ -27,7 +27,7 @@
                         <tbody>
                             <tr v-for="(d, index) in dmds" :key="d.dmd_id">
                                 <td width="5%">{{ index + 1}}</td>
-                                <td width="30%">{{ d.gendesc }} {{ d.dmdnost }} {{ d.stredesc }} {{ d.formdesc }}</td>
+                                <td width="30%">{{ d.dmddesc }}</td>
                                 <td>{{ d.brandname }}</td>
                                 <td id="uacs_1">
                                     <div id="uacs_2" v-for="uc in d.dmd_uacs" :key="uc.id">

@@ -51,7 +51,10 @@ Route::apiResources([
     'user' => 'API\UserController',
     'fund_source_code' => 'API\FundSourceCodeController',
     
+    'payment_term' => 'API\PaymentTermController',
 ]);
+Route::get('purchase_order_obrs/{id}', 'API\PurchaseOrderController@purchase_order_obrs');
+Route::get('po_show/{id}', 'API\PurchaseOrderController@po_show');
 
 Route::get('budget_show/{id}', 'API\PurchaseOrderController@budget_show');
 
@@ -61,6 +64,7 @@ Route::post('search_po', 'API\PurchaseOrderController@search_po');
 Route::get('all_dmd_pr', 'API\PurchaseRequestController@dmd_pr');
 Route::get('pr_for_cmps', 'API\PurchaseRequestController@for_cmps');
 Route::get('pr_for_pmo', 'API\PurchaseRequestController@for_pmo');
+
 
 Route::get('po_for_pmo', 'API\PurchaseOrderController@for_pmo');
 Route::get('po_for_budget', 'API\PurchaseOrderController@for_budget');
