@@ -43,9 +43,21 @@
                             <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 9" @click="accounting_rcv(po.purchase_order_id)">
                                 <i class="fas fa-file-download"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 10" @click="accounting_rls(po.purchase_order_id)">
+                            <!-- <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 10" @click="accounting_rls(po.purchase_order_id)">
                                 <i class="fas fa-file-upload"></i>
                             </button>
+                            <button type="button" class="btn btn-sm btn-primary" v-if="po.csid == 10" @click="na_modal(po)">
+                                print   
+                            </button> -->
+                            <div class="btn-group" role="group" v-if="po.csid == 10">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                <button class="dropdown-item" @click="na_modal(po)">Notice of Adjustment</button>
+                                <button class="dropdown-item" @click="accounting_rls(po.purchase_order_id)">Released to FMO</button>
+                                </div>
+                            </div>
                         </th>
                     </tr>
                 </tbody>
@@ -116,6 +128,31 @@
                 </div>
             </div>
         </div> <!-- col-md-12 poModal -->
+        <div class="col-md-12">
+            <div class="modal fade" id="naModal" tabindex="-1" role="dialog" aria-labelledby="naModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            PO #: <span v-if="view_po_form.po_id"> {{ view_po_form.po_id}}</span>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-md-12">
+                                <span>Notice of Adjustment</span>
+                            </div>
+                            <div class="col-md-12">
+                                
+                            </div>
+                        </div>
+                        <div class="modal-footer" >
+                            <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- col-md-12 returnModal -->
     </div>
     
 </template>
@@ -179,6 +216,9 @@ export default {
         track_po(pos){
             this.track_po_modal = pos;
             $('#trackModal').modal('show')
+        },
+        na_modal(po){
+            $('#naModal').modal('show')
         },
         accounting_rcv(id){
             axios.put('../../api/accounting_rcv/'+id).then(() => {

@@ -133,6 +133,9 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4 text-right">
+                                                <button class="btn btn-sm btn-primary" type="button" @click="edit_dod()">Edit</button>
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -344,6 +347,9 @@ export default {
             });
         },
         create_dod(){
+            $('#dodModal').modal('show')
+        },
+        edit_dod(){
             $('#dodModal').modal('show')
         },
         store_dod(){

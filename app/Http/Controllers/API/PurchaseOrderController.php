@@ -184,11 +184,12 @@ class PurchaseOrderController extends Controller
 
         $po->update([
             'allotment_id' => $request->allotment_id,
-            'uacs_id' => $request->uacs_id,
+            // 'uacs_id' => $request->uacs_id,
             'fund_source_id' => $request->fund_source_id,
             'amount' => $request->amount,
             'obrs_date' => $date,
-            'uacs_code_id' => $request->uacs_code_id
+            'uacs_code_id' => $request->uacs_code_id,
+            'fund_source_code_id' => $request->fund_source_code_id
         ]);
 
         return response()->json($po);
@@ -552,4 +553,117 @@ class PurchaseOrderController extends Controller
     
     }
     
+    public function pharmacy_rtn($id){
+
+        $po = PurchaseOrder::findOrFail($id);
+        
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 18
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+
+    }
+
+    public function cmps_rtn_po($id){
+        $po = PurchaseOrder::findOrFail($id);
+        
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 19
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    }
+
+    public function pmo_rtn_po($id){
+        $po = PurchaseOrder::findOrFail($id);
+        
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 20
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    }
+
+    public function budget_rtn($id){
+        $po = PurchaseOrder::findOrFail($id);
+        
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 21
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    }
+
+    public function accounting_rtn($id){
+        $po = PurchaseOrder::findOrFail($id);
+        
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 22
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    }
+
+    public function fmo_rtn($id){
+        $po = PurchaseOrder::findOrFail($id);
+        
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 23
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    }
+
+    public function mcc_rtn($id){
+        $po = PurchaseOrder::findOrFail($id);
+        
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 24
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    }
+
+    public function mmo_rtn($id){
+        $po = PurchaseOrder::findOrFail($id);
+        
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 25
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    }
 }

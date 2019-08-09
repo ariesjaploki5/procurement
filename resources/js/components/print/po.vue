@@ -42,7 +42,7 @@
                         <div class="col-2 po all">
                            <span>Supplier: </span> 
                         </div>
-                        <div class="col po top left right">
+                        <div class="col po top left right font-weight-bold">
                             <span>{{ purchase_order.supplier_name }}</span>
                         </div>
                         <div class="col-1 po all"></div>
@@ -51,7 +51,7 @@
                 <div class="col po top bottom right">
                     <div class="row">
                         <div class="col-5 po all">Purchase Order Number: </div>
-                        <div class="col po top left right">{{ purchase_order.po_id }}</div>
+                        <div class="col po top left right font-weight-bold">{{ purchase_order.po_id }}</div>
                         <div class="col-1 po all"></div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                 <div class="col po top bottom right">
                     <div class="row">
                         <div class="col-5 po all">Purchase Order Date: </div>
-                        <div class="col po top left right">{{ purchase_order.created_at | myDate3 }}</div>
+                        <div class="col po top left right font-weight-bold">{{ purchase_order.created_at | myDate3 }}</div>
                         <div class="col-1 po all"></div>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                         <div class="col-2 po all">
                             <span>Address: </span> 
                         </div>
-                        <div class="col po top left right">
+                        <div class="col po top left right font-weight-bold">
                             <span>{{ purchase_order.supplier_address }}</span>
                         </div>
                         <div class="col-1 po all"></div>
@@ -95,7 +95,7 @@
                 <div class="col po top bottom right">
                     <div class="row">
                         <div class="col-5 po all">Mode of Procurement: </div>
-                        <div class="col po top left right">{{ purchase_order.mode_desc }}</div>
+                        <div class="col po top left right font-weight-bold">{{ purchase_order.mode_desc }}</div>
                         <div class="col-1 po all"></div>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                         <div class="col-4 po all">
                             <span>Place of Delivery: </span> 
                         </div>
-                        <div class="col po top left right">
+                        <div class="col po top left right font-weight-bold">
                             <span>{{ purchase_order.place_of_delivery }}</span>
                         </div>
                         <div class="col-1 po all"></div>
@@ -125,7 +125,7 @@
                 <div class="col po top bottom right">
                     <div class="row">
                         <div class="col-5 po all">Delivery Term: </div>
-                        <div class="col po top left right"><span>{{ purchase_order.delivery_term }}</span></div>
+                        <div class="col po top left right font-weight-bold"><span>{{ purchase_order.delivery_term }} Calendar Days</span></div>
                         <div class="col-1 po all"></div>
                     </div>
                 </div>
@@ -140,7 +140,7 @@
                         <div class="col-4 po all">
                             <span>Date of Delivery: </span> 
                         </div>
-                        <div class="col po top left right">
+                        <div class="col po top left right font-weight-bold">
                             <span>{{ purchase_order.date_of_delivery }}</span>
                         </div>
                         <div class="col-1 po all"></div>
@@ -149,7 +149,7 @@
                 <div class="col po top bottom right">
                     <div class="row">
                         <div class="col-5 po all">Payment Term:</div>
-                        <div class="col po top left right">{{ purchase_order.payment_term_desc }}</div>
+                        <div class="col po top left right font-weight-bold">{{ purchase_order.payment_term_desc }}</div>
                         <div class="col-1 po all"></div>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
         <div class="col-12 po top aheight"></div>
     </div>
     <div class="row">
-        <div class="col-2 po top right text-center font-weight-bold">
+        <div class="col po top right text-center font-weight-bold">
             <span>Stock Number</span>
         </div>
         <div class="col po top right text-center font-weight-bold">
@@ -169,18 +169,18 @@
         <div class="col po top right text-center font-weight-bold">
             <span>QUANTITY</span>
         </div>
-        <div class="col-4 po top right text-center font-weight-bold">
+        <div class="col-5 po top right text-center font-weight-bold">
             <span>DESCRIPTION</span>
         </div>
         <div class="col po top right text-center font-weight-bold">
             <span>UNIT COST</span>
         </div>
-        <div class="col-2 po top text-center font-weight-bold">
+        <div class="col po top text-center font-weight-bold">
             <span>AMOUNT</span>
         </div>
     </div>
     <div class="row" v-for="item in dmd_purchase_orders" :key="item.dmd_po_id">
-        <div class="col-2 po top right text-center">
+        <div class="col po top right text-center">
             <span></span>
         </div>
         <div class="col po top right text-center">
@@ -189,7 +189,7 @@
         <div class="col po top right text-center">
             <span>{{ item.order_quantity | numeral3 }}</span>
         </div>
-        <div class="col-4 po top right text-center">
+        <div class="col-5 po top right text-center">
             <div class="row col">
                 <span>{{ item.dmddesc }}</span>
             </div>
@@ -209,7 +209,7 @@
         <div class="col po top right text-center">
             <span>{{ item.cost_price | currency2 }}</span>
         </div>
-        <div class="col-2 po top text-center">
+        <div class="col po top text-center">
             <span>{{ item.cost_price * item.order_quantity | currency2 }}</span>
         </div>
     </div>
@@ -223,11 +223,11 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-3 po right font-weight-bold">Total Amount in Words:</div>
-                    <div class="col po left right font-weight-bold">
-                        <span v-if="purchase_order.amount">{{ purchase_order.amount | num_words }} pesos <span v-if="purchase_order.cent > 0">and {{ purchase_order.cent | num_words  }}</span> centavos</span>
+                    <div class="col-7 po left right font-weight-bold font-italic">
+                        <span v-if="purchase_order.amount">{{ purchase_order.amount | num_words }} pesos <span v-if="purchase_order.cent > 0">and {{ purchase_order.cent | num_words  }}</span> centavos only</span>
                         
                     </div>
-                    <div class="col-2 po font-weight-bold">{{ purchase_order.total_amount | currency2 }}</div>
+                    <div class="col po font-weight-bold text-right">{{ purchase_order.total_amount | currency2 }}</div>
                     
                 </div>
             </div>
@@ -276,7 +276,7 @@
                         <div class="col po top left bottom">
                             <div class="row">
                                 <div class="col-3 po all"></div>
-                                <div class="col po all font-weight-bold text-center">RICARDO B. RUNEZ JR.,MD,FPCS,MHA,CESE</div>
+                                <div class="col-9 po all font-weight-bold text-center mleft">RICARDO B. RUNEZ JR.,MD,FPCS,MHA,CESE</div>
                                 <div class="col-1 po all"></div>
                             </div>
                         </div>
@@ -330,7 +330,7 @@
                     <div class="col po top right bottom">
                         <div class="row">
                             <div class="col-3 po all"></div>
-                            <div class="col po all text-center font-weight-bold">(Current Date)</div>
+                            <div class="col po all text-center font-weight-bold"><span> </span></div>
                             <div class="col-1 po all"></div>
                         </div>
                     </div>
@@ -369,7 +369,7 @@
                 <div class="row po top bottom">
                     <div class="col po all">
                         <div class="row">
-                            <div class="col-4 po all font-weight-bold">
+                            <div class="col-5 po all font-weight-bold">
                                 <span>FUND CLUSTER: </span> 
                             </div>
                             <div class="col po top left right">
@@ -393,7 +393,7 @@
                 <div class="row po top bottom">
                     <div class="col po all">
                         <div class="row">
-                            <div class="col-4 po all font-weight-bold">
+                            <div class="col-5 po all font-weight-bold">
                                 <span>FUNDS AVAILABLE:</span> 
                             </div>
                             <div class="col po top left right">
@@ -465,7 +465,7 @@
                     <div class="col po top bottom right">
                         <div class="row">
                             <div class="col-5 po all">Amount: </div>
-                            <div class="col po top left right">{{ purchase_order.amount | currency2 }}</div>
+                            <div class="col po top left right font-weight-bold">{{ purchase_order.amount | currency2 }}</div>
                             <div class="col-1 po all"></div>
                         </div>
                     </div>
@@ -596,6 +596,9 @@ export default {
         border-right: none;
         border-left: none;
         border-bottom: none;
+    }
+    .mleft{
+        margin-left: -5%;
     }
     .aheight {
         height: 5px;

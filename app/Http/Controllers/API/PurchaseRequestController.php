@@ -73,8 +73,8 @@ class PurchaseRequestController extends Controller
 
     public function for_cmps(){
         $data = DB::table("fn_purchase_requests()")
-        ->where('csi', '>', 1)
-        ->where('csi2', '<', 3)
+        // ->where('csi', '>', 1)
+        ->where('csi', '<', 4)
         ->orderBy('csi', 'asc')
         ->orderBy('csi2', 'asc')
         ->get();

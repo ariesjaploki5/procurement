@@ -53,6 +53,8 @@ Route::apiResources([
     
     'payment_term' => 'API\PaymentTermController',
 ]);
+
+
 Route::get('purchase_order_obrs/{id}', 'API\PurchaseOrderController@purchase_order_obrs');
 Route::get('po_show/{id}', 'API\PurchaseOrderController@po_show');
 
@@ -160,28 +162,35 @@ Route::put('pmo_rls/{id}', 'API\PurchaseRequestController@pmo_rls');
 
 Route::put('cmps_rcv_po/{id}', 'API\PurchaseOrderController@cmps_rcv_po');
 Route::put('cmps_rls_po/{id}', 'API\PurchaseOrderController@cmps_rls_po');
+Route::put('cmps_rtn_po/{id}', 'API\PurchaseOrderController@cmps_rtn_po');
 
-
+Route::put('pmo_rtn_po/{id}', 'API\PurchaseOrderController@pmo_rtn_po');
 Route::put('pmo_rls_po/{id}', 'API\PurchaseOrderController@pmo_rls_po');
+
 Route::put('pmo_rcv_po_2/{id}', 'API\PurchaseOrderController@pmo_rcv_po_2');
 Route::put('pmo_rls_po_2/{id}', 'API\PurchaseOrderController@pmo_rls_po_2');
 
 Route::put('budget_rcv/{id}', 'API\PurchaseOrderController@budget_rcv');
 Route::put('budget_rls/{id}', 'API\PurchaseOrderController@budget_rls');
+Route::put('budget_rtn/{id}', 'API\PurchaseOrderCOntroller@budget_rtn');
 
 Route::put('accounting_rcv/{id}', 'API\PurchaseOrderController@accounting_rcv');
 Route::put('accounting_rls/{id}', 'API\PurchaseOrderController@accounting_rls');
+Route::put('accounting_rtn/{id}', 'API\PurchaseOrderController@accounting_rtn');
 
 Route::put('mcc_rcv/{id}', 'API\PurchaseOrderController@mcc_rcv');
 Route::put('mcc_rls/{id}', 'API\PurchaseOrderController@mcc_rls');
-
+Route::put('mcc_rtn/{id}', 'API\PurchaseOrderController@mcc_rtn');
 
 Route::put('fmo_rcv/{id}', 'API\PurchaseOrderController@fmo_rcv');
 Route::put('fmo_rls/{id}', 'API\PurchaseOrderController@fmo_rls');
-
+Route::put('fmo_rtn/{id}', 'API\PurchaseOrderController@fmo_rtn');
 
 Route::put('mmo_rcv/{id}', 'API\PurchaseOrderController@mmo_rcv');
 Route::put('mmo_rls/{id}', 'API\PurchaseOrderController@mmo_rls');
+Route::put('mmo_rtn/{id}', 'API\PurchaseOrderController@mmo_rtn');
+
+
 
 
 Route::get('public_bidding', 'API\CartController@public_bidding');

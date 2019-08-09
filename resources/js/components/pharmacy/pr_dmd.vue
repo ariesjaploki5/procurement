@@ -148,15 +148,15 @@
                                     </tr>
                                 </thead>
                                 <tbody id="pr_tbody">
-                                    <tr v-for="(dmd,index) in pr.dmd_purchase_requests" :key="dmd.dmd_id">
+                                    <tr v-for="(dmd,index) in pr" :key="dmd.dpr_id">
                                         <td width="5%">{{ index + 1}}</td>
-                                        <td width="25%">{{ dmd.dmd.dmddesc }}</td>
+                                        <td width="25%">{{ dmd.dmddesc }}</td>
                                         <td class="text-right"></td>
                                         <td class="text-right">
-                                            <span>{{ dmd.dmd.ssl | numeral3 }}</span> 
+                                            <span>{{ dmd.ssl | numeral3 }}</span> 
                                         </td>
                                         <td class="text-right">
-                                            <span>{{ dmd.dmd.boh | numeral3 }}</span>
+                                            <span>{{ dmd.boh | numeral3 }}</span>
                                         </td>
                                         <td width="10%" class="text-right">
                                             <span>{{ dmd.request_quantity | numeral3 }}</span>
@@ -179,9 +179,9 @@
                     </div>
                     <div class="modal-footer" >
                         <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
-                        <span v-show="!pr.last_status">
+                        <!-- <span v-show="!pr.last_status">
                             <button type="button" class="btn btn-sm btn-success" @click="send_to_cmps()">Send to CMPS</button>
-                        </span>
+                        </span> -->
                         
                     </div>
                     </form>

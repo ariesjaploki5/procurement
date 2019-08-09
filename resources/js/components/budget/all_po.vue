@@ -43,7 +43,7 @@
                                 <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 7" @click="budget_rcv(po.purchase_order_id)">
                                     <i class="fas fa-file-download"></i>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 8" @click="budget_rls(po.purchase_order_id)">
+                                <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 8 && po.obrs_date" @click="budget_rls(po.purchase_order_id)">
                                     <i class="fas fa-file-upload"></i>
                                 </button>
                             <!-- <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: po.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link> -->
@@ -112,12 +112,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row" v-if="view_po_form.fs_acro">
-                                <div class="col-md-12">
-                                    <b> ORS / BURS No.:</b> {{ view_po_form.fs_acro }}-0{{ view_po_form.allotment_code }}-{{ view_po_form.uc_cura }}-{{ view_po_form.obrs_date | myDate}}-{{ view_po_form.purchase_order_id | numeral2}}
-                                </div>
-                            </div>
-                            <div class="row" v-else>
+
+                            <div class="row" v-if="!view_po_form.obrs_date">
                                 <div class="col-md-12 text-right">
                                     <button type="button" class="btn btn-sm btn-primary" @click="create_obrs()">Add OBRS</button>
                                 </div>
@@ -137,7 +133,7 @@
         </div> <!-- col-md-12 poModal -->
         <div class="col-md-12">
                 <div class="modal fade" id="obrsModal" tabindex="-1" role="dialog" aria-labelledby="obrsModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             OBRS
@@ -167,7 +163,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-label font-weight-bold">UACS</div>
-                                <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.uacs_id">
+                                <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.uacs_code_id">
                                     <option v-for="uc in uacs_codes" :key="uc.id" :value="uc.id">{{ uc.uacs_desc }}</option>
                                 </select>
                             </div>
@@ -193,10 +189,37 @@ export default {
                 word: '',
             }),
             view_po_form: new Form({
-                purchase_order_id: '',
-                purchase_request_id: '',
-                po_id: '',
+                
+                allotment_code: '',
+                allotment_desc: '',
+                allotment_id: '',
+                created_at: '',
+                csd: '',
+                csid:'',
+                date_of_delivery:'',
+                delivery_term:'',
+                fs_acro: '',
+                fs_desc: '',
+                fs_id: '',
+                fsc_ca: '',
+                fsc_cra: '',
+                fsc_desc: '',
+                fsc_source: '',
+                fund_source_code_id: '',
+                id: '',
+                mode_desc:'',
+                obrs_date: '',
+                po_id:'',
+                purchase_order_id:'',
+                purchase_request_id:'',
+                supplier_name:'',
+
+                uacs_code_id: '',
+                uacs_code: '',
+                uacs_desc: '',
+                uacs_type_id: '',
                 dmd_purchase_orders: [],
+
             }),
             track_po_modal: {},
             fund_sources: [],
@@ -211,15 +234,9 @@ export default {
         view_po(po){
             this.isLoading = true;
             this.view_po_form.reset();
+            this.view_po_form.fill(po);
             axios.get('../../api/budget_show/'+po.purchase_order_id).then(({data}) => {
-                    
                     this.view_po_form.dmd_purchase_orders = data;
-
-                    this.view_po_form.po_id = po.po_id;
-                    this.view_po_form.purchase_order_id = po.purchase_order_id;
-                    this.view_po_form.purchase_request_id = po.purchase_request_id;
-
-                    
                     this.isLoading = false;
                 }).catch(() => {
 
@@ -291,11 +308,14 @@ export default {
                     type: 'success',
                     title: 'Success'
                 });
-                axios.get('../../api/purchase_order/'+this.view_po_form.purchase_order_id).then(({data}) => {
-                    this.view_po_form.fill(data);
-                }).catch(() => {
 
-                });
+                $('#obrsModal').modal('hide');
+                $('#poModal').modal('hide');
+                // axios.get('../../api/purchase_order/'+this.view_po_form.purchase_order_id).then(({data}) => {
+                //     this.view_po_form.fill(data);
+                // }).catch(() => {
+
+                // });
             }).catch(() => {
 
             });
@@ -304,7 +324,7 @@ export default {
             axios.put('../../api/budget_rls/'+id).then(() => {
                 toast.fire({
                     type: 'success',
-                    title: 'PO Received'
+                    title: 'PO Release'
                 });
             }).catch(() => {
 
@@ -346,7 +366,12 @@ export default {
 }
 </script>
 <style scoped>
-
+@media (min-width: 770px) {
+    .modal-xl {
+            width: 95%;
+            max-width:1500px;
+        }
+    }
     #disapprovedModal{
         background-color: #0606067a;
     }
