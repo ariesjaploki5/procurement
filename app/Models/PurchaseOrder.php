@@ -19,7 +19,6 @@ class PurchaseOrder extends Model
 
         'payment_term_id', 'place_of_delivery',
 
-
         'current_status',
         
         'supplier_id',
@@ -30,21 +29,11 @@ class PurchaseOrder extends Model
         'updated_at',
         'po_id',
         'dod',
-        // 'div_head_rcv_po', 'div_head_rls_po',
 
-        // 'pmo_rcv_po', 'pmo_rls_po',
+        'ors',
+        'burs',
 
-        // 'budget_rcv', 'budget_rls',
-
-        // 'accntng_rcv', 'accntng_rls',
-
-        // 'fmo_rcv', 'fmo_rls',
-
-        // 'mcc_rcv', 'mcc_rls',
-
-        // 'mmo_rcv', 'mmo_rls', 
-        
-        
+        // 'div_head_rcv_po', 'div_head_rls_po', 'pmo_rcv_po', 'pmo_rls_po', 'budget_rcv', 'budget_rls', 'accntng_rcv', 'accntng_rls','fmo_rcv', 'fmo_rls','mcc_rcv', 'mcc_rls','mmo_rcv', 'mmo_rls', 
     ];
 
     protected $dispatchesEvents = [
@@ -115,6 +104,10 @@ class PurchaseOrder extends Model
 
     public function payment_term(){
         return $this->belongsTo('App\Models\PaymentTerm', 'payment_term_id', 'id');
+    }
+
+    public function notice_of_adjustment(){
+        return $this->hasMany('App\Models\NoticeOfAdjustment', 'purchase_order_id', 'purchase_order_id');
     }
     
 }

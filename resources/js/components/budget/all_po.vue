@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
              <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
-                <h4><i class="fas fa-cart-arrow-down"></i> Purchase Order</h4>
+                <h6><i class="fas fa-cart-arrow-down"></i> Purchase Order</h6>
             </div>
         </div>
         <div class="col-md-12 mt-1">
@@ -40,12 +40,15 @@
                         <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
                         <th @click="view_po(po)" width="37%">{{ po.supplier_name }}</th>
                         <th width="10%">
-                                <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 7" @click="budget_rcv(po.purchase_order_id)">
-                                    <i class="fas fa-file-download"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 8 && po.obrs_date" @click="budget_rls(po.purchase_order_id)">
-                                    <i class="fas fa-file-upload"></i>
-                                </button>
+                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 7" @click="budget_rcv(po.purchase_order_id)">
+                                <i class="fas fa-file-download"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 8 && po.obrs_date" @click="budget_rls(po.purchase_order_id)">
+                                <i class="fas fa-file-upload"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 21" @click="budget_rls(po.purchase_order_id)">
+                                <i class="fas fa-file-upload"></i>
+                            </button>
                             <!-- <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: po.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link> -->
                             <router-link class="btn btn-sm btn-success" v-show="po.obrs_date" :to="{ name: 'obrs', params: { id: po.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
                         </th>
@@ -189,7 +192,6 @@ export default {
                 word: '',
             }),
             view_po_form: new Form({
-                
                 allotment_code: '',
                 allotment_desc: '',
                 allotment_id: '',
@@ -213,13 +215,11 @@ export default {
                 purchase_order_id:'',
                 purchase_request_id:'',
                 supplier_name:'',
-
                 uacs_code_id: '',
                 uacs_code: '',
                 uacs_desc: '',
                 uacs_type_id: '',
                 dmd_purchase_orders: [],
-
             }),
             track_po_modal: {},
             fund_sources: [],
@@ -235,13 +235,17 @@ export default {
             this.isLoading = true;
             this.view_po_form.reset();
             this.view_po_form.fill(po);
-            axios.get('../../api/budget_show/'+po.purchase_order_id).then(({data}) => {
+            axios.
+            get('../../api/budget_show/'+po.purchase_order_id)
+            .then(({data}) => {
                     this.view_po_form.dmd_purchase_orders = data;
                     this.isLoading = false;
-                }).catch(() => {
+                })
+            .catch(() => {
 
                 });
             $('#poModal').modal('show');
+            
         },
         
         get_uacs(){

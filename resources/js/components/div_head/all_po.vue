@@ -203,7 +203,6 @@ export default {
         }
     },
     methods:{
-
         get_pos(){
             axios.get('../../api/po_for_cmps').then(({data}) => {
                 this.pos = data;

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
-                <h4><i class="fas fa-cart-arrow-down"></i> Purchase Order</h4>
+                <h6><i class="fas fa-cart-arrow-down"></i> Purchase Order</h6>
             </div>
             <div class="table-responsive-sm">
                 <table class="table table-sm table-hover">

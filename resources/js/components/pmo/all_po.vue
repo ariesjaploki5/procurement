@@ -290,10 +290,7 @@ export default {
                 dmd_purchase_orders: [],
                 last_status: {},
                 dod: '',
-                purchase_request:{
-                   view_dmd_purchase_requests:[],
-                   last_status: {},
-               },
+                obrs_no: '',
             }),
             track_po_modal: {},
             payment_terms: [],

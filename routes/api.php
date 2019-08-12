@@ -52,6 +52,7 @@ Route::apiResources([
     'fund_source_code' => 'API\FundSourceCodeController',
     
     'payment_term' => 'API\PaymentTermController',
+    'notice_of_adjustment' => 'API\NoticeOfAdjustmentController',
 ]);
 
 

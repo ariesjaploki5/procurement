@@ -220,7 +220,8 @@ class PurchaseOrderController extends Controller
 
     public function for_pmo(){
 
-        $data = DB::table('fn_purchase_orders()')->get();
+        $data = DB::table('fn_purchase_orders()')
+        ->get();
 
         return response()->json($data);
     }
@@ -234,7 +235,7 @@ class PurchaseOrderController extends Controller
 
     public function for_budget(){
         
-        $data = DB::table('fn_filter_purchase_orders(6, 9)')->get();
+        $data = DB::table('fn_filter_purchase_orders_2(7, 8, 21)')->get();
 
         return response()->json($data);
     }
@@ -302,7 +303,7 @@ class PurchaseOrderController extends Controller
     }
 
     public function purchase_order_obrs($id){
-        $data = DB::table("fn_dmd_purchase_orders($id)")->take(1)->get();
+        $data = DB::table("fn_dmd_purchase_orders($id)")->take(1)->first();
         return response()->json($data);
     }
 
@@ -629,7 +630,7 @@ class PurchaseOrderController extends Controller
         $po = PurchaseOrder::findOrFail($id);
         
         $po->purchase_order_statuses()->create([
-            'current_status_id' => 23
+            'current_status_id' => 21
         ]);
 
         $po->update([

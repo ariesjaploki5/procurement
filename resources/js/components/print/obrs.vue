@@ -19,13 +19,13 @@
                     <div class="row po left right bottom">
                         <div class="col">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="">
+                                <span style='font-size:20px;'>&#9634;</span>
                                     <label class="form-check-label font-weight-bold" for="defaultCheck1">
                                             <h5>OBLIGATION REQUEST AND STATUS</h5>
                                     </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="">
+                                <span style='font-size:20px;'>&#9634;</span>
                                     <label class="form-check-label font-weight-bold" for="defaultCheck2">
                                             <h5>BUDGET UTILIZATION REQUEST AND STATUS</h5>
                                     </label>
@@ -54,7 +54,7 @@
                            <span>Payee: </span> 
                         </div>
                         <div class="col po top left right font-weight-bold">
-                            <span>METRO DRUG, INC.</span>
+                            <span>{{ purchase_order.supplier_name }}</span>
                         </div>
                         <div class="col-1 po all"></div>
                     </div>
@@ -98,7 +98,7 @@
                             <span>Address: </span> 
                         </div>
                         <div class="col po top left right font-weight-bold">
-                            <span>Manalac Avenue, Taguig, Metro Manila</span>
+                            {{ purchase_order.supplier_address }}
                         </div>
                         <div class="col-1 po all"></div>
                     </div>
@@ -140,11 +140,11 @@
             <span>Main Pharmacy</span>
         </div>
         <div class="col-4 po top right bottom font-weight-bold">
-            <span>ACETYLCYSTEINE 100.00 mg powder<br>
-                Brand:	Fluimucil<br>
-                Packaging:	30's<br>
-                Manufacturer:	Zambon Switzerland Ltd.<br>
-                Country of Origin:	Switzerland<br>
+            <span>{{  dmd_purchase_orders.dmddesc }}<br>
+                Brand:	{{ dmd_purchase_orders.brand_desc }}<br>
+                Packaging:	{{ dmd_purchase_orders.packaging_desc }}<br>
+                Manufacturer:	{{ dmd_purchase_orders.manufacturer_desc }}<br>
+                Country of Origin:	{{ dmd_purchase_orders.country_desc }}<br>
                 CPR:	
             </span>
         </div>
@@ -155,7 +155,7 @@
             <span></span>
         </div>
         <div class="col po top bottom text-center font-weight-bold">
-            <span>P 3,500.00</span>
+            <span>{{ purchase_order.total_amount | currency2 }}</span>
         </div>
     </div>
 
@@ -173,7 +173,7 @@
             <span></span>
         </div>
         <div class="col po top text-center font-weight-bold">
-            <span>P 3,500.00</span>
+            <span>{{ purchase_order.total_amount | currency2 }}</span>
         </div>
         </div>
         <div>
@@ -528,7 +528,7 @@ export default {
     data(){
         return{
                 
-                dmd_purchase_orders: [],
+                dmd_purchase_orders: {},
 
                 purchase_order: '',
 
@@ -536,7 +536,7 @@ export default {
         },
         methods:{
             get_po(){
-                axios.get('../../api/purchase_order/'+this.$route.params.id).then(({data}) => {
+                axios.get('../../api/purchase_order_obrs/'+this.$route.params.id).then(({data}) => {
                     this.dmd_purchase_orders = data;
                 }).catch(() => {
 

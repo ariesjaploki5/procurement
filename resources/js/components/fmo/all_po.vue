@@ -32,20 +32,34 @@
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="po in pos" :key="po.purchase_order_id">
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.po_id }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="15%">{{ po.created_at | myDate3 }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="18%">
+                        <th @click="view_po(po)" width="10%">{{ po.po_id }}</th>
+                        <th @click="view_po(po)" width="15%">{{ po.created_at | myDate3 }}</th>
+                        <th @click="view_po(po)" width="18%">
                             <span v-if="po.csd">{{ po.csd }}</span>
                         </th>
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode_desc }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="37%">{{ po.supplier_name }}</th>
+                        <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
+                        <th @click="view_po(po)" width="37%">{{ po.supplier_name }}</th>
                         <th width="10%">
                             <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 11" @click="fmo_rcv(po.purchase_order_id)">
-                                <i class="fas fa-file-download"></i>
+                                <i class="fas fa-file-download"></i> Received
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 12" @click="fmo_rls(po.purchase_order_id)">
-                                <i class="fas fa-file-upload"></i>
-                            </button>
+
+                            <div class="btn-group" role="group" v-if="po.csid == 12">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                <button type="button" class="dropdown-item" v-if="po.csid == 12" @click="fmo_rtn(po.purchase_order_id)">
+                                    <i class="fas fa-file-upload"></i> Returned to PMO
+                                </button>
+
+                                <button type="button" class="dropdown-item" v-if="po.csid == 12" @click="fmo_rls(po.purchase_order_id)">
+                                    <i class="fas fa-file-upload"></i> Released to MCC
+                                </button></div>
+                            </div>
+
+                            
+                            
                         </th>
                     </tr>
                 </tbody>
@@ -65,10 +79,10 @@
                                     <thead>
                                         <tr class="text-center">
                                             <th width="5%">#</th>
-                                            <th width="20%">Description</th>
+                                            <th width="25%">Description</th>
                                             <th>SSL</th>
                                             <th>BOH</th>
-                                            <th>Item In Transit</th>
+                                            <!-- <th>Item In Transit</th> -->
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
@@ -77,43 +91,48 @@
                                     <tbody id="po_tbody">
                                         <tr v-for="(dmd,index) in view_po_form.dmd_purchase_orders" :key="dmd.dmd_id">
                                             <td width="5%">{{ index + 1}}</td>
-                                            <td width="20%">
-                                                <tr><td colspan="2"><span>{{ dmd.new_dmd_homis.dmddesc }}</span></td></tr>
-                                                <tr><td>Brand:</td><td></td></tr>
-                                                <tr><td>Manufacturer:</td><td></td></tr>
-                                                <tr><td>Supplier:</td><td></td></tr>
-                                                <tr><td></td></tr>
-                                            </td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd_homis.ssl | numeral3 }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd.boh | numeral3 }}</td>
-                                            <td class="text-right table-danger"></td>
-                                            <td width="10%" class="text-right">
-                                                <input v-if="!view_po_form.last_status" type="number" class="form-control form-control-sm text-right" v-model="dmd.order_quantity">
-                                                <div v-else>{{ dmd.order_quantity | numeral3 }}</div>
-                                            </td>
-                                            <td class="text-right">
-                                                <span>{{ dmd.cost_price | currency2 }}</span>
-                                            </td>
-                                            <td  class="text-right">
-                                                <span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span>
-                                            </td>
+                                            <td width="25%">{{ dmd.dmddesc }}</td>
+                                            <td class="text-right">{{ dmd.ssl | numeral3 }}</td>
+                                            <td class="text-right">{{ dmd.boh | numeral3 }}</td>
+                                            <!-- <td class="text-right table-danger"></td> -->
+                                            <td width="10%" class="text-right">{{ dmd.order_quantity | numeral3 }}</td>
+                                            <td class="text-right"><span>{{ dmd.cost_price | currency2 }}</span></td>
+                                            <td  class="text-right"><span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row" v-if="view_po_form.fund_source_id">
-                                <div class="col-md-12">
-                                    <b> ORS / BURS No.:</b> {{ view_po_form.fund_source.acronym }}-0{{ view_po_form.allotment.allotment_code }}-{{ view_po_form.uacs.current_appropriations }}-{{ view_po_form.obrs_date | myDate}}-{{ view_po_form.purchase_order_id | numeral2}}
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div>
+                                                <span class="text-bold">Date of Delivery: </span>    
+                                                {{ view_po_form.date_of_delivery }}
+                                            </div>
+                                            <div>
+                                                <span class="text-bold">Delivery Term: </span>  
+                                                {{ view_po_form.delivery_term }}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div>
+                                                <span class="text-bold">Place of Delivery: </span>{{ view_po_form.place_of_delivery }}
+                                            </div>
+                                            <div>
+                                                <span class="text-bold">Payment Term: </span>{{ view_po_form.payment_term_desc }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-4 text-right">
+                                    <button class="btn btn-sm btn-primary" type="button" @click="edit_dod()">Edit</button>
+                                </div> -->
                             </div>
-                            <!-- <div class="row">
-                                <div class="col-md-12">
-                                    <b>Delivery Date: </b>
-                                </div>
-                                <div class="col-md-12">
-                                    <b>Delivery Term: </b>
-                                </div>
-                            </div> -->
                         </div>
                         <div class="modal-footer" >
                             <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Close</button>
@@ -122,62 +141,8 @@
                 </div>
             </div>
         </div> <!-- col-md-12 poModal -->
-        <div class="col-md-12">
-            <div class="modal fade" id="trackModal" tabindex="-1" role="dialog" aria-labelledby="trackModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            {{ track_po_modal.created_at | myDate }} - {{ track_po_modal.purchase_order_id | numeral2 }}
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row justify-content-center">
-                                <div class="col-md-12">
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rcv }">Division Head Received <div>{{ track_po_modal.div_head_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rls }">Division Head Released <div>{{ track_po_modal.div_head_rcv }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rcv }">PMO Received <div>{{ track_po_modal.pmo_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rls }">PMO Released <div>{{ track_po_modal.pmo_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">  
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rcv_2 }">Division Head Received <div>{{ track_po_modal.div_head_rcv_2 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.div_head_rls_2 }">Division Head Released <div>{{ track_po_modal.div_head_rls_2 }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rcv_2 }">PMO Received <div>{{ track_po_modal.pmo_rcv_2 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rls_2 }">PMO Released <div>{{ track_po_modal.pmo_rls_2 }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">  
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.budget_rcv }">Budget Received <div>{{ track_po_modal.budget_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.budget_rls }">Budget Released <div>{{ track_po_modal.budget_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.mcc_rcv }">MCC Received <div>{{ track_po_modal.mcc_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.mcc_rls }">MCC Released <div>{{ track_po_modal.mcc_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.fmo_rcv }">FMO Received <div>{{ track_po_modal.fmo_rcv }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.fmo_rls }">FMO Released <div>{{ track_po_modal.fmo_rls }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rcv_3 }">PMO Received <div>{{ track_po_modal.pmo_rcv_3 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_po_modal.pmo_rls_3 }">PMO Released <div>{{ track_po_modal.pmo_rls_3 }}</div></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div><!-- col-md-12 trackmodal -->
     </div>
-    
 </template>
-
 <script>
 export default {
     data(){
@@ -187,23 +152,45 @@ export default {
                 word: '',
             }),
             view_po_form: new Form({
+                payment_term_id: '',
+                place_of_delivery: '',
                 purchase_order_id: '',
                 purchase_request_id: '',
+                payment_term_desc: '',
                 po_id: '',
                 uacs_code_id: '',
-                uacs: {},
+                uacs: '',
                 allotment_id: '',
-                allotment: {},
+                allotment: '',
                 uacs_id: '',
                 fund_source_id: '',
-                fund_source: {},
+                fund_source: '',
                 date_of_delivery: '',
+                delivery_term: '',
                 dmd_purchase_orders: [],
                 last_status: {},
-                purchase_request:{
-                   view_dmd_purchase_requests:[],
-                   last_status: {},
-               },
+                dod: '',
+                obrs_no: '',
+                total_amount: '',
+                noa_id: '',
+            }),
+            na_form: new Form({
+                purchase_order_id: '',
+                ors: false,
+                burs: false,
+                amount_to_p: false,
+                adjust_ors_burs_no: false,
+                resp_center_to_check: false,
+                particulars_to_check: false,
+                mfo_pap_to_check: false,
+                account_code_to_check: false,
+                adjust_raod_check: false,
+                resp_center_to: '',
+                particulars_to: '',
+                mfo_pap_to: '',
+                account_code_to: '',
+                adjust_raod: '',
+                remarks: '',
             }),
             track_po_modal: {},
         }
@@ -223,10 +210,11 @@ export default {
 
             });
         },
-        view_po(id){
+        view_po(po){
             this.view_po_form.reset();
-            axios.get('../../api/purchase_order/'+id).then(({data}) => {
-                    this.view_po_form.fill(data);
+            this.view_po_form.fill(po);
+            axios.get('../../api/purchase_order/'+po.purchase_order_id).then(({data}) => {
+                    this.view_po_form.dmd_purchase_orders = data;
                 }).catch(() => {
 
                 });
@@ -235,6 +223,19 @@ export default {
         track_po(pos){
             this.track_po_modal = pos;
             $('#trackModal').modal('show')
+        },
+        na_modal(po){
+            this.view_po_form.fill(po);
+            this.na_form.purchase_order_id = po.purchase_order_id;
+            $('#naModal').modal('show')
+        },
+        store_na(){
+            this.na_form.post("../../api/notice_of_adjustment").then(() => {
+                this.na_form.reset();
+                $('#naModal').modal('hide')
+            }).catch(() => {
+
+            });
         },
         fmo_rcv(id){
             axios.put('../../api/fmo_rcv/'+id).then(() => {
@@ -251,6 +252,16 @@ export default {
                 toast.fire({
                     type: 'success',
                     title: 'PO Release'
+                });
+            }).catch(() => {
+
+            });
+        },
+        fmo_rtn(id){
+            axios.put('../../api/fmo_rtn/'+id).then(() => {
+                toast.fire({
+                    type: 'success',
+                    title: 'PO Returned to PMO'
                 });
             }).catch(() => {
 

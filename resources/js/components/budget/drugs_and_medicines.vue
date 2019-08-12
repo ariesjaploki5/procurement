@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
-                <h4><i class="fas fa-capsules"></i> Drugs and Medicines</h4>
+                <h6><i class="fas fa-capsules"></i> Drugs and Medicines</h6>
             </div>
             <div class="row mb-1">
                 <div class="col-md-auto text-right font-weight-bold">Search:</div>
@@ -13,7 +13,7 @@
                     <thead>
                         <tr>
                             <th width="5%">#</th>
-                            <!-- <th width="10%">ID</th> -->
+                            
                             <th width="30%">Description</th>
                             <th width="10%" class="text-center">Balance On Hand</th>
                             <th class="text-center">SSL</th>
@@ -24,13 +24,12 @@
                     <tbody>
                         <tr v-for="(d, index) in filteredDmds" :key="d.dmd_id" :class="{ 'table-warning' : d.boh_iit < d.ssl/2 , 'table-danger' : d.ssl == 0 , 'table-success' : d.boh > d.ssl/2, 'table-primary' : d.boh_iit > d.ssl/2}" >
                             <td width="5%">{{ index + 1}}</td>
-                            <!-- <td width="10%">{{ d.dmdcomb }}-{{ d.dmdctr}}</td> -->
+                            
                             <td width="30%">{{ d.dmddesc }}</td>
                             <td width="10%" class="text-right">{{ d.boh | numeral3 }}</td>
                             <td class="text-right">{{ d.ssl | numeral3 }}</td>
                             <td class="text-right">{{ d.rop | numeral3 }}</td>
                             <td class="text-right">{{ d.item_in_transit | numeral3 }}</td>
-
                         </tr>
                     </tbody>
                 </table>

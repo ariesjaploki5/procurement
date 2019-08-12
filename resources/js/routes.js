@@ -236,6 +236,12 @@ export const routes = [
         meta: { requiresAuth: true }
     },
     {
+        path: '/na/:id',
+        component: na,
+        name: 'na',
+        meta: { requiresAuth: true }
+    },
+    {
         path: '/rfq/:id',
         component: rfq,
         name: 'rfq',
