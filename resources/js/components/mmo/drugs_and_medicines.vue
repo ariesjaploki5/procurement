@@ -32,7 +32,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    {{ form.gendesc }} {{ form.dmdnost }} {{ form.stredesc }} {{ form.formdesc }} {{ form.brandname }}
+                                   <h5> {{ form.gendesc }} {{ form.dmdnost }} {{ form.stredesc }} {{ form.formdesc }} {{ form.brandname }}</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -49,8 +49,8 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-sm btn-warning">Cancel</button>
-                                        <button type="submit" class="btn btn-sm btn-danger">Submit</button>
+                                        <button type="button" data-dismiss="modal" class="btn btn-sm btn-warning">Cancel</button>
+                                        <button type="submit" class="btn btn-sm btn-success">Submit</button>
                                     </div>
                                 </form>
                             </div>
@@ -115,6 +115,19 @@ export default {
 </script>
 
 <style scoped>
+
+    #d_modal_content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-body{
+        background-color: white;
+        color: black;
+    }
 
     tr {
         width: 100%;
