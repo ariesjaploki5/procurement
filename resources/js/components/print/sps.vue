@@ -1,219 +1,231 @@
-    <template>
-    <div id="f01">
+<template>
+<div>
+    <button class="btn btn-primary d-print-none button ml-2 mb-2" onclick="print()">Print</button>
+    <div v-for="dmd_pr in dmd_pr" :key="dmd_pr.dmd_pr_id">
         <div class="row">
-            <div class="col">
-                <router-link to="/pr_dmd" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
-            </div>
-            <div class="col">
-                <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
+            <div class="col-12">
+                <div class="row bottom">
+                    <div class="sps col-auto bottom right">
+                        <img :src="'/img/bghmc.png'" class="img-thumbnail">
+                    </div>
+                    <div class="sps col bottom">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="sps all text-center">Republic of the Philippines</div>
+                                <div class="sps all text-center">Department of Health</div>
+                                <div class="sps all text-center font-weight-bold">BAGUIO GENERAL HOSPITAL AND MEDICAL CENTER</div>
+                                <div class="sps all text-center">Baguio City</div>
+                            </div>
+                        </div>
+                        <div class="row sps left right bottom">
+                            <div class="col">
+                                <div class="po all text-center text-muted">MATERIALS MANAGEMENT OFFICE</div>
+                                <div class="text-center"><h1>STOCK POSITION SHEET</h1></div>
+                            </div>
+                            <div class="row">
+                                <div class="col ml-2 mr-1">
+                                    <div class="col sps top bottom right"> Form No.: HS-PS-005</div>
+                                    <div class="col sps bottom right mr-2"> Revision No.: Ø</div>
+                                    <div class="col sps bottom right mr-2">Effectivity Date: August 1, 2014</div>   
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="content-wrapper" v-for="item in pr" :key="item.dmd_id">
-            <div class="col-lg-12" style="height: 43rem">
-                <table class="table table-condensed table-sm a" style="margin-top: 1%">
-                    <tr>
-                        <td rowspan="7" class="pr1 border-right-0"><img :src="'/img/bghmc.png'"
-                                style="margin-left: 10%; margin-top: 3%" width="150" height="150"></td>
-                        <td colspan="5" class="pr1 border-bottom-0" id="pr1">
-                            <center>Republic of the Philippines</center>
-                        </td>
-                    </tr>
-                    <td colspan="5" class="pr1 border-top-0 border-bottom-0">
-                        <center>Department of Health</center>
-                    </td>
-                    <tr>
-                        <td colspan="5" class="pr1 border-top-0 border-bottom-0">
-                            <center><b>BAGUIO GENERAL HOSPITAL AND MEDICAL CENTER</b></center>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" class="pr1 border-top-0">
-                            <center>Baguio City</center>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="pr1 text-center border-bottom-0 align-top text-muted" rowspan="" width="50%">MATERIALS MANAGEMENT OFFICE</td>
-                        <td class="pr1" colspan="4">Form No.: HS-PS-005</td>
-                    </tr>
-                    <td class="pr1 text-center border-top-0 align-bottom" rowspan="2" width="50%"><strong><h2>STOCK POSITION SHEET</h2></strong></td>
-                        <td class="pr1" colspan="4">Revision No.: Ø</td>
-                    <tr>
-                        <td class="pr1" colspan="4">Effectivity Date: August 1, 2014</td>
-                    </tr>
-                </table>
-                <table class="table table-condensed border-0 table-sm" style="margin-top:-1%">
-                    <tr class="table table-borderless">
-                        <td class="border-top-0 border-bottom-0" width="5%" style="text-align: center">Articles:</td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-primary align-middle text-bold" rowspan="2" width="25%"><h5>{{ item.dmddesc }}</h5></td>
-                        <td class="border-top-0 border-bottom-0" width="10%" style="text-align: right"><strong>UNIT:</strong></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-center align-bottom" width="10%"><b>{{ item.formdesc }}</b></td>
+        <div class="row"> 
+            <div class="col sps bottom aheight">
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-2 sps all text-center">
+                <div class="row">
+
+                </div>
+                <div class="row">
+                    <span>Articles: </span>
+                </div>
                 
-                    </tr>
-                    <tr class="table table-borderless">
-                        <td class="border-top-0 border-bottom-0"></td>
-                        <td class="border-top-0 border-bottom-0" width="10%" style="text-align: right"><strong>SSL:</strong></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 text-center align-bottom text-bold" width="10%">{{ item.ssl | numeral3  }}</td>
-                    </tr>
-                    <tr class="table table-borderless">
-                        <td class="border-top-0 border-bottom-0"></td>
-                        <td class="border-bottom-0"></td>
-                        <td class="border-top-0 border-bottom-0"></td>
-                        <td class="border-bottom-0 text-center"></td>
-                    </tr>
-                    <tr class="table table-borderless">
-                        <td class="border-top-0 border-bottom-0">
-                            <center>1.</center>
-                        </td>
-                        <td class="border-top-0 border-bottom-0">Balance on Hand</td>
-                        <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">
-                            <span v-if="item.boh == .00">0</span>
-                            <span v-else>{{ item.boh | numeral3 }}</span>
-                        </td>
-                    </tr>
-                    <tr class="table table-borderless">
-                        <td class="border-top-0 border-bottom-0">
-                            <center>2.</center>
-                        </td>
-                        <td class="border-top-0 border-bottom-0">Item in Transit</td>
-                        <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">
-                            {{ item.iit | numeral3 }}
-                        </td>
-                    </tr>
-                    <tr class="table table-borderless">
-                        <td class="border-top-0 border-bottom-0">
-                            <center>3.</center>
-                        </td>
-                        <td class="border-top-0 border-bottom-0">This Requisition</td>
-                        <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.tr | numeral3 }}</td>
-                    </tr>
-                    <tr class="table table-borderless">
-                        <td class="border-top-0 border-bottom-0">
-                            <center>4.</center>
-                        </td>
-                        <td class="border-top-0 border-bottom-0">Total Expected Stocks (Sum of Lines 1 to 3)</td>
-                        <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.es | numeral3 }}</td>
-                    </tr>
-                    <tr class="table table-borderless">
-                        <td class="border-top-0 border-bottom-0">
-                            <center>5.</center>
-                        </td>
-                        <td class="border-top-0 border-bottom-0">Monthly Average Consumption</td>
-                        <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">{{ item.tr / 2 | numeral3 }}</td>
-                    </tr>
-                    <tr class="table table-borderless">
-                        <td class="border-top-0 border-bottom-0">
-                            <center>6.</center>
-                        </td>
-                        <td class="border-top-0 border-bottom-0">Estimated No. of Months to Consume (Line 4 to 5)</td>
-                        <td class="border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-right-0 align-bottom text-center text-bold">2 Months</td>
-                    </tr>
-                </table>
-                <table class="table table-condensed border-0 table-sm" style="margin-top: -1.35%">
-                        <tr class="table table-borderless">
-                            <td class="border-top-0"></td>
-                        </tr>
-                        <td style="text-indent: 80px" colspan="4" class="text-justify border-0">
-                            <p>I certify to the fairness and reasonableness of the the above data.</p>
-                        </td>
-                        <tr class="table table-borderless">
-                            <td width="2%"></td>
-                            <td width="10%" class="pr1 border-top-0 border-left-0 border-right-0"></td>
-                            <td width="15%" class="pr1 border-0"></td>
-                            <td width="10%" class="pr1 border-top-0 border-left-0 border-right-0 text-center text-bold">{{ pr.created_at | myDate3 }}</td>
-                        </tr>
-                        <tr class="table table-borderless">
-                            <td width="2%"></td>
-                            <td width="10%" class="pr1 border-0 text-center"><strong>RISCILLA E. LAZATIN, MPA</strong></td>
-                            <td width="15%" class="pr1 border-0"></td>
-                            <td width="10%" class="pr1 border-0 text-center">Date</td>
-                        </tr>
-                        <tr class="table table-borderless">
-                            <td width="2%"></td>
-                            <td width="10%" class="pr1 border-0 text-center"><strong>Head, Pharmacy Section</strong></td>
-                            <td width="15%" class="pr1 border-0"></td>
-                            <td width="10%" class="pr1 border-0 text-center"></td>
-                        </tr>
-                        <tr>
-                            <td style="text-indent: 80px" colspan="4" class="text-justify border-0">
-                                <p>Note: Attach writes justification for requisition in excess of normal requirements.</p>
-                                <!-- <p>Note: Requisition in excess of normal requirements is due to packaging of
-                                    medicine/medical supply.</p> -->
-                            </td>
-                        </tr>
-                </table>
-                 <br>
-                        <td class="pr1 border-0" colspan="22">
-                            ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                        </td>
-            </div>    
-        </div>
+            </div>
+            <div class="col-6 sps top left right font-weight-bold text-primary ">
+                <div class="row">
+
+                </div>
+                <div class="row">
+                    <h6>{{ dmd_pr.dmddesc }}</h6>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col-3 sps all font-weight-bold">UNIT:</div>
+                    <div class="col-9 sps top left right"></div>
+                </div>
+                <div class="row">
+                    <div class="col-3 sps all font-weight-bold">SSL:</div>
+                    <div class="col-9 sps top left right">{{ dmd_pr.ssl | numeral3 }}</div>
+                </div>
+            </div>
+                <div class="w-100"></div>
+
+            <div class="col-2 sps all bheight text-center">1.</div>
+            <div class="col-7 sps all ">Balance on Hand</div>
+            <div class="col sps top left right">{{ dmd_pr.boh | numeral3 }}</div>
+
+                <div class="w-100"></div>
+
+            <div class="col-2 sps all bheight text-center">2.</div>
+            <div class="col-7 sps all">Item in Transit</div>
+            <div class="col sps top left right">{{ dmd_pr.last_iit | numeral3 }}</div>
+
+                <div class="w-100"></div>
+
+            <div class="col-2 sps all bheight text-center">3.</div>
+            <div class="col-7 sps all">This Requisition</div>
+            <div class="col sps top left right">{{ dmd_pr.request_quantity | numeral3 }}</div>
+
+                <div class="w-100"></div>
+
+            <div class="col-2 sps all bheight text-center">4.</div>
+            <div class="col-7 sps all">Total Expected Stocks (Sum of Lines 1 to 3)</div>
+            <div class="col sps top left right">{{ dmd_pr.total_expect | numeral3 }}</div>
+            
+                <div class="w-100"></div>
+
+            <div class="col-2 sps all bheight text-center">5.</div>
+            <div class="col-7 sps all">Monthly Average Consumption</div>
+            <div class="col sps top left right">{{ dmd_pr.mvc | numeral3 }}</div>
+            <div class="w-100"></div>
+
+            <div class="col-2 sps all bheight text-center">6.</div>
+            <div class="col-7 sps all">Estimated No. of Months to Consume (Line 4 to 5)</div>
+            <div class="col sps top left right"> 2 Months</div>
+            <div class="w-100"></div>
+
+            <div class="col-2"></div>
+            <div class="col sps all dheight">I certify to the fairness and reasonableness of the the above data.</div>
+            <div class="w-100"></div>
+
+            <div class="col-4 sps top left right"></div>
+            <div class="col-4 sps all"></div>
+            <div class="col-4 sps top left right"></div>
+            <div class="w-100"></div>
+
+            <div class="col-4 sps all text-center font-weight font-weight-bold">RISCILLA E. LAZATIN, MPA</div>
+            <div class="w-100"></div>
+
+            <div class="col-4 sps all text-center font-weight font-weight-bold cheight">Head, Pharmacy Section</div>
+            <div class="w-100"></div>
+            
+            <div class="col sps all cheight">Note: Attached written justification for requisition in excess of normal requirements.</div>
+            <div class="w-100"></div>
+
+            <div class="col sps" style="border:dotted"></div>
+            <div class="w-100"></div>
+            <div class="col cheight"></div>
+        </div>  
     </div>
-    </template>
+</div>
+</template>
 
-    <script>
-    export default {
-            data(){
-                return{
-                    pr: {},
-                }
-            },
-            methods:{
-                get_pr(){
-                    axios.get('../../api/purchase_request/'+this.$route.params.id).then(({data}) => {
-                        this.pr = data;
-                    }).catch(() => {
+<script>
+export default {
+        data(){
+        return{
+            dmd_pr: [],
 
-                    });
-                },
-                print(){
-                window.print();
-                location.reload();
-                },
-            },
-
-            created(){
-                this.get_pr();
-            },
-            mounted() {
-
-            }
         }
-    </script>
+    },
+    methods:{
+        get_pr(){
+            axios.get('../../api/purchase_request/'+this.$route.params.id).then(({data}) => {
+                this.dmd_pr = data;
+            }).catch(() => {
 
-    <style lang="scss" scoped>
-    #content-wrapper {
-            background-color: rgb(255, 255, 255) !important;
-        }
-    @font-face {
+            });
+        },
+
+
+    },
+    created(){
+        this.get_pr();
+
+    },
+    mounted() {
+
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.img-thumbnail{
+        margin-top: 0% !important;
+    }
+@font-face {
         font-family: 'Helvetica';
         src: url('https://fonts.googleapis.com/css?family=Helvetica');
         font-weight: normal;
         font-style: normal;
     }
+    .container {
+        border: none;
+    }
 
-    div#f01 {
+    .img-thumbnail {
+        border: none;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 65%;
+    }
+
+    .font {
         font-family: 'Helvetica', sans-serif;
     }
 
-    td.pr1 {
+    .sps {
         border-collapse: collapse;
         border: 1px solid black;
-        margin: 0px;
-        padding: none;
-        padding-top: 0px;
     }
 
-    table#t01 th {
-        background-color: rgb(184, 172, 172) !important;
-        border: 1px solid black;
-        color: black;
-        margin: 0px;
-        padding: none;
+    .top {
+        border-top: none;
     }
-    </style>
+
+    .bottom {
+        border-bottom: none;
+    }
+
+    .left {
+        border-left: none;
+    }
+
+    .right {
+        border-right: none;
+    }
+
+    .all {
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        border-bottom: none;
+    }
+    .aheight {
+        height: 5px;
+    }
+    .bheight {
+        height: 30px;
+    }
+    .dheight {
+        height: 100px;
+    }
+    .cheight {
+        height: 50px;
+    }
+    #footer {
+        position: fixed;
+        bottom: 0;
+        width: auto;
+        margin-left: -1.3%;
+    }
+</style>

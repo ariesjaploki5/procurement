@@ -15,6 +15,28 @@ use Carbon\Carbon;
 class PurchaseOrderController extends Controller
 {
 
+    public function mmo_dmd_po(){
+        
+        $data = DB::table('fn_mmo_dmd_po()')
+        ->orderBy('po_id', 'desc')
+        ->orderBy('dmddesc', 'asc')
+        ->take(20)
+        ->get();
+
+
+        return response()->json($data);
+    }
+
+    public function mmo_dmd_po_search(Request $request){
+        $data = DB::table('fn_mmo_dmd_po()')
+        ->where('po_id', 'like', '%'.$request->word.'%')
+        ->orderBy('po_id', 'desc')
+        ->orderBy('dmddesc', 'asc')
+        ->get();
+
+        return response()->json($data);
+    }
+
     public function index(){
         $data = PurchaseOrder::with([
             'mode',
@@ -28,7 +50,6 @@ class PurchaseOrderController extends Controller
 
         return response()->json($data);
     }
-
 
     public function terminate_po($id){
         $po = PurchaseOrder::findOrFail($id);
@@ -46,6 +67,7 @@ class PurchaseOrderController extends Controller
     }
 
     public function get_po($id){
+
         $data = PurchaseOrder::with([
             'mode',
             'allotment', 'fund_source', 'uacs', 'supplier',
@@ -67,14 +89,6 @@ class PurchaseOrderController extends Controller
         ->whereNotNull('fmo_rls')
         ->whereNotNull('mcc_rls')
         ->where('purchase_order_id', $id)->first();
-
-        // $data = PurchaseOrder::with([
-        //     'dmd_purchase_orders' => function($query){
-        //         $query->with([
-        //             'brand', 'manufacturer', 'packaging', 'country', 'new_dmd'
-        //         ]);
-        //     }, 'supplier'
-        // ])->where('purchase_order_id', $id)->first();
 
         return response()->jsoN($data);
     }
@@ -113,7 +127,6 @@ class PurchaseOrderController extends Controller
         }
 
         return response()->json();
-
     }
 
     public function received_dmd(Request $request){
@@ -162,19 +175,30 @@ class PurchaseOrderController extends Controller
         return response()->json();
     }
 
-    public function store_date_of_delivery(Request $request){
+    public function store_dod(Request $request){
 
         $po = PurchaseOrder::findOrFail($request->purchase_order_id);
 
         $po->update([
             'date_of_delivery' => $request->date_of_delivery,
             'delivery_term' => $request->delivery_term,
-            'payment_term_id' => $request->payment_term_id,
-            'place_of_delivery' => $request->place_of_delivery,
             'dod' => 1
         ]);
 
         return response()->json();
+    }
+
+    public function store_pod(Request $request){
+        $po = PurchaseOrder::findOrFail($request->purchase_order_id);
+
+        $po->update([
+            'payment_term_id' => $request->payment_term_id,
+            'place_of_delivery' => $request->place_of_delivery,
+            'pod' => 1
+        ]);
+
+        return response()->json();
+    
     }
 
     public function store_update_obrs(Request $request){
@@ -184,18 +208,17 @@ class PurchaseOrderController extends Controller
 
         $po->update([
             'allotment_id' => $request->allotment_id,
-            // 'uacs_id' => $request->uacs_id,
-            'fund_source_id' => $request->fund_source_id,
             'amount' => $request->amount,
+            'fund_cluster_id' => $request->fund_cluster_id,
+            'fund_source_code_id' => $request->fund_source_code_id,
+            'fund_source_id' => $request->fund_source_id,
             'obrs_date' => $date,
             'uacs_code_id' => $request->uacs_code_id,
-            'fund_source_code_id' => $request->fund_source_code_id
+            'ors_burs' => $request->ors_burs,
         ]);
 
         return response()->json($po);
     }
-
-    
 
     public function pmo_show($id){
 
@@ -206,8 +229,6 @@ class PurchaseOrderController extends Controller
         
         return response()->json($data);
     }
-    
-    
 
     public function search_po(Request $request){
 
@@ -220,10 +241,10 @@ class PurchaseOrderController extends Controller
 
     public function for_pmo(){
 
-        $data = DB::table('fn_purchase_orders()')
-        ->get();
+        $data = DB::table('fn_filter_purchase_orders_3()')->get();
 
         return response()->json($data);
+
     }
     
     public function for_cmps(){
@@ -239,8 +260,6 @@ class PurchaseOrderController extends Controller
 
         return response()->json($data);
     }
-
-
 
     public function for_accounting(){
 
@@ -313,7 +332,6 @@ class PurchaseOrderController extends Controller
         return response()->json($data);
     }
 
-
     public function budget_show($id){
 
         $data = DB::SELECT("exec procurement.dbo.sp_cons $id");
@@ -325,11 +343,13 @@ class PurchaseOrderController extends Controller
     public function update(Request $request, $id){
         
 
+        return response()->json();
     }
 
     public function destroy($id){
         
-
+        
+        return response()->json();
     }
 
     public function date_now(){
@@ -644,7 +664,7 @@ class PurchaseOrderController extends Controller
         $po = PurchaseOrder::findOrFail($id);
         
         $po->purchase_order_statuses()->create([
-            'current_status_id' => 24
+            'current_status_id' => 20
         ]);
 
         $po->update([

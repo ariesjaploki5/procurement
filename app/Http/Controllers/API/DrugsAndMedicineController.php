@@ -73,13 +73,13 @@ class DrugsAndMedicineController extends Controller
 
         if($count > 0){
 
-            DB::UPDATE("UPDATE Hospital.dbo.Hdmhdrsub SET begbal = $request->begbal
-            WHERE dmdcomb = CAST('$request->dmdcomb' as varchar(12)) AND dmdctr = $request->dmdctr AND dmhdrsub = 'DRUM4'; ");
+            DB::UPDATE("UPDATE Hospital.dbo.Hdmhdrsub SET stockbal = $request->stock
+            WHERE dmdcomb = CAST('$request->dmdcomb' as varchar(12)) AND dmdctr = $request->dmdctr AND dmhdrsub = 'DRUM4';");
 
         } else {
 
-            DB::INSERT("INSERT INTO Hospital.dbo.Hdmhdrsub(dmdctr, dmdcomb, dmhdrsub, begbal, statusMed) 
-            VALUES ($request->dmdctr, CAST('$request->dmdcomb' as varchar(12)), 'DRUM4', $request->begbal, 'A');");
+            DB::INSERT("INSERT INTO Hospital.dbo.Hdmhdrsub(dmdctr, dmdcomb, dmhdrsub, statusMed, stockbal) 
+            VALUES ($request->dmdctr, CAST('$request->dmdcomb' as varchar(12)), 'DRUM4', 'A', $request->stock);");
             
         }
 
@@ -88,7 +88,7 @@ class DrugsAndMedicineController extends Controller
 
     public function for_mmo(){
 
-        $data = DB::SELECT("SELECT * FROM procurement.dbo.view_for_mmo_inventory order by gendesc");
+        $data = DB::table("fn_mmo_dmds()")->orderby('dmddesc', 'asc')->get();
 
         return response()->json($data);
     }
@@ -110,7 +110,11 @@ class DrugsAndMedicineController extends Controller
     public function search(Request $request){
         
         $word = $request->word;
-        $data = DB::SELECT("SELECT * FROM procurement.dbo.view_dmds WHERE gendesc LIKE '$word%' ORDER BY gendesc ASC");
+
+        $data = DB::table("fn_dmd()")
+        ->where('dmddesc', 'like', '%'.$word.'%')
+        ->orderBy('dmddesc', 'asc')
+        ->get();
 
         return response()->json($data);
 

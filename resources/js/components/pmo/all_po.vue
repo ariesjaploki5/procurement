@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <span>Purchase Requests</span>
+            <span>Purchase Orders</span>
         </div>
         <div class="col-md-12 mt-1">
             <form @submit.prevent="search()">
@@ -40,7 +40,7 @@
                         <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
                         <th @click="view_po(po)" width="32%">{{ po.supplier_name }}</th>
                         <th width="15%">
-                            <span v-if="!po.csd && po.dod">
+                            <span v-if="!po.csd && po.pod">
                                 <button type="button" class="btn btn-sm btn-danger" @click="pmo_rls_po(po.purchase_order_id)">
                                     <i class="fas fa-file-upload"></i>
                                 </button>
@@ -73,7 +73,6 @@
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
-                                            
                                         </tr>
                                     </thead>
                                     <tbody id="po_tbody">
@@ -96,32 +95,11 @@
                                     </tbody>
                                 </table>
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row" v-if="!view_po_form.dod">
-                                            <div class="col text-right">
-                                                <button class="btn btn-sm btn-primary" type="button" @click="create_dod()">
-                                                    Add Delivery Date
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="row" v-else>
-                                            <div class="col-md-4">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div>
-                                                            <span class="text-bold">Date of Delivery: </span>    
-                                                            {{ view_po_form.date_of_delivery }}
-                                                        </div>
-                                                        <div>
-                                                            <span class="text-bold">Delivery Term: </span>  
-                                                            {{ view_po_form.delivery_term }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="card">
-                                                    <div class="card-body">
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-10">
                                                         <div>
                                                             <span class="text-bold">Place of Delivery: </span>    
                                                             {{ view_po_form.place_of_delivery }}
@@ -131,10 +109,41 @@
                                                             {{ view_po_form.payment_term_desc }}
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-2 text-right" v-if="view_po_form.csid != 20">
+                                                        <button class="btn btn-sm btn-primary" type="button" v-if="!view_po_form.pod" @click="create_pod()">
+                                                            <i class="fas fa-plus-circle"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-success" type="button" v-else @click="edit_pod()">
+                                                            <i class="fas fa-pen-square"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 text-right">
-                                                <button class="btn btn-sm btn-primary" type="button" @click="edit_dod()">Edit</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" v-if="view_po_form.csid == 20">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-10">
+                                                        <div>
+                                                            <span class="text-bold">Date of Delivery: </span>    
+                                                            {{ view_po_form.date_of_delivery }}
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-bold">Delivery Term: </span>  
+                                                            {{ view_po_form.delivery_term }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 text-right">
+                                                        <button class="btn btn-sm btn-primary" type="button" v-if="!view_po_form.dod" @click="create_dod()">
+                                                            <i class="fas fa-plus-circle"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-success" type="button" v-else @click="edit_dod()">
+                                                            <i class="fas fa-pen-square"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -213,43 +222,22 @@
                         </div>
                         <form @submit.prevent="store_dod()">
                         <div class="modal-body">
-                            
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <div class="form-label">Date of Delivery:</div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="date" class="form-control form-control-sm" v-model="view_po_form.date_of_delivery" required>
-                                    </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <div class="form-label">Date of Delivery:</div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <div class="form-label">Delivery Term: <small>(Days)</small></div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="number" class="form-control form-control-sm" v-model="view_po_form.delivery_term" required>
-                                    </div>
+                                <div class="col-md-6">
+                                    <input type="date" class="form-control form-control-sm" v-model="view_po_form.date_of_delivery" required>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <div class="form-label">Place of Delivery:</div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control form-control-sm" v-model="view_po_form.place_of_delivery" required>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <div class="form-label">Delivery Term: <small>(Days)</small></div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <div class="form-label">Payment Term: </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <select v-model="view_po_form.payment_term_id" class="form-control form-control-sm">
-                                            <option v-for="pt in payment_terms" :key="pt.id" :value="pt.id">{{ pt.payment_term_desc }}</option>
-                                        </select>
-                                    </div>
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control form-control-sm" v-model="view_po_form.delivery_term" required>
                                 </div>
-                                
-                            
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-success" type="submit">Save</button>
@@ -259,6 +247,45 @@
                 </div>
             </div>
         </div><!-- col-md-12 dodModal -->
+        <div class="col-md-12">
+            <div class="modal fade" id="podModal" tabindex="-1" role="dialog" aria-labelledby="podModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            PO #: <span v-if="view_po_form.po_id"> {{ view_po_form.po_id}}</span>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form @submit.prevent="store_pod()">
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <div class="form-label">Place of Delivery:</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control form-control-sm" v-model="view_po_form.place_of_delivery" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <div class="form-label">Payment Term: </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <select v-model="view_po_form.payment_term_id" class="form-control form-control-sm">
+                                        <option v-for="pt in payment_terms" :key="pt.id" :value="pt.id">{{ pt.payment_term_desc }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-success" type="submit">Save</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><!-- col-md-12 podModal -->
     </div>
     
 </template>
@@ -291,6 +318,8 @@ export default {
                 last_status: {},
                 dod: '',
                 obrs_no: '',
+                pod: '',
+                csid: '',
             }),
             track_po_modal: {},
             payment_terms: [],
@@ -321,7 +350,8 @@ export default {
         view_po(po){
             this.view_po_form.reset();
             this.view_po_form.fill(po);
-            axios.get('../../api/purchase_order/'+po.purchase_order_id).then(({data}) => {
+
+                axios.get('../../api/purchase_order/'+po.purchase_order_id).then(({data}) => {
                     this.view_po_form.dmd_purchase_orders = data;
                 }).catch(() => {
 
@@ -349,19 +379,36 @@ export default {
         edit_dod(){
             $('#dodModal').modal('show')
         },
+        create_pod(){
+            $('#podModal').modal('show')
+        },
+        edit_pod(){
+            $('#podModal').modal('show')
+        },
         store_dod(){
-            this.view_po_form.post('../../api/date_of_delivery').then(() => {
+            this.view_po_form.post('../../api/dod').then(() => {
                 toast.fire({
                     type: 'success',
                     title: 'Success'
                 });
-                axios.get('../../api/purchase_order/'+this.view_po_form.purchase_order_id).then(({data}) => {
-                this.view_po_form.fill(data);
+
                 $('#dodModal').modal('hide')
                 $('#poModal').modal('hide');
-                }).catch(() => {
 
+            }).catch(() => {
+
+            });
+        },
+        store_pod(){
+            this.view_po_form.post('../../api/pod').then(() => {
+                toast.fire({
+                    type: 'success',
+                    title: 'Success'
                 });
+
+                $('#podModal').modal('hide')
+                $('#poModal').modal('hide');
+  
             }).catch(() => {
 
             });

@@ -1,3 +1,4 @@
+
 <!Doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -7,6 +8,7 @@
         <title>Procurement</title>
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        
     </head>
     <body class="hold-transition sidebar-mini">
         <div id="app">

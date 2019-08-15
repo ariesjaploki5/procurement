@@ -70,9 +70,11 @@ import pmo_rfq from './components/pmo/request_for_quotation.vue';
 
 import cmps_pr from './components/div_head/all_pr.vue';
 import cmps_po from './components/div_head/all_po.vue';
+import cmps_dmd from './components/div_head/dmd_po';
 
 import mmo_po from './components/mmo/all_po.vue';
 import mmo_dmd from './components/mmo/drugs_and_medicines.vue';
+import dmd_po from './components/mmo/dmd_po.vue';
 
 import aoq from './components/print/aoq';
 import app from './components/print/app';
@@ -95,6 +97,18 @@ import consignment_requests from './components/pharmacy/consignment_request.vue'
 import others from './components/others/main.vue';
 
 export const routes = [
+    {
+        path: '/cmps_dmd',
+        component: cmps_dmd,
+        name: 'cmps_dmd',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/dmd_po',
+        component: dmd_po,
+        name: 'dmd_po',
+        meta: { requiresAuth: true }
+    },
     {
         path: '/others',
         component: others,

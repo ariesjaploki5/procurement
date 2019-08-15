@@ -40,20 +40,6 @@ class PurchaseRequestController extends Controller
 
     public function search_pr(Request $request){
 
-        // $data = PurchaseRequest::has('last_status.current_status')->with([
-        //     'last_status.current_status','supplier','user', 'mode', 'rfq', 'purchase_request_remarks',
-        //     'dmd_purchase_requests' => function($query){
-        //         $query->with([
-        //             'dmd_price_schedule.new_dmd', 'dmd', 'new_app_dmd' => function($query){
-        //                 $query->where('app_year', Carbon::now()->year)->first();
-        //             }
-        //         ]);
-        //     },
-        // ])->orderBy('created_at', 'desc')
-        // ->where('pr_id', 'like', "%$request->word%")
-        // ->take(50)
-        // ->get();
-
         $data = DB::SELECT("SELECT * FROM fn_filter_purchase_requests_search($request->word) order by purchase_request_id");
 
 
@@ -69,11 +55,11 @@ class PurchaseRequestController extends Controller
 
     public function for_pharmacy(){
 
+        return response()->json();
     }
 
     public function for_cmps(){
         $data = DB::table("fn_purchase_requests()")
-        // ->where('csi', '>', 1)
         ->where('csi', '<', 4)
         ->orderBy('csi', 'asc')
         ->orderBy('csi2', 'asc')
@@ -90,7 +76,6 @@ class PurchaseRequestController extends Controller
         ->get();
 
         return response()->json($data);
-
     }
 
     public function new_for_pmo(){
@@ -221,6 +206,7 @@ class PurchaseRequestController extends Controller
 
     public function item_purchase_request($pr, $item){
         
+        return response()->json();
     }
 
     public function show($id){
@@ -231,12 +217,17 @@ class PurchaseRequestController extends Controller
 
     }
 
+    public function get_pr($id){
+        $data = DB::table("fn_filter_dmd_pr()")->where('purchase_request_id', $id)->first();
+
+        return response()->jsoN($data);
+    }
+
     public function pr_show($id){
 
         $data = DB::SELECT("SELECT * FROM fn");
 
         return response()->json($data);
-
     }
 
     public function show_2($id){
@@ -248,8 +239,7 @@ class PurchaseRequestController extends Controller
         ->join('procurement.dbo.apps as tb5', 'tb4.app_id', '=', 'tb5.app_id')
         ->join('procurement.dbo.dmd_price_schedule as tb6', function($join){
             $join->where();
-        })
-        ->where('tb5.app_year', Carbon::now()->year)
+        })->where('tb5.app_year', Carbon::now()->year)
         ->get();
 
         return response()->json($data);
@@ -257,7 +247,8 @@ class PurchaseRequestController extends Controller
     }
 
     public function remove_dmd($id){
-        
+     
+        return response()->json();
     }
     
     public function update(Request $request, $id){
@@ -332,7 +323,6 @@ class PurchaseRequestController extends Controller
 
         return response()->json();
     }
-
 
     public function rfq_to_po(Request $request){
 
@@ -411,26 +401,10 @@ class PurchaseRequestController extends Controller
 
     public function destroy($id){
         
-        
+        return response()->json();
     }
 
     public function pr_dmd_rqf($id){
-        // $data = PurchaseRequest::with([
-        //     'supplier', 'user', 'mode', 'rfq', 'purchase_request_remarks',
-        //     'dmd_purchase_requests' => function($query){
-        //         $query->with([
-        //             'dmd_rfqs' => function($query) {
-        //                 $query->with([
-        //                     'supplier', 'manufacturer', 'brand', 'packaging'
-        //                 ]);
-        //             }, 
-        //             'dmd', 
-        //             'new_app_dmd' => function($query){
-        //                 $query->where('app_year', Carbon::now()->year)->first();
-        //             },
-        //         ]);
-        //     },
-        // ])->where('purchase_request_id', $id)->first();
 
         $data = DB::table("fn_get_pr_dmd_rqf($id)")->get();
         
@@ -512,6 +486,5 @@ class PurchaseRequestController extends Controller
 
         return response()->json();
     }
-
 
 }

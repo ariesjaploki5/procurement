@@ -8,9 +8,11 @@ use App\Models\Allotment;
 
 class AllotmentController extends Controller
 {
+
     public function index(){
         $data = Allotment::orderBy('allotment_id', 'asc')->get();
 
         return response()->json($data);
     }
+    
 }

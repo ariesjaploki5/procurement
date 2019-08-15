@@ -54,7 +54,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="table-responsive-sm">
-                                <table class="table table-sm table-hover" style="height:26rem; display: -moz-groupbox;    ">
+                                <table class="table table-sm table-hover" style="height:16rem; display: -moz-groupbox;    ">
                                     <thead>
                                         <tr>
                                             <th width="5%">#</th>
@@ -64,7 +64,7 @@
                                             <th width="10%" class="text-center">Estimated Cost</th>
                                         </tr>
                                     </thead>
-                                    <tbody style="overflow-y: scroll; height: 24rem; width: 98.5%;position: absolute;">
+                                    <tbody style="overflow-y: scroll; height: 15rem; width: 98.5%;position: absolute;">
                                         <tr v-for="(md, index) in cpr.details" :key="md.id">
                                             <td width="5%">{{ index+1 }}</td>
                                             <td width="40%">{{ md.mds_consignment.cl1desc }}{{ md.mds_consignment.cl2desc }}</td>
@@ -365,30 +365,34 @@ export default {
 
 <style scoped>
     #d_modal_content{
-            background-color: #4a5ea5fa;
-            color: #d5e8e2;
-        }
-        .modal-content{
-            background-color: #4a5ea5fa;
-            color: #d5e8e2;
-        }
-        .modal-body{
-            background-color: white;
-            color: black;
-        }
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-content{
+        background-color: #4a5ea5fa;
+        color: #d5e8e2;
+    }
+    .modal-body{
+        background-color: white;
+        color: black;
+    }
+
     tr {
         width: 100%;
         display: inline-table;
         table-layout: fixed;
     }
+
     table {
-        height:37rem;             
+        height:30rem;             
         display: -moz-groupbox;    
     }
+
     tbody {
         overflow-y: scroll;      
-        height: 35rem;           
+        height: 29rem;           
         width: 98.5%;
         position: absolute;
     }
+
 </style>

@@ -32,13 +32,13 @@
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="po in pos" :key="po.purchase_order_id">
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.po_id }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="15%">{{ po.created_at | myDate3 }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="18%">
+                        <th @click="view_po(po)" width="10%">{{ po.po_id }}</th>
+                        <th @click="view_po(po)" width="15%">{{ po.created_at | myDate3 }}</th>
+                        <th @click="view_po(po)" width="18%">
                             <span v-if="po.csd">{{ po.csd }}</span>
                         </th>
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode_desc }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="37%">{{ po.supplier_name }}</th>
+                        <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
+                        <th @click="view_po(po)" width="37%">{{ po.supplier_name }}</th>
                         <th width="10%">
                             <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 5" @click="cmps_rcv(po.purchase_order_id)">
                                 <i class="fas fa-file-download"></i>
@@ -56,7 +56,7 @@
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            PO #: <span v-if="view_po_form.po_id"> {{ view_po_form.po_id}}</span>
+                            <span>PO #:  </span><span v-if="view_po_form.po_id"> {{ view_po_form.po_id}}</span>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         <div class="modal-body">
@@ -68,7 +68,6 @@
                                             <th width="20%">Description</th>
                                             <th>SSL</th>
                                             <th>BOH</th>
-                                            <th>Item In Transit</th>
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
@@ -77,13 +76,11 @@
                                     <tbody id="po_tbody">
                                         <tr v-for="(dmd,index) in view_po_form.dmd_purchase_orders" :key="dmd.dmd_id">
                                             <td width="5%">{{ index + 1}}</td>
-                                            <td width="20%">{{ dmd.new_dmd_homis.dmddesc }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd_homis.ssl | numeral3 }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd.boh | numeral3 }}</td>
-                                            <td class="text-right table-danger"></td>
+                                            <td width="20%">{{ dmd.dmddesc }}</td>
+                                            <td class="text-right table-danger">{{ dmd.ssl | numeral3 }}</td>
+                                            <td class="text-right table-danger">{{ dmd.boh | numeral3 }}</td>
                                             <td width="10%" class="text-right">
-                                                <input v-if="!view_po_form.last_status" type="number" class="form-control form-control-sm text-right" v-model="dmd.order_quantity">
-                                                <div v-else>{{ dmd.order_quantity | numeral3 }}</div>
+                                               {{ dmd.order_quantity | numeral3 }}
                                             </td>
                                             <td class="text-right">
                                                 <span>{{ dmd.cost_price | currency2 }}</span>
@@ -95,19 +92,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row" v-if="view_po_form.fund_source_id">
-                                <div class="col-md-12">
-                                    <b> ORS / BURS No.:</b> {{ view_po_form.fund_source.acronym }}-0{{ view_po_form.allotment.allotment_code }}-{{ view_po_form.uacs.current_appropriations }}-{{ view_po_form.obrs_date | myDate}}-{{ view_po_form.purchase_order_id | numeral2}}
-                                </div>
-                            </div>
-                            <!-- <div class="row">
-                                <div class="col-md-12">
-                                    <b>Delivery Date: </b>
-                                </div>
-                                <div class="col-md-12">
-                                    <b>Delivery Term: </b>
-                                </div>
-                            </div> -->
                         </div>
                         <div class="modal-footer" >
                             <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Close</button>
@@ -217,10 +201,11 @@ export default {
 
             });
         },
-        view_po(id){
+        view_po(po){
             this.view_po_form.reset();
-            axios.get('../../api/purchase_order/'+id).then(({data}) => {
-                    this.view_po_form.fill(data);
+            this.view_po_form.fill(po);
+            axios.get('../../api/purchase_order/'+po.purchase_order_id).then(({data}) => {
+                    this.view_po_form.dmd_purchase_orders = data;
                 }).catch(() => {
 
                 });

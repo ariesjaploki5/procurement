@@ -55,7 +55,6 @@
                     </tr>
                 </tbody>
             </table>
-
         </div>
         <div class="col-md-12">
             <div class="modal fade" id="poModal" tabindex="-1" role="dialog" aria-labelledby="poModalLabel" aria-hidden="true">
@@ -98,6 +97,10 @@
                                                     <td class="text-bold" width="30%">Supplier:</td>
                                                     <td width="auto">{{ dmd.supplier_name }}</td>
                                                 </tr>
+                                                <tr>
+                                                    <td class="text-bold" width="30%">Packaging:</td>
+                                                    <td width="auto">{{ dmd.packaging_desc }}</td>
+                                                </tr>
                                             </td>
                                             <td class="text-right table-bordered">{{ dmd.ssl | numeral3 }}</td>
                                             <td class="text-right table-bordered">{{ dmd.boh | numeral3 }}</td>
@@ -114,11 +117,28 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <div>
+                                                        <span class="text-bold">Serial No: </span>    
+                                                        {{ view_po_form.obrs_no }}
+                                                    </div>
 
-                            <div class="row" v-if="!view_po_form.obrs_date">
-                                <div class="col-md-12 text-right">
-                                    <button type="button" class="btn btn-sm btn-primary" @click="create_obrs()">Add OBRS</button>
+                                                </div>
+                                                <div class="col-md-2 text-right" v-if="view_po_form.csid == 8">
+                                                    <button class="btn btn-sm btn-primary" type="button" v-if="!view_po_form.obrs_no" @click="create_obrs()">
+                                                        <i class="fas fa-plus-circle"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-success" type="button" v-else @click="edit_obrs()">
+                                                        <i class="fas fa-pen-square"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -147,16 +167,18 @@
                         <form @submit.prevent="store_obrs()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <div class="form-label font-weight-bold">Fund Source</div>
-                                <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.fund_source_id">
-                                    <option v-for="fs in fund_sources" :key="fs.id" :value="fs.id">{{ fs.description }}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-label font-weight-bold">Fund Source Code</div>
-                                <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.fund_source_code_id">
-                                    <option v-for="fsc in fund_source_codes" :key="fsc.id" :value="fsc.id">{{ fsc.description }}</option>
-                                </select>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" :value="1" v-model="view_po_form.ors_burs" required>
+                                    <label class="form-check-label" for="gridRadios1">
+                                        OBLIGATION REQUEST AND STATUS
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" :value="2" v-model="view_po_form.ors_burs" required>
+                                    <label class="form-check-label" for="gridRadios2">
+                                        BUDGET UTILIZATION REQUEST AND STATUS
+                                    </label>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-label font-weight-bold">Allotment</div>
@@ -165,9 +187,27 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <div class="form-label font-weight-bold">Fund Cluster</div>
+                                <select class="form-control form-control-sm" v-model="view_po_form.fund_cluster_id">
+                                    <option v-for="fc in fund_clusters" :key="fc.fund_cluster_id"  :value="fc.fund_cluster_id">{{ fc.fund_cluster_desc }} - {{ fc.fund_cluster_code }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-label font-weight-bold">Fund Source</div>
+                                <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.fund_source_id">
+                                    <option v-for="fs in fund_sources" :key="fs.fund_source_id" :value="fs.fund_source_id">{{ fs.description }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-label font-weight-bold">Fund Source Code</div>
+                                <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.fund_source_code_id">
+                                    <option v-for="fsc in fund_source_codes" :key="fsc.fund_source_code_id" :value="fsc.fund_source_code_id">{{ fsc.description }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <div class="form-label font-weight-bold">UACS</div>
                                 <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.uacs_code_id">
-                                    <option v-for="uc in uacs_codes" :key="uc.id" :value="uc.id">{{ uc.uacs_desc }}</option>
+                                    <option v-for="uc in uacs_codes" :key="uc.uacs_code_id" :value="uc.uacs_code_id">{{ uc.uacs_desc }}</option>
                                 </select>
                             </div>
                         </div>
@@ -192,9 +232,10 @@ export default {
                 word: '',
             }),
             view_po_form: new Form({
+                obrs_no: '',
                 allotment_code: '',
                 allotment_desc: '',
-                allotment_id: '',
+                
                 created_at: '',
                 csd: '',
                 csid:'',
@@ -202,12 +243,15 @@ export default {
                 delivery_term:'',
                 fs_acro: '',
                 fs_desc: '',
-                fs_id: '',
+                
                 fsc_ca: '',
                 fsc_cra: '',
                 fsc_desc: '',
                 fsc_source: '',
-                fund_source_code_id: '',
+
+                fund_cluster_desc: '',
+                fund_cluster_code: '',
+
                 id: '',
                 mode_desc:'',
                 obrs_date: '',
@@ -215,14 +259,23 @@ export default {
                 purchase_order_id:'',
                 purchase_request_id:'',
                 supplier_name:'',
+
+                allotment_id: '',
+                fund_cluster_id: '',
+                fund_source_code_id: '',
+                fund_source_id: '',
                 uacs_code_id: '',
+
                 uacs_code: '',
                 uacs_desc: '',
                 uacs_type_id: '',
                 dmd_purchase_orders: [],
+
+                ors_burs: '',
             }),
             track_po_modal: {},
             fund_sources: [],
+            fund_clusters: [],
             uacs_codes: [],
             allotments: [],
             fund_source_codes: [],
@@ -245,9 +298,14 @@ export default {
 
                 });
             $('#poModal').modal('show');
-            
         },
-        
+        get_fund_clusters(){
+            axios.get('../../api/fund_cluster').then(({data}) => {
+                this.fund_clusters = data;
+            }).catch(() => {
+
+            });
+        },
         get_uacs(){
             axios.get('../../api/uacs').then(({data}) => {
                 this.uacs = data;
@@ -262,7 +320,6 @@ export default {
 
             });
         },
-
         get_fund_source_codes(){
             axios.get('../../api/fund_source_code').then(({data}) => {
                 this.fund_source_codes = data;
@@ -304,6 +361,9 @@ export default {
             $('#trackModal').modal('show')
         },
         create_obrs(){
+            $('#obrsModal').modal('show')
+        },
+        edit_obrs(){
             $('#obrsModal').modal('show')
         },
         store_obrs(){
@@ -353,6 +413,7 @@ export default {
         this.get_uacs_codes();
         this.get_fund_sources();
         this.get_uacs();
+        this.get_fund_clusters();
     },
     computed:{
         current_user() {

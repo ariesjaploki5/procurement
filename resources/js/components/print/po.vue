@@ -125,7 +125,7 @@
                 <div class="col po top bottom right">
                     <div class="row">
                         <div class="col-5 po all">Delivery Term: </div>
-                        <div class="col po top left right font-weight-bold"><span>{{ purchase_order.delivery_term }} Calendar Days</span></div>
+                        <div class="col po top left right font-weight-bold"><span v-if="purchase_order.delivery_term">{{ purchase_order.delivery_term }} Calendar Days</span></div>
                         <div class="col-1 po all"></div>
                     </div>
                 </div>
@@ -224,11 +224,11 @@
                 <div class="row">
                     <div class="col-3 po right font-weight-bold">Total Amount in Words:</div>
                     <div class="col-7 po left right font-weight-bold font-italic">
-                        <span v-if="purchase_order.amount">{{ purchase_order.amount | num_words }} pesos <span v-if="purchase_order.cent > 0">and {{ purchase_order.cent | num_words  }}</span> centavos only</span>
-                        
+                        <span v-if="purchase_order.amount">{{ purchase_order.amount | num_words }} pesos 
+                            <span v-if="purchase_order.cent > 0">and {{ purchase_order.cent | num_words  }} centavos only</span>
+                        </span>
                     </div>
                     <div class="col po font-weight-bold text-right">{{ purchase_order.total_amount | currency2 }}</div>
-                    
                 </div>
             </div>
         </div>

@@ -32,13 +32,13 @@
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="po in pos" :key="po.purchase_order_id">
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.po_id }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="15%">{{ po.created_at | myDate3 }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="18%">
+                        <th @click="view_po(po)" width="10%">{{ po.po_id }}</th>
+                        <th @click="view_po(po)" width="15%">{{ po.created_at | myDate3 }}</th>
+                        <th @click="view_po(po)" width="18%">
                             <span v-if="po.csd">{{ po.csd }}</span>
                         </th>
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode_desc }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="37%">{{ po.supplier_name }}</th>
+                        <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
+                        <th @click="view_po(po)" width="37%">{{ po.supplier_name }}</th>
                         <th width="10%">
                             <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 15" @click="mmo_rcv(po.purchase_order_id)">
                                 <i class="fas fa-file-download"></i>
@@ -64,12 +64,11 @@
                                 <table class="table table-sm table-hover" id="po_table">
                                     <thead>
                                         <tr class="text-center">
-                                            <th width="5%">#</th>
-                                            <th width="20%">Description</th>
+                                            <th width="4%">#</th>
+                                            <th width="25%">Description</th>
                                             <th>SSL</th>
                                             <th>BOH</th>
-                                            <!-- <th>Item In Transit</th> -->
-                                            <th width="10%">Quantity</th>
+                                            <th width="10%">Ordered Qty.</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
                                             <th></th>
@@ -77,25 +76,29 @@
                                     </thead>
                                     <tbody id="po_tbody">
                                         <tr v-for="(dmd,index) in view_po_form.dmd_purchase_orders" :key="dmd.dmd_id">
-                                            <td width="5%">{{ index + 1}}</td>
-                                            <td width="20%">{{ dmd.new_dmd_homis.dmddesc }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd_homis.ssl | numeral3 }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd.boh | numeral3 }}</td>
-                                            <!-- <td class="text-right table-danger"></td> -->
-                                            <td width="10%" class="text-right">
-                                                <input v-if="!view_po_form.last_status" type="number" class="form-control form-control-sm text-right" v-model="dmd.order_quantity">
-                                                <div v-else>{{ dmd.order_quantity | numeral3 }}</div>
+                                            <td width="4%">{{ index + 1}}</td>
+                                            <td width="25%">
+                                                <tr><td colspan="2"><span class="text-bold">{{ dmd.dmddesc }}</span></td></tr>
+                                                <tr>
+                                                    <td class="text-bold" width="30%">Brand:</td>
+                                                    <td width="auto">{{ dmd.brand_desc }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-bold" width="30%">Manufacturer:</td>
+                                                    <td width="auto">{{ dmd.manufacturer_desc }}</td>
+                                                    </tr>
+                                                <tr>
+                                                    <td class="text-bold" width="30%">Supplier:</td>
+                                                    <td width="auto">{{ dmd.supplier_name }}</td>
+                                                </tr>
                                             </td>
-                                            <td class="text-right">
-                                                <span>{{ dmd.cost_price | currency2 }}</span>
-                                            </td>
-                                            <td  class="text-right">
-                                                <span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span>
-                                            </td>
+                                            <td class="text-right">{{ dmd.ssl | numeral3 }}</td>
+                                            <td class="text-right">{{ dmd.boh | numeral3 }}</td>
+                                            <td width="10%" class="text-right">{{ dmd.order_quantity | numeral3 }}</td>
+                                            <td class="text-right"><span>{{ dmd.cost_price | currency2 }}</span></td>
+                                            <td  class="text-right"><span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span></td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-sm btn-success" @click="receive_modal()">
-                                                    Receive
-                                                </button>
+                                                <button type="button" class="btn btn-sm btn-success" @click="receive_modal(dmd)">Receive</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -112,58 +115,29 @@
         </div> <!-- col-md-12 poModal -->
         <div class="col-md-12">
             <div class="modal fade" id="receiveModal" tabindex="-1" role="dialog" aria-labelledby="receiveModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             PO #: <span v-if="view_po_form.po_id"> {{ view_po_form.po_id}}</span>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         <div class="modal-body">
-                            <div class="table-responsive-sm">
-                                <table class="table table-sm table-hover" id="po_table">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th width="5%">#</th>
-                                            <th width="20%">Description</th>
-                                            <th>SSL</th>
-                                            <th>BOH</th>
-                                            <!-- <th>Item In Transit</th> -->
-                                            <th width="10%">Quantity</th>
-                                            <th>Unit Cost</th>
-                                            <th>Estimated Cost</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="po_tbody">
-                                        <tr v-for="(dmd,index) in view_po_form.dmd_purchase_orders" :key="dmd.dmd_id">
-                                            <td width="5%">{{ index + 1}}</td>
-                                            <td width="20%">{{ dmd.new_dmd_homis.dmddesc }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd_homis.ssl | numeral3 }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd.boh | numeral3 }}</td>
-                                            <!-- <td class="text-right table-danger"></td> -->
-                                            <td width="10%" class="text-right">
-                                                <input v-if="!view_po_form.last_status" type="number" class="form-control form-control-sm text-right" v-model="dmd.order_quantity">
-                                                <div v-else>{{ dmd.order_quantity | numeral3 }}</div>
-                                            </td>
-                                            <td class="text-right">
-                                                <span>{{ dmd.cost_price | currency2 }}</span>
-                                            </td>
-                                            <td  class="text-right">
-                                                <span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span>
-                                            </td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-sm btn-success" @click="receive_modal()">
-                                                    Receive
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="form-group">
+                                <label for="" class="label form-label">Item Description:</label>
+                                {{ receive_form.dmddesc }}
                             </div>
-
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label for="" class="label form-label">Quantity: </label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="number" class="form-control form-control-sm text-right" v-model="receive_form.qty">
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer" >
                             <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Close</button>
+                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -205,6 +179,7 @@ export default {
                 purchase_order_id: '',
                 dmd_id: '',
                 purchase_request_id: '',
+                dmddesc: '',
                 qty: '',
             }),
         }
@@ -224,17 +199,20 @@ export default {
 
             });
         },
-        view_po(id){
+        view_po(po){
             this.view_po_form.reset();
-            axios.get('../../api/purchase_order/'+id).then(({data}) => {
-                    this.view_po_form.fill(data);
+            this.view_po_form.fill(po);
+            axios.get('../../api/purchase_order/'+po.purchase_order_id).then(({data}) => {
+                    this.view_po_form.dmd_purchase_orders = data;
                 }).catch(() => {
 
                 });
             $('#poModal').modal('show');
         },
-        receive_modal(){
+        receive_modal(dmd){
             $('#receiveModal').modal('show');
+            this.receive_form.fill(dmd);
+            this.receive_form.qty = dmd.order_quantity;
         },
         track_po(pos){
             this.track_po_modal = pos;
@@ -329,13 +307,13 @@ export default {
     }
 
     #po_table{
-        height: 20rem;             
+        height: 25rem;             
         display: -moz-groupbox; 
     }
 
     #po_tbody{
         overflow-y: scroll;      
-        height: 18rem;           
+        height: 23rem;           
         width: 98.5%;
         position: absolute;
     }

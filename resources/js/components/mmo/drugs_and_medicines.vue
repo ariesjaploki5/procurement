@@ -1,38 +1,42 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
-                <h4><i class="fas fa-capsules"></i> Drugs and Medicines</h4>
+            <div class="row shadow mb-1 bg-white rounded">
+                <h6><i class="fas fa-capsules"></i> Drugs and Medicines</h6>
             </div>
             <div class="row">
+                <div class="col-md-3">
+                    <input type="text" class="form-control form-control-sm">
+                </div>
+                <div class="col-md-auto">
+                    <button type="button" class="btn btn-sm btn-primary" @click="search()">Search</button>
+                </div>
                 <div class="col-md-12">
                     <table class="table table-sm table-hover">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th width="5%">#</th>
                                 <th width="35%">Item Description</th>
-                                <th>Beginning Balance</th>
                                 <th>Stock</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(dmd, index) in dmds" :key="dmd.dmd_id">
-                                <td>{{ index++ }}</td>
-                                <td width="35%">{{ dmd.gendesc }} {{ dmd.dmdnost }} {{ dmd.stredesc }} {{ dmd.formdesc }} {{ dmd.brandname }}</td>
-                                <td>{{ dmd.begbal }}</td>
-                                <td>{{ dmd.mmo_stock }}</td>
+                                <td width="5%">{{ index++ }}</td>
+                                <td width="35%">{{ dmd.dmddesc }}</td>
+                                <td>{{ dmd.stock }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-success" @click="edit_beg_bal(dmd)"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-sm btn-success" @click="edit_mmo_stock(dmd)"><i class="fas fa-edit"></i></button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="modal fade" id="begbalModal" tabindex="-1" role="dialog" aria-labelledby="begbalModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="stockModal" tabindex="-1" role="dialog" aria-labelledby="stockModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                   <h5> {{ form.gendesc }} {{ form.dmdnost }} {{ form.stredesc }} {{ form.formdesc }} {{ form.brandname }}</h5>
+                                   <h5> {{ form.dmddesc }}</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -42,8 +46,8 @@
                                         <div class="row justify-content-center">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label for="" class="form-label">Beginning Balance</label>
-                                                    <input type="number" class="form-control form-control-sm" v-model="form.begbal">
+                                                    <label for="" class="form-label">Stock</label>
+                                                    <input type="number" class="form-control form-control-sm" v-model="form.stock">
                                                 </div>
                                             </div>
                                         </div>
@@ -68,18 +72,17 @@ export default {
         return{
             dmds: {},
             form: new Form({
-                gendesc: '',
-                formdesc: '',
-                stredesc: '',
-                dmdnost: '',
-                brandname: '',
+                dmddesc: '',
                 dmdctr: '',
                 dmdcomb: '',
-                begbal: '',
+                stock: '',
             }),
         }
     },
     methods:{
+        search(){
+
+        },
         get_dmds(){
             axios.get('../../api/for_mmo').then(({data}) => {
                 this.dmds = data;
@@ -88,18 +91,18 @@ export default {
 
             });
         },
-        edit_beg_bal(dmd){
+        edit_mmo_stock(dmd){
             this.form.fill(dmd);
-            $('#begbalModal').modal('show');
+            $('#stockModal').modal('show');
         },
         submit_beg_bal(){
             axios.post('../../api/beg_bal',{
                 dmdcomb: this.form.dmdcomb,
                 dmdctr: this.form.dmdctr,
-                begbal: this.form.begbal,
+                stock: this.form.stock,
             }).then(() => {
                 this.get_dmds();
-                $('#begbalModal').modal('hide');
+                $('#stockModal').modal('hide');
             }).catch(() => {
 
             });

@@ -41,10 +41,10 @@
                         <th @click="view_po(po.purchase_order_id)" width="37%">{{ po.supplier_name }}</th>
                         <th width="10%">
                             <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 13" @click="mcc_rcv(po.purchase_order_id)">
-                                <i class="fas fa-file-download"></i>
+                                <i class="fas fa-file-download"> Receive PO</i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 14" @click="mcc_rls(po.purchase_order_id)">
-                                <i class="fas fa-file-upload"></i>
+                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 14" @click="mcc_rtn(po.purchase_order_id)">
+                                <i class="fas fa-file-upload"> Return to PMO</i>
                             </button>
                         </th>
                     </tr>
@@ -68,7 +68,6 @@
                                             <th width="20%">Description</th>
                                             <th>SSL</th>
                                             <th>BOH</th>
-                                            <th>Item In Transit</th>
                                             <th width="10%">Quantity</th>
                                             <th>Unit Cost</th>
                                             <th>Estimated Cost</th>
@@ -77,13 +76,11 @@
                                     <tbody id="po_tbody">
                                         <tr v-for="(dmd,index) in view_po_form.dmd_purchase_orders" :key="dmd.dmd_id">
                                             <td width="5%">{{ index + 1}}</td>
-                                            <td width="20%">{{ dmd.new_dmd_homis.dmddesc }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd_homis.ssl | numeral3 }}</td>
-                                            <td class="text-right table-danger">{{ dmd.new_dmd.boh | numeral3 }}</td>
-                                            <td class="text-right table-danger"></td>
+                                            <td width="20%">{{ dmd.dmddesc }}</td>
+                                            <td class="text-right table-danger">{{ dmd.ssl | numeral3 }}</td>
+                                            <td class="text-right table-danger">{{ dmd.boh | numeral3 }}</td>
                                             <td width="10%" class="text-right">
-                                                <input v-if="!view_po_form.last_status" type="number" class="form-control form-control-sm text-right" v-model="dmd.order_quantity">
-                                                <div v-else>{{ dmd.order_quantity | numeral3 }}</div>
+                                                {{ dmd.order_quantity | numeral3 }}
                                             </td>
                                             <td class="text-right">
                                                 <span>{{ dmd.cost_price | currency2 }}</span>
@@ -95,19 +92,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row" v-if="view_po_form.fund_source_id">
-                                <div class="col-md-12">
-                                    <b> ORS / BURS No.:</b> {{ view_po_form.fund_source.acronym }}-0{{ view_po_form.allotment.allotment_code }}-{{ view_po_form.uacs.current_appropriations }}-{{ view_po_form.obrs_date | myDate}}-{{ view_po_form.purchase_order_id | numeral2}}
-                                </div>
-                            </div>
-                            <!-- <div class="row">
-                                <div class="col-md-12">
-                                    <b>Delivery Date: </b>
-                                </div>
-                                <div class="col-md-12">
-                                    <b>Delivery Term: </b>
-                                </div>
-                            </div> -->
+
                         </div>
                         <div class="modal-footer" >
                             <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Close</button>
@@ -221,7 +206,7 @@ export default {
         view_po(id){
             this.view_po_form.reset();
             axios.get('../../api/purchase_order/'+id).then(({data}) => {
-                    this.view_po_form.fill(data);
+                    this.view_po_form.dmd_purchase_orders = data;
                 }).catch(() => {
 
                 });
@@ -241,11 +226,11 @@ export default {
 
             });
         },
-        mcc_rls(id){
-            axios.put('../../api/mcc_rls/'+id).then(() => {
+        mcc_rtn(id){
+            axios.put('../../api/mcc_rtn/'+id).then(() => {
                 toast.fire({
                     type: 'success',
-                    title: 'PO Release'
+                    title: 'PO Return to PMO'
                 });
             }).catch(() => {
 

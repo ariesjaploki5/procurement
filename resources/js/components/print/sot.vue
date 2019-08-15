@@ -102,6 +102,9 @@
 </script>
 
 <style lang="scss">
+.img-thumbnail{
+        margin-top: 0% !important;
+    }
     @font-face {
         font-family: 'Helvetica';
         src: url('https://fonts.googleapis.com/css?family=Helvetica');

@@ -59,6 +59,7 @@ class PriceScheduleController extends Controller
                     ])->where('price_schedule_id', $id)->orderBy('rank', 'asc');
                 }, 'app_dmd',
             ])->orderBy('gendesc', 'asc')->get();
+            
         return response()->json($data);
     }
 

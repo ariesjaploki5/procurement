@@ -13,6 +13,7 @@ use Carbon\Carbon;
 
 class AdjustmentController extends Controller
 {
+    
     public function items($id){
         $data = AdjustmentItem::where('chrgcode', $id)->orderBy('gendesc', 'asc')->get();
 

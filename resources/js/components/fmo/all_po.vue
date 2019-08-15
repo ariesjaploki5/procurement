@@ -50,7 +50,7 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <button type="button" class="dropdown-item" v-if="po.csid == 12" @click="fmo_rtn(po.purchase_order_id)">
-                                    <i class="fas fa-file-upload"></i> Returned to PMO
+                                    <i class="fas fa-file-upload"></i> Returned to BUDGET
                                 </button>
 
                                 <button type="button" class="dropdown-item" v-if="po.csid == 12" @click="fmo_rls(po.purchase_order_id)">
@@ -261,7 +261,7 @@ export default {
             axios.put('../../api/fmo_rtn/'+id).then(() => {
                 toast.fire({
                     type: 'success',
-                    title: 'PO Returned to PMO'
+                    title: 'PO Returned to BUDGET'
                 });
             }).catch(() => {
 

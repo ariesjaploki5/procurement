@@ -53,8 +53,12 @@ Route::apiResources([
     
     'payment_term' => 'API\PaymentTermController',
     'notice_of_adjustment' => 'API\NoticeOfAdjustmentController',
+    'fund_cluster' => 'API\FundClusterController',
 ]);
 
+
+Route::get('mmo_dmd_po', 'API\PurchaseOrderController@mmo_dmd_po');
+Route::post('mmo_dmd_po_search', 'API\PurchaseOrderController@mmo_dmd_po_search');
 
 Route::get('purchase_order_obrs/{id}', 'API\PurchaseOrderController@purchase_order_obrs');
 Route::get('po_show/{id}', 'API\PurchaseOrderController@po_show');
@@ -82,6 +86,8 @@ Route::get('for_accounting', 'API\PurchaseOrderController@for_accounting');
 Route::get('for_budget', 'API\PurchaseOrderController@for_budget');
 
 Route::get('get_po/{id}', 'API\PurchaseOrderController@get_po');
+
+Route::get('get_pr/{id}', 'API\PurchaseRequestController@get_pr');
 
 Route::post('received_po_dmd', 'API\DmdReceivedController@store');
 
@@ -133,7 +139,9 @@ Route::post('pr_remarks', 'API\PurchaseRequestRemarksController@store');
 Route::post('dmd_remarks', 'API\DmdRemarksController@store');
 Route::put('send_to_cmps/{id}', 'API\PurchaseRequestController@send_to_cmps');
 
-Route::post('date_of_delivery', 'API\PurchaseOrderController@store_date_of_delivery');
+Route::post('dod', 'API\PurchaseOrderController@store_dod');
+Route::post('pod', 'API\PurchaseOrderController@store_pod');
+
 Route::get('new_purchase_request', 'API\PurchaseRequestController@new');
 Route::get('consignment/{id}', 'API\ConsignmentController@search');
 
@@ -215,6 +223,7 @@ Route::post('item_price_schedule/{id}', 'API\ItemPriceScheduleController@store')
 Route::put('item_price_schedule/{id}/terminate', 'API\ItemPriceScheduleController@terminate');
 Route::put('item_price_schedule/{id}/unterminate', 'API\ItemPriceScheduleController@unterminate');
 Route::get('price_schedule_get/{id}', 'API\PriceScheduleController@price_schedule_get');
+
 
 
 Route::get('inventory/{id}', 'API\InventoryController@index');

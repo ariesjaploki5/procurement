@@ -12,10 +12,17 @@ class PurchaseOrder extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'created_at', 'allotment_id', 
-        'fund_source_id', 'amount', 'obrs_date', 
+        'created_at', 
+        
+        'allotment_id', 
+        'fund_source_code_id', 
+        'fund_cluster_id',
+        'fund_source_id', 
+        'uacs_code_id',
+        
+        'amount', 'obrs_date', 
         'date_of_delivery', 'terminated',
-        'fund_source_code_id', 'uacs_code_id',
+        
 
         'payment_term_id', 'place_of_delivery',
 
@@ -29,11 +36,12 @@ class PurchaseOrder extends Model
         'updated_at',
         'po_id',
         'dod',
+        'pod',
 
-        'ors',
-        'burs',
+        'ors_burs',
 
-        // 'div_head_rcv_po', 'div_head_rls_po', 'pmo_rcv_po', 'pmo_rls_po', 'budget_rcv', 'budget_rls', 'accntng_rcv', 'accntng_rls','fmo_rcv', 'fmo_rls','mcc_rcv', 'mcc_rls','mmo_rcv', 'mmo_rls', 
+
+        
     ];
 
     protected $dispatchesEvents = [

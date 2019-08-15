@@ -159,21 +159,21 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group row">
-                                        <div class="col-md-12">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck9" v-model="na_form.ors">
-                                                <label class="custom-control-label" for="customCheck9">OBLIGATION REQUEST AND STATUS</label>
-                                            </div>
+                                    <div class="col-md-12">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="customCheck9" v-model="na_form.ors">
+                                            <label class="custom-control-label" for="customCheck9">OBLIGATION REQUEST AND STATUS</label>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-12">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck8" v-model="na_form.burs">
-                                                <label class="custom-control-label" for="customCheck8">BUDGET UTILIZATION REQUEST AND STATUS</label>
-                                            </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="customCheck8" v-model="na_form.burs">
+                                            <label class="custom-control-label" for="customCheck8">BUDGET UTILIZATION REQUEST AND STATUS</label>
                                         </div>
                                     </div>
+                                </div>
 
                                     <div class="form-group row">
                                         <div class="col-md-5">

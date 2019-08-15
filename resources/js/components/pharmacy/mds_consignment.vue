@@ -47,7 +47,7 @@
                     </div>
                     <form @submit.prevent="pr_submit()">
                         <div class="modal-body">
-                            <table class="table table-sm table-hover" style="height:26rem; display: -moz-groupbox;    ">
+                            <table class="table table-sm table-hover" style="height:13rem; display: -moz-groupbox;    ">
                                 <thead>
                                     <tr>
                                         <th width="5%">#</th>
@@ -57,7 +57,7 @@
                                         <th width="10%" class="text-center">Estimated Cost</th>
                                     </tr>
                                 </thead>
-                                <tbody style="overflow-y: scroll; height: 24rem; width: 98.5%;position: absolute;">
+                                <tbody style="overflow-y: scroll; height: 12rem; width: 98.5%;position: absolute;">
                                     <tr v-for="(md, index) in form.items" :key="md.id">
                                         <td width="5%">{{ index+1 }}</td>
                                         <td width="40%">{{ md.cl1desc }}{{ md.cl2desc }}</td>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Purpose: </label>
-                                <textarea type="text" class="form-control form-control-sm" rows="2" v-model="form.purpose" :disabled="!form.hpercode"></textarea>
+                                <textarea type="text" class="form-control form-control-sm" rows="2" v-model="form.purpose" :disabled="!form.hpercode" required></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -143,7 +143,7 @@
                                     <div class="col-md-6">
                                         Name: <span v-if="selected_patient" class="font-weight-bold">{{ selected_patient.patlast }}, {{ selected_patient.patfirst }} {{ selected_patient.patmiddle }}</span>
                                     </div>
-                                    <table class="table table-sm table-hover mt-1" style="height:8rem; display: -moz-groupbox;">
+                                    <table class="table table-sm table-hover mt-1" style="height:6rem; display: -moz-groupbox;">
                                         <thead>
                                             <tr>
                                                 <th>Date/Time</th>
@@ -152,7 +152,7 @@
                                                 <th></th>
                                             </tr>
                                         </thead>
-                                        <tbody style="overflow-y: scroll; height: 7rem; width: 98.5%;position: absolute;">
+                                        <tbody style="overflow-y: scroll; height: 5rem; width: 98.5%;position: absolute;">
                                             <tr v-for="enc in enccode" :key="enc.enccode" @click="select_enccode(enc.enccode)">
                                                 <td class="font-weight-bold">{{ enc.admdate | myDate3 }}</td>
                                                 <td class="font-weight-bold">{{ enc.toecode }}</td>
@@ -376,12 +376,12 @@ export default {
     table-layout: fixed;
 }
  table {
-    height:37rem;             
+    height:30rem;             
     display: -moz-groupbox;    
 }
  tbody {
     overflow-y: scroll;      
-    height: 35rem;           
+    height: 28rem;           
     width: 98.5%;
     position: absolute;
 }

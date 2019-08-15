@@ -24,10 +24,16 @@
             </ul>
                 <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="ntpr" role="tabpanel" aria-labelledby="ntpr-tab">
-                    <div class="row mb-1 mt-1">
-                        <div class="col-md-auto text-right font-weight-bold ">Search:</div>
-                        <div class="col-md-4"><input type="text" class="form-control form-control-sm" v-model="search_word_2"></div>
-                    </div>
+                    <form @submit.prevent="search_submit()">
+                        <div class="row mb-1 mt-1">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control form-control-sm" v-model="search_form.word">
+                        </div>
+                        <div class="col-md-aut">
+                            <button class="btn btn-sm btn-primary" type="submit">Search</button>
+                        </div>
+                        </div>
+                    </form>
                     <div class="table-responsive-sm">
                         <table class="table table-fixed table-sm table-hover table-condensed">
                             <thead class="shadow">
@@ -80,10 +86,16 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
-                    <div class="row mb-1 mt-1">
-                        <div class="col-md-auto text-right font-weight-bold ">Search:</div>
-                        <div class="col-md-4"><input type="text" class="form-control form-control-sm" v-model="search_word"></div>
-                    </div>
+                    <form @submit.prevent="search_submit_2()">
+                        <div class="row mb-1 mt-1">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control form-control-sm" v-model="search_form.word">
+                        </div>
+                        <div class="col-md-aut">
+                            <button class="btn btn-sm btn-primary" type="submit">Search</button>
+                        </div>
+                        </div>
+                    </form>
                     <div class="table-responsive-sm">
                         <table class="table table-fixed table-sm table-hover table-condensed">
                             <thead>
@@ -281,6 +293,9 @@ export default {
             },
             dmds: [],
             ntprs: [],
+            search_form: new Form({
+                word: '',
+            }),
             search_word: '',
             search_word_2: '',
             ssl_form: new Form({
@@ -312,6 +327,20 @@ export default {
         }
     },
     methods:{
+        search_submit(){
+            this.search_form.post("../../api/dmd_search").then(({data}) => {
+                this.ntprs = data;
+            }).catch(() => {
+
+            });
+        },
+        search_submit_2(){
+            this.search_form.post("../../api/dmd_search").then(({data}) => {
+                this.dmds = data;
+            }).catch(() => {
+
+            });
+        },
         get_need_to_pr(){
             axios.get('../../api/need_to_pr').then(({data}) => {
                     this.ntprs = data;
