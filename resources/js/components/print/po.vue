@@ -24,9 +24,9 @@
                         </div>
                         <div class="row">
                             <div class="col ml-2 mr-1">
-                                <div class="po top bottom right">Form No.: HS – PS – 006</div>
-                                <div class="po bottom right">Revision No.: 1</div>
-                                <div class="po bottom right">Effectivity Date: September 1, 2016</div>   
+                                <div class="col po top bottom right">Form No.: HS – PS – 006</div>
+                                <div class="col po bottom right">Revision No.: 1</div>
+                                <div class="col po bottom right">Effectivity Date: September 1, 2016</div>   
                             </div>
                         </div>
                     </div> 
@@ -224,7 +224,7 @@
                 <div class="row">
                     <div class="col-3 po right font-weight-bold">Total Amount in Words:</div>
                     <div class="col-7 po left right font-weight-bold font-italic">
-                        <span v-if="purchase_order.amount">{{ purchase_order.amount | num_words }} pesos 
+                        <span v-if="purchase_order.amount">{{ purchase_order.amount | num_words }} Pesos Only
                             <span v-if="purchase_order.cent > 0">and {{ purchase_order.cent | num_words  }} centavos only</span>
                         </span>
                     </div>
@@ -233,7 +233,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12 po top bottom">
+            <div class="col-12 po top bottom text-justify indent dheight">
                 <span>
                     Non-delivery of the above-mentioned item/s, partial, or completely delivery, within the prescribed delivery term shall have the effect of
                     cancellation of the Purchase Order and Subsequent orders. In case you will be allowed to deliver beyond the delivery term, partial or completely
@@ -309,7 +309,7 @@
                 <div class="row">
                     <div class="col po top right bottom">
                         <div class="row">
-                            <div class="col-3 po all"></div>
+                            <div class="col-3 po all bheight"></div>
                             <div class="col po all text-center">Signature over Printed Name</div>
                             <div class="col-1 po all"></div>
                         </div>
@@ -329,8 +329,8 @@
                 <div class="row">
                     <div class="col po top right bottom">
                         <div class="row">
-                            <div class="col-3 po all"></div>
-                            <div class="col po all text-center font-weight-bold"><span> </span></div>
+                            <div class="col-3 po all eheight"></div>
+                            <div class="col po top left right text-center font-weight-bold"><span> </span></div>
                             <div class="col-1 po all"></div>
                         </div>
                     </div>
@@ -404,8 +404,8 @@
                     </div>
                     <div class="col po top bottom right">
                         <div class="row">
-                            <div class="col-5 po all"></div>
-                            <div class="col po all"></div>
+                            <div class="col-5 po all">ORS / BURS No.:</div>
+                            <div class="col po top left right"></div>
                             <div class="col-1 po all"></div>
                         </div>
                     </div>
@@ -424,7 +424,7 @@
                     </div>
                     <div class="col po top bottom right">
                         <div class="row">
-                            <div class="col-5 po all">ORS / BURS No.:</div>
+                            <div class="col-5 po all">Date of ORS / BURS:</div>
                             <div class="col po top left right"></div>
                             <div class="col-1 po all"></div>
                         </div>
@@ -444,8 +444,8 @@
                     </div>
                     <div class="col po top bottom right">
                         <div class="row">
-                            <div class="col-5 po all">Date of ORS / BURS: </div>
-                            <div class="col po top left right"></div>
+                            <div class="col-5 po all">Amount: </div>
+                            <div class="col po top left right text-right font-weight-bold">{{ purchase_order.amount | currency2 }}</div>
                             <div class="col-1 po all"></div>
                         </div>
                     </div>
@@ -464,9 +464,9 @@
                     </div>
                     <div class="col po top bottom right">
                         <div class="row">
-                            <div class="col-5 po all">Amount: </div>
-                            <div class="col po top left right font-weight-bold">{{ purchase_order.amount | currency2 }}</div>
-                            <div class="col-1 po all"></div>
+                            <div class="col-3 po top left right aheight"></div>
+                            <div class="col po top left right"></div>
+                            <div class="col-1 po top left right"></div>
                         </div>
                     </div>
                 </div>
@@ -484,9 +484,9 @@
                     </div>
                     <div class="col po top bottom right">
                         <div class="row">
-                            <div class="col-5 po all"></div>
-                            <div class="col po all"></div>
-                            <div class="col-1 po all"></div>
+                            <div class="col-4 po all font-weight-bold font-italic">PR No.:</div>
+                            <div class="col-4 po all">Date</div>
+                            <div class="col-4 po all">Time</div>
                         </div>
                     </div>
                 </div>
@@ -597,6 +597,9 @@ export default {
         border-left: none;
         border-bottom: none;
     }
+    .indent{
+        text-indent: 50px;
+    }
     .mleft{
         margin-left: -5%;
     }
@@ -608,6 +611,12 @@ export default {
     }
     .cheight {
         height: 150px;
+    }
+    .dheight {
+        height: 100px;
+    }
+    .eheight {
+        height: 35px;
     }
     #footer {
         position: relative;

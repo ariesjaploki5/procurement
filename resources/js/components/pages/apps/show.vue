@@ -1,9 +1,9 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-                <div class="row b-1 shadow p-3 mb-3 bg-white rounded">
+                <div class="row b-1 bg-white rounded">
                 <div class="col-md-6">
-                     <h4><i class="fas fa-list"></i> Annual Procurement Plan</h4>
+                     <h6><i class="fas fa-list"></i> Annual Procurement Plan</h6>
                 </div>
             </div>
                 <div class="card-body">
@@ -22,12 +22,12 @@
                                 <tr>
                                     <th width="5%">#</th>
                                     <th width="45%">Description</th>
-                                    <th>Unit of Issue</th>
-                                    <th>Mode of Procurement</th>
-                                    <th>Quantity</th>
-                                    <th>Unit Cost</th>
-                                    <th>Budget</th>
-                                    <th v-show="current_user.role_id == 3">Action</th>
+                                    <th class="text-center">Unit of Issue</th>
+                                    <th class="text-center">Mode of Procurement</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center">Unit Cost</th>
+                                    <th class="text-center">Budget</th>
+                                    <th v-show="current_user.role_id == 3"  class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

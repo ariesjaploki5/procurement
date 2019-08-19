@@ -1,19 +1,32 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+            <div class="row mb-2 bg-white rounded">
                 <div class="col-md-5">
-                    <h4> <i class="fas fa-capsules"></i> Drugs And Medicines</h4>
+                    <h6> <i class="fas fa-capsules"></i> Drugs And Medicines</h6>
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <form @submit.prevent="search()">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control form-control-sm" v-model="search_form.word">
+                            </div>
+                            <div class="col-md-auto">
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <div class="col-md-12">
                     <table class="table table-sm table-hover">
                         <thead>
                             <tr>
                                 <th width="5%">ID</th>
                                 <th width="30%">Description</th>
-                                <th>HOMIS Brand Name</th>
                                 <th id="uacs_1">
                                     <div id="uacs_2">
                                         <div id="brand">Brand Name</div>
@@ -28,12 +41,11 @@
                             <tr v-for="(d, index) in dmds" :key="d.dmd_id">
                                 <td width="5%">{{ index + 1}}</td>
                                 <td width="30%">{{ d.dmddesc }}</td>
-                                <td>{{ d.brandname }}</td>
                                 <td id="uacs_1">
-                                    <div id="uacs_2" v-for="uc in d.dmd_uacs" :key="uc.id">
-                                        <div id="brand">{{ uc.brand.brand_desc }}</div>
-                                        <div id="code">{{ uc.code }}</div>
-                                        <div id="action"><button type="button" class="btn btn-success btn-sm" @click="edit_uacs(d, uc.brand_id, uc.code)">Edit</button></div>
+                                    <div id="uacs_2" v-for="uc in d.dmd_uacs" :key="uc.dmd_uacs_id">
+                                        <div id="brand">{{ uc.brand_desc }}</div>
+                                        <div id="code">10402030-00-{{ uc.code }}</div>
+                                        <div id="action"><button type="button" class="btn btn-success btn-sm" @click="edit_uacs(uc, d.dmddesc)">Edit</button></div>
                                     </div>
                                 </td>
                                 <td width="5%">
@@ -55,9 +67,9 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form @submit.prevent="store_uacs()">
+                            <form @submit.prevent="editmode ? update_uacs() : store_uacs()">
                                 <div class="form-group">
-                                    <h4><label class="form-label">{{ form.gendesc }} {{ form.dmdnost }} {{ form.stredesc }} {{ form.formdesc }}</label></h4>
+                                    <h4><label class="form-label">{{ form.dmddesc }}</label></h4>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">UACS CODE</label>
@@ -78,6 +90,7 @@
         </div>
     </div>
 </template>
+
 <script>
     import { mapGetters, mapActions } from "vuex";
     export default {
@@ -86,14 +99,14 @@
                 dmds: {},
                 editmode: false,
                 form: new Form({
-                    id: '',
+                    dmd_uacs_id: '',
                     code: '',
                     dmd_id: '',
                     brand_id: '',
-                    gendesc: '',
-                    dmdnost: '',
-                    stredesc: '',
-                    formdesc: '',
+                    dmddesc: '',
+                }),
+                search_form: new Form({
+                    word: '',
                 }),
                 
             }
@@ -103,7 +116,7 @@
                 'get_brands',
             ]),
             get_dmds(){
-                axios.get('../../api/dmd').then(({data}) => {
+                axios.get('../../api/dmd_uacs_2').then(({data}) => {
                     this.dmds = data;
                 }).catch(() => {
 
@@ -115,6 +128,7 @@
                 $('#uacsModal').modal('show');
             },
             store_uacs(){
+                this.editmode = false;
                 this.form.post('../../api/dmd_uacs').then(() => {
                     $('#uacsModal').modal('hide');
                     this.get_dmds();
@@ -122,20 +136,28 @@
 
                 });
             },
-            edit_uacs(d, brand_id, code){
+            edit_uacs(d, dmddesc){
+                this.editmode = true;
                 this.form.fill(d);
-                this.form.brand_id = brand_id;
-                this.form.code = code;
+                this.form.dmddesc = dmddesc;
                 $('#uacsModal').modal('show');
             },
             update_uacs(){
-                this.form.put('../../api/dmd_uacs/'+this.form.id).then(() => {
+                this.form.put('../../api/dmd_uacs/'+this.form.dmd_uacs_id).then(() => {
                     $('#uacsModal').modal('hide');
                     this.get_dmds();
                 }).catch(() => {
 
                 });
+            },
+            search(){
+                this.search_form.post('../../api/search_dmd_uacs').then(({data}) => {
+                    this.dmds = data;
+                }).catch(() => {
+
+                });
             }
+            
         },
         created(){
             this.get_dmds();

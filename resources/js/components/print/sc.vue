@@ -124,7 +124,6 @@
 
         }
     }
-
     function print(){
         window.print();
         location.reload();

@@ -26,7 +26,8 @@ class ItemUpdated implements ShouldBroadcast
         return new Channel('item_updated');
     }
 
-    public function broadcastAs(){
+    public function broadcastAs()
+    {
         return 'item.updated';
     }
 }

@@ -67,4 +67,12 @@ class DmdPurchaseOrder extends Model
     public function new_dmd_homis(){
         return $this->hasOne('App\Views\NewDmdHomis', 'dmd_id', 'dmd_id');
     }
+
+    public function dmd_po_receiveds(){
+        return $this->hasMany('App\Models\DmdPoReceived', 'list_no', 'list_no');
+    }
+
+    public function dmd_po_receiveds_2(){
+        return $this->hasMany('App\Models\DmdPoReceived', 'id', 'dmd_po_id');
+    }
 }

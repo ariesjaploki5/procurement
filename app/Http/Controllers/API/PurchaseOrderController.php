@@ -51,10 +51,11 @@ class PurchaseOrderController extends Controller
         return response()->json($data);
     }
 
-    public function terminate_po($id){
+    public function terminate_po(Request $request, $id){
         $po = PurchaseOrder::findOrFail($id);
         $po->update([
             'terminated' => 1,
+            'waiver' => $request->waiver,
         ]);
         
         return response()->json();
@@ -175,6 +176,45 @@ class PurchaseOrderController extends Controller
         return response()->json();
     }
 
+
+    public function notice_to_terminate($id){
+        
+        $po = PurchaseOrder::findOrFail($id);
+        
+        $po->update([
+            'notice' => 1
+        ]);
+
+        return response()->json();
+    }
+
+    public function terminate(Request $request){
+        
+        $po = PurchaseOrder::findOrfail($request->purchase_order_id);
+        
+        $po->update([
+            'terminated' => 1,
+            'waiver' => 1
+        ]);
+
+        return response()->json();
+    }
+
+    public function transfer_stock(Request $request){
+
+        
+        $dmd_id = $request->dmd_id;
+
+        $dmd = Dmd::findOrFail($dmd_id);
+
+        $dmdcomb = $dmd->dmdcomb;
+        $dmdctr = $dmd->dmdctr;
+        $balance = $request->balance;
+
+
+        return response()->json();
+    }
+
     public function store_dod(Request $request){
 
         $po = PurchaseOrder::findOrFail($request->purchase_order_id);
@@ -200,6 +240,7 @@ class PurchaseOrderController extends Controller
         return response()->json();
     
     }
+
 
     public function store_update_obrs(Request $request){
         $date = Carbon::now();
@@ -284,7 +325,18 @@ class PurchaseOrderController extends Controller
 
     public function for_mmo(){
 
-        $data = DB::table('fn_filter_purchase_orders(14, 17)')->get();
+        $data = DB::table('fn_filter_purchase_orders_4(26)')
+        ->orderBy('po_id', 'desc')
+        ->get();
+
+        return response()->json($data);
+    }
+
+    public function search_for_mmo(Request $request){
+        $data = DB::table('fn_filter_purchase_orders_4(26)')
+        ->where('po_id', 'like', '%'.$request->word.'%')
+        ->orderBy('po_id', 'desc')
+        ->get();
 
         return response()->json($data);
     }
@@ -407,6 +459,21 @@ class PurchaseOrderController extends Controller
 
         $po->purchase_order_statuses()->create([
             'current_status_id' => 6
+        ]);
+
+        $po->update([
+            'updated_at' => $this->date_now(),
+        ]);
+    
+        return response()->json();
+    }
+
+    public function pmo_to_mmo($id){
+        
+        $po = PurchaseOrder::findOrFail($id);
+
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => 26
         ]);
 
         $po->update([

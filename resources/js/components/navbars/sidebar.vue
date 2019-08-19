@@ -142,24 +142,24 @@
                         <p>Purchase Order</p>
                     </router-link>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <router-link to='../../dmd_po' class="nav-link">
                         <i class="nav-icon fas fa-cart-arrow-down"></i>
                         <p>Purchase Order 2</p>
                     </router-link>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <router-link to='../../mmo_dmd' class="nav-link">
                         <i class="nav-icon fas fa-capsules"></i>
                         <p>Drugs and Medicines</p>
                     </router-link>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <router-link to='../../verified_reports' class="nav-link">
                         <i class="nav-icon fas fa-file-excel"></i>
                         <p>Terminated</p>
                     </router-link>
-                </li>
+                </li> -->
             </ul>
             <ul v-show="user.role_id === '5'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">

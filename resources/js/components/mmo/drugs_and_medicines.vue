@@ -5,29 +5,36 @@
                 <h6><i class="fas fa-capsules"></i> Drugs and Medicines</h6>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <input type="text" class="form-control form-control-sm">
                 </div>
                 <div class="col-md-auto">
                     <button type="button" class="btn btn-sm btn-primary" @click="search()">Search</button>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 mt-2">
                     <table class="table table-sm table-hover">
                         <thead>
                             <tr>
                                 <th width="5%">#</th>
-                                <th width="35%">Item Description</th>
-                                <th>Stock</th>
-                                <th>Action</th>
+                                <th width="35%">Description</th>
+                                <th width="5%">Unit</th>
+                                <th width="25%">Stock No</th>
+                                <th width="15%">Brand</th>
+                                <th width="10%">Quantity</th>
+                                <th width="10%"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(dmd, index) in dmds" :key="dmd.dmd_id">
-                                <td width="5%">{{ index++ }}</td>
+                            <tr v-for="(dmd, index) in dmds" :key="dmd.du_id">
+                                <td width="5%" class="text-right">{{ index + 1 }}</td>
                                 <td width="35%">{{ dmd.dmddesc }}</td>
-                                <td>{{ dmd.stock }}</td>
-                                <td>
+                                <td width="5%"></td>
+                                <td width="25%">10402030-00-{{ dmd.code }}</td>
+                                <td width="15%">{{ dmd.brand_desc }}</td>
+                                <td width="10%">{{ dmd.stock }}</td>
+                                <td width="10%">
                                     <button type="button" class="btn btn-sm btn-success" @click="edit_mmo_stock(dmd)"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-sm btn-primary"><i class="fas fa-dolly-flatbed"></i></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -43,12 +50,22 @@
                                 </div> 
                                 <form action="" @submit.prevent="submit_beg_bal()">
                                     <div class="modal-body">
-                                        <div class="row justify-content-center">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="" class="form-label">Stock</label>
-                                                    <input type="number" class="form-control form-control-sm" v-model="form.stock">
-                                                </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <label for="" class="form-label">
+                                                    Stock No:
+                                                </label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                10402030-00-{{ form.code }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <label for="" class="form-label">Stock Quantity:</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="number" class="form-control form-control-sm text-right" v-model="form.stock_quantity">
                                             </div>
                                         </div>
                                     </div>
@@ -72,10 +89,10 @@ export default {
         return{
             dmds: {},
             form: new Form({
+                du_id: '',
                 dmddesc: '',
-                dmdctr: '',
-                dmdcomb: '',
-                stock: '',
+                code: '',
+                stock_quantity: '',
             }),
         }
     },
@@ -84,7 +101,7 @@ export default {
 
         },
         get_dmds(){
-            axios.get('../../api/for_mmo').then(({data}) => {
+            axios.get('../../api/dmd_uacs').then(({data}) => {
                 this.dmds = data;
 
             }).catch(() => {

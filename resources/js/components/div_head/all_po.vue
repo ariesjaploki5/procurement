@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <span>Purchase Requests</span>
+            <span>Purchase Order</span>
         </div>
         <div class="col-md-12 mt-1">
             <form @submit.prevent="search()">

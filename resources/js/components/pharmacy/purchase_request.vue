@@ -201,39 +201,8 @@
                         </div>
                         <div class="modal-body">
                             <div class="row justify-content-center">
-                                <div class="col-md-12">
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rcv  }">Division Head Received <div v-show="track_pr_modal.div_head_rcv">{{ track_pr_modal.div_head_rcv | myDate3 }}, {{ track_pr_modal.div_head_rcv | time1 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rls }">Division Head Released <div v-show="track_pr_modal.div_head_rls">{{ track_pr_modal.div_head_rls | myDate3 }}, {{ track_pr_modal.div_head_rls | time1 }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rcv }">PMO Received <div v-show="track_pr_modal.pmo_rcv">{{ track_pr_modal.pmo_rcv | myDate3 }}, {{ track_pr_modal.pmo_rcv | time1 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rls }">PMO Released <div v-show="track_pr_modal.pmo_rls">{{ track_pr_modal.pmo_rls | myDate3 }}, {{ track_pr_modal.pmo_rls | time1 }} </div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">  
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rcv_2 }">Division Head Received <div v-show="track_pr_modal.div_head_rcv_2">{{ track_pr_modal.div_head_rcv_2 | myDate3 }}, {{ track_pr_modal.div_head_rcv_2 | time1 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.div_head_rls_2 }">Division Head Released <div v-show="track_pr_modal.div_head_rls_2">{{ track_pr_modal.div_head_rls_2 | myDate3 }}, {{ track_pr_modal.div_head_rls_2 | time1 }} </div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rcv_2 }">PMO Received <div v-show="track_pr_modal.pmo_rcv_2">{{ track_pr_modal.pmo_rcv_2 | myDate3 }}, {{ track_pr_modal.pmo_rcv_2 | time1 }} </div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rls_2 }">PMO Released <div v-show="track_pr_modal.pmo_rls_2">{{ track_pr_modal.pmo_rls_2 | myDate3 }}, {{ track_pr_modal.pmo_rls_2 | time1 }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">  
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.budget_rcv }">Budget Received <div v-show="track_pr_modal.budget_rcv">{{ track_pr_modal.budget_rcv | myDate3 }}, {{ track_pr_modal.budget_rcv | time1 }} </div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.budget_rls }">Budget Released <div v-show="track_pr_modal.budget_rls">{{ track_pr_modal.budget_rls | myDate3 }}, {{ track_pr_modal.budget_rls | time1 }} </div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.mcc_rcv }">MCC Received <div v-show="track_pr_modal.mcc_rcv">{{ track_pr_modal.mcc_rcv | myDate3 }}, {{ track_pr_modal.mcc_rcv | time1 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.mcc_rls }">MCC Released <div v-show="track_pr_modal.mcc_rls">{{ track_pr_modal.mcc_rls | myDate3 }}, {{ track_pr_modal.mcc_rls | time1 }} </div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.fmo_rcv }">FMO Received <div v-show="track_pr_modal.fmo_rcv">{{ track_pr_modal.fmo_rcv | myDate3 }}, {{ track_pr_modal.fmo_rcv | time1 }} </div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.fmo_rls }">FMO Released <div v-show="track_pr_modal.fmo_rls">{{ track_pr_modal.fmo_rls | myDate3 }}, {{ track_pr_modal.fmo_rls | time1 }}</div></li>
-                                    </ul>
-                                    <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rcv_3 }">PMO Received <div v-show="track_pr_modal.pmo_rcv_3">{{ track_pr_modal.pmo_rcv_3 | myDate3 }}, {{ track_pr_modal.pmo_rcv_3 | time1 }}</div></li>
-                                        <li class="list-group-item" :class="{ ' bg-success' : track_pr_modal.pmo_rls_3 }">PMO Released <div v-show="track_pr_modal.pmo_rls_3">{{ track_pr_modal.pmo_rls_3 | myDate3 }}, {{ track_pr_modal.pmo_rls_3 | time1 }}</div></li>
-                                    </ul>
+                                <div class="col-md-">
+                                    
                                 </div>
                             </div>
                         </div>

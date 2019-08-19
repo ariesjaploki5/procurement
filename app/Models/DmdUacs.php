@@ -10,7 +10,7 @@ class DmdUacs extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'code', 'dmd_id', 'brand_id'
+        'code', 'dmd_id', 'brand_id', 'stock_quantity'
     ];
 
     public function dmd(){
@@ -20,4 +20,6 @@ class DmdUacs extends Model
     public function brand(){
         return $this->belongsTo('App\Models\Brand', 'brand_id', 'brand_id');
     }
+
+    
 }

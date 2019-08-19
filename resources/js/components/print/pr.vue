@@ -40,19 +40,19 @@
         <div class="col-6 pr all">
             <div class="row">
                 <div class="col-3 pr bottom right"><span>Department:</span> </div>
-                <div class="col pr right left"><span>MEDICAL SERVICES</span></div>
+                <div class="col pr right left font-weight-bold"><span>MEDICAL SERVICES</span></div>
             </div>
         </div>
         <div class="col-3 pr all">
             <div class="row">
-                <div class="col-6 pr left bottom right"><span>PR No.:</span></div>
-                <div class="col pr left right"><span>{{ pr.pr_id }}</span></div>
+                <div class="col-5 pr left bottom right"><span>PR No.:</span></div>
+                <div class="col pr left right font-weight-bold text-center"><span>{{ pr.pr_id }}</span></div>
             </div>
         </div>
         <div class="col-3 pr all">
             <div class="row">
                 <div class="col-3 pr left bottom right"><span>Date:</span></div>
-                <div class="col pr left right text-center">{{ pr.created_at | myDate3 }}</div>
+                <div class="col pr left right text-center font-weight-bold">{{ pr.created_at | myDate3 }}</div>
                 <div class="col-1 pr left bottom "></div>
             </div>
         </div>
@@ -61,12 +61,12 @@
         <div class="col-6 pr all">
             <div class="row">
                 <div class="col-3 pr top bottom right"><span>Section:</span> </div>
-                <div class="col pr top right left"><span>PHARMACY</span></div>
+                <div class="col pr top right left font-weight-bold"><span>PHARMACY</span></div>
             </div>
         </div>
         <div class="col-3 pr all">
             <div class="row">
-                <div class="col-6 pr top left bottom right"><span>SAI No.:</span></div>
+                <div class="col-5 pr top left bottom right"><span>SAI No.:</span></div>
                 <div class="col pr top left right"></div>
             </div>
         </div>
@@ -203,7 +203,7 @@
         <div class="col-5 pr top left text-center font-weight-bold"><span>RAY P. SUANDING, MD, FPCP, FPCCP</span></div>
     </div>
     <div class="row">
-        <div class="col-2 pr top right"><span>Printed Name:</span></div>
+        <div class="col-2 pr top right"><span>Designation:</span></div>
         <div class="col-5 pr top text-center"><span>Pharmacist IV</span></div>
         <div class="col-5 pr top left text-center"><span>Chief Medical Professional Staff II</span></div>
     </div>

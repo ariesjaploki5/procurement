@@ -14,6 +14,7 @@ use App\Models\Hdmhdrsub;
 use App\Views\NewHomisDmd;
 use App\Models\App;
 use App\Views\NewAppDmd;
+use App\Views\Dmd as Dmd_2;
 
 class DrugsAndMedicineController extends Controller
 {
@@ -25,6 +26,13 @@ class DrugsAndMedicineController extends Controller
         return response()->json($data);
     }
 
+
+    public function cmps_dmd(){
+
+        $data = DB::table('fn_dmd()')->get();
+
+        return response()->json($data);
+    }
 
     public function need_to_pr(){
         // $now = Carbon::now();
@@ -59,6 +67,13 @@ class DrugsAndMedicineController extends Controller
 
         return response()->json($data);
 
+    }
+
+    public function dmd_uacs_2(){
+        $data = Dmd_2::with('dmd_uacs')
+        ->orderBy('dmddesc', 'asc')->get();
+
+        return response()->json($data);
     }
 
     public function beg_bal(Request $request){

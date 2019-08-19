@@ -70,7 +70,7 @@ import pmo_rfq from './components/pmo/request_for_quotation.vue';
 
 import cmps_pr from './components/div_head/all_pr.vue';
 import cmps_po from './components/div_head/all_po.vue';
-import cmps_dmd from './components/div_head/dmd_po';
+import cmps_dmd from './components/div_head/dmds.vue';
 
 import mmo_po from './components/mmo/all_po.vue';
 import mmo_dmd from './components/mmo/drugs_and_medicines.vue';

@@ -6,9 +6,9 @@
                     <h6> <i class="fas fa-capsules"></i> Drugs And Medicines</h6>
                 </div>
                 <div class="col-md-auto">Legend:</div>
-                <div class="col-md-auto"><i class="fas fa-stop" style="color:yellow"></i> - Below ROP</div>
-                <div class="col-md-auto"><i class="fas fa-stop" style="color:red"></i> - No SSL</div>
-                <div class="col-md-auto"><i class="fas fa-stop" style="color:green"></i> - Above SSL</div>
+                <div class="col-md-auto"><i class="fas fa-stop" style="color: #fff6a1"></i> - Below ROP</div>
+                <div class="col-md-auto"><i class="fas fa-stop" style="color: #f4b0af"></i> - No SSL</div>
+                <div class="col-md-auto"><i class="fas fa-stop" style="color: #b3e8ca"></i> - Above SSL</div>
                 <div class="col-md-auto"><i class="fas fa-stop" style="color:blue"></i> - Item in Transit</div>
                 <div class="col-md-auto text-right">
                     <button class="btn btn-sm btn-primary" :disabled="cart_item == 0" @click="cart_modal()"><i class="fas fa-shopping-cart"></i> <span class="badge badge-light">{{ cart_item }}</span></button>

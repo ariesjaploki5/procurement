@@ -5,10 +5,16 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\DmdUacs;
+use DB;
+use App\Views\Dmd as Dmd_2;
 
 class DmdUacsController extends Controller
 {
     public function index(){
+
+        $data = DB::select('select * from fn_dmd_uacs() order by dmddesc asc');
+
+        return response()->json($data);
 
     }
 
@@ -34,5 +40,15 @@ class DmdUacsController extends Controller
         ]);
 
         return response()->json();
+
+    }
+
+    public function search(Request $request){
+        $data = Dmd_2::with('dmd_uacs')
+        ->where('dmddesc', 'like', '%'.$request->word.'%')
+        ->orderBy('dmddesc', 'asc')
+        ->get();
+
+        return response()->json($data);
     }
 }

@@ -40,8 +40,13 @@
                         <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
                         <th @click="view_po(po)" width="32%">{{ po.supplier_name }}</th>
                         <th width="15%">
-                            <span v-if="!po.csd && po.pod">
+                            <span v-if="!po.csid && po.pod">
                                 <button type="button" class="btn btn-sm btn-danger" @click="pmo_rls_po(po.purchase_order_id)">
+                                    <i class="fas fa-file-upload"></i>
+                                </button>
+                            </span>
+                            <span v-if="po.csid == 20 && po.dod">
+                                <button type="button" class="btn btn-sm btn-danger" @click="pmo_to_mmo(po.purchase_order_id)">
                                     <i class="fas fa-file-upload"></i>
                                 </button>
                             </span>
@@ -368,6 +373,16 @@ export default {
                 toast.fire({
                     type: 'success',
                     title: 'PO Release'
+                });
+            }).catch(() => {
+
+            });
+        },
+        pmo_to_mmo(id){
+            axios.put('../../api/pmo_to_mmo/'+id).then(() => {
+                toast.fire({
+                    type: 'success',
+                    title: 'PO Release to MMO'
                 });
             }).catch(() => {
 

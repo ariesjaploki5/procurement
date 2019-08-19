@@ -53,7 +53,7 @@
 
                 </div>
                 <div class="row">
-                    <h6>{{ dmd_pr.dmddesc }}</h6>
+                    <h5>{{ dmd_pr.dmddesc }}</h5>
                 </div>
             </div>
             <div class="col">
@@ -63,43 +63,43 @@
                 </div>
                 <div class="row">
                     <div class="col-3 sps all font-weight-bold">SSL:</div>
-                    <div class="col-9 sps top left right">{{ dmd_pr.ssl | numeral3 }}</div>
+                    <div class="col-9 sps top left right text-center font-weight-bold">{{ dmd_pr.ssl | numeral3 }}</div>
                 </div>
             </div>
                 <div class="w-100"></div>
 
             <div class="col-2 sps all bheight text-center">1.</div>
             <div class="col-7 sps all ">Balance on Hand</div>
-            <div class="col sps top left right">{{ dmd_pr.boh | numeral3 }}</div>
+            <div class="col sps top left right text-center font-weight-bold">{{ dmd_pr.boh | numeral3 }}</div>
 
                 <div class="w-100"></div>
 
             <div class="col-2 sps all bheight text-center">2.</div>
             <div class="col-7 sps all">Item in Transit</div>
-            <div class="col sps top left right">{{ dmd_pr.last_iit | numeral3 }}</div>
+            <div class="col sps top left right text-center font-weight-bold">{{ dmd_pr.last_iit | numeral3 }}</div>
 
                 <div class="w-100"></div>
 
             <div class="col-2 sps all bheight text-center">3.</div>
             <div class="col-7 sps all">This Requisition</div>
-            <div class="col sps top left right">{{ dmd_pr.request_quantity | numeral3 }}</div>
+            <div class="col sps top left right text-center font-weight-bold">{{ dmd_pr.request_quantity | numeral3 }}</div>
 
                 <div class="w-100"></div>
 
             <div class="col-2 sps all bheight text-center">4.</div>
             <div class="col-7 sps all">Total Expected Stocks (Sum of Lines 1 to 3)</div>
-            <div class="col sps top left right">{{ dmd_pr.total_expect | numeral3 }}</div>
+            <div class="col sps top left right text-center font-weight-bold">{{ dmd_pr.total_expect | numeral3 }}</div>
             
                 <div class="w-100"></div>
 
             <div class="col-2 sps all bheight text-center">5.</div>
             <div class="col-7 sps all">Monthly Average Consumption</div>
-            <div class="col sps top left right">{{ dmd_pr.mvc | numeral3 }}</div>
+            <div class="col sps top left right text-center font-weight-bold">{{ dmd_pr.mvc | numeral3 }}</div>
             <div class="w-100"></div>
 
             <div class="col-2 sps all bheight text-center">6.</div>
             <div class="col-7 sps all">Estimated No. of Months to Consume (Line 4 to 5)</div>
-            <div class="col sps top left right"> 2 Months</div>
+            <div class="col sps top left right text-center font-weight-bold"> 2 Months</div>
             <div class="w-100"></div>
 
             <div class="col-2"></div>
@@ -108,10 +108,11 @@
 
             <div class="col-4 sps top left right"></div>
             <div class="col-4 sps all"></div>
-            <div class="col-4 sps top left right"></div>
+            <div class="col-4 sps top left right text-center font-weight-bold"></div>
             <div class="w-100"></div>
-
+            
             <div class="col-4 sps all text-center font-weight font-weight-bold">RISCILLA E. LAZATIN, MPA</div>
+            <div class="col-6 ml-4 sps all text-right font-weight font-weight-bold">Date</div>
             <div class="w-100"></div>
 
             <div class="col-4 sps all text-center font-weight font-weight-bold cheight">Head, Pharmacy Section</div>

@@ -70,7 +70,7 @@ export default {
     methods:{
         
         get_dmds(){
-            axios.get('../../api/dmd').then(({data}) => {
+            axios.get('../../api/cmps_dmd').then(({data}) => {
                 this.dmds = data;
             }).catch(() => {
 
