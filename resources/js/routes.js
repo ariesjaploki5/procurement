@@ -86,6 +86,7 @@ import rfq from './components/print/rfq';
 import sps from './components/print/sps';
 import ntt from './components/print/ntt';
 import na from './components/print/na';
+import dv from './components/print/dv';
 
 import cpr from './components/print/cpr';
 

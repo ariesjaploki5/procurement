@@ -223,7 +223,6 @@
             </div>
         </div>
     </div>
-    
 </template>
 
 <script>
@@ -315,7 +314,7 @@ export default {
                 $('#prModal').modal('hide');
                 this.view_pr_form.reset();
             }).catch(() => {
-
+                
             });
         },
         track_pr(prs){
@@ -430,6 +429,9 @@ export default {
             this.get_prs();
         });
         window.Echo.channel("pr_updated").listen(".purchase_request.updated", (e) => {
+            this.get_prs();
+        });
+        window.Echo.channel("po_created").listen(".purchase_order.created", (e) => {
             this.get_prs();
         });
     },

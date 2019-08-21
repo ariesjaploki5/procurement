@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DmdPoReceived;
 use App\Models\DmdUacs;
 use DB;
+use Carbon\Carbon;
 
 class DmdPoReceivedController extends Controller
 {
@@ -16,36 +17,39 @@ class DmdPoReceivedController extends Controller
     }
 
     public function store(Request $request){
-        $dmd_uacs = DB::table('dmd_uacs')->where('dmd_id', $request->dmd_id)->where('brand_id', $request->brand_id)->first();
 
-        return $dmd_uacs;
+        $year_now = Carbon::now()->year;
+        $month_now = Carbon::now()->month;
+        
+        $count = DmdPoReceived::where('created_at', $year_now)->count();
+        $new_count = $count + 1;
+        $iar_no = sprintf( '%04d', $new_count );
+        $month = sprintf('%02d', $month_now);
+        $iar_now_m_y = $year_now.'-'.$month.'-'.$iar_no;
 
 
         $dmd_po_r = DmdPoReceived::create([
             'list_no' => $request->list_no,
             'receiving_officer_id' => $request->officer_id,
-            'inspection_officer_id' => $request->inspection_id,
+            'inspection_officer_id' => $request->inspector_id,
             'received_quantity' => $request->order_quantity,
             'remarks' => $request->remarks,
             'date_received' => $request->date_received,
             'expiry_date' => $request->expiry_date,
+            'dmd_po_id' => $request->dmd_po_id,
+            'iar_no' => $iar_now_m_y,
         ]);
 
-        $dmd_uacs = DB::table('dmd_uacs')->where('dmd_id', $request->dmd_id)->where('brand_id', $request->brand_id)->firstOrFail();
-
-        return $dmd_uacs;
+        $dmd_uacs = DmdUacs::firstOrCreate([
+            'dmd_id' => $request->dmd_id,
+            'brand_id' => $request->brand_id
+        ]);
 
         $last_quantity = $dmd_uacs->stock_quantity;
-        if($last_quantity){
-            $new_quantity = $last_quantity + $request->order_quantity;
-            
-        } else{
-            $new_quantity = $request->order_quantity;
-        }
+        $new_stock = $last_quantity + $request->order_quantity;
+        $dmd_uacs->stock_quantity = $new_stock;
 
-        $dmd_uacs->update([
-            'stock_quantity' => $new_quantity,
-        ]);
+        $dmd_uacs->save();
 
         return response()->json();
 
@@ -53,27 +57,38 @@ class DmdPoReceivedController extends Controller
 
     public function update(Request $request, $id){
 
-        $dmd_po_r = DmdPoReceived::findOrFail($id);
+        $year_now = Carbon::now()->year;
+        $month_now = Carbon::now()->month;
+        
+        $count = DmdPoReceived::where('created_at', $year_now)->count();
+        $new_count = $count + 1;
+        $iar_no = sprintf( '%04d', $new_count );
+        $month = sprintf('%02d', $month_now);
+        $iar_now_m_y = $year_now.'-'.$month.'-'.$iar_no;
 
-        $last_received_quantity = $dmd_po_r->received_quantity;
 
-        $dmd_po_r->update([
+        $dmd_po_r = DmdPoReceived::create([
             'list_no' => $request->list_no,
-            'receiving_officer_id' => $request->receiving_officer_id,
-            'inspection_officer_id' => $request->inspection_offcier_id,
+            'receiving_officer_id' => $request->officer_id,
+            'inspection_officer_id' => $request->inspector_id,
             'received_quantity' => $request->order_quantity,
             'remarks' => $request->remarks,
             'date_received' => $request->date_received,
             'expiry_date' => $request->expiry_date,
+            'dmd_po_id' => $request->dmd_po_id,
+            'iar_no' => $iar_now_m_y,
         ]);
 
-        $dmd_uacs = DmdUacs::where('dmd_id', $request->dmd_id)->where('brand_id', $request->brand_id)->firstOrFail();
-        $last_quantity = $dmd_uacs->stock_quantity - $last_received_quantity;
-        $new_quantity = $last_quantity + $request->order_quantity;
-
-        $dmd_uacs->update([
-            'stock_quantity' => $new_quantity,
+        $dmd_uacs = DmdUacs::firstOrCreate([
+            'dmd_id' => $request->dmd_id,
+            'brand_id' => $request->brand_id
         ]);
+
+        $last_quantity = $dmd_uacs->stock_quantity;
+        $new_stock = $last_quantity + $request->order_quantity;
+        $dmd_uacs->stock_quantity = $new_stock;
+
+        $dmd_uacs->save();
 
         return response()->json();
     }

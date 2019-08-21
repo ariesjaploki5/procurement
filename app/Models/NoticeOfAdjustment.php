@@ -18,7 +18,9 @@ class NoticeOfAdjustment extends Model
         'account_code_to',
         'amount_to_p',
         'adjust_raod',
-        'remarks'
+        'remarks',
+        'ors',
+        'burs'
     ];
 
     public function purchase_order(){

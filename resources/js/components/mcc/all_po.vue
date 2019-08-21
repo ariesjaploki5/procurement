@@ -39,12 +39,12 @@
                         </th>
                         <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode_desc }}</th>
                         <th @click="view_po(po.purchase_order_id)" width="37%">{{ po.supplier_name }}</th>
-                        <th width="10%">
+                        <th width="10%" class="text-bold">
                             <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 13" @click="mcc_rcv(po.purchase_order_id)">
-                                <i class="fas fa-file-download"> Receive PO</i>
+                                <i class="fas fa-file-download"></i>  Receive PO
                             </button>
                             <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 14" @click="mcc_rtn(po.purchase_order_id)">
-                                <i class="fas fa-file-upload"> Return to PMO</i>
+                                <i class="fas fa-file-upload"></i>  Return to PMO
                             </button>
                         </th>
                     </tr>
@@ -79,15 +79,9 @@
                                             <td width="20%">{{ dmd.dmddesc }}</td>
                                             <td class="text-right table-danger">{{ dmd.ssl | numeral3 }}</td>
                                             <td class="text-right table-danger">{{ dmd.boh | numeral3 }}</td>
-                                            <td width="10%" class="text-right">
-                                                {{ dmd.order_quantity | numeral3 }}
-                                            </td>
-                                            <td class="text-right">
-                                                <span>{{ dmd.cost_price | currency2 }}</span>
-                                            </td>
-                                            <td  class="text-right">
-                                                <span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span>
-                                            </td>
+                                            <td width="10%" class="text-right">{{ dmd.order_quantity | numeral3 }}</td>
+                                            <td class="text-right"><span>{{ dmd.cost_price | currency2 }}</span></td>
+                                            <td  class="text-right"><span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span></td>
                                         </tr>
                                     </tbody>
                                 </table>

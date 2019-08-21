@@ -56,6 +56,15 @@ Route::apiResources([
     'fund_cluster' => 'API\FundClusterController',
 ]);
 
+Route::get('attachment', 'API\AttachmentController@index');
+Route::get('approving_officer', 'API\AttachmentController@approving_officer');
+Route::get('get_dv_item/{id}', 'API\PurchaseOrderController@get_dv_item');
+
+
+Route::get('get_attachments/{id}', 'API\PurchaseOrderController@get_attachments');
+
+Route::get('receiving_officer', 'API\ReceivingOfficerController@index');
+Route::get('inspector', 'API\InspectorController@index');
 
 Route::post('dmd_po_receive', 'API\DmdPoReceivedController@store');
 Route::put('dmd_po_receive/{id}', 'API\DmdPoReceivedController@update');
@@ -81,8 +90,6 @@ Route::get('pr_for_pmo', 'API\PurchaseRequestController@for_pmo');
 Route::get('po_for_pmo', 'API\PurchaseOrderController@for_pmo');
 Route::get('po_for_budget', 'API\PurchaseOrderController@for_budget');
 Route::get('po_for_cmps', 'API\PurchaseOrderController@for_cmps');
-
-
 
 Route::get('for_mmo_po', 'API\PurchaseOrderController@for_mmo');
 Route::get('for_mcc', 'API\PurchaseOrderController@for_mcc');

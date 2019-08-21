@@ -309,6 +309,15 @@ class PurchaseRequestController extends Controller
                 $po->save();
             }
 
+            $year_now = Carbon::now()->year;
+
+            $dmd_po = DmdPurchaseOrder::where('created_at', $year_now)->get();
+            $count = count($dmd_po);
+
+            $new_count = $count + 1;
+
+            $list_no = sprintf( '%04d', $new_count );
+
             $po->dmd_purchase_orders()->create([
                 'dmd_id' => $dmd_id,
                 'order_quantity' => $quantity,
@@ -317,6 +326,7 @@ class PurchaseRequestController extends Controller
                 'country_id' => $dmd->country_id,
                 'packaging_id' => $dmd->packaging_id,
                 'manufacturer_id' => $dmd->manufacturer_id,
+                'list_no' => $list_no
             ]);
             
         }

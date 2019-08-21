@@ -9,6 +9,7 @@ use App\Models\PurchaseRequest;
 use App\Models\DmdPurchaseRequest;
 use DB;
 use App\Models\Hdmhdrsub;
+use App\Views\DmdPurchaseOrder;
 
 use Carbon\Carbon;
 
@@ -368,9 +369,43 @@ class PurchaseOrderController extends Controller
 
     public function show($id){
 
-        $data = DB::SELECT("SELECT * FROM fn_dmd_purchase_orders($id) order by dmddesc asc");
+        // $data = DB::SELECT("SELECT * FROM fn_dmd_purchase_orders($id) order by dmddesc asc");
+
+        $data = DmdPurchaseOrder::with([
+            'dmd_po_receiveds'
+        ])->where('purchase_order_id', $id)->get();
+
         return response()->json($data);
+    }
+
+    public function get_attachments($id){
+        $po = DB::Table("fn_get_dv($id)")->first();
+
+        $array_1 = array(
+            ["attachment" => $po->po_no], 
+            ["attachment" => $po->pr_id], 
+            ["attachment" => $po->ors_burs_no],
+            // ["attachment" => $po->total_amount]
+        );
+
+        $iar = DB::Table("fn_get_iar($id)")->get();
+
+        $array_2 = array();
+
+        foreach($iar as $i){
+            $array_2[] = $i; 
+        }
+
+        $merge_array = array_merge($array_2, $array_1);
+
+        return response()->json($merge_array);
+    }
+
+    public function get_dv_item($id){
+        $item = DB::Table("fn_get_dv($id)")->first();
         
+
+        return response()->json($item);
     }
 
     public function purchase_order_obrs($id){
