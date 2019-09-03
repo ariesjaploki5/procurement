@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="row shadow mb-1 bg-white rounded">
+            <div class="row bg-white rounded">
                 <h6><i class="fas fa-capsules"></i> Drugs and Medicines</h6>
             </div>
             <div class="row">

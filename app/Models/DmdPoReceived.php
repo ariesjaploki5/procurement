@@ -23,6 +23,7 @@ class DmdPoReceived extends Model
         'date_received',
         'user_id',
         'iar_no',
+        'days_delayed',
     ];
 
     // public function dmd_purchase_order(){

@@ -50,6 +50,7 @@ Vue.filter('myDate2', function(val){return moment(val).format("YYYY - M");});
 Vue.filter('myDate3', function(val){return moment(val).format("MMMM D, YYYY");});
 Vue.filter('myDate4', function(val){return moment(val).format('L');});
 Vue.filter('myDate5', function(val){return moment(val).format('LTS');});
+Vue.filter('myDate6', function(val){return moment(val).format('l'); });
 
 Vue.filter('numeral1', function(val){return numeral(val).format('000');});
 Vue.filter('numeral2', function(val){return numeral(val).format('0000');});
@@ -60,6 +61,7 @@ Vue.filter('num_words', function(val){return converter.toWords(val);});
 
 Vue.filter('currency', function(val){return accounting.formatMoney(val, {symbol: '',});});
 Vue.filter('currency2', function(val){return accounting.formatMoney(val, {symbol: '₱ ',decimals: 2,});});
+Vue.filter('currency3', function(val){return accounting.formatMoney(val, {symbol: 'Php ',decimals: 2,});});
 Vue.filter('decimal_to_whole', function(val){return accounting.formatMoney(val, {symbol: '',precision: 0,});});
 
 Vue.use(VueProgressBar, {

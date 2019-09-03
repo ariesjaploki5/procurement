@@ -21,7 +21,7 @@ class DmdPoReceivedController extends Controller
         $year_now = Carbon::now()->year;
         $month_now = Carbon::now()->month;
         
-        $count = DmdPoReceived::where('created_at', $year_now)->count();
+        $count = DmdPoReceived::where(DB::raw('YEAR(created_at)'), $year_now)->count();
         $new_count = $count + 1;
         $iar_no = sprintf( '%04d', $new_count );
         $month = sprintf('%02d', $month_now);
@@ -38,6 +38,7 @@ class DmdPoReceivedController extends Controller
             'expiry_date' => $request->expiry_date,
             'dmd_po_id' => $request->dmd_po_id,
             'iar_no' => $iar_now_m_y,
+            'days_delayed' => $request->days_delayed,
         ]);
 
         $dmd_uacs = DmdUacs::firstOrCreate([
@@ -60,8 +61,11 @@ class DmdPoReceivedController extends Controller
         $year_now = Carbon::now()->year;
         $month_now = Carbon::now()->month;
         
-        $count = DmdPoReceived::where('created_at', $year_now)->count();
+        $c = DmdPoReceived::where(DB::raw('YEAR(created_at)'), '=', $year_now)->get();
+
+        $count = count($c);
         $new_count = $count + 1;
+
         $iar_no = sprintf( '%04d', $new_count );
         $month = sprintf('%02d', $month_now);
         $iar_now_m_y = $year_now.'-'.$month.'-'.$iar_no;
@@ -77,6 +81,7 @@ class DmdPoReceivedController extends Controller
             'expiry_date' => $request->expiry_date,
             'dmd_po_id' => $request->dmd_po_id,
             'iar_no' => $iar_now_m_y,
+            'days_delayed' => $request->days_delayed,
         ]);
 
         $dmd_uacs = DmdUacs::firstOrCreate([

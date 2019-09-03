@@ -51,12 +51,18 @@
                             </button> -->
                             <div class="btn-group" role="group" v-if="po.csid == 10">
                                 <button id="btnGroupDrop1" type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Action
+                                    <span>Action</span>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                <button v-if="!po.noa_id" class="dropdown-item" @click="na_modal(po)">Notice of Adjustment</button>
-                                <router-link v-else class="dropdown-item" :to="{ name: 'na', params: { id: po.purchase_order_id }}">Notice of Adjustment</router-link>
-                                <button class="dropdown-item" v-show="po.csid == 10" @click="accounting_rls(po.purchase_order_id)">Released to FMO</button>
+                                    <button v-if="!po.noa_id" class="dropdown-item" @click="na_modal(po)">
+                                        <span>Notice of Adjustment</span>
+                                    </button>
+                                    <router-link v-else class="dropdown-item" :to="{ name: 'na', params: { id: po.purchase_order_id }}">
+                                        <span>Notice of Adjustment</span>
+                                    </router-link>
+                                    <button class="dropdown-item" v-show="po.csid == 10" @click="accounting_rls(po.purchase_order_id)">
+                                        <span>Released to FMO</span>
+                                    </button>
                                 </div>
                             </div>
                         </th>
@@ -78,44 +84,55 @@
                                     <thead>
                                         <tr class="text-center">
                                             <th width="5%">#</th>
-                                            <th width="25%">Description</th>
-                                            <th>SSL</th>
-                                            <th>BOH</th>
+                                            <th width="17%" class="text-center">Stock No</th>
+                                            <th width="35%">Description</th>
+                                            <th width="7%">SSL</th>
+                                            <th width="7%">BOH</th>
                                             <!-- <th>Item In Transit</th> -->
-                                            <th width="10%">Quantity</th>
-                                            <th>Unit Cost</th>
-                                            <th>Estimated Cost</th>
+                                            <th width="7%">Quantity</th>
+                                            <th width="10%">Unit Cost</th>
+                                            <th width="12%">Estimated Cost</th>
                                         </tr>
                                     </thead>
                                     <tbody id="po_tbody">
                                         <tr v-for="(dmd,index) in view_po_form.dmd_purchase_orders" :key="dmd.dmd_id">
                                             <td width="5%">{{ index + 1}}</td>
-                                            <td width="25%">{{ dmd.dmddesc }}</td>
-                                            <td class="text-right">{{ dmd.ssl | numeral3 }}</td>
-                                            <td class="text-right">{{ dmd.boh | numeral3 }}</td>
+                                            <td width="17%" class="text-center">
+                                                <span v-if="dmd.code">{{ dmd.code }}</span>
+                                                <span v-else>
+                                                    <button class="btn btn-sm btn-primary" type="button" @click="add_stock_code(dmd)">add stock no</button>
+                                                </span>
+                                            </td>
+                                            <td width="35%">
+                                                <tr><td colspan="2"><span>{{ dmd.dmddesc }}</span></td></tr>
+                                                <tr>
+                                                    <td class="text-bold" width="30%">Brand:</td>
+                                                    <td width="auto">{{ dmd.brand_desc }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-bold" width="30%">Manufacturer:</td>
+                                                    <td width="auto">{{ dmd.manufacturer_desc }}</td>
+                                                    </tr>
+                                                <tr>
+                                                    <td class="text-bold" width="30%">Supplier:</td>
+                                                    <td width="auto">{{ dmd.supplier_name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-bold" width="30%">Packaging:</td>
+                                                    <td width="auto">{{ dmd.packaging_desc }}</td>
+                                                </tr>
+                                            </td>
+                                            <td class="text-right" width="7%">{{ dmd.ssl | numeral3 }}</td>
+                                            <td class="text-right" width="7%">{{ dmd.boh | numeral3 }}</td>
                                             <!-- <td class="text-right table-danger"></td> -->
-                                            <td width="10%" class="text-right">{{ dmd.order_quantity | numeral3 }}</td>
-                                            <td class="text-right"><span>{{ dmd.cost_price | currency2 }}</span></td>
-                                            <td  class="text-right"><span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span></td>
+                                            <td width="7%" class="text-right">{{ dmd.order_quantity | numeral3 }}</td>
+                                            <td class="text-right" width="10%"><span>{{ dmd.cost_price | currency2 }}</span></td>
+                                            <td class="text-right" width="12%"><span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="row">
-                                <!-- <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div>
-                                                <span class="text-bold">Date of Delivery: </span>    
-                                                {{ view_po_form.date_of_delivery }}
-                                            </div>
-                                            <div>
-                                                <span class="text-bold">Delivery Term: </span>  
-                                                {{ view_po_form.delivery_term }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-body">
@@ -124,6 +141,20 @@
                                             </div>
                                             <div>
                                                 <span class="text-bold">Payment Term: </span>{{ view_po_form.payment_term_desc }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div>
+                                                        <span class="text-bold">Serial No: </span>    
+                                                        {{ view_po_form.obrs_no }}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -151,116 +182,168 @@
                             </button>
                         </div>
                         <form  @submit.prevent="store_na()">
-                        <div class="modal-body">
-                            <div class="col-md-12 text-center">
-                                <h4>
-                                    <span>Notice of Adjustment</span>
-                                </h4>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group row">
-                                    <div class="col-md-12">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck9" v-model="na_form.ors">
-                                            <label class="custom-control-label" for="customCheck9">OBLIGATION REQUEST AND STATUS</label>
+                            <div class="modal-body">
+                                <div class="col-md-12 text-center">
+                                    <h4>
+                                        <span>Notice of Adjustment</span>
+                                    </h4>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck9" v-model="na_form.ors">
+                                                <label class="custom-control-label" for="customCheck9">OBLIGATION REQUEST AND STATUS</label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-12">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck8" v-model="na_form.burs">
-                                            <label class="custom-control-label" for="customCheck8">BUDGET UTILIZATION REQUEST AND STATUS</label>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck8" v-model="na_form.burs">
+                                                <label class="custom-control-label" for="customCheck8">BUDGET UTILIZATION REQUEST AND STATUS</label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                    <div class="form-group row">
-                                        <div class="col-md-5">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="na_form.adjust_ors_burs_no">
-                                                <label class="custom-control-label" for="customCheck1">ORS / BURS No:</label>
+                                        <div class="form-group row">
+                                            <div class="col-md-5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="na_form.adjust_ors_burs_no">
+                                                    <label class="custom-control-label" for="customCheck1">ORS / BURS No:</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7 text-center">
+                                                <span>{{ view_po_form.obrs_no }}</span>
                                             </div>
                                         </div>
-                                        <div class="col-md-7 text-center">
-                                            <span>{{ view_po_form.obrs_no }}</span>
+                                        <div class="form-group row">
+                                            <div class="col-md-5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck2" v-model="na_form.resp_center_to_check">
+                                                    <label class="custom-control-label" for="customCheck2">Responsibility Center to</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <input type="text" class="form-control form-control-sm" v-model="na_form.resp_center_to" :disabled="!na_form.resp_center_to_check">
+                                            </div>
+                                            
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-5">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck2" v-model="na_form.resp_center_to_check">
-                                                <label class="custom-control-label" for="customCheck2">Responsibility Center to</label>
+                                        <div class="form-group row">
+                                            <div class="col-md-5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck3" v-model="na_form.particulars_to_check">
+                                                    <label class="custom-control-label" for="customCheck3">Particulars to</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <input type="text" class="form-control form-control-sm" v-model="na_form.particulars_to" :disabled="!na_form.particulars_to_check">
                                             </div>
                                         </div>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control form-control-sm" v-model="na_form.resp_center_to" :disabled="!na_form.resp_center_to_check">
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-5">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck3" v-model="na_form.particulars_to_check">
-                                                <label class="custom-control-label" for="customCheck3">Particulars to</label>
+                                        <div class="form-group row">
+                                            <div class="col-md-5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck4" v-model="na_form.mfo_pap_to_check">
+                                                    <label class="custom-control-label" for="customCheck4">MFO/PAP to</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <input type="text" class="form-control form-control-sm" v-model="na_form.mfo_pap_to" :disabled="!na_form.mfo_pap_to_check">
                                             </div>
                                         </div>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control form-control-sm" v-model="na_form.particulars_to" :disabled="!na_form.particulars_to_check">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-5">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck4" v-model="na_form.mfo_pap_to_check">
-                                                <label class="custom-control-label" for="customCheck4">MFO/PAP to</label>
+                                        <div class="form-group row">
+                                            <div class="col-md-5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck5" v-model="na_form.account_code_to_check">
+                                                    <label class="custom-control-label" for="customCheck5">Account Code to</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <input type="text" class="form-control form-control-sm" v-model="na_form.account_code_to" :disabled="!na_form.account_code_to_check">
                                             </div>
                                         </div>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control form-control-sm" v-model="na_form.mfo_pap_to" :disabled="!na_form.mfo_pap_to_check">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-5">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck5" v-model="na_form.account_code_to_check">
-                                                <label class="custom-control-label" for="customCheck5">Account Code to</label>
+                                        <div class="form-group row">
+                                            <div class="col-md-5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck6" v-model="na_form.amount_to_p">
+                                                    <label class="custom-control-label" for="customCheck6">Amount to P</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7 text-right">
+                                                <span>{{ view_po_form.total_amount | currency }}</span>
                                             </div>
                                         </div>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control form-control-sm" v-model="na_form.account_code_to" :disabled="!na_form.account_code_to_check">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-5">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck6" v-model="na_form.amount_to_p">
-                                                <label class="custom-control-label" for="customCheck6">Amount to P</label>
+                                        <div class="form-group row">
+                                            <div class="col-md-5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck7" v-model="na_form.adjust_raod_check">
+                                                    <label class="custom-control-label" for="customCheck7">RAOD/RBUD for excess/ under obligation per attached JEV No dated</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <input type="text" class="form-control form-control-sm" v-model="na_form.adjust_raod" :disabled="!na_form.adjust_raod_check">
                                             </div>
                                         </div>
-                                        <div class="col-md-7 text-right">
-                                            <span>{{ view_po_form.total_amount | currency }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-5">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck7" v-model="na_form.adjust_raod_check">
-                                                <label class="custom-control-label" for="customCheck7">RAOD/RBUD for excess/ under obligation per attached JEV No dated</label>
+                                        <div class="form-group row">
+                                            <div class="col-md-5 text-center">
+                                                <label class="form-label">Remarks</label>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <input type="text" class="form-control form-control-sm" v-model="na_form.remarks">
                                             </div>
                                         </div>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control form-control-sm" v-model="na_form.adjust_raod" :disabled="!na_form.adjust_raod_check">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-5 text-center">
-                                            <label class="form-label">Remarks</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control form-control-sm" v-model="na_form.remarks">
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" >
+                                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Close</button>
+                                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- col-md-12 returnModal -->
+        <div class="col-md-12">
+            <div class="modal fade" id="stockModal" tabindex="-1" role="dialog" aria-labelledby="stockModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span>Stock No Modal</span>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form  @submit.prevent="store_stock_code()">
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label for="" class="label form-label">
+                                        Description:
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{ stock_code_form.dmddesc }}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label for="" class="label form-label">
+                                        Brand:
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <span>{{ stock_code_form.brand_desc }}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label for="" class="label form-label" >
+                                        UACS CODE:
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control form-control-sm" v-model="stock_code_form.code">
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer" >
@@ -272,7 +355,7 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- col-md-12 returnModal -->
+        </div> <!-- col-md-12 stockModal -->
     </div>
 </template>
 <script>
@@ -325,6 +408,13 @@ export default {
                 remarks: '',
             }),
             track_po_modal: {},
+            stock_code_form: new Form({
+                brand_id: '',
+                dmd_id: '',
+                dmddesc: '',
+                brand_desc: '',
+                code: '',
+            }),
         }
     },
     methods:{
@@ -354,7 +444,7 @@ export default {
         },
         track_po(pos){
             this.track_po_modal = pos;
-            $('#trackModal').modal('show')
+            $('#trackModal').modal('show');
         },
         na_modal(po){
             this.view_po_form.fill(po);
@@ -385,6 +475,24 @@ export default {
                     type: 'success',
                     title: 'PO Release'
                 });
+            }).catch(() => {
+
+            });
+        },
+        add_stock_code(dmd){
+            this.stock_code_form.fill(dmd);
+            $('#stockModal').modal('show');
+        },
+        store_stock_code(){
+            this.stock_code_form.post('../../api/dmd_uacs').then(() => {
+                $('#stockModal').modal('hide');
+                axios.get('../../api/purchase_order/'+view_po_form.purchase_order_id).then(({data}) => {
+                    this.view_po_form.dmd_purchase_orders = data;
+                    
+                }).catch(() => {
+
+                });
+                
             }).catch(() => {
 
             });

@@ -79,9 +79,9 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-6 pr all">
+        <div class="col-6 pr top bottom right">
             <div class="row">
-                <div class="col-3 pr top bottom right text-white">1</div>
+                <div class="col-3 pr top bottom right"></div>
                 <div class="col pr all"></div>
             </div>
         </div>
@@ -112,7 +112,7 @@
         <div class="col-2 pr top right text-center font-weight-bold"><span>Estimated Unit Cost</span></div>
         <div class="col-2 pr top text-center font-weight-bold"><span>Estimated Cost</span></div>
     </div>
-    <div class="row cheight" v-for="dpr in dmd_pr" :key="dpr.dpr_id"> 
+    <div class="row cheight" v-for="dpr in dmd_pr" :key="dpr.dpr_id" id="height"> 
         <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.dmd_id }}</span></div>
         <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.request_quantity | numeral3 }}</span></div>
         <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
@@ -156,11 +156,11 @@
         <div class="w-100"></div>
         <div class="col pr top bottom right">
             <span style='font-size:22px;'>&#9634;</span>
-            <span>Justification for none inclusion in the PPMP</span>
+            <span><small>Justification for none inclusion in the PPMP</small></span>
         </div>
         <div class="col pr top bottom all">
             <span style='font-size:22px;'>&#9634;</span>
-            <span>Biomedical Service Report / MIS Service Report</span>
+            <span><small>Biomedical Service Report / MIS Service Report</small></span>
         </div>
         <div class="col pr top bottom left">
             <span style='font-size:22px;'>&#9634;</span>
@@ -169,7 +169,7 @@
         <div class="w-100"></div>
         <div class="col pr top bottom right">
             <span style='font-size:22px;'>&#9634;</span>
-            <span>Complete generic specification of item/s requested</span>
+            <span><small>Complete generic specification of item/s requested</small></span>
         </div>
         <div class="col pr top bottom all">
             <span style='font-size:22px;'>&#9634;</span>
@@ -327,5 +327,11 @@
         bottom: 0;
         width: auto;
         margin-left: -1.3%;
+    }
+
+    @media print{
+        #height{
+            height: 330px;
+        }
     }
 </style>

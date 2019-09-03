@@ -17,4 +17,8 @@ class RequestForQuotation extends Model
     public function purchase_request(){
         return $this->belongsTo('App\Models\PurchaseRequest', 'purchase_request_id', 'purchase_request_id');
     }
+
+    public function dmd_rfqs(){
+        return $this->hasMany('App\Models\DmdRfq', 'purchase_request_id', 'purchase_request_id');
+    }
 }

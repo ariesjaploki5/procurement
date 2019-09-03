@@ -132,6 +132,7 @@ class PurchaseOrderController extends Controller
     }
 
     public function received_dmd(Request $request){
+
         $dmd = $request->items;
         $count = count($dmd);
 
@@ -177,15 +178,12 @@ class PurchaseOrderController extends Controller
         return response()->json();
     }
 
-
     public function notice_to_terminate($id){
         
         $po = PurchaseOrder::findOrFail($id);
-        
         $po->update([
             'notice' => 1
         ]);
-
         return response()->json();
     }
 
@@ -196,6 +194,16 @@ class PurchaseOrderController extends Controller
         $po->update([
             'terminated' => 1,
             'waiver' => 1
+        ]);
+
+        return response()->json();
+    }
+
+    public function unterminate_po(Request $request, $id){
+        $po = PurchaseOrder::findOrfail($id);
+        $po->update([
+            'terminated' => 0,
+            'waiver' => 0
         ]);
 
         return response()->json();
@@ -241,7 +249,6 @@ class PurchaseOrderController extends Controller
         return response()->json();
     
     }
-
 
     public function store_update_obrs(Request $request){
         $date = Carbon::now();
@@ -389,34 +396,52 @@ class PurchaseOrderController extends Controller
         );
 
         $iar = DB::Table("fn_get_iar($id)")->get();
-
         $array_2 = array();
 
         foreach($iar as $i){
             $array_2[] = $i; 
         }
 
-        $merge_array = array_merge($array_2, $array_1);
+        $dv_attachment = DB::Table("fn_get_dv_attachment($id)")->get();
+        $array_3 = array();
+        foreach($dv_attachment as $d){
+            $array_3[] = $d;
+        }
+
+        $merge_array = array_merge($array_2, $array_1, $array_3);
 
         return response()->json($merge_array);
     }
 
+    public function get_liquidated_damages($id){
+
+        $data = DB::Table("fn_get_liquidated_damages($id)")->get();
+
+        return response()->json($data);
+        
+    }
+
     public function get_dv_item($id){
+
         $item = DB::Table("fn_get_dv($id)")->first();
         
-
         return response()->json($item);
     }
 
     public function purchase_order_obrs($id){
+        
         $data = DB::table("fn_dmd_purchase_orders($id)")->take(1)->first();
+
         return response()->json($data);
+
     }
 
     public function po_show($id){
+
         $data = DB::table("fn_purchase_orders()")->where('purchase_order_id', $id)->first();
 
         return response()->json($data);
+        
     }
 
     public function budget_show($id){

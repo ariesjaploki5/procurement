@@ -84,7 +84,9 @@
                                         <tr v-for="(dmd,index) in view_po_form.dmd_purchase_orders" :key="dmd.dpo">
                                             <td  class="table-bordered" width="5%">{{ index + 1}}</td>
                                             <td width="25%">
-                                                <tr><td colspan="2"><span>{{ dmd.dmddesc }}</span></td></tr>
+                                                <tr>
+                                                    <td colspan="2"><span>{{ dmd.dmddesc }}</span></td>
+                                                </tr>
                                                 <tr>
                                                     <td class="text-bold" width="30%">Brand:</td>
                                                     <td width="auto">{{ dmd.brand_desc }}</td>
@@ -92,7 +94,7 @@
                                                 <tr>
                                                     <td class="text-bold" width="30%">Manufacturer:</td>
                                                     <td width="auto">{{ dmd.manufacturer_desc }}</td>
-                                                    </tr>
+                                                </tr>
                                                 <tr>
                                                     <td class="text-bold" width="30%">Supplier:</td>
                                                     <td width="auto">{{ dmd.supplier_name }}</td>
@@ -355,7 +357,6 @@ export default {
 
             });
         },
-        
         track_po(pos){
             this.track_po_modal = pos;
             $('#trackModal').modal('show')
@@ -398,7 +399,7 @@ export default {
             axios.put('../../api/budget_rcv/'+id).then(() => {
                 toast.fire({
                     type: 'success',
-                    title: 'PO Release'
+                    title: 'PO Receive'
                 });
             }).catch(() => {
 

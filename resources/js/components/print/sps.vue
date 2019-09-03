@@ -20,7 +20,7 @@
                         <div class="row sps left right bottom">
                             <div class="col">
                                 <div class="po all text-center text-muted">MATERIALS MANAGEMENT OFFICE</div>
-                                <div class="text-center"><h1>STOCK POSITION SHEET</h1></div>
+                                <div class="text-center"><h2>STOCK POSITION SHEET</h2></div>
                             </div>
                             <div class="row">
                                 <div class="col ml-2 mr-1">

@@ -1,10 +1,10 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-12 b-1 shadow p-3 mb-3 bg-white rounded">
-                <h3>
+            <div class="col-md-12 bg-white rounded">
+                <h5>
                     <i class="fas fa-capsules mr-2"></i><span v-if="price_schedule.category_id">{{ price_schedule.category.category_desc }} - {{ price_schedule.price_schedule_year }}</span>
-                </h3>
+                </h5>
             </div>
                 <div class="col-md-12">
                     <div class="row">
@@ -222,6 +222,7 @@ export default {
             this.editmode = true;
             this.form.reset();
             this.form.fill(ps);
+            this.form.id = ps.dps_id;
             this.form.dmddesc = dmd.dmddesc;
             $('#bidderModal').modal('show');
         },
@@ -229,6 +230,7 @@ export default {
             this.form.put('../../api/dmd_price_schedule/'+this.form.id).then(() => {
                 
                 $('#bidderModal').modal('hide');
+
             });
         },
         terminate_bidder(id){
@@ -239,6 +241,7 @@ export default {
             });
         },
         unterminate_bidder(id){
+
             axios.put('../../api/dmd_price_schedule/'+id+"/unterminate").then(() => {
                 
             }).catch(() => {

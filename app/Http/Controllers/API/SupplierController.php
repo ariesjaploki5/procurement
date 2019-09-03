@@ -20,6 +20,8 @@ class SupplierController extends Controller
         $supplier = Supplier::firstOrCreate([
             'supplier_name' => $request->supplier_name,
             'supplier_address' => $request->supplier_address,
+            'zip_code' => $request->zip_code,
+            ''
         ]);
         
         return response()->json();

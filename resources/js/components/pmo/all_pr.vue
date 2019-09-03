@@ -194,15 +194,13 @@
                                     <tr class="text-center">
                                         <th width="5%">#</th>
                                         <th width="20%">Description</th>
-                                        <th width="10%">Request Quantity</th>
                                         <th width="65%">Supplier</th>
                                     </tr>
                                 </thead>
                                 <tbody id="pr_tbody">
                                     <tr v-for="(dmd,index) in rfq_po_form.dmd_purchase_requests" :key="dmd.dmd_id">
                                         <td width="5%">{{ index + 1}}</td>
-                                        <td width="20%">{{ dmd.dmd.dmddesc }}</td>
-                                        <td width="10%" class="text-right">{{ dmd.request_quantity | numeral3 }}</td>
+                                        <td width="20%">{{ dmd.dmddesc }}</td>
                                         <td width="65%">
                                             <select v-model="dmd.dmd_rfq_id" class="form-control form-control-sm">
                                                 <option v-for="dr in dmd.dmd_rfqs" :key="dr.id" :value="dr.id">
@@ -252,12 +250,22 @@ export default {
             rfq_po_form: new Form({
                 purchase_request_id : '',
                 dmd_purchase_requests: [],
-            }),
-            
+                dmd_rfq: [],
+            }),            
         }
     },
     methods:{
-        
+        rfqPo_modal(){
+            axios.get('../../api/pr_dmd_rqf/'+this.view_pr_form.rfq_id).then(({data}) => {
+                console.table(data);
+                this.rfq_po_form.dmd_purchase_requests = data.purchase_request.view_dmd_purchase_requests;
+                this.rfq_po_form.purchase_request_id = this.view_pr_form.purchase_request_id;
+                $('#rfqPoModal').modal('show');
+            }).catch(() => {
+
+            });
+
+        },
         get_prs(){
             axios.get('../../api/pr_for_pmo').then(({data}) => {
                 this.prs = data;
@@ -342,17 +350,7 @@ export default {
 
             });
         },
-        rfqPo_modal(){
-            
-            axios.get('../../api/pr_dmd_rqf/'+this.view_pr_form.purchase_request_id).then(({data}) => {
-                this.rfq_po_form.dmd_purchase_requests = data;
-                this.rfq_po_form = this.view_pr_form.purchase_request_id;
-                $('#rfqPoModal').modal('show');
-            }).catch(() => {
-
-            });
-
-        },
+        
         
         store_po(id){
             this.view_pr_form.put('../../api/purchase_request/'+id).then(() =>{

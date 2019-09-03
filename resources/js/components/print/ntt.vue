@@ -42,8 +42,10 @@
     <div class="row">
         <div class="col nt">
             <div class="row" v-for="p in po" :key="p.dmd_po_id">
-                <div class="col-2 text-center nt all"></div>
-                <div class="col-2 nt text-center top right bottom">{{ p.po_id }}</div>
+                <div class="col-2 text-center nt all">
+                    {{  }}
+                </div>
+                <div class="col-2 nt text-center top right bottom">{{ purchase_order.po_id }}</div>
                 <div class="col-5 nt top right bottom"><small>{{ p.dmddesc }}<br>
                     Brand Name: {{ p.brand_desc }}<br>
                     Dosage Strength & Form: 5mg Film-Coated Tablet<br>

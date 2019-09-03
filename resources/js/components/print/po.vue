@@ -372,8 +372,8 @@
                             <div class="col-5 po all font-weight-bold">
                                 <span>FUND CLUSTER: </span> 
                             </div>
-                            <div class="col po top left right">
-                                <span></span>
+                            <div class="col po top left right font-weight-bold">
+                                <span>{{ purchase_order.fund_cluster_desc }}</span>
                             </div>
                             <div class="col-1 po all"></div>
                         </div>
@@ -396,8 +396,8 @@
                             <div class="col-5 po all font-weight-bold">
                                 <span>FUNDS AVAILABLE:</span> 
                             </div>
-                            <div class="col po top left right">
-                                <span></span>
+                            <div class="col po top left right font-weight-bold">
+                                <span>{{ purchase_order.total_amount | currency2 }}</span>
                             </div>
                             <div class="col-1 po all"></div>
                         </div>
@@ -405,7 +405,7 @@
                     <div class="col po top bottom right">
                         <div class="row">
                             <div class="col-5 po all">ORS / BURS No.:</div>
-                            <div class="col po top left right"></div>
+                            <div class="col po top left right text-center"><small>{{ purchase_order.obrs_no }}</small></div>
                             <div class="col-1 po all"></div>
                         </div>
                     </div>
@@ -425,7 +425,7 @@
                     <div class="col po top bottom right">
                         <div class="row">
                             <div class="col-5 po all">Date of ORS / BURS:</div>
-                            <div class="col po top left right"></div>
+                            <div class="col po top left right text-center">{{purchase_order.obrs_date | myDate3}}</div>
                             <div class="col-1 po all"></div>
                         </div>
                     </div>

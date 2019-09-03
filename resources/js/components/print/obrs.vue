@@ -22,14 +22,14 @@
                                 <span style='font-size:22px;' v-if="purchase_order.ors_burs == 1">&#9746;</span>
                                 <span style='font-size:22px;' v-else>&#9634;</span>
                                     <label class="form-check-label font-weight-bold" for="defaultCheck1">
-                                            <h5>OBLIGATION REQUEST AND STATUS</h5>
+                                            <h6>OBLIGATION REQUEST AND STATUS</h6>
                                     </label>
                             </div>
                             <div class="form-check">
                                 <span style='font-size:22px;' v-if="purchase_order.ors_burs == 2">&#9746;</span>
                                 <span style='font-size:22px;' v-else>&#9634;</span>
                                     <label class="form-check-label font-weight-bold" for="defaultCheck2">
-                                            <h5>BUDGET UTILIZATION REQUEST AND STATUS</h5>
+                                            <h6>BUDGET UTILIZATION REQUEST AND STATUS</h6>
                                     </label>
                             </div>
                         </div>
@@ -612,6 +612,9 @@ export default {
     }
     div.bheight {
         height: 20px;
+    }
+    .dheaight {
+        height: 23.5px;
     }
     #footer {
         position: fixed;

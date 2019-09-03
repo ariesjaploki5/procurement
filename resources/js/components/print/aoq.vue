@@ -1,5 +1,5 @@
 <template>
-<div id="f01" class="orientation">
+<div id="f01">
      <div class="row">
             <div class="col">
                 <router-link to="/request_for_quotation" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>

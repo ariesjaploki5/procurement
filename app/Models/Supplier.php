@@ -10,6 +10,8 @@ class Supplier extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'supplier_name', 'supplier_address', 'tel_no'
+        'supplier_name', 'supplier_address', 'tel_no', 'zip_code', 
+        'tin', 'tax_registration', 'income_tax',
+        'business_form', 'created+_at'
     ];
 }

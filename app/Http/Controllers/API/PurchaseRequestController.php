@@ -14,6 +14,7 @@ use DB;
 use App\Models\DmdRfq;
 use App\Models\Cart;
 use App\Views\DmdPrDmdPo;
+use App\Models\RequestForQuotation;
 
 class PurchaseRequestController extends Controller
 {
@@ -416,7 +417,8 @@ class PurchaseRequestController extends Controller
 
     public function pr_dmd_rqf($id){
 
-        $data = DB::table("fn_get_pr_dmd_rqf($id)")->get();
+        // $data = DB::table("fn_get_pr_dmd_rqf($id)")->get();
+        // $data = 
         
         return response()->json($data);
     }

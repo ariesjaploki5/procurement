@@ -75,6 +75,8 @@ import cmps_dmd from './components/div_head/dmds.vue';
 import mmo_po from './components/mmo/all_po.vue';
 import mmo_dmd from './components/mmo/drugs_and_medicines.vue';
 import dmd_po from './components/mmo/dmd_po.vue';
+import mmo_dvs from './components/mmo/dv.vue';
+import mmo_iar from './components/mmo/iar.vue';
 
 import aoq from './components/print/aoq';
 import app from './components/print/app';
@@ -98,6 +100,18 @@ import consignment_requests from './components/pharmacy/consignment_request.vue'
 import others from './components/others/main.vue';
 
 export const routes = [
+    {
+        path: '/mmo_dvs',
+        component: mmo_dvs,
+        name: 'mmo_dvs',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/mmo_iar',
+        component: mmo_iar,
+        name: 'mmo_iar',
+        meta: { requiresAuth: true }
+    },
     {
         path: '/cmps_dmd',
         component: cmps_dmd,
@@ -218,6 +232,12 @@ export const routes = [
         path: '/app/:id',
         component: app,
         name: 'app',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/dv/:id',
+        component: dv,
+        name: 'dv',
         meta: { requiresAuth: true }
     },
     {
