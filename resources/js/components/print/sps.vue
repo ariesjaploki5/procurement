@@ -94,7 +94,7 @@
 
             <div class="col-2 sps all bheight text-center">5.</div>
             <div class="col-7 sps all">Monthly Average Consumption</div>
-            <div class="col sps top left right text-center font-weight-bold">{{ dmd_pr.mvc | numeral3 }}</div>
+            <div class="col sps top left right text-center font-weight-bold">{{ dmd_pr.ssl/ 2 | numeral3 }}</div>
             <div class="w-100"></div>
 
             <div class="col-2 sps all bheight text-center">6.</div>

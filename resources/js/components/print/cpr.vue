@@ -1,175 +1,188 @@
 <template>
-    <div id="pr1">
-      <div class="row">
-            <div class="col">
-                <router-link to="/consignment_requests" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
-            </div>
-            <div class="col">
-                <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
-            </div>
-        </div>
-        <div id="content-wrapper">
-            <div class="col-lg-12">
-                <table class="table table-condensed table-sm a" style="margin-top: 1%">
-                    <tr>
-                        <td rowspan="7" class="pr1 border-right-0"><img :src="'/img/bghmc.png'" style="margin-left: 0%; margin-top: 15%" width="150" height="150"></td>
-                        <td colspan="5" class="pr1 border-bottom-0 text-center" id="pr1">Republic of the Philippines</td>
-                    </tr>
-                    <td colspan="5" class="pr1 border-top-0 border-bottom-0 text-center">Department of Health</td>
-                    <tr>
-                        <td colspan="5" class="pr1 border-top-0 border-bottom-0 text-center"><b>BAGUIO GENERAL HOSPITAL AND MEDICAL CENTER</b></td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" class="pr1 border-top-0 text-center">Baguio City</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="3" class="pr1 text-center" width="40%"><br><b><h2>CONSIGNMENT REQUEST</h2></b></td>
-                        <td class="pr1" colspan="4">Form No.: HS - PS - 001</td>
-                    </tr>
-                    <td class="pr1" colspan="4">Revision No.: 3</td>
-                    <tr>
-                        <td class="pr1" colspan="4">Effectivity Date: January 1, 2016</td>
-                    </tr>
-                    <td class="pr1" colspan="7"></td>
-                    <tr>
-                        <td class="pr1 border-right-0 border-bottom-0" colspan="1" width="15%">Department: </td>
-                        <td class="pr1 border-left-0 border-right-0" width="10%"><b>MEDICAL SERVICES</b></td>
-                        <td class="pr1 border-left-0 border-right-0 border-bottom-0" width="12.5%">PR No.:</td>
-                        <td class="pr1 border-left-0 border-right-0 text-left" width="11%"><b>{{ cpr.crID}}</b></td>
-                        <td class="pr1 border-left-0 border-right-0 border-bottom-0" width="1%">Date: </td>
-                        <td class="pr1 border-left-0" width=""><b>{{ cpr.crDate | myDate3 }}</b></td>
-                    </tr>
-                    <tr>
-                        <td class="pr1 border-right-0 border-top-0 border-bottom-0" colspan="1" width="15%">Section: </td>
-                        <td class="pr1 border-left-0 border-right-0"><b>PHARMACY</b></td>
-                        <td class="pr1 border-0">SAI No.:</td>
-                        <td class="pr1 border-left-0 border-right-0" width=""></td>
-                        <td class="pr1 border-0" width="">Date: </td>
-                        <td class="pr1 border-left-0"></td>
-                    </tr>
-                    <tr>
-                        <td class="pr1 border-right-0 border-top-0 border-bottom-0" colspan="1" width="15%"></td>
-                        <td class="pr1 border-left-0 border-right-0 border-bottom-0"><b></b></td>
-                        <td class="pr1 border-0"><small>ORS No./BURS No:</small></td>
-                        <td class="pr1 border-left-0 border-right-0"></td>
-                        <td class="pr1 border-0" width="">Date: </td>
-                        <td class="pr1 border-left-0"></td>
-                    </tr>
-                    <td class="pr1 border-top-0" colspan="7"></td>
-                </table>
-                <table id="table_height" class="table table-condensed table-sm table-sm" style="margin-top: -1.65%; height: 47rem;">
-                    <tr style="height: 1rem;">
-                        <td class="pr1 text-center" width="5%"><b>Item No.</b></td>
-                        <td class="pr1 text-center" width="5%"><b>Qty.</b></td>
-                        <td class="pr1 text-center" width="7%"><b>Unit of Issue</b></td>
-                        <td class="pr1 text-center"><b>Item Description</b></td>
-                        <td class="pr1 text-center" width="5%"><b>Stock No.</b></td>
-                        <td class="pr1 text-center" width="15%"><b>Estimated Unit Cost</b></td>
-                        <td class="pr1 text-center" width="15%"><b>Estimated Cost</b></td>
-                    </tr>
-                    <!--Line 1 -->
-                    <tr class="prpr" v-for="(md, index) in cpr.details" :key="md.id">
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ index+1 }}</td>
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="5%">{{ md.itemQty }}</td>
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="7%"></td>
-                        <td class="pr border-top-0 border-bottom-0 text-center"><h6>{{ md.mds_consignment.cl1desc }}{{ md.mds_consignment.cl2desc }}</h6></td>
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="7%"></td>
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="15%">{{ md.itemPrice | currency2 }}</td>
-                        <td class="pr border-top-0 border-bottom-0 text-center" width="15%">
-                            <span v-if="md.itemQty">{{ md.itemQty * md.itemPrice | currency2 }}</span>
-                            <span v-else></span>
-                        </td>
-                    </tr>
-                     <!--Name of Supplier  -->
-                    <tr>
-                        <td class="pur border-top-0 border-bottom-0 text-center" width="5%"></td>
-                        <td class="pur border-top-0 border-bottom-0 text-center" width="5%"></td>
-                        <td class="pur border-top-0 border-bottom-0 text-center" width="7%"></td>
-                        <td class="pur border-top-0 border-bottom-0 text-center font-weight-bold"><!--(Supplier Name)--></td>
-                        <td class="pur border-top-0 border-bottom-0 text-center" width="7%"></td>
-                        <td class="pur border-top-0 border-bottom-0 text-center" width="15%"></td>
-                        <td class="pur border-top-0 border-bottom-0 text-center" width="15%"><b></b></td>
-                    </tr>
-                     <!--Total Amount  -->
-                    <tr>
-                        <td class="pur border-top-0 border-bottom-0"></td>
-                        <td class="pur border-top-0 border-bottom-0"></td>
-                        <td class="pur border-top-0 border-bottom-0"></td>
-                        <td class="pur border-top-0 border-bottom-0"></td>
-                        <td class="pur border-top-0 border-bottom-0"></td>
-                        <td class="pur border-top-0 border-bottom-0"></td>
-                        <td class="pr1 border-top-0 border-left-0 text-center align-bottom" style="border-bottom:double" width="15%"><b><span>{{ estimated_cost | currency2 }}</span></b></td>
-                    </tr>
-                    
-                </table>
-                <table class="table table-condensed table-borderless table-sm a" style="margin-top: -1.7%">
-                    <tr>
-                        <td class="pr1 border-top-0" colspan="6"></td>
-                    </tr>
-                    <tr>
-                        <td class="pr1 border-right-0 border-top-0">Purpose:</td>
-                        <td class="pr1 border-left-0 border-top-0 text-center text-uppercase" colspan="5"><b>{{ cpr.purpose }} - {{ cpr.hperson.patfirst }} {{ cpr.hperson.patmiddle }} {{ cpr.hperson.patlast }} - {{ cpr.hperson.hpercode }}</b></td>
-                    </tr>
-                    <tr>
-                        <td class="pr1 border-top-0" colspan="6"><b>Required Attachments:</b> <i class="text-primary">(For Procurement Management Office use only)</i></td>
-                    </tr>
-                    <tr>
-                        <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
-                        <td class="pr1 border-0">Stock Position Sheet for Consumables</td>
-                        <td width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
-                        <td>Acknowledgement Receipt for Equipment</td>
-                        <td class="pr1 border-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-bottom-0">Certificate of No suitable subtitute</td>
-                    </tr>
-                    <!-- {{-- ROW 2 --}} -->
-                    <tr>
-                        <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
-                        <td class="pr1 border-0">Justification for none inclusion in the PPMP</td>
-                        <td width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
-                        <td><small>Biomedical Service Report / MIS Service Report</small></td>
-                        <td class="pr1 border-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-bottom-0"><small>Certificate of Exclusive Distributorship</small></td>
-                    </tr>
-                    <!-- {{-- ROW 3 --}} -->
-                    <tr>
-                        <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
-                        <td class="pr1 border-0"><small>Complete generic specification of item/s requested</small></td>
-                        <td width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
-                        <td>Scope of Work / Detailed Estimate</td>
-                        <td class="pr1 border-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
-                        <td class="pr1 border-top-0 border-left-0 border-bottom-0">Price Quotation</td>
-                    </tr>
-                    <tr>
-                        <td class="pr1 border-top-0 border-right-0 border-bottom-0" width="3%"><input type="checkbox" style="width: 25px; height: 25px"></td>
-                        <td class="pr1 border-0">Others:</td>
-                        <td class="pr1 border-top-0 border-left-0 border-bottom-0" colspan="4"></td>
-                    </tr>
-                </table>
-                <table class="table table-condensed table-sm table-sm a" style="margin-top: -1.7%">
-                    <tr>
-                        <td class="pr1" width="20%"></td>
-                        <td class="pr1">Requested By:</td>
-                        <td class="pr1">Approved By:</td>
-                    </tr>
-                    <tr>
-                        <td class="pr1">Signature:</td>
-                        <td class="pr1"></td>
-                        <td class="pr1"></td>
-                    </tr>
-                    <tr>
-                        <td class="pr1">Printed Name:</td>
-                        <td class="pr1 text-center"><b>RISCILLA E. LAZATIN, MPA</b></td>
-                        <td class="pr1 text-center"><b>RAY P. SUANDING, MD, FPCP, FPCCP</b></td>
-                    </tr>
-                    <tr>
-                        <td class="pr1">Designation:</td>
-                        <td class="pr1 text-center">Pharmacist IV</td>
-                        <td class="pr1 text-center">Chief Medical Professional Staff II</td>
-                    </tr>
-                </table>
+<div class="container">
+    <button class="btn btn-primary d-print-none button ml-2 mb-2" onclick="print()">Print</button>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="row bottom">
+                <div class="pr col-3 bottom right">
+                    <img :src="'/img/bghmc.png'" class="img-thumbnail">
+                </div>
+                <div class="pr col bottom">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="pr all text-center">Republic of the Philippines</div>
+                            <div class="pr all text-center">Department of Health</div>
+                            <div class="pr all text-center font-weight-bold">BAGUIO GENERAL HOSPITAL AND MEDICAL CENTER</div>
+                            <div class="pr all text-center">Baguio City</div>
+                        </div>
+                    </div>
+                    <div class="row pr left right bottom">
+                        <div class="col mt-3">
+                            <div class="text-center"><h1>CONSIGNMENT REQUEST</h1></div>
+                        </div>
+                        <div class="row">
+                            <div class="col ml-2 mr-1">
+                                <div class="col pr top bottom right">Form No.: HS - PS - 001</div>
+                                <div class="col pr bottom right">Revision No.: 3</div>
+                                <div class="col pr bottom right">Effectivity Date: September 1, 2016</div>   
+                            </div>
+                        </div>
+                    </div> 
+                </div>
             </div>
         </div>
     </div>
+    <div class="row"> 
+        <div class="col pr bottom aheight">
+        </div> 
+    </div>
+    <div class="row">
+        <div class="col-6 pr all">
+            <div class="row">
+                <div class="col-3 pr bottom right"><span>Department:</span> </div>
+                <div class="col-5 pr right left font-weight-bold">MEDICAL SERVICES</div>
+            </div>
+        </div>
+        <div class="col-3 pr all">
+            <div class="row">
+                <div class="col-6 pr left bottom right"><span>PR No.:</span></div>
+                <div class="col pr left right font-weight-bold"><small>{{ cpr.crID}}</small></div>
+            </div>
+        </div>
+        <div class="col-3 pr all">
+            <div class="row">
+                <div class="col-3 pr left bottom right"><span>Date:</span></div>
+                <div class="col pr left right font-weight-bold">{{ cpr.crDate | myDate3 }}</div>
+                <div class="col-1 pr left bottom "></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 pr all">
+            <div class="row">
+                <div class="col-3 pr top bottom right"><span>Section:</span> </div>
+                <div class="col-5 pr top right left font-weight-bold">PHARMACY</div>
+            </div>
+        </div>
+        <div class="col-3 pr all">
+            <div class="row">
+                <div class="col-6 pr top left bottom right"><span>SAI No.:</span></div>
+                <div class="col pr top left right"></div>
+            </div>
+        </div>
+        <div class="col-3 pr all">
+            <div class="row">
+                <div class="col-3 pr top left bottom right"><span>Date:</span></div>
+                <div class="col pr top left right"></div>
+                <div class="col-1 pr top left bottom "></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 pr all">
+            <div class="row">
+                <div class="col-3 pr top bottom right text-white">1</div>
+                <div class="col pr all"></div>
+            </div>
+        </div>
+        <div class="col-3 pr all">
+            <div class="row">
+                <div class="col-6 pr top left bottom right"><small><span>ORS/BURS No.:</span></small></div>
+                <div class="col pr top left right"></div>
+            </div>
+        </div>
+        <div class="col-3 pr all">
+            <div class="row">
+                <div class="col-3 pr top left bottom right"><span>Date:</span></div>
+                <div class="col pr top left right"></div>
+                <div class="col-1 pr top left bottom "></div>
+            </div>
+        </div>
+    </div>
+    <div class="row"> 
+        <div class="col pr top aheight">
+        </div> 
+    </div>
+    <div class="row"> 
+        <div class="col pr top right text-center font-weight-bold"><span>Item No.</span></div>
+        <div class="col pr top right text-center font-weight-bold"><span>Qty</span></div>
+        <div class="col pr top right text-center font-weight-bold"><span>Unit of Issue</span></div>
+        <div class="col-4 pr top right text-center font-weight-bold"><span>Item Description</span></div>
+        <div class="col pr top right text-center font-weight-bold"><span>Stock No.</span></div>
+        <div class="col-2 pr top right text-center font-weight-bold"><span>Estimated Unit Cost</span></div>
+        <div class="col-2 pr top text-center font-weight-bold"><span>Estimated Cost</span></div>
+    </div>
+    <div class="row cheight" v-for="(md, index) in cpr.details" :key="md.id"> 
+        <div class="col pr top right bottom text-center font-weight-bold"><span>{{ index+1 }}</span></div>
+        <div class="col pr top right bottom text-center font-weight-bold"><span>{{ md.itemQty }}</span></div>
+        <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
+        <div class="col-4 pr top right bottom text-center font-weight-bold"><span>{{ md.mds_consignment.cl1desc }}{{ md.mds_consignment.cl2desc }}</span></div>
+        <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
+        <div class="col-2 pr top right bottom text-center font-weight-bold"><span>{{ md.itemPrice | currency2 }}</span></div>
+        <div class="col-2 pr top bottom text-center font-weight-bold">
+                <span v-if="md.itemQty">{{ md.itemQty * md.itemPrice | currency2 }}</span>
+                <span v-else></span></div>
+    </div>
+    <div class="row">
+        <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
+        <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
+        <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
+        <div class="col-4 pr top right bottom text-center font-weight-bold"><span></span></div>
+        <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
+        <div class="col-2 pr top right bottom text-center font-weight-bold"><span></span></div>
+        <div class="col-2 pr top text-center font-weight-bold" style="border-bottom:double"><span>{{ estimated_cost | currency2 }}</span></div>
+    </div>
+    <div class="row">
+        <div class="col pr top aheight"></div>
+    </div>
+    <div class="row">
+        <div class="col-2 pr right top"><span>Purpose</span></div>
+        <div class="col pr left top"><span>{{ cpr.purpose }} - {{ cpr.hperson.patfirst }} {{ cpr.hperson.patmiddle }} {{ cpr.hperson.patlast }} - {{ cpr.hperson.hpercode }}</span></div>
+    </div>
+    <div class="row">
+        <div class="col-3 pr right top font-weight-bold"><span>Required Attachments:</span></div>
+        <div class="col pr left top text-primary font-italic"><span>(For Procurement Management Office only)</span></div>
+    </div>
+    <div class="row">
+        <div class="col pr top bottom right"><input type="checkbox"><span> Stock Position Sheet for Consumables</span></div>
+        <div class="col pr top bottom all"><input type="checkbox"><span> Acknowledgement Receipt for Equipment</span></div>
+        <div class="col pr top bottom left"><input type="checkbox"><span> Certificate of No suitable subtitute</span></div>
+        <div class="w-100"></div>
+        <div class="col pr top bottom right"><input type="checkbox"><span> Justification for none inclusion in the PPMP</span></div>
+        <div class="col pr top bottom all"><input type="checkbox"><span> Biomedical Service Report / MIS Service Report</span></div>
+        <div class="col pr top bottom left"><input type="checkbox"><span> Certificate of Exclusive Distributorship</span></div>
+        <div class="w-100"></div>
+        <div class="col pr top bottom right"><input type="checkbox"><span> Complete generic specification of item/s requested</span></div>
+        <div class="col pr top bottom all"><input type="checkbox"><span> Scope of Work / Detailed Estimate</span></div>
+        <div class="col pr top bottom left"><input type="checkbox"><span> Price Quotation</span></div>
+        <div class="w-100"></div>
+        <div class="col pr top"><input type="checkbox"><span> Others</span></div>
+    </div>
+    <div class="row">
+        <div class="col pr top aheight"></div>
+    </div>
+    <div class="row">
+        <div class="col-2 pr top right"></div>
+        <div class="col-5 pr top"><span>Requested By:</span></div>
+        <div class="col-5 pr top left"><span>Approved By:</span></div>
+    </div>
+    <div class="row">
+        <div class="col-2 pr top right"><span>Signature:</span></div>
+        <div class="col-5 pr top"></div>
+        <div class="col-5 pr top left "></div>
+    </div>
+    <div class="row">
+        <div class="col-2 pr top right"><span>Printed Name:</span></div>
+        <div class="col-5 pr top text-center font-weight-bold"><span>RISCILLA E. LAZATIN, MPA</span></div>
+        <div class="col-5 pr top left text-center font-weight-bold"><span>RAY P. SUANDING, MD, FPCP, FPCCP</span></div>
+    </div>
+    <div class="row">
+        <div class="col-2 pr top right"><span>Printed Name:</span></div>
+        <div class="col-5 pr top text-center"><span>Pharmacist IV</span></div>
+        <div class="col-5 pr top left text-center"><span>Chief Medical Professional Staff II</span></div>
+    </div>
+</div>
 </template>
 
 <script>
@@ -211,54 +224,62 @@
 </script>
 
 <style lang="scss">
-  #content-wrapper {
-        background-color: rgb(255, 255, 255) !important;
-    }
-    @font-face {
+      @font-face {
         font-family: 'Helvetica';
         src: url('https://fonts.googleapis.com/css?family=Helvetica');
         font-weight: normal;
         font-style: normal;
     }
+    .container {
+        border: none;
+    }
 
-    div#pr1 {
+    .img-thumbnail {
+        border: none;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 65%;
+    }
+
+    .font {
         font-family: 'Helvetica', sans-serif;
     }
-    tr.prpr{
-        padding-top: none;
-        padding-bottom: none;
-    }
 
-    td.pr1 {
+    .pr {
         border-collapse: collapse;
         border: 1px solid black;
-        margin: 0px;
-        padding: none;
-        padding-top: 0px;
     }
 
-    td.pr {
-        border-collapse: collapse;
-        border: 1px solid black;
-        margin: 0px;
-        padding: none;
-        padding-bottom: 0px;
+    .top {
+        border-top: none;
     }
 
-    td.pur {
-        border-collapse: collapse;
-        border: 1px solid black;
-        margin: 0px;
-        padding: none;
-        padding-bottom: 15px;
+    .bottom {
+        border-bottom: none;
     }
 
-    table #t01 th {
-        background-color: rgb(184, 172, 172) !important;
-        border: 1px solid black;
-        color: black;
-        margin: 0px;
-        padding: none;
+    .left {
+        border-left: none;
     }
 
+    .right {
+        border-right: none;
+    }
+
+    .all {
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        border-bottom: none;
+    }
+    .aheight {
+        height: 5px;
+    }
+    .bheight {
+        height: 20px;
+    }
+    .cheight {
+        height: 300px;
+    }   
 </style>

@@ -1,597 +1,441 @@
 <template>
-<div id="f01">
-     <div class="row">
-            <div class="col">
-                <router-link to="/request_for_quotation" tag="button" class="btn btn-secondary d-print-none float-left"><i class="fas fa-arrow-left ml-2"></i> Back</router-link>
+    <div class="container landscape">
+        <button class="btn btn-primary d-print-none button ml-2 mb-2" onclick="print()">Print</button>
+        <div class="row">
+            <div class="col-12">
+                <div class="row bottom">
+                    <div class="aoq col-3 bottom right">
+                        <img :src="'/img/bghmc.png'" class="img-thumbnail" />
+                    </div>
+                    <div class="aoq col bottom">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="aoq all text-center">Republic of the Philippines</div>
+                                <div class="aoq all text-center">Department of Health</div>
+                                <div class="aoq all text-center font-weight-bold">BAGUIO GENERAL HOSPITAL AND MEDICAL
+                                    CENTER</div>
+                                <div class="aoq all text-center">Baguio City</div>
+                            </div>
+                        </div>
+                        <div class="row aoq left right bottom">
+                            <div class="col mt-3">
+                                <div class="text-center">
+                                    <h1>ABSTRACT OF QUOTATION</h1>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col ml-2 mr-1">
+                                    <div class="col aoq top bottom right">Form No.: HS – PS-010</div>
+                                    <div class="col aoq bottom right">Revision No.: Ø</div>
+                                    <div class="col aoq bottom right">Effectivity Date: August 1, 2014</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col">
-                <button class="btn btn-primary d-print-none button float-right" onclick="print()"><i class="fas fa-print ml-2"></i> Print</button>
-            </div>
-        </div>
-    <div id="content-wrapper">
-        <div class="col-lg-12">
-            <table class="table table-condensed table-sm a" style="margin-top: 1%">
-                <tr>
-                    <td class="pr1 border-right-0" rowspan="8"><img :src="'/img/bghmc.png'" style="margin-left: 15%; margin-top: 3%" width="150" height="150"></td>
-                    <td class="pr1 border-bottom-0" colspan="5" id="pr1">
-                        <center>Republic of the Philippines</center>
-                    </td>
-                </tr>
-                <td class="pr1 border-top-0 border-bottom-0" colspan="5">
-                    <center>Department of Health</center>
-                </td>
-                <tr>
-                    <td class="pr1 border-top-0 border-bottom-0" colspan="5">
-                        <center><b>BAGUIO GENERAL HOSPITAL AND MEDICAL CENTER</b></center>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1 border-top-0" colspan="5">
-                        <center>Baguio City</center>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1" rowspan="3" width="40%">
-                        <center><br><b><h3>ABSTRACT OF QUOTATION</h3></b></center>
-                    </td>
-                    <td class="pr1" colspan="4">Form No.: HS – PS-010</td>
-                </tr>
-                <td class="pr1" colspan="4">Revision No.: Ø</td>
-                <tr>
-                    <td class="pr1" colspan="4">Effectivity Date: August 1, 2014</td>
-                </tr>
-            </table>
-            <table class="table table-condensed table-borderless border-0 table-sm" style="margin-top:-1.2%">
-                <tr>
-                    <td colspan="2"></td>
-                    <td width="15%">PR No.:</td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="20%">
-                        <span v-if="aoq.pr.purchase_request_id">{{ aoq.pr.created_at | myDate }} - {{ aoq.pr.purchase_request_id | numeral2 }}</span>
-                        
-                    </td>
-                </tr>
-                <td colspan="2">Canvassed By:</td>
-                <td>AOQ No.:</td>
-                <td class="pr1 border-top-0 border-left-0 border-right-0" width="20%">
-                    <span v-if="aoq.pr.purchase_request_id">{{ aoq.pr.created_at | myDate }} - {{ aoq.pr.purchase_request_id | numeral2 }}</span>
-                        
-                </td>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Date:</td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="20%">
+            <div class="col-12 aoq all">
+                <div class="row">
+                    <div class="col-3 aoq left right bottom bheight"></div>
+                    <div class="col-4 aoq left right bottom"></div>
+                    <div class="col-1 aoq left right bottom"></div>
+                    <div class="col-1 aoq left right bottom"></div>
+                    <div class="col-2 aoq left bottom right"></div>
+                    <div class="col-1 aoq left right bottom"></div>
+                    <div class="w-100"></div>
+
+                    <div class="col-3 aoq all">Canvassed by:</div>
+                    <div class="col-4 aoq top left right"></div>
+                    <div class="col-1 aoq all"></div>
+                    <div class="col-2 aoq all">PR No.:</div>
+                    <div class="col-2 aoq top left right font-weight-bold">
+                        <span v-if="aoq.pr.purchase_request_id">{{ aoq.pr.created_at | myDate }} -
+                            {{ aoq.pr.purchase_request_id | numeral2 }}</span>
+                    </div>
+                    <div class="col-1 aoq all"></div>
+                    <div class="w-100"></div>
+
+                    <div class="col-3 aoq all"></div>
+                    <div class="col-4 aoq top left right"></div>
+                    <div class="col-1 aoq all"></div>
+                    <div class="col-2 aoq all">AOQ No.:</div>
+                    <div class="col-2 aoq top left right"></div>
+                    <div class="col-1 aoq all"></div>
+                    <div class="w-100"></div>
+
+                    <div class="col-3 aoq all"></div>
+                    <div class="col-4 aoq all"></div>
+                    <div class="col-1 aoq all"></div>
+                    <div class="col-2 aoq all">Date:</div>
+                    <div class="col-2 aoq top left right font-weight-bold">
                         <span v-if="aoq.pr.created_at">{{ aoq.pr.created_at | myDate3 }}</span>
-                        
-                    </td>
-                </tr>
-            </table>
-            <table class="table table-condensed border-top-0 border-left-0 border-right-0 table-sm" v-if="aoq.dmd_rfqs.length == 5">
-                <tr class="" >
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" colspan="4"></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="10%" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <b>
-                            <center>
-                                <span v-if="rfq.supplier_name">{{ rfq.supplier_name  }}</span>
-                                <span v-else></span>
-                            </center>
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Item No.</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Qty</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="10%">
-                        <center><b>Unit</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="25%">
-                        <center><b>ARTICLES</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>1</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>2</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>3</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>4</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>5</b></center>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1">
-                        <center>1</center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center>{{ aoq.dmddesc }}</center>
-                    </td>
-                    <td class="pr1" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <center>{{ rfq.cost_unit | currency2 }}</center>
-                    </td>
-                </tr>
-            </table>
-            <table class="table table-condensed border-top-0 border-left-0 border-right-0 table-sm" v-if="aoq.dmd_rfqs.length == 5">
-                <tr class="" >
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" colspan="4"></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="10%" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <b>
-                            <center>
-                                <span v-if="rfq.supplier_name">{{ rfq.supplier_name  }}</span>
-                                <span v-else></span>
-                            </center>
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Item No.</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Qty</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="10%">
-                        <center><b>Unit</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="25%">
-                        <center><b>ARTICLES</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>1</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>2</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>3</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>4</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>5</b></center>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1">
-                        <center>1</center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center>{{ aoq.dmddesc }}</center>
-                    </td>
-                    <td class="pr1" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <center>{{ rfq.cost_unit | currency2 }}</center>
-                    </td>
-                </tr>
-            </table>
-            <table class="table table-condensed border-top-0 border-left-0 border-right-0 table-sm" v-if="aoq.dmd_rfqs.length == 1">
-                <tr class="" >
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" colspan="4"></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="10%" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <b>
-                            <center>
-                                <span v-if="rfq.supplier_name">{{ rfq.supplier_name  }}</span>
-                                <span v-else></span>
-                            </center>
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Item No.</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Qty</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="10%">
-                        <center><b>Unit</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="25%">
-                        <center><b>ARTICLES</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>1</b></center>
-                    </td>
-                    <td class="pr1 ">
-                        <center><b>2</b></center>
-                    </td>
-                    <td class="pr1 ">
-                        <center><b>3</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>4</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>5</b></center>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1">
-                        <center>1</center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1 text-center">
-                        {{ aoq.formdesc }}
-                    </td>
-                    <td class="pr1 text-center">
-                        {{ aoq.dmddesc }}
-                    </td>
-                    <td class="pr1 text-center" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        {{ rfq.cost_unit | currency2 }}
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                </tr>
-            </table>
-            <table class="table table-condensed border-top-0 border-left-0 border-right-0 table-sm" v-if="aoq.dmd_rfqs.length == 2">
-                <tr class="" >
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" colspan="4"></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="10%" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <b>
-                            <center>
-                                <span v-if="rfq.supplier_name">{{ rfq.supplier_name  }}</span>
-                                <span v-else></span>
-                            </center>
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Item No.</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Qty</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="10%">
-                        <center><b>Unit</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="25%">
-                        <center><b>ARTICLES</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>1</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>2</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>3</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>4</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>5</b></center>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1">
-                        <center>1</center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center>{{ aoq.dmddesc }}</center>
-                    </td>
-                    <td class="pr1" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <center>{{ rfq.cost_unit | currency2 }}</center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                </tr>
-            </table>
-            <table class="table table-condensed border-top-0 border-left-0 border-right-0 table-sm" v-if="aoq.dmd_rfqs.length == 3">
-                <tr class="" >
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" colspan="4"></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="10%" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <b>
-                            <center>
-                                <span v-if="rfq.supplier_name">{{ rfq.supplier_name  }}</span>
-                                <span v-else></span>
-                            </center>
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Item No.</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Qty</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="10%">
-                        <center><b>Unit</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="25%">
-                        <center><b>ARTICLES</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>1</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>2</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>3</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>4</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>5</b></center>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1">
-                        <center>1</center>
-                    </td>
-                    <td class="pr1 text-center">
-                        
-                    </td>
-                    <td class="pr1 text-center">
-                         {{ aoq.formdesc }}
-                    </td>
-                    <td class="pr1 text-center">
-                        {{ aoq.dmddesc }}
-                    </td>
-                    <td class="pr1 text-center" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        {{ rfq.cost_unit | currency2 }}
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                </tr>
-            </table>
-            <table class="table table-condensed border-top-0 border-left-0 border-right-0 table-sm" v-if="aoq.dmd_rfqs.length == 4">
-                <tr class="" >
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" colspan="4"></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="10%" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <b>
-                            <center>
-                                <span v-if="rfq.supplier_name">{{ rfq.supplier_name  }}</span>
-                                <span v-else></span>
-                            </center>
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Item No.</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Qty</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="10%">
-                        <center><b>Unit</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="25%">
-                        <center><b>ARTICLES</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>1</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>2</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>3</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>4</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>5</b></center>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1">
-                        <center>1</center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center>{{ aoq.dmddesc }}</center>
-                    </td>
-                    <td class="pr1" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <center>{{ rfq.cost_unit | currency2 }}</center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                </tr>
-            </table>
-            <table class="table table-condensed border-top-0 border-left-0 border-right-0 table-sm" v-if="aoq.dmd_rfqs.length == 5">
-                <tr class="" >
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" colspan="4"></td>
-                    <td class="pr1 border-top-0 border-left-0 border-right-0" width="10%" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <b>
-                            <center>
-                                <span v-if="rfq.supplier_name">{{ rfq.supplier_name  }}</span>
-                                <span v-else></span>
-                            </center>
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Item No.</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="5%">
-                        <center><b>Qty</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="10%">
-                        <center><b>Unit</b></center>
-                    </td>
-                    <td class="pr1 border-top" width="25%">
-                        <center><b>ARTICLES</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>1</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>2</b></center>
-                    </td>
-                    <td class="pr1 border-top">
-                        <center><b>3</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>4</b></center>
-                    </td>
-                    <td class="pr1">
-                        <center><b>5</b></center>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="pr1">
-                        <center>1</center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center></center>
-                    </td>
-                    <td class="pr1">
-                        <center>{{ aoq.dmddesc }}</center>
-                    </td>
-                    <td class="pr1" v-for="rfq in aoq.dmd_rfqs" :key="rfq.id">
-                        <center>{{ rfq.cost_unit | currency2 }}</center>
-                    </td>
-                </tr>
-            </table>
-
-            <!--{{--SIGNATORIES  --}}-->
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm"></div>
-                    <div class="col-sm">Approved:</div>
+                    </div>
+                    <div class="col-1 aoq all"></div>
                 </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm"><b><u>SAMPLE1</u></b></div>
-                    <div class="col-sm-5"><b>SAMPLE2</b></div>
-                </div>
+            </div>
 
+            <div class="col-12 bheight"></div>
+
+            <div class="row" v-if="aoq.dmd_rfqs.length == 1">
+                <div class="col-12 aoq all">
+                    <div class="row">
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-4 aoq all"></div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" v-for="rfq in aoq.dmd_rfqs"
+                            :key="rfq.id">
+                            <i><small><span v-if="rfq.supplier_name">{{ rfq.supplier_name }}</span>
+                                    <span v-else></span></small></i>
+                        </div>
+                        <div class="col-1 aoq all font-weight-bold text-center"></div>
+                        <div class="col-1 aoq all font-weight-bold left text-center">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 aoq">
+                    <div class="row">
+                        <div class="col-1 aoq all font-weight-bold right text-center" width="5%">Item No.</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center" width="5%">Qty</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" width="10%">Unit</div>
+                        <div class="col-4 aoq top bottom font-weight-bold text-center" width="25%">Articles</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center">1</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center">2</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center">3</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center">4</div>
+                        <div class="col-1 aoq all font-weight-bold left text-center">5</div>
+                    </div>
+                </div>
+                <div class="col-12 aoq top">
+                    <div class="row">
+                        <div class="col-1 aoq all font-weight-bold right text-center" width="5%"></div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center" width="5%"></div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" width="10%"></div>
+                        <div class="col-4 aoq top bottom font-weight-bold text-center" width="25%">{{ aoq.dmddesc }}
+                        </div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" v-for="rfq in aoq.dmd_rfqs"
+                            :key="rfq.id"><small>{{ rfq.cost_unit | currency2 }}</small></div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center"></div>
+                        <div class="col-1 aoq top bottom font-weight-bold left text-center"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" v-if="aoq.dmd_rfqs.length == 2">
+                <div class="col-12 aoq all">
+                    <div class="row">
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-4 aoq all"></div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" v-for="rfq in aoq.dmd_rfqs"
+                            :key="rfq.id">
+                            <i><small><span v-if="rfq.supplier_name">{{ rfq.supplier_name }}</span>
+                                    <span v-else></span></small></i>
+                        </div>
+                        <div class="col-1 aoq all font-weight-bold text-center"></div>
+                        <div class="col-1 aoq all font-weight-bold left text-center">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 aoq">
+                    <div class="row">
+                        <div class="col-1 aoq all font-weight-bold right text-center" width="5%">Item No.</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center" width="5%">Qty</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" width="10%">Unit</div>
+                        <div class="col-4 aoq top bottom font-weight-bold text-center" width="25%">Articles</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center">1</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center">2</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center">3</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center">4</div>
+                        <div class="col-1 aoq all font-weight-bold left text-center">5</div>
+                    </div>
+                </div>
+                <div class="col-12 aoq top">
+                    <div class="row">
+                        <div class="col-1 aoq all font-weight-bold right text-center" width="5%"></div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center" width="5%"></div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" width="10%"></div>
+                        <div class="col-4 aoq top bottom font-weight-bold text-center" width="25%">{{ aoq.dmddesc }}
+                        </div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" v-for="rfq in aoq.dmd_rfqs"
+                            :key="rfq.id"><small>{{ rfq.cost_unit | currency2 }}</small></div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center"></div>
+                        <div class="col-1 aoq top bottom font-weight-bold left text-center"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" v-if="aoq.dmd_rfqs.length == 3">
+                <div class="col-12 aoq all">
+                    <div class="row">
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-4 aoq all"></div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" v-for="rfq in aoq.dmd_rfqs"
+                            :key="rfq.id">
+                            <i><small><span v-if="rfq.supplier_name">{{ rfq.supplier_name }}</span>
+                                    <span v-else></span></small></i>
+                        </div>
+                        <div class="col-1 aoq all font-weight-bold text-center"></div>
+                        <div class="col-1 aoq all font-weight-bold left text-center">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 aoq">
+                    <div class="row">
+                        <div class="col-1 aoq all font-weight-bold right text-center" width="5%">Item No.</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center" width="5%">Qty</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" width="10%">Unit</div>
+                        <div class="col-4 aoq top bottom font-weight-bold text-center" width="25%">Articles</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center">1</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center">2</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center">3</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center">4</div>
+                        <div class="col-1 aoq all font-weight-bold left text-center">5</div>
+                    </div>
+                </div>
+                <div class="col-12 aoq top">
+                    <div class="row">
+                        <div class="col-1 aoq all font-weight-bold right text-center" width="5%"></div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center" width="5%"></div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" width="10%"></div>
+                        <div class="col-4 aoq top bottom font-weight-bold text-center" width="25%">{{ aoq.dmddesc }}
+                        </div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" v-for="rfq in aoq.dmd_rfqs"
+                            :key="rfq.id"><small>{{ rfq.cost_unit | currency2 }}</small></div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center"></div>
+                        <div class="col-1 aoq all font-weight-bold left text-center"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" v-if="aoq.dmd_rfqs.length == 4">
+                <div class="col-12 aoq all">
+                    <div class="row">
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-4 aoq all"></div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" v-for="rfq in aoq.dmd_rfqs"
+                            :key="rfq.id">
+                            <i><small><span v-if="rfq.supplier_name">{{ rfq.supplier_name }}</span>
+                                    <span v-else></span></small></i>
+                        </div>
+                        <div class="col-1 aoq all font-weight-bold text-center"></div>
+                        <div class="col-1 aoq all font-weight-bold left text-center">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 aoq">
+                    <div class="row">
+                        <div class="col-1 aoq all font-weight-bold right text-center" width="5%">Item No.</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center" width="5%">Qty</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" width="10%">Unit</div>
+                        <div class="col-4 aoq top bottom font-weight-bold text-center" width="25%">Articles</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center">1</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center">2</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center">3</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center">4</div>
+                        <div class="col-1 aoq all font-weight-bold left text-center">5</div>
+                    </div>
+                </div>
+                <div class="col-12 aoq top">
+                    <div class="row">
+                        <div class="col-1 aoq all font-weight-bold right text-center" width="5%"></div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center" width="5%"></div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" width="10%"></div>
+                        <div class="col-4 aoq top bottom font-weight-bold text-center" width="25%">{{ aoq.dmddesc }}
+                        </div>
+                        <div class="col-1 aoq top bottom left font-weight-bold left right text-center"
+                            v-for="rfq in aoq.dmd_rfqs" :key="rfq.id"><small>{{ rfq.cost_unit | currency2 }}</small>
+                        </div>
+                        <div class="col-1 aoq top bottom right font-weight-bold left text-center"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" v-if="aoq.dmd_rfqs.length == 5">
+                <div class="col-12 aoq all">
+                    <div class="row">
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-1 aoq all"></div>
+                        <div class="col-4 aoq all"></div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" v-for="rfq in aoq.dmd_rfqs"
+                            :key="rfq.id">
+                            <i><small><span v-if="rfq.supplier_name">{{ rfq.supplier_name }}</span>
+                                    <span v-else></span></small></i>
+                        </div>
+                        <div class="col-1 aoq all font-weight-bold text-center"></div>
+                        <div class="col-1 aoq all font-weight-bold left text-center">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 aoq">
+                    <div class="row">
+                        <div class="col-1 aoq all font-weight-bold right text-center" width="5%">Item No.</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center" width="5%">Qty</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" width="10%">Unit</div>
+                        <div class="col-4 aoq top bottom font-weight-bold text-center" width="25%">Articles</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center">1</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center">2</div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center">3</div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center">4</div>
+                        <div class="col-1 aoq all font-weight-bold left text-center">5</div>
+                    </div>
+                </div>
+                <div class="col-12 aoq top">
+                    <div class="row">
+                        <div class="col-1 aoq all font-weight-bold right text-center" width="5%"></div>
+                        <div class="col-1 aoq top bottom font-weight-bold text-center" width="5%"></div>
+                        <div class="col-1 aoq all font-weight-bold left right text-center" width="10%"></div>
+                        <div class="col-4 aoq top bottom font-weight-bold text-center" width="25%">{{ aoq.dmddesc }}
+                        </div>
+                        <div class="col-1 aoq top bottom font-weight-bold left right text-center"
+                            v-for="rfq in aoq.dmd_rfqs" :key="rfq.id"><small>{{ rfq.cost_unit | currency2 }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 aheight"></div>
+
+            <div class="col-12 aoq all">
                 <div class="row">
-                    <div class="col-sm">BAC Member</div>
-                    <div class="col-sm-5">BAC Chairperson</div>
+                    <div class="col-7 aoq text-right all">Approved:</div>
+                </div>
+            </div>
+
+            <div class="col-12 bheight"></div>
+            <div class="col-12 aoq all">
+                <div class="row">
+                    <div class="col-7 aoq all font-weight-bold">Sample1</div>
+                    <div class="col-5 aoq all font-weight-bold">Sample2</div>
+                    <div class="w-100"></div>
+                    <div class="col-7 aoq all">BAC Member</div>
+                    <div class="col-5 aoq all">BAC Chairperson</div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
-export default {
-    data(){
-        return{
-            aoq: '',
+    export default {
+        data() {
+            return {
+                aoq: ""
+            };
+        },
+        methods: {
+            get_aoq() {
+                axios
+                    .get(
+                        "../../../api/dmd_aoq/" +
+                        this.$route.params.id +
+                        "/" +
+                        this.$route.params.rfq_id
+                    )
+                    .then(({
+                        data
+                    }) => {
+                        this.aoq = data;
+                    })
+                    .catch(() => {});
+            },
+            print() {
+                window.print();
+                location.reload();
+            }
+        },
+        created() {
+            this.get_aoq();
         }
-    },
-    methods:{
-        get_aoq(){
-            axios.get('../../../api/dmd_aoq/'+this.$route.params.id+'/'+this.$route.params.rfq_id).then(({data}) => {
-                this.aoq = data;
-            }).catch(() => {
-
-            });
-        },
-        print(){
-            window.print();
-            location.reload();
-        },
-    },
-    created(){
-        this.get_aoq();
-    }
-    
-}
+    };
 
 </script>
 
-<style lang="scss" scoped>
+<style type="text/css" media="print">
+    .landscape {
+        width: 276mm;
+        height: 190mm;
+    }
 
-  @media print{
-      .orientation{
-          width: 100%;
-      }
-  }
+    @media print {
+        div.landscape {
+            transform: rotate(270deg) translate(-276mm, 0);
+            transform-origin: 0 0;
+        }
+    }
 
-@font-face {
-    font-family: 'Helvetica';
-    src: url('https://fonts.googleapis.com/css?family=Helvetica');
-    font-weight: normal;
-    font-style: normal;
-}
+    @font-face {
+        font-family: "Helvetica";
+        src: url("https://fonts.googleapis.com/css?family=Helvetica");
+        font-weight: normal;
+        font-style: normal;
+    }
 
-div#f01 {
-    font-family: 'Helvetica', sans-serif;
-}
+    .container {
+        border: none;
+    }
 
-td.pr1 {
-    border-collapse: collapse;
-    border: 1px solid black;
-    margin: 0px;
-    padding: none;
-    padding-top: 0px;
-}
+    .img-thumbnail {
+        border: none;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 65%;
+    }
 
-table#t01 th {
-    background-color: rgb(184, 172, 172) !important;
-    border: 1px solid black;
-    color: black;
-    margin: 0px;
-    padding: none;
-}
+    .font {
+        font-family: "Helvetica", sans-serif;
+    }
+
+    .aoq {
+        border-collapse: collapse;
+        border: 1px solid black;
+    }
+
+    .top {
+        border-top: none;
+    }
+
+    .bottom {
+        border-bottom: none;
+    }
+
+    .left {
+        border-left: none;
+    }
+
+    .right {
+        border-right: none;
+    }
+
+    .all {
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        border-bottom: none;
+    }
+
+    .aheight {
+        height: 50px;
+    }
+
+    .bheight {
+        height: 30px;
+    }
+
+    .cheight {
+        height: 600px;
+    }
+
 </style>

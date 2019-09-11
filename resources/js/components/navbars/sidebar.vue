@@ -162,13 +162,13 @@
                 </li> -->
                 <li class="nav-item">
                     <router-link to='../../mmo_iar' class="nav-link">
-                        <i class="nav-icon fas fa-capsules"></i>
+                        <i class="nav-icon fas fa-list"></i>
                         <p>List of IAR</p>
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link to='../../mmo_dvs' class="nav-link">
-                        <i class="nav-icon fas fa-capsules"></i>
+                        <i class="nav-icon fas fa-list-ul"></i>
                         <p>List of DV</p>
                     </router-link>
                 </li>

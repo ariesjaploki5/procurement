@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\DmdPriceSchedule;
 use App\Events\DmdPriceScheduleUpdated;
+
 class DmdPriceScheduleController extends Controller
 {
     public function index(){

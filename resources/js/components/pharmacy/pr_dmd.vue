@@ -52,7 +52,7 @@
                                 {{ item.pr_date_time | myDate4 }}
                             </span>
                         </td>
-                        <td width="9%" class="text-center" @click="view_pr(item.purchase_request_id)">
+                        <td width="9%" class="text-center" @click="view_track(item.purchase_request_id)">
                             <span v-if="item.csid2" class="badge badge-pill" v-bind:class="[
                                 { 'badge-success' : item.csid2 == 5 },
                                 { 'badge-success' : item.csid2 == 6 },
@@ -182,9 +182,42 @@
                         <!-- <span v-show="!pr.last_status">
                             <button type="button" class="btn btn-sm btn-success" @click="send_to_cmps()">Send to CMPS</button>
                         </span> -->
-                        
                     </div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="viewTrack" tabindex="-1" role="dialog" aria-labelledby="viewTrackLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5  class="modal-title text-bold" id="viewTrackLabel">PR # {{ pr.created_at | myDate }} - {{ pr.purchase_request_id | numeral2 }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Date/Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(tr, index) in track" :key="index">
+                                            <td>{{ tr.status_desc }}</td>
+                                            <td>{{ tr.date_time | myDate4 }} - {{ tr.date_time | myDate5 }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
                 </div>
             </div>
         </div>
@@ -198,6 +231,7 @@ export default {
             dmd_pr: [],
             pr: {},
             search_word: '',
+            track: {},
         }
     },
     methods:{
@@ -226,7 +260,14 @@ export default {
 
             });
         },
+        view_track(id){
+            axios.get('../../api/purchase_request_track/'+id).then(({data}) => {
+                this.track = data;
+                $('#viewTrack').modal('show');
+            }).catch(() => {
 
+            });
+        }
     },
     created(){
         this.get_dmd_pr();
@@ -251,10 +292,10 @@ export default {
         window.Echo.channel("pr_updated").listen(".purchase_request.updated", (e) => {
             this.get_dmd_pr();
         });
-        window.Echo.channel("pr_created").listen(".purchase_order.created", (e) => {
+        window.Echo.channel("po_created").listen(".purchase_order.created", (e) => {
             this.get_dmd_pr();
         });
-        window.Echo.channel("pr_updated").listen(".purchase_order.updated", (e) => {
+        window.Echo.channel("po_updated").listen(".purchase_order.updated", (e) => {
             this.get_dmd_pr();
         });
     }

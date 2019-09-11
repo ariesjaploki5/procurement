@@ -41,10 +41,10 @@
                             <span v-else></span>
                         </th>
                         <th width="12%">
-                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 15" @click="mmo_rcv(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 26" @click="mmo_rcv(po.purchase_order_id)">
                                 <i class="fas fa-file-download"></i>
                             </button>
-                            <div class="btn-group dropleft btn-sm">
+                            <div class="btn-group dropleft btn-sm" v-if="po.csid == 16">
                                 <button type="button" class="btn btn-light btn-outline-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                                 <div class="dropdown-menu" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                     <span v-if="po.terminated != 1">
@@ -255,12 +255,12 @@
                                             <div class="col-md-6">
                                                 <span>{{ dv_form.dmddesc }}</span>
                                             </div>
-                                            <div class="col-md-3">
+                                            <!-- <div class="col-md-3">
                                                 <select v-model="dv_form.vat_exempt" class="form-control form-control-sm">
                                                     <option value="0"></option>
                                                     <option value="1">VAT-EXEMPT</option>
                                                 </select>
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-md-3">
@@ -269,7 +269,7 @@
                                                 </label>
                                             </div>
                                             <div class="col-md-9">
-                                                <select class="form-control form-control-sm" v-model="dv_form.approving_officer_id">
+                                                <select class="form-control form-control-sm" v-model="dv_form.approving_officer_id" required>
                                                     <option v-for="ao in approving_officers" :key="ao.id" :value="ao.id">{{ ao.officer_name }}</option>
                                                 </select>
                                             </div>
@@ -294,7 +294,7 @@
                                                 <span>{{ dv_form.total_amount | currency2 }}</span>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <!-- <div class="form-group row">
                                             <div class="col-md-3">
                                                 <label for="" class="label form-label">
                                                     <span>Tax Base:</span>
@@ -303,8 +303,8 @@
                                             <div class="col-md-9 text-right">
                                                 <span>{{ dv_form.total_amount | currency2 }}</span>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
+                                        </div> -->
+                                        <!-- <div class="form-group row">
                                             <div class="col-md-3">
                                                 <label for="" class="label form-label">
                                                     <span>Taxes:</span>
@@ -320,7 +320,7 @@
                                                     <div class="col-md-6"></div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row">

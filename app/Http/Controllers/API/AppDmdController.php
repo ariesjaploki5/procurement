@@ -48,7 +48,6 @@ class AppDmdController extends Controller
             $id = $dmd[$i]['dmd_id'];
             $mode_id = $dmd[$i]['mode_id'];
             $budget = $dmd[$i]['budget'];
-
         }
 
         return response()->json();

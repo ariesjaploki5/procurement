@@ -57,6 +57,8 @@ Route::apiResources([
 
 ]);
 
+Route::get('purchase_request_track/{id}', 'API\TrackController@show');
+
 Route::get('get_all_iar', 'API\IarController@index');
 
 Route::post('dv', 'API\DvController@store');

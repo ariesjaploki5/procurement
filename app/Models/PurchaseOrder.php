@@ -15,7 +15,7 @@ class PurchaseOrder extends Model
         'created_at', 'allotment_id', 
         'fund_source_code_id', 'fund_cluster_id',
         'fund_source_id', 'uacs_code_id','amount', 'obrs_date', 
-        'date_of_delivery', 'terminated',
+        'date_of_delivery', 'terminated', 'date_served',
         'payment_term_id', 'place_of_delivery',
         'current_status','supplier_id',
         'purchase_request_id','mode_id',

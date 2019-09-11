@@ -333,7 +333,7 @@ class PurchaseOrderController extends Controller
 
     public function for_mmo(){
 
-        $data = DB::table('fn_filter_purchase_orders_4(26)')
+        $data = DB::table('fn_filter_purchase_orders_5(26, 16)')
         ->orderBy('po_id', 'desc')
         ->get();
 
@@ -813,5 +813,27 @@ class PurchaseOrderController extends Controller
         ]);
     
         return response()->json();
+    }
+
+    public function separate_po(Request $request){
+        $dpo_id = $request->dpo_id;
+
+        $dmd_po = DB::Table('procurement.dbo.dmd_purchase_order')->where('dmd_po_id', $dpo_id)->first();
+
+        return response()->json();
+    }
+
+    public function days_delayed($id){
+
+        $po = PurchaseOrder::where('id', $id)->first();
+
+        $dt = $po->delivery_term;
+        $ds = $po->date_served;
+        
+        $dmd_pos = DmdPurchaseOrder::where('purchase_order_id', $id)->get();
+
+
+        return response()->json();
+
     }
 }

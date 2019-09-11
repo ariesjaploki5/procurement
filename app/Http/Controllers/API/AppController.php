@@ -15,7 +15,9 @@ class AppController extends Controller
     public function index(){
         $apps = App::with([
             'category'
-        ])->orderBy('app_year', 'desc')->get();
+        ])
+        ->orderBy('app_year', 'desc')
+        ->get();
 
         return response()->json($apps);
     }

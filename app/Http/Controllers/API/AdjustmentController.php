@@ -15,13 +15,18 @@ class AdjustmentController extends Controller
 {
     
     public function items($id){
-        $data = AdjustmentItem::where('chrgcode', $id)->orderBy('gendesc', 'asc')->get();
+        $data = AdjustmentItem::where('chrgcode', $id)
+        ->orderBy('gendesc', 'asc')
+        ->get();
 
         return response()->json($data);
     }
 
     public function search(Request $request, $id){
-        $data = AdjustmentItem::where('chrgcode', $id)->where('item_desc', 'like', $request->word.'%')->orderBy('gendesc', 'asc')->get();
+        $data = AdjustmentItem::where('chrgcode', $id)
+        ->where('item_desc', 'like', $request->word.'%')
+        ->orderBy('gendesc', 'asc')
+        ->get();
         
         return response()->json($data);
     }
@@ -44,7 +49,10 @@ class AdjustmentController extends Controller
     }
 
     public function adjust_stockbal($request){
-        $adjust_stockbal = Hdmhdrsub::where('dmdcomb', $request->dmdcomb)->where('dmdctr', $request->dmdctr)->where('dmhdrsub', $request->chrgcode)->first();
+        $adjust_stockbal = Hdmhdrsub::where('dmdcomb', $request->dmdcomb)
+        ->where('dmdctr', $request->dmdctr)
+        ->where('dmhdrsub', $request->chrgcode)
+        ->first();
         
         return response()->json();
     }
