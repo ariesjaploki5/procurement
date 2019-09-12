@@ -89,6 +89,7 @@ import sps from './components/print/sps';
 import ntt from './components/print/ntt';
 import na from './components/print/na';
 import dv from './components/print/dv';
+import iar from './components/print/iar';
 
 import cpr from './components/print/cpr';
 
@@ -238,6 +239,12 @@ export const routes = [
         path: '/dv/:id',
         component: dv,
         name: 'dv',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/iar/:id',
+        component: iar,
+        name: 'iar',
         meta: { requiresAuth: true }
     },
     {

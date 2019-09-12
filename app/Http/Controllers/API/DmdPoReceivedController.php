@@ -27,6 +27,7 @@ class DmdPoReceivedController extends Controller
         $month = sprintf('%02d', $month_now);
         $iar_now_m_y = $year_now.'-'.$month.'-'.$iar_no;
 
+        $items = $request->items;
 
         $dmd_po_r = DmdPoReceived::create([
             'list_no' => $request->list_no,
@@ -53,7 +54,6 @@ class DmdPoReceivedController extends Controller
         $dmd_uacs->save();
 
         return response()->json();
-
     }
 
     public function update(Request $request, $id){
@@ -69,7 +69,6 @@ class DmdPoReceivedController extends Controller
         $iar_no = sprintf( '%04d', $new_count );
         $month = sprintf('%02d', $month_now);
         $iar_now_m_y = $year_now.'-'.$month.'-'.$iar_no;
-
 
         $dmd_po_r = DmdPoReceived::create([
             'list_no' => $request->list_no,

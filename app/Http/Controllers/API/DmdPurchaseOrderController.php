@@ -36,7 +36,32 @@ class DmdPurchaseOrderController extends Controller
     }
 
     public function update(Request $request, $id){
+        
+        $dmd_po = DmdPurchaseOrder::findOrFail($id);
+        
+        $dmd_po->update([
+            'order_quantity' => $request->order_quantity,
+        ]);
 
+        return response()->json();
+    }
+
+    public function change_po($id){
+
+        $dmd_po = DmdPurchaseOrder::findOrFail($id);
+        $purchase_request_id = $dmd_po->purchase_order->purchase_request_id;
+        $pr_id = $dmd_po->purchase_order->pr_id;
+        
+        $po = PurchaseOrder::count();
+
+        $new_po = PurchaseOrder::create([
+            'po_id' => $new_po
+        ]);
+
+        $dmd_po->update([
+            'po_id' => $new_po->po_id,
+            
+        ]);
 
     }
 
@@ -44,5 +69,7 @@ class DmdPurchaseOrderController extends Controller
 
 
     }
+
+
 
 }

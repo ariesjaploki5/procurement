@@ -14,7 +14,7 @@ class CartDmd extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'cart_id', 'dmd_id', 'request_quantity'
+        'cart_id', 'dmd_id', 'request_quantity', 'ep'
     ];
 
     protected $dispatchesEvents = [

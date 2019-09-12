@@ -33,7 +33,7 @@ class CartController extends Controller
         $cart = Cart::firstOrCreate([ 
             'user_id' => $user_id, 
             'mode_id' => $mode_id,
-            'status' => 0 
+            'status' => 0 ,
         ]);
         
         // if(!CartDmd::where('cart_id', $cart->id)->where('dmd_id', $request->dmd_id)->exists()){

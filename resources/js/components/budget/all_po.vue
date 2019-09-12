@@ -157,7 +157,7 @@
             </div>
         </div> <!-- col-md-12 poModal -->
         <div class="col-md-12">
-                <div class="modal fade" id="obrsModal" tabindex="-1" role="dialog" aria-labelledby="obrsModalLabel" aria-hidden="true">
+            <div class="modal fade" id="obrsModal" tabindex="-1" role="dialog" aria-labelledby="obrsModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -222,6 +222,28 @@
                 </div>
             </div>
         </div><!-- col-md-12 obrsmodal -->
+        <div class="col-md-12">
+            <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Update Order
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form @submit.prevent="update_order()">
+                        <div class="modal-body">  
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Cancel</button>
+                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -283,6 +305,10 @@ export default {
             fund_source_codes: [],
             uacs: [],
             isLoading: true,
+            update_order_form: new Form({
+                id: '',
+                
+            }),
         }
     },
     methods:{
@@ -405,6 +431,13 @@ export default {
 
             });
         },
+        update_order(){
+            this.update_order_form.put('../../api/update_order/'+this.update_order_form.id).then(() => {
+
+            }).catch(() => {
+
+            });
+        }
     },
     created(){
 

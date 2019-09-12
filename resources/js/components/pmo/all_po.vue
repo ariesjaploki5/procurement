@@ -139,6 +139,10 @@
                                                             <span class="text-bold">Delivery Term: </span>  
                                                             {{ view_po_form.delivery_term }}
                                                         </div>
+                                                        <div>
+                                                            <span class="text-bold">Date Served: </span>
+                                                            {{ view_po_form.date_served }}
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-2 text-right">
                                                         <button class="btn btn-sm btn-primary" type="button" v-if="!view_po_form.dod" @click="create_dod()">
@@ -243,6 +247,14 @@
                                     <input type="number" class="form-control form-control-sm" v-model="view_po_form.delivery_term" required>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <div class="form-label">Date Served: </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="date" class="form-control form-control-sm" v-model="view_po_form.date_served" required>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-success" type="submit">Save</button>
@@ -325,6 +337,7 @@ export default {
                 obrs_no: '',
                 pod: '',
                 csid: '',
+                date_served: '',
             }),
             track_po_modal: {},
             payment_terms: [],
@@ -363,7 +376,6 @@ export default {
                 });
             $('#poModal').modal('show');
         },
-
         track_po(pos){
             this.track_po_modal = pos;
             $('#trackModal').modal('show')

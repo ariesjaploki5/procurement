@@ -78,6 +78,12 @@
                                     {{ item.csd }}
                                 </span>
                             </span>
+                            <div class="w-100">
+                            </div>
+                            <small>
+                                <span v-if="item.ep == 0">Regular Purchase</span>
+                                <span v-else>Emergency Purchase</span>
+                            </small>
                         </td>
                         <td width="9%" class="text-center" @click="view_pr(item.purchase_request_id)">
                             <span v-if="item.csid2">

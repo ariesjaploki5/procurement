@@ -207,12 +207,27 @@
                                         <tbody style="overflow-y: scroll;height: 11rem; width: 98.5%; position: absolute;" class="table-bordered">
                                             <tr v-for="(item,index) in pb_form.items" :key="item.dmd_id">
                                                 <td width="4%">{{ index + 1}}</td>
-                                                <td width="30%">{{ item.dmddesc }}</td>
+                                                <td width="30%">
+                                                    <div class="col-12">{{ item.dmddesc }}</div>
+                                                    <div class="row">
+                                                        <div class="col-auto  text-right">
+                                                        <span>Type:</span>
+                                                        
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <select class="form-control form-control-sm" v-model="item.ep">
+                                                            <option value="0">Regular Purchase</option>
+                                                            <option value="1">Emergency Purchase</option>
+                                                        </select>
+                                                    </div>
+                                                    </div>
+                                                </td>
                                                 <td class="text-right">{{ item.ssl | numeral3 }}</td>
                                                 <td class="text-right">{{ item.boh | numeral3 }}</td>
                                                 <td class="text-right">{{ item.iit | numeral3}}</td>
                                                 <td width="10%" class="text-right">
-                                                    <input type="number" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" v-model="item.item_needed" required>
+                                                    <input type="number" v-if="item.ep == 0" class="form-control form-control-sm text-right invalid" :max="item.ssl - item.boh" min="1" v-model="item.item_needed">
+                                                    <input type="number" v-else class="form-control form-control-sm text-right invalid" v-model="item.item_needed">
                                                 </td>
                                                 <td class="text-right">{{ item.cost | currency2 }}</td>
                                                 <td class="text-right">{{ item.cost * item.item_needed | currency2 }}</td>
@@ -244,12 +259,28 @@
                                         <tbody style="overflow-y: scroll;height: 11rem; width: 98.5%; position: absolute;" class="table-bordered">
                                             <tr v-for="(item,index) in sp_form.items" :key="item.dmd_id">
                                                 <td width="4%">{{ index + 1}}</td>
-                                                <td width="30%">{{ item.dmddesc }}</td>
+                                                <td width="30%">
+                                                    <div class="col-12">{{ item.dmddesc }}</div>
+                                                    <div class="row">
+                                                        <div class="col-auto text-right">
+                                                        <span>Type:</span>
+                                                        
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <select class="form-control form-control-sm" v-model="item.ep">
+                                                            <option value="0">Regular Purchase</option>
+                                                            <option value="1">Emergency Purchase</option>
+                                                        </select>
+                                                    </div>
+                                                    </div>
+                                                    
+                                                </td>
                                                 <td class="text-right">{{ item.ssl }}</td>
                                                 <td class="text-right">{{ item.boh }}</td>
                                                 <td class="text-right">{{ item.iit }}</td>
                                                 <td width="10%" class="text-right">
-                                                    <input type="number" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" min="1" v-model="item.item_needed">
+                                                    <input type="number" v-if="item.ep == 0" class="form-control form-control-sm text-right" :max="item.ssl - item.boh" min="1" v-model="item.item_needed">
+                                                    <input type="number" v-else class="form-control form-control-sm text-right" v-model="item.item_needed">
                                                 </td>
                                                 <td class="text-right">{{ item.cost | currency2 }}</td>
                                                 <td class="text-right">{{ item.cost * item.item_needed | currency2 }}</td>

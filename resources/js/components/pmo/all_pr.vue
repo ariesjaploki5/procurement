@@ -350,8 +350,6 @@ export default {
 
             });
         },
-        
-        
         store_po(id){
             this.view_pr_form.put('../../api/purchase_request/'+id).then(() =>{
                 $('#prModal').modal('hide');
@@ -367,6 +365,7 @@ export default {
         store_pr_po(id){
             axios.post('../../api/pr_to_po',{
                 purchase_request_id: id,
+                pr_id: this.view_pr_form.pr_id,
                 items: this.view_pr_form.dmd_purchase_requests,
             }).then(() => {
 

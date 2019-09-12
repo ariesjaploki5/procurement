@@ -24,7 +24,7 @@
                     <tr>
                         <th width="10%">PR #</th>
                         <th width="12%">Date Created</th>
-                        <th width="8%"  class="text-center">CMPS Status</th>
+                        <th width="8%" class="text-center">CMPS Status</th>
                         <th width="15%">Track</th>
                         <th width="10%">Mode</th>
                         <th width="40%">Supplier</th>
@@ -44,7 +44,12 @@
                             <span v-if="pr.cdi2">{{ pr.csd2 }}</span>
                             <span v-else>{{ pr.csd }}</span>
                         </td>
-                        <td @click="view_pr(pr)" width="10%">{{ pr.mode_desc }}</td>
+                        <td @click="view_pr(pr)" width="13%" class="text-center">
+                            <span>{{ pr.mode_desc }}</span>
+                            <div class="w-100"></div>
+                            <span v-if="pr.ep == 0"><small>Regular Purchase</small></span>
+                            <span v-else><small>Emergency Purchase</small></span>
+                        </td>
                         <td @click="view_pr(pr)" width="45%">
                             <span v-if="pr.supplier_name">{{ pr.supplier_name }}</span>
                         </td>

@@ -82,63 +82,70 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         <div class="modal-body">
-                            <div class="table-responsive-sm">
-                                <table class="table table-sm table-hover" id="po_table">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th width="3%">#</th>
-                                            <th width="25%">Description</th>
-                                            <th width="7%">SSL</th>
-                                            <th width="7%">BOH</th>
-                                            <th width="7%">Ordered Qty.</th>
-                                            <th width="7%">Unit Cost</th>
-                                            <th width="7%">Estimated Cost</th>
-                                            <th width="36%">
-                                                <tr width="100%">
-                                                    <th class="text-center">IAR NO</th>
-                                                    <th class="text-center">Received Qty</th>
-                                                    <th class="text-center">Date Received</th>
-                                                    <th class="text-center"></th>
-                                                </tr>
-                                            </th>
-                                            <th width="7%"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="po_tbody">
-                                        <tr v-for="(dmd,index) in view_po_form.dmd_purchase_orders" :key="dmd.dmd_id">
-                                            <td width="3%">{{ index + 1}}</td>
-                                            <td width="25%">
-                                                <tr><td colspan="2"><span class="text-bold">{{ dmd.dmddesc }}</span></td></tr>
-                                                <tr><td class="text-bold" width="30%">Brand:</td><td width="auto">{{ dmd.brand_desc }}</td></tr>
-                                                <tr><td class="text-bold" width="30%">Manufacturer:</td><td width="auto">{{ dmd.manufacturer_desc }}</td></tr>
-                                                <tr><td class="text-bold" width="30%">Supplier:</td><td width="auto">{{ dmd.supplier_name }}</td></tr>
-                                                <tr><td class="text-bold" width="30%">Packaging:</td><td width="auto">{{ dmd.packaging_desc }}</td></tr>
-                                            </td>
-                                            <td width="7%" class="text-right">{{ dmd.ssl | numeral3 }}</td>
-                                            <td width="7%" class="text-right">{{ dmd.boh | numeral3 }}</td>
-                                            <td width="7%" class="text-right">{{ dmd.order_quantity | numeral3 }}</td>
-                                            <td width="7%" class="text-right"><span>{{ dmd.cost_price | currency2 }}</span></td>
-                                            <td width="7%" class="text-right"><span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span></td>
-                                            <td width="36%">
-                                                <tr width="100%" v-for="dpr in dmd.dmd_po_receiveds" :key="dpr.id">
-                                                    <td class="text-center">{{ dpr.iar_no }}</td>
-                                                    <td class="text-center">{{ dpr.received_quantity }}</td>
-                                                    <td class="text-center">{{ dpr.date_received | myDate3 }}</td>
-                                                    <td class="text-center">
-                                                        <button class="btn btn-success btn-sm" type="button">
-                                                            Edit
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </td>
-                                            <td width="7%" class="text-center">
-                                                <button type="button" class="btn btn-sm btn-success" @click="receive_modal(dmd)">
-                                                    Receive
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <table class="table table-sm table-hover" id="po_table">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th width="3%">#</th>
+                                                <th width="45%">Description</th>
+                                                <!-- <th width="10%">SSL</th> -->
+                                                <th width="12%">BOH</th>
+                                                <th width="12%">Ordered Qty.</th>
+                                                <th width="14%">Unit Cost</th>
+                                                <th width="14%">Estimated Cost</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="po_tbody">
+                                            <tr v-for="(dmd,index) in view_po_form.dmd_purchase_orders" :key="dmd.dmd_id">
+                                                <td width="3%" class="text-right">{{ index + 1}}</td>
+                                                <td width="45%">
+                                                    <tr><td colspan="2"><span class="text-bold">{{ dmd.dmddesc }}</span></td></tr>
+                                                    <tr><td class="text-bold" width="30%">Brand:</td><td width="auto">{{ dmd.brand_desc }}</td></tr>
+                                                    <tr><td class="text-bold" width="30%">Manufacturer:</td><td width="auto">{{ dmd.manufacturer_desc }}</td></tr>
+                                                    <tr><td class="text-bold" width="30%">Supplier:</td><td width="auto">{{ dmd.supplier_name }}</td></tr>
+                                                    <tr><td class="text-bold" width="30%">Packaging:</td><td width="auto">{{ dmd.packaging_desc }}</td></tr>
+                                                </td>
+                                                <!-- <td width="10%" class="text-right">{{ dmd.ssl | numeral3 }}</td> -->
+                                                <td width="12%" class="text-right">{{ dmd.boh | numeral3 }}</td>
+                                                <td width="12%" class="text-right">{{ dmd.order_quantity | numeral3 }}</td>
+                                                <td width="14%" class="text-right"><span>{{ dmd.cost_price | currency2 }}</span></td>
+                                                <td width="14%" class="text-right"><span>{{ dmd.order_quantity * dmd.cost_price | currency2}}</span></td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-5">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>IAR No</th>
+                                                <th>Batch No</th>
+                                                <th>Item Desc</th>
+                                                <th>Received Quantity</th>
+                                                <th>Expiry Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>  
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                                
+                            
+                            <div class="w-100"></div>
+                            <div class="col-md-12 text-right">
+                                <button type="button" class="btn btn-sm btn-success" @click="receive_modal()">
+                                    Receive
+                                </button>
                             </div>
                         </div>
                         <div class="modal-footer" >
@@ -150,7 +157,7 @@
         </div> <!-- col-md-12 poModal -->
         <div class="col-md-12">
             <div class="modal fade" id="receiveModal" tabindex="-1" role="dialog" aria-labelledby="receiveModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             PO #: <span v-if="view_po_form.po_id"> {{ view_po_form.po_id}}</span>
@@ -158,74 +165,80 @@
                         </div>
                         <form @submit.prevent="receive()">
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="" class="label form-label">Item Description:</label>
-                                    {{ receive_form.dmddesc }}
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <label for="" class="label form-label">Receiving Officer: </label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select class="form-control form-control-sm" v-model="receive_form.officer_id">
+                                                    <option v-for="ro in receiving_officers" :key="ro.id" :value="ro.id">
+                                                        {{ ro.name }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <label for="" class="label form-label">Inspection Officer: </label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select class="form-control form-control-sm" v-model="receive_form.inspector_id">
+                                                    <option v-for="i in inspectors" :key="i.id" :value="i.id">
+                                                        {{ i.name }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <label for="" class="label form-label">Date Received: </label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="date" class="form-control form-control-sm text-right" v-model="receive_form.date_received" required>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row" v-for="(item, index) in receive_form.items" :key="index">
+                                            <div class="col-md-3">
+                                                <label for="" class="label form-label">Item: </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <select class="form-control form-control-sm" v-model="item.dmd_id">
+                                                    <option v-for="(item, index) in view_po_form.dmd_purchase_orders" :key="index" :value="item.dmd_id">{{ item.dmddesc }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-3">
+                                                <label for="" class="label form-label">Quantity: </label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="number" class="form-control form-control-sm" v-model="item.received_quantity">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="" class="label form-label">Expiry Date: </label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="date" class="form-control form-control-sm" v-model="item.expiry_date">
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-3">
+                                                <label for="" class="label form-label">Remarks: </label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <textarea type="text"  class="form-control form-control-sm" v-model="item.remarks"></textarea>
+                                            </div>  
+            
+                                        </div>
+                                        <button class="btn btn-sm btn-primary" type="button" @click="add_item()">add</button>
+                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label for="" class="label form-label">Receiving Officer: </label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <select class="form-control form-control-sm" v-model="receive_form.officer_id">
-                                            <option v-for="ro in receiving_officers" :key="ro.id" :value="ro.id">
-                                                {{ ro.name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label for="" class="label form-label">Inspection Officer: </label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <select class="form-control form-control-sm" v-model="receive_form.inspector_id">
-                                            <option v-for="i in inspectors" :key="i.id" :value="i.id">
-                                                {{ i.name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label for="" class="label form-label">Quantity: </label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="number" class="form-control form-control-sm text-right" v-model="receive_form.order_quantity" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label for="" class="label form-label">Expiry Date: </label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="date" class="form-control form-control-sm text-right" v-model="receive_form.expiry_date" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label for="" class="label form-label">Date Received: </label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="date" class="form-control form-control-sm text-right" v-model="receive_form.date_received" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label for="" class="label form-label">Days Delayed: </label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="number" class="form-control form-control-sm text-right" v-model="receive_form.days_delayed">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label for="" class="label form-label">Remarks: </label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control form-control-sm" v-model="receive_form.remarks">
-                                    </div>
-                                </div>
+                                
+                                
                             </div>
                             <div class="modal-footer" >
                                 <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Close</button>
@@ -488,6 +501,7 @@
     export default {
         data(){
             return{
+                items: [],
                 editmode: false,
                 editmode_2: false,
                 pos: [],
@@ -513,20 +527,24 @@
                     last_status: {},
                 },
                 }),
+                iar_batch: [],
                 track_po_modal: {},
                 receive_form: new Form({
+                    po_id : '',
                     id: '',
-                    brand_id: '',
-                    dmd_id: '',
-                    dmd_po_id: '',
                     list_no: '',
-                    dmddesc: '',
                     order_quantity: '',
                     officer_id: '',
                     inspector_id: '',
-                    expiry_date: '',
                     date_received: '',
-                    days_delayed: '',
+                    items: [
+                        { 
+                            dmd_id: '',
+                            received_quantity: '',
+                            expiry_date: '',
+                            remarks: '',
+                        }
+                    ],
                 }),
                 terminate_form: new Form({
                     purchase_order_id: '',
@@ -598,10 +616,15 @@
                 this.view_po_form.reset();
                 this.view_po_form.fill(po);
                 axios.get('../../api/purchase_order/'+po.purchase_order_id).then(({data}) => {
-                        this.view_po_form.dmd_purchase_orders = data;
-                    }).catch(() => {
+                    this.view_po_form.dmd_purchase_orders = data;
+                }).catch(() => {
 
-                    });
+                });
+                axios.get('../../api/iar_batch/'+po.po_id).then(({data}) => {
+
+                }).catch(() => {
+
+                });
                 $('#poModal').modal('show');
             },
             attachment(){
@@ -662,13 +685,27 @@
 
                 });
             },
-            receive_modal(dmd){
+            receive_modal(){
+                this.receive_form.po_id = this.view_po_form.po_id;
                 $('#receiveModal').modal('show');
-                this.receive_form.fill(dmd);
-                this.receive_form.qty = dmd.order_quantity;
+                
+                this.receive_form.items = [
+                    {
+                        dmd_id: '',
+                        received_quantity: '',
+                        expiry_date: '',
+                    }
+                ];
+            },
+            add_item(){
+                this.receive_form.items.push({
+                    received_quantity: '',
+                    expiry_date: '',
+                    remarks: '',
+                });
             },
             receive(){
-                this.receive_form.post('../../api/dmd_po_receive').then(() => {
+                this.receive_form.post('../../api/iar').then(() => {
                     $('#receiveModal').modal('hide');
                 }).catch(() => {
 

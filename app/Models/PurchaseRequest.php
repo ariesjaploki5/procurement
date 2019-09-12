@@ -28,6 +28,7 @@ class PurchaseRequest extends Model
 
         'updated_at',
         'pr_id',
+        'ep'
     ];
 
     protected $dispatchesEvents = [

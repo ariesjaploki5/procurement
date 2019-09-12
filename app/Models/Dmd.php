@@ -12,8 +12,8 @@ class Dmd extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'dmdctr', 'dmdcomb', 'ssl', 'unit_id',
-    ];
+        'dmdctr', 'dmdcomb', 'ssl', 'unit_id', 'status'
+    ]; 
 
     public function homis_dmd(){
         return $this->hasOne('App\Views\HomisDmd', ['dmdcomb', 'dmdctr'], ['dmdcomb', 'dmdctr']);

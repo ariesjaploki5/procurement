@@ -55,6 +55,7 @@ class DmdPurchaseRequestController extends Controller
             $dmd_id = $dmd[$i]['dmd_id'];
             $quantity = $dmd[$i]['item_needed'];
             $supplier_id = $dmd[$i]['supplier_id'];
+            $ep = $dmd[$i]['ep'];
 
             $cost = $dmd[$i]['cost'];
 
@@ -66,7 +67,7 @@ class DmdPurchaseRequestController extends Controller
                 'status' => 0,
                 'purpose' => $request->purpose,
                 'cart_id' => $cart->id,
-
+                'ep' =>  $ep,
             ]);
 
             
@@ -106,6 +107,8 @@ class DmdPurchaseRequestController extends Controller
 
         for($i = 0; $i < $count; $i++){
 
+            $ep = $dmd[$i]['ep'];
+
             $pr = PurchaseRequest::create([
                 'mode_id' => $request->mode_id,
                 'category_id' => $request->category_id,
@@ -113,6 +116,7 @@ class DmdPurchaseRequestController extends Controller
                 'status' => 0,
                 'purpose' => $request->purpose,
                 'cart_id' => $cart->id,
+                'ep' => $ep
             ]);
     
             if(!$pr->pr_id){

@@ -231,6 +231,7 @@ class PurchaseOrderController extends Controller
         $po->update([
             'date_of_delivery' => $request->date_of_delivery,
             'delivery_term' => $request->delivery_term,
+            'date_served' => $request->date_served,
             'dod' => 1
         ]);
 
@@ -386,6 +387,7 @@ class PurchaseOrderController extends Controller
     }
 
     public function get_attachments($id){
+
         $po = DB::Table("fn_get_dv($id)")->first();
 
         $array_1 = array(
@@ -411,6 +413,7 @@ class PurchaseOrderController extends Controller
         $merge_array = array_merge($array_2, $array_1, $array_3);
 
         return response()->json($merge_array);
+        
     }
 
     public function get_liquidated_damages($id){

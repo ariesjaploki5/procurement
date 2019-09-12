@@ -261,16 +261,17 @@ class PurchaseRequestController extends Controller
         $po = PurchaseOrder::create([
             'created_at' => $this->date_now()
         ]);
+
         $pr->update([
             'purchase_order_id' => $po->purchase_order_id,
         ]);
 
         for($i = 0; $i < $count; $i++){
+
             $dmd_pr = DmdPurchaseRequest::findOrFail($dmd[$i]['id']);
             $dmd_pr->update([
                 'order_quantity' => $dmd[$i]['request_quantity'],
             ]);
-
         }
 
         return response()->json();
@@ -279,10 +280,12 @@ class PurchaseRequestController extends Controller
     public function pr_to_po(Request $request){
         
         $year_month = Carbon::now()->format('Y-m');
+        $year_now = Carbon::now()->year;
 
         $item = $request->items;
         $count = count($item);
         $purchase_request_id = $request->purchase_request_id;
+        $pr_id = $request->pr_id;
         
         for($i = 0; $i < $count; $i++){
 
@@ -301,22 +304,19 @@ class PurchaseRequestController extends Controller
                 'supplier_id' => $dmd->supplier_id,
                 'purchase_request_id' => $purchase_request_id,
                 'mode_id' => 1,
+                'pr_id' => $pr_id,
             ]);
 
             if(!$po->po_id){
                 $zero_id = sprintf("%04d", $po->purchase_order_id);
-    
                 $po->po_id = $year_month.'-'.$zero_id;
                 $po->save();
             }
 
-            $year_now = Carbon::now()->year;
-
             $dmd_po = DmdPurchaseOrder::where('created_at', $year_now)->get();
+
             $count = count($dmd_po);
-
             $new_count = $count + 1;
-
             $list_no = sprintf( '%04d', $new_count );
 
             $po->dmd_purchase_orders()->create([
@@ -327,7 +327,8 @@ class PurchaseRequestController extends Controller
                 'country_id' => $dmd->country_id,
                 'packaging_id' => $dmd->packaging_id,
                 'manufacturer_id' => $dmd->manufacturer_id,
-                'list_no' => $list_no
+                'list_no' => $list_no,
+                'po_id' => $po->po_id
             ]);
             
         }

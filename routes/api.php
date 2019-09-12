@@ -57,9 +57,15 @@ Route::apiResources([
 
 ]);
 
+Route::put('change_po', 'API\DmdPurchaseOrderController@change_po');
+Route::put('update_order', 'API\DmdPurchaseOrderController@update_order');
+
 Route::get('purchase_request_track/{id}', 'API\TrackController@show');
 
 Route::get('get_all_iar', 'API\IarController@index');
+
+Route::post('iar', 'API\IarController@store');
+Route::get('iar_batch/{id}', 'API\IarBatchController@show');
 
 Route::post('dv', 'API\DvController@store');
 Route::get('dv', 'API\DvController@index');

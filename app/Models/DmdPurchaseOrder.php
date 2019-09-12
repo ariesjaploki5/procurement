@@ -26,8 +26,8 @@ class DmdPurchaseOrder extends Model
         'country_id',
 
         'cost_price',
-        'list_no'
-
+        'list_no',
+        'po_id'
     ];
 
 
