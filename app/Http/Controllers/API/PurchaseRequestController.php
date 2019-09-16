@@ -330,7 +330,6 @@ class PurchaseRequestController extends Controller
                 'list_no' => $list_no,
                 'po_id' => $po->po_id
             ]);
-            
         }
 
         return response()->json();

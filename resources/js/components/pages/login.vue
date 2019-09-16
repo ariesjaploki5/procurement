@@ -1,7 +1,7 @@
 <template>
     <div class="login row justify-content-center mt-2">
         <div class="col-lg-3 col-md-6 col-sm-8">
-            <div class="card mt-5">
+            <div class="card mt-3">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12 text-center">
@@ -10,21 +10,21 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="card-title text-center font-weight-bold mt-2">
+                            <div class="card-title text-center font-weight-bold mt-1">
                                 Procurement Management Information System
                             </div>
                                 <hr>
                             <form @submit.prevent="authenticate">
                                 <div class="form-group">
-                                    <label for="username">Username</label>
+                                   
                                     <input type="username" v-model="form.username" class="form-control form-control" placeholder="Username" required autofocus>
                                 </div>
                                 <div class="form-group">
-                                    <label for="password">Password</label>
+
                                     <input type="password" v-model="form.password" class="form-control form-control" placeholder="Password" required>
                                 </div>
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-primary">Login <i class="fas fa-sign-in-alt"></i></button>
+                                    <button type="submit" class="btn btn-primary btn-sm">Login <i class="fas fa-sign-in-alt"></i></button>
                                 </div>
                             </form>
                         </div>

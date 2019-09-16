@@ -10,6 +10,7 @@ use App\Models\DmdPurchaseRequest;
 use DB;
 use App\Models\Hdmhdrsub;
 use App\Views\DmdPurchaseOrder;
+use App\Models\CurrentStatus;
 
 use Carbon\Carbon;
 
@@ -838,5 +839,22 @@ class PurchaseOrderController extends Controller
 
         return response()->json();
 
+    }
+
+    public function release(Request $request){
+
+        $po = PurchaseOrder::where('po_id', $request->po_id)->first();
+        $po->purchase_order_statuses()->create([
+            'current_status_id' => $request->cs_id,
+        ]);
+
+        $po->update([
+            'updated_at' => Carbon::now()
+        ]);
+
+        $cs = CurrentStatus::where('id', $request->cs_id)->first();
+        $cs_desc = $cs->current_status_desc;
+
+        return response()->json($cs_desc);
     }
 }

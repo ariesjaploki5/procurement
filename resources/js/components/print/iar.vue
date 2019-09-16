@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="row bottom">
-                <div class=" col-3 iar col-auto bottom right"><img src="/bghmc.png" class="img-thumbnail"></div>
+                <div class=" col-3 iar col-auto bottom right"><img :src="'/img/bghmc.png'" class="img-thumbnail"></div>
                 <div class="iar col bottom">
                     <div class="row">
                         <div class="col-12">
@@ -26,8 +26,7 @@
                             <div class="col ml-2 mr-1">
                                 <div class="col iar top bottom right">Form No.: HS – MMO – 004</div>
                                 <div class="col iar bottom right mr-2">Revision No.: 1</div>
-                                <div class="col iar bottom right mr-2">Effectivity Date: September 1,
-                                    2016 </div>
+                                <div class="col iar bottom right mr-2">Effectivity Date: September 1, 2016 </div>
                             </div>
                         </div>
                     </div>
@@ -40,27 +39,27 @@
         <div class="col-6 iar right bottom">
             <div class="row">
                 <div class="col-3 iar all">SUPPLIER:</div>
-                <div class="col-8 iar top left right font-weight-bold"></div>
+                <div class="col-8 iar top left right font-weight-bold">{{ iar.supplier_name }}</div>
                 <div class="col-1 iar all"></div>
                 <div class="w-100"></div>
 
                 <div class="col-3 iar all">PO Number:</div>
-                <div class="col-8 iar top left right font-weight-bold"></div>
+                <div class="col-8 iar top left right font-weight-bold">{{ iar.po_id }}</div>
                 <div class="col-1 iar all"></div>
                 <div class="w-100"></div>
 
                 <div class="col-3 iar all">PO Date:</div>
-                <div class="col-8 iar top left right font-weight-bold"></div>
+                <div class="col-8 iar top left right font-weight-bold">{{ iar.po_date | myDate4 }}</div>
                 <div class="col-1 iar all"></div>
                 <div class="w-100"></div>
 
                 <div class="col-3 iar all">Resp. Center:</div>
-                <div class="col-8 iar top left right font-weight-bold"></div>
+                <div class="col-8 iar top left right font-weight-bold">Main Pharmacy</div>
                 <div class="col-1 iar all"></div>
                 <div class="w-100"></div>
 
                 <div class="col-3 iar all">ObRequest:</div>
-                <div class="col-8 iar top left right font-weight-bold"></div>
+                <div class="col-8 iar top left right font-weight-bold"> {{ iar.obrs_no }} </div>
                 <div class="col-1 iar all"></div>
                 <div class="w-100"></div>
             </div>
@@ -69,12 +68,12 @@
         <div class="col-6 iar bottom">
             <div class="row">
                 <div class="col-5 iar all">IAR Number:</div>
-                <div class="col-6 iar top left right font-weight-bold"></div>
+                <div class="col-6 iar top left right font-weight-bold">{{ iar.iar_no }}</div>
                 <div class="col-1 iar all"></div>
                 <div class="w-100"></div>
 
                 <div class="col-5 iar all">IAR Date:</div>
-                <div class="col-6 iar top left right font-weight-bold"></div>
+                <div class="col-6 iar top left right font-weight-bold">{{ iar.iar_date | myDate4 }}</div>
                 <div class="col-1 iar all"></div>
                 <div class="w-100"></div>
 
@@ -84,12 +83,14 @@
                 <div class="w-100"></div>
 
                 <div class="col-5 iar all">DR/Invoice Number:</div>
-                <div class="col-6 iar top left right font-weight-bold"></div>
+                <div class="col-6 iar top left right font-weight-bold">{{ iar.invoice_no }}</div>
                 <div class="col-1 iar all"></div>
                 <div class="w-100"></div>
 
                 <div class="col-5 iar all">DR/Invoice Date:</div>
-                <div class="col-6 iar top left right font-weight-bold"></div>
+                <div class="col-6 iar top left right font-weight-bold">
+                    <span v-if="iar.invoice_date">{{ iar.invoice_date | myDate4 }}</span>
+                </div>
                 <div class="col-1 iar all"></div>
                 <div class="w-100"></div>
             </div>
@@ -116,20 +117,20 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" v-for="b in batches" :key="b.batch_no">
         <div class="col-6 iar top right">
             <div class="row">
                 <div class="col-3 iar top bottom left cheight"></div>
-                <div class="col iar all"></div>
+                <div class="col iar all">{{ b.dmddesc }}</div>
             </div>
         </div>
         <div class="col-6 iar top">
             <div class="row">
                 <div class="col-2 iar top bottom left cheight"></div>
-                <div class="col-3 iar top bottom left"></div>
-                <div class="col-3 iar top bottom left"></div>
-                <div class="col-2 iar top bottom left"></div>
-                <div class="col-2 iar all"></div>
+                <div class="col-3 iar top bottom left text-right">{{ b.received_quantity }}</div>
+                <div class="col-3 iar top bottom left text-right">{{ b.cost_price | currency2 }}</div>
+                <div class="col-2 iar top bottom left text-right">{{ b.total_cost | currency2 }}</div>
+                <div class="col-2 iar all text-center">{{ b.batch_no }}</div>
             </div>
         </div>
     </div>
@@ -154,7 +155,7 @@
         <div class="col-5 iar top">
             <div class="row">
                 <div class="col-5 iar all">Date Received</div>
-                <div class="col iar top left right"></div>
+                <div class="col iar top left right">{{ iar.date_received }}</div>
                 <div class="col-1 iar all"></div>
                 <div class="w-100"></div>
 
@@ -175,12 +176,12 @@
                 <div class="w-100"></div>
                 <div class="col bheight"></div>
                 <div class="w-100"></div>
-                <div class="col text-center font-weight-bold eheight"><h5>  </h5></div>
+                <div class="col text-center font-weight-bold eheight"><h5>{{ iar.inspector_name }}</h5></div>
                 <div class="w-100"></div>
-                <div class="col text-center eheight"></div>
+                <div class="col text-center eheight">{{ iar.inspector_pos }}</div>
                 <div class="w-100"></div>
                 <div class="col-5 font-weight-bold">Date Inspected</div>
-                <div class="col-6 top left right iar"></div>
+                <div class="col-6 top left right iar">{{ iar.inspector_inspected }}</div>
                 <div class="w-100"></div>
                 <div class="col aheight"></div>
             </div>
@@ -191,12 +192,12 @@
                 <div class="w-100"></div>
                 <div class="col bheight"></div>
                 <div class="w-100"></div>
-                <div class="col text-center font-weight-bold eheight"><h5>  </h5></div>
+                <div class="col text-center font-weight-bold eheight"><h5> {{ iar.officer_name }} </h5></div>
                 <div class="w-100"></div>
-                <div class="col text-center eheight"></div>
+                <div class="col text-center eheight"> {{ iar.officer_pos }} </div>
                 <div class="w-100"></div>
                 <div class="col-5 font-weight-bold">Date Inspected</div>
-                <div class="col-6 top left right iar"></div>
+                <div class="col-6 top left right iar">{{ iar.officer_inspected }}</div>
                 <div class="w-100"></div>
                 <div class="col aheight"></div>
             </div>
@@ -221,6 +222,40 @@
 
 <script>
     export default {
+        data(){
+            return{
+                
+                iar: {},
+                batches: [],
+            }
+        },
+        methods:{
+            get_iar(){
+
+            },
+            get_iar(){
+                axios.get('../../api/iar_batch_2/'+this.$route.params.id).then(({data}) => {
+                    this.iar = data;
+                }).catch(() => {
+
+                });
+            },
+            get_batches(){
+                axios.get('../../api/iar_batch_3/'+this.$route.params.id).then(({data}) => {
+                    this.batches = data;
+                }).catch(() => {
+
+                });
+            }
+        },
+        computed:{
+
+        },
+        created(){
+            this.get_batches();
+            this.get_iar();
+            
+        },
         mounted() {
 
         }
@@ -229,6 +264,7 @@
         window.print();
         location.reload();
     }
+
 </script>
 
 <style lang="scss">

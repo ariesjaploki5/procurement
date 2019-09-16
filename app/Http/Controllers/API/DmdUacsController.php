@@ -51,4 +51,16 @@ class DmdUacsController extends Controller
 
         return response()->json($data);
     }
+
+    public function get_needed_code(){
+        
+        $data = DB::table("fn_need_uacs_code()")->get();
+
+        return response()->json($data);
+    }
+
+    public function search_need_code(Request $request){
+
+
+    }
 }

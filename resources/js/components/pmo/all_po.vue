@@ -107,7 +107,7 @@
                                                     <div class="col-md-10">
                                                         <div>
                                                             <span class="text-bold">Place of Delivery: </span>    
-                                                            {{ view_po_form.place_of_delivery }}
+                                                            BGHMC
                                                         </div>
                                                         <div>
                                                             <span class="text-bold">Payment Term: </span>  
@@ -266,7 +266,7 @@
         </div><!-- col-md-12 dodModal -->
         <div class="col-md-12">
             <div class="modal fade" id="podModal" tabindex="-1" role="dialog" aria-labelledby="podModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             PO #: <span v-if="view_po_form.po_id"> {{ view_po_form.po_id}}</span>
@@ -281,7 +281,7 @@
                                     <div class="form-label">Place of Delivery:</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control form-control-sm" v-model="view_po_form.place_of_delivery" required>
+                                    <span>BGHMC</span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -376,6 +376,8 @@ export default {
                 });
             $('#poModal').modal('show');
         },
+
+
         track_po(pos){
             this.track_po_modal = pos;
             $('#trackModal').modal('show')

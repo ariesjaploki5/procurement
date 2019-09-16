@@ -18,14 +18,14 @@ use App\Views\Dmd as Dmd_2;
 
 class DrugsAndMedicineController extends Controller
 {
+    
     public function index(){
 
 
-        $data = DB::SELECT("SELECT TOP(50) * from fn_dmd() order by dmddesc asc");
+        $data = DB::SELECT("SELECT * from fn_dmd() order by dmddesc asc");
 
         return response()->json($data);
     }
-
 
     public function cmps_dmd(){
 
@@ -35,17 +35,6 @@ class DrugsAndMedicineController extends Controller
     }
 
     public function need_to_pr(){
-        // $now = Carbon::now();
-        // $year = $now->year;
-
-        // $data = NewAppDmd::with([
-        //     'dmd_price_schedule', 'last_pr'
-        // ])->whereColumn('rop', '>=', 'boh')
-        // ->where('ssl', '<>', 0)
-        // ->where('cost', '<>', '')
-        // ->where('app_year', $year)
-        // ->orderBy('dmddesc', 'asc')
-        // ->get();
 
         $data = DB::SELECT("SELECT TOP(50) * from procurement.dbo.fn_dmd() where rop > (boh + iit) order by dmddesc asc");
 
@@ -170,6 +159,14 @@ class DrugsAndMedicineController extends Controller
     public function store(Request $request){
         
 
+    }
+
+    public function update_unit(Request $request){
+        $dmd = DB::table('dmds')->where('dmd_id', $request->dmd_id)->update([
+            'unit_id' => $request->unit_id,
+        ]);
+
+        return response()->json();
     }
 
     public function update(){

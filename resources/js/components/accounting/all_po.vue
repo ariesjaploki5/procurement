@@ -34,7 +34,7 @@
                     <tr v-for="po in pos" :key="po.purchase_order_id">
                         <th @click="view_po(po)" width="10%">{{ po.po_id }}</th>
                         <th @click="view_po(po)" width="15%">{{ po.created_at | myDate3 }}</th>
-                        <th @click="view_po(po)" width="18%">
+                        <th @click="view_track(po)" width="18%">
                             <span v-if="po.csd">{{ po.csd }}</span>
                         </th>
                         <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
@@ -60,8 +60,11 @@
                                     <router-link v-else class="dropdown-item" :to="{ name: 'na', params: { id: po.purchase_order_id }}">
                                         <span>Notice of Adjustment</span>
                                     </router-link>
-                                    <button class="dropdown-item" v-show="po.csid == 10" @click="accounting_rls(po.purchase_order_id)">
+                                    <!-- <button class="dropdown-item" v-show="po.csid == 10" @click="accounting_rls(po.purchase_order_id)">
                                         <span>Released to FMO</span>
+                                    </button> -->
+                                    <button class="dropdown-item" @click="release_modal(po)">
+                                        <span>Release</span>
                                     </button>
                                 </div>
                             </div>
@@ -137,7 +140,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div>
-                                                <span class="text-bold">Place of Delivery: </span>{{ view_po_form.place_of_delivery }}
+                                                <span class="text-bold">Place of Delivery: </span>BGHMC
                                             </div>
                                             <div>
                                                 <span class="text-bold">Payment Term: </span>{{ view_po_form.payment_term_desc }}
@@ -152,6 +155,7 @@
                                                 <div class="col-md-12">
                                                     <div>
                                                         <span class="text-bold">Serial No: </span>    
+                                                        <div class="w-100"></div>
                                                         {{ view_po_form.obrs_no }}
                                                     </div>
                                                 </div>
@@ -358,35 +362,82 @@
         </div> <!-- col-md-12 stockModal -->
         <div class="col-md-12">
             <div class="modal fade" id="releaseModal" tabindex="-1" role="dialog" aria-labelledby="releaseModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <span>Stock No Modal</span>
+                            <span>Release or Return</span>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form  @submit.prevent="store_release()">
-                        <div class="modal-body">
-                            <div class="form-group row">
-                                <div class="col-md-3">Office:</div>
-                                <div class="col-md-9">
-                                    <select class="form-control form-control-sm">
-                                        <option value=""></option>
-                                    </select>
+                        <form  @submit.prevent="release()">
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-md-3">Office:</div>
+                                    <div class="col-md-9">
+                                        <select class="form-control form-control-sm" v-model="release_form.cs_id">
+                                            <option value="18">Pharmacy</option>
+                                            <option value="19">CMPS</option>
+                                            <option value="20">PMO</option>
+                                            <option value="21">Budget</option>
+                                            <option value="13">FMO</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        Remarks:
+                                    </div>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control form-control-sm" v-model="release_form.remarks"></textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer" >
-                            <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Close</button>
-                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
-                        </div>
-
+                            <div class="modal-footer" >
+                                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Close</button>
+                                <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div> <!-- col-md-12 releaseModal -->
+        <div class="col-md-12">
+            <div class="modal fade" id="viewTrack" tabindex="-1" role="dialog" aria-labelledby="viewTrackLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5  class="modal-title text-bold" id="viewTrackLabel">PO # {{ po_id }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Status</th>
+                                                <th>Date/Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(tr, index) in track" :key="index">
+                                                <td>{{ tr.status_desc }}</td>
+                                                <td>{{ tr.date_time | myDate4 }} - {{ tr.date_time | myDate5 }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- col-md-12 viewTrack -->
     </div>
 </template>
 <script>
@@ -446,9 +497,34 @@ export default {
                 brand_desc: '',
                 code: '',
             }),
+            release_form: new Form({
+                po_id: '',
+                purchase_order_id: '',
+                cs_id: '',
+                remarks: '',
+            }),
+            track: {},
+            po_id: '',
         }
     },
     methods:{
+        release_modal(po){
+            this.release_form.po_id = po.po_id;
+            this.release_form.purchase_order_id = po.purchase_order_id;
+            $('#releaseModal').modal('show');
+        },
+        release(){
+            this.release_form.post('../../api/release').then(({data}) => {
+
+                $('#releaseModal').modal('hide');
+                toast.fire({
+                    type: 'success',
+                    title: data
+                });
+            }).catch(() => {
+
+            });
+        },
         get_pos(){
             axios.get('../../api/for_accounting').then(({data}) => {
                 this.pos = data;
@@ -528,6 +604,15 @@ export default {
 
             });
         },
+        view_track(po){
+            this.po_id = po.po_id;
+            axios.get('../../api/purchase_request_track/'+po.purchase_request_id).then(({data}) => {
+                this.track = data;
+                $('#viewTrack').modal('show');
+            }).catch(() => {
+
+            });
+        }
     },
     created(){
         this.get_pos();

@@ -27,7 +27,8 @@ class DmdPurchaseOrder extends Model
 
         'cost_price',
         'list_no',
-        'po_id'
+        'po_id',
+        'total_received',
     ];
 
 

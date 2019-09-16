@@ -23,7 +23,7 @@ class PurchaseOrder extends Model
         'po_id','dod',
         'pod','ors_burs',
         'notice','waiver',        
-        'pr_id',
+        'pr_id'
     ];
 
     protected $dispatchesEvents = [

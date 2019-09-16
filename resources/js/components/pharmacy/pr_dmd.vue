@@ -20,11 +20,11 @@
                 <thead>
                     <tr>
                         <th width="3%" class="text-left">#</th>
-                        <th width="24%" class="text-left">Item Desc</th>
+                        <th width="22%" class="text-left">Item Desc</th>
                         <th width="5%" class="text-left">Unit</th>
                         <th width="9%" class="text-left">PR #</th>
                         <th width="9%" class="text-left">Date of PR</th>
-                        <th width="9%" class="text-center">Status</th>
+                        <th width="11%" class="text-center">Status</th>
                         <th width="9%" class="text-center">Date (Status)</th>
                         <th width="13%" class="text-left">Date (Whole)</th>
                         <th width="7%">Qty Ordered</th>
@@ -34,7 +34,7 @@
                 <tbody class="table-bordered">
                     <tr v-for="(item, index) in filteredPrs" :key="item.dmd_pr_id">
                         <td width="3%" class="text-left" @click="view_pr(item.purchase_request_id)">{{ index + 1 }}</td>
-                        <td width="24%" class="text-left" @click="view_pr(item.purchase_request_id)">
+                        <td width="22%" class="text-left" @click="view_pr(item.purchase_request_id)">
                             <span class="text-link btn" >
                                 {{ item.dmddesc }}
                             </span>
@@ -52,7 +52,7 @@
                                 {{ item.pr_date_time | myDate4 }}
                             </span>
                         </td>
-                        <td width="9%" class="text-center" @click="view_track(item.purchase_request_id)">
+                        <td width="11%" class="text-center" @click="view_track(item.purchase_request_id)">
                             <span v-if="item.csid2" class="badge badge-pill" v-bind:class="[
                                 { 'badge-success' : item.csid2 == 5 },
                                 { 'badge-success' : item.csid2 == 6 },

@@ -102,23 +102,6 @@ class CartController extends Controller
 
 
     public function shopping(){
-        
-        // $data = NewCart::where('status', 0)
-        // ->where('mode_id', 4)
-        // ->where('app_year', Carbon::now()->year)
-        // ->orderBy('dmddesc', 'asc')
-        // ->get();
-
-        // $data = Cart::with([
-        //     'cart_dmds' => function($query){
-        //         $query->with([
-        //             'app_dmd_year'
-        //         ]);
-        //     }
-        // ])
-        // ->where('mode_id',4)
-        // ->where('status', 0)
-        // ->first();
 
         $data = DB::SELECT("SELECT * FROM procurement.dbo.fn_cart_shopping()");
 
@@ -126,18 +109,6 @@ class CartController extends Controller
     }
 
     public function public_bidding(){
-        
-        // $data = Cart::with([
-        //     'cart_dmds' => function($query){
-        //         $query->with([
-        //             'dmd_price_schedule', 
-        //             'app_dmd_year',
-        //         ]);
-        //     }
-        // ])
-        // ->where('mode_id', 1)
-        // ->where('status', 0)
-        // ->first();
 
         $data = DB::SELECT("SELECT * FROM procurement.dbo.fn_cart_public_bidding()");
 

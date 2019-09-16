@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-             <div class="row mb-1 shadow p-3 mb-3 bg-white rounded">
+             <div class="row bg-white rounded">
                 <h6><i class="fas fa-cart-arrow-down"></i> Purchase Order</h6>
             </div>
         </div>

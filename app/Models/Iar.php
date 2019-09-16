@@ -10,7 +10,15 @@ class Iar extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'iar_no', 'po_id', 'inspector_id', 'officer_id', 'date_received'
+        'iar_no', 
+        'po_id', 
+        'inspector_id', 
+        'officer_id', 
+        'date_received', 
+        'invoice_no', 
+        'invoice_date',
+        'officer_inspected',
+        'inspector_inspected'
     ];
 
     public function iar(){

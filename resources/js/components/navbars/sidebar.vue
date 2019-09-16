@@ -172,6 +172,12 @@
                         <p>List of DV</p>
                     </router-link>
                 </li>
+                <li class="nav-item">
+                    <router-link to='../../holidays' class="nav-link">
+                        <i class="nav-icon fas fa-list-ul"></i>
+                        <p>Holidays</p>
+                    </router-link>
+                </li>
             </ul>
             <ul v-show="user.role_id === '5'" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
@@ -212,6 +218,12 @@
                     <router-link to='../../accounting_po' class="nav-link">
                         <i class="nav-icon fas fa-cart-arrow-down"></i>
                         <p>Purchase Order</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to='../../needed_uacs' class="nav-link">
+                        <i class="nav-icon fas fa-capsules"></i>
+                        <p>Need Uacs</p>
                     </router-link>
                 </li>
                 <li class="nav-item">

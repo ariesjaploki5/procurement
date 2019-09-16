@@ -40,6 +40,7 @@ import adjustment_list from './components/pages/adjustments/list';
 import purchase_request2 from './components/pharmacy/purchase_request.vue';
 import purchase_order2 from './components/pharmacy/purchase_order.vue';
 
+import a_dmds from './components/administrator/drugs_and_medicines.vue';
 
 import request_for_quotation from './components/pages/rfq/main.vue';
 import request_for_quotation_list from './components/pages/rfq/list.vue';
@@ -55,6 +56,7 @@ import supplier_list from './components/pages/supplier/list';
 
 import accounting_po from './components/accounting/all_po.vue';
 import accounting_dmd from './components/accounting/drugs_and_medicines.vue';
+import needed_uacs from './components/accounting/needed_uacs.vue';
 
 import budget_po from './components/budget/all_po.vue';
 import budget_dmd from './components/budget/drugs_and_medicines.vue';
@@ -77,6 +79,7 @@ import mmo_dmd from './components/mmo/drugs_and_medicines.vue';
 import dmd_po from './components/mmo/dmd_po.vue';
 import mmo_dvs from './components/mmo/dv.vue';
 import mmo_iar from './components/mmo/iar.vue';
+import holidays from './components/mmo/holidays.vue';
 
 import aoq from './components/print/aoq';
 import app from './components/print/app';
@@ -101,6 +104,24 @@ import consignment_requests from './components/pharmacy/consignment_request.vue'
 import others from './components/others/main.vue';
 
 export const routes = [
+    {
+        path: '/holidays',
+        component: holidays,
+        name: 'holidays',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/a_dmds',
+        component: a_dmds,
+        name: 'a_dmds',
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/needed_uacs',
+        component: needed_uacs,
+        name: 'needed_uacs',
+        meta: { requiresAuth: true }
+    },
     {
         path: '/mmo_dvs',
         component: mmo_dvs,

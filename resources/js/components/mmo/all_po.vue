@@ -120,27 +120,25 @@
                                     <table class="table table-sm table-hover">
                                         <thead>
                                             <tr>
-                                                <th>IAR No</th>
-                                                <th>Batch No</th>
-                                                <th>Item Desc</th>
-                                                <th>Received Quantity</th>
-                                                <th>Expiry Date</th>
+                                                <th width="20%" class="text-center"><small>IAR No</small> </th>
+                                                <th width="10%" class="text-center"><small>Batch No</small></th>
+                                                <th width="35%" class="text-center"><small>Description</small></th>
+                                                <th width="15%" class="text-center"><small>Received Quantity</small></th>
+                                                <th width="20%" class="text-center"><small>Expiry Date</small></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>  
-                                                <td></td>
+                                            <tr v-for="(iar, index) in view_po_form.iars" :key="index">
+                                                <td width="20%">{{ iar.iar_no }}</td>
+                                                <td width="10%" class="text-right">{{ iar.batch_no }}</td>
+                                                <td width="35%">{{ iar.dmddesc }}</td>
+                                                <td width="15%" class="text-right">{{ iar.received_quantity }}</td>  
+                                                <td width="20%" class="text-center">{{ iar.expiry_date }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                                
-                            
                             <div class="w-100"></div>
                             <div class="col-md-12 text-right">
                                 <button type="button" class="btn btn-sm btn-success" @click="receive_modal()">
@@ -167,13 +165,20 @@
                             <div class="modal-body">
                                 <div class="row">
                                     <div class="col-md-6">
-
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <label for="" class="label form-label">Date Received: </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="date" class="form-control form-control-sm text-right" v-model="receive_form.date_received" required>
+                                            </div>
+                                        </div>
                                         <div class="form-group row">
                                             <div class="col-md-4">
                                                 <label for="" class="label form-label">Receiving Officer: </label>
                                             </div>
                                             <div class="col-md-8">
-                                                <select class="form-control form-control-sm" v-model="receive_form.officer_id">
+                                                <select class="form-control form-control-sm" v-model="receive_form.officer_id" required>
                                                     <option v-for="ro in receiving_officers" :key="ro.id" :value="ro.id">
                                                         {{ ro.name }}
                                                     </option>
@@ -181,11 +186,19 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <div class="col-md-8 text-right">
+                                                <label for="" class="label form-label">Date Inspected: </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="date" class="form-control form-control-sm text-right" v-model="receive_form.officer_inspected" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <div class="col-md-4">
                                                 <label for="" class="label form-label">Inspection Officer: </label>
                                             </div>
                                             <div class="col-md-8">
-                                                <select class="form-control form-control-sm" v-model="receive_form.inspector_id">
+                                                <select class="form-control form-control-sm" v-model="receive_form.inspector_id" required>
                                                     <option v-for="i in inspectors" :key="i.id" :value="i.id">
                                                         {{ i.name }}
                                                     </option>
@@ -193,22 +206,45 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <div class="col-md-4">
-                                                <label for="" class="label form-label">Date Received: </label>
+                                            <div class="col-md-8 text-right">
+                                                <label for="" class="label form-label">Date Inspected: </label>
                                             </div>
-                                            <div class="col-md-8">
-                                                <input type="date" class="form-control form-control-sm text-right" v-model="receive_form.date_received" required>
+                                            <div class="col-md-4">
+                                                <input type="date" class="form-control form-control-sm text-right" v-model="receive_form.inspector_inspected" required>
                                             </div>
                                         </div>
-
+                                        
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <label for="" class="label form-label">Invoice No: </label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control form-control-sm text-right" v-model="receive_form.invoice_no" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-8 text-right">
+                                                <label for="" class="label form-label">Invoice Date: </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="date" class="form-control form-control-sm text-right" v-model="receive_form.invoice_date" required>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row" v-for="(item, index) in receive_form.items" :key="index">
                                             <div class="col-md-3">
+                                                <label for="" class="label form-label">Batch No.</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control form-control-sm" v-model="item.batch_no" required>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-3">
                                                 <label for="" class="label form-label">Item: </label>
                                             </div>
                                             <div class="col-md-9">
-                                                <select class="form-control form-control-sm" v-model="item.dmd_id">
+                                                <select class="form-control form-control-sm" v-model="item.dmd_id" required>
                                                     <option v-for="(item, index) in view_po_form.dmd_purchase_orders" :key="index" :value="item.dmd_id">{{ item.dmddesc }}</option>
                                                 </select>
                                             </div>
@@ -217,22 +253,21 @@
                                                 <label for="" class="label form-label">Quantity: </label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="number" class="form-control form-control-sm" v-model="item.received_quantity">
+                                                <input type="number" class="form-control form-control-sm text-right" v-model="item.received_quantity" required>
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="" class="label form-label">Expiry Date: </label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="date" class="form-control form-control-sm" v-model="item.expiry_date">
+                                                <input type="date" class="form-control form-control-sm" v-model="item.expiry_date" required>
                                             </div>
                                             <div class="w-100"></div>
                                             <div class="col-md-3">
                                                 <label for="" class="label form-label">Remarks: </label>
                                             </div>
                                             <div class="col-md-9">
-                                                <textarea type="text"  class="form-control form-control-sm" v-model="item.remarks"></textarea>
+                                                <textarea type="text"  class="form-control form-control-sm" v-model="item.remarks" required></textarea>
                                             </div>  
-            
                                         </div>
                                         <button class="btn btn-sm btn-primary" type="button" @click="add_item()">add</button>
                                     </div>
@@ -525,6 +560,7 @@
                     purchase_request:{
                     view_dmd_purchase_requests:[],
                     last_status: {},
+                    iars: [],
                 },
                 }),
                 iar_batch: [],
@@ -535,14 +571,19 @@
                     list_no: '',
                     order_quantity: '',
                     officer_id: '',
+                    officer_inspected: '',
                     inspector_id: '',
+                    inspector_inspected: '',
                     date_received: '',
+                    invoice_no: '',
+                    invoice_date: '',
                     items: [
                         { 
                             dmd_id: '',
                             received_quantity: '',
                             expiry_date: '',
                             remarks: '',
+                            batch_no: '',
                         }
                     ],
                 }),
@@ -621,8 +662,8 @@
 
                 });
                 axios.get('../../api/iar_batch/'+po.po_id).then(({data}) => {
-
-                }).catch(() => {
+                    this.view_po_form.iars = data;
+                }).catch(() => {    
 
                 });
                 $('#poModal').modal('show');
@@ -688,12 +729,12 @@
             receive_modal(){
                 this.receive_form.po_id = this.view_po_form.po_id;
                 $('#receiveModal').modal('show');
-                
                 this.receive_form.items = [
                     {
                         dmd_id: '',
                         received_quantity: '',
                         expiry_date: '',
+                        batch_no: '',
                     }
                 ];
             },
@@ -705,8 +746,15 @@
                 });
             },
             receive(){
-                this.receive_form.post('../../api/iar').then(() => {
+                this.receive_form.post('../../api/iar').then(({data}) => {
+                    console.log(data);
+                    axios.get('../../api/iar_batch/'+this.view_po_form.po_id).then(({data}) => {
+                        this.view_po_form.iars = data;
+                    }).catch(() => {    
+
+                    });
                     $('#receiveModal').modal('hide');
+                    
                 }).catch(() => {
 
                 });

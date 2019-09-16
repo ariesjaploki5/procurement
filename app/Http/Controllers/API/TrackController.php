@@ -26,7 +26,9 @@ class TrackController extends Controller
 
     public function show($id){
 
-        $data = DB::table("dbo.fn_purchase_request_track($id)")->get();
+        $data = DB::table("dbo.fn_purchase_request_track($id)")
+        ->orderBy('date_time', 'asc')
+        ->get();
 
 
         return response()->json($data);

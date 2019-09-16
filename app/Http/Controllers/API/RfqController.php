@@ -11,6 +11,7 @@ use App\Views\Dmds;
 use DB;
 use App\Views\DmdRfq2;
 use App\Views\HomisDmd;
+use App\Models\PurchaseRequest;
 
 class RfqController extends Controller
 {
@@ -69,8 +70,13 @@ class RfqController extends Controller
 
     public function store(Request $request){
 
-        $rfq = Rfq::create([
+        $rfq = Rfq::firstOrCreate([
             'purchase_request_id' => $request->purchase_request_id,
+        ]);
+
+        $pr = PurchaseRequest::findOrFail($request->purchase_request_id);
+        $pr->update([
+            'updated_at' => Carbon::now()
         ]);
 
         return response()->json();

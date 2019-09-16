@@ -10,7 +10,7 @@ class PurchaseOrderStatus extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'purchase_order_id', 'current_status_id', 'status_date_time',
+        'purchase_order_id', 'current_status_id', 'status_date_time', 'remarks'
     ];
 
     public function purchase_order(){

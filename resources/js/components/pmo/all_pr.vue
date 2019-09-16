@@ -285,8 +285,6 @@ export default {
             this.view_pr_form.fill(pr);
             axios.get('../../api/purchase_request/'+pr.purchase_request_id).then(({data}) => {
                     this.view_pr_form.dmd_purchase_requests = data;
-
-                
                 }).catch(() => {
 
                 });
@@ -380,7 +378,6 @@ export default {
 
             });
         },
-
         store_rfq_po(id){
             axios.post('../../api/rfq_to_po',{
                 purchase_request_id: id,
@@ -398,7 +395,6 @@ export default {
 
             });
         },
-
         store_rfq(id){
             this.view_pr_form.post('../../api/rfq').then(() => {
                 $('#prModal').modal('hide');
@@ -413,7 +409,6 @@ export default {
     },
     created(){
         this.get_prs();
-
     },
     computed:{
         current_user() {
