@@ -5,11 +5,12 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Holiday;
+use Carbon\Carbon;
 
 class HolidayController extends Controller
 {
     public function index(){
-        $data = Holiday::orderBy('holiday_date', 'asc')->get();
+        $data = Holiday::whereYear('holiday_date', date(Carbon::now()->year))->orderBy('holiday_date', 'asc')->get();
 
         return response()->json($data);
     }

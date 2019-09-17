@@ -81,6 +81,8 @@ Route::get('iar_batch/{id}', 'API\IarBatchController@show');
 Route::get('iar_batch_2/{id}', 'API\IarBatchController@show_4');
 Route::get('iar_batch_3/{id}', 'API\IarBatchController@show_2');
 
+Route::get('get_iar/{id}', 'API\IarBatchController@get_iar');
+
 Route::post('dv', 'API\DvController@store');
 Route::get('dv', 'API\DvController@index');
 
@@ -128,6 +130,9 @@ Route::get('for_budget', 'API\PurchaseOrderController@for_budget');
 
 Route::get('get_po/{id}', 'API\PurchaseOrderController@get_po');
 Route::get('get_pr/{id}', 'API\PurchaseRequestController@get_pr');
+
+Route::get('get_pr_total_amount/{id}', 'API\PurchaseRequestController@get_total_amount');
+
 Route::post('received_po_dmd', 'API\DmdReceivedController@store');
 Route::put('notice_to_terminate/{id}', 'API\PurchaseOrderController@notice_to_terminate');
 Route::post('rfq_to_po', 'API\PurchaseRequestController@rfq_to_po');

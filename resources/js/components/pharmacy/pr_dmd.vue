@@ -33,14 +33,16 @@
                 </thead>
                 <tbody class="table-bordered">
                     <tr v-for="(item, index) in filteredPrs" :key="item.dmd_pr_id">
-                        <td width="3%" class="text-left" @click="view_pr(item.purchase_request_id)">{{ index + 1 }}</td>
+                        <td width="3%" class="text-left" @click="view_pr(item.purchase_request_id)">
+                            <span>{{ index + 1 }}</span>
+                        </td>
                         <td width="22%" class="text-left" @click="view_pr(item.purchase_request_id)">
                             <span class="text-link btn" >
                                 {{ item.dmddesc }}
                             </span>
                         </td>
                         <td width="5%" class="text-left" @click="view_pr(item.purchase_request_id)">
-                            {{ item.unit_id }}
+                            {{ item.unit_desc }}
                         </td>
                         <td width="9%" class="text-center" @click="view_pr(item.purchase_request_id)">
                             <span class="text-link btn">
@@ -52,7 +54,7 @@
                                 {{ item.pr_date_time | myDate4 }}
                             </span>
                         </td>
-                        <td width="11%" class="text-center" @click="view_track(item.purchase_request_id)">
+                        <td width="11%" class="text-center" @click="view_track(item)">
                             <span v-if="item.csid2" class="badge badge-pill" v-bind:class="[
                                 { 'badge-success' : item.csid2 == 5 },
                                 { 'badge-success' : item.csid2 == 6 },
@@ -197,7 +199,7 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5  class="modal-title text-bold" id="viewTrackLabel">PR # {{ pr.created_at | myDate }} - {{ pr.purchase_request_id | numeral2 }}</h5>
+                        <h5  class="modal-title text-bold" id="viewTrackLabel">PR # {{ pr_id }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -210,12 +212,14 @@
                                         <tr>
                                             <th>Status</th>
                                             <th>Date/Time</th>
+                                            <th>Remarks</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="(tr, index) in track" :key="index">
                                             <td>{{ tr.status_desc }}</td>
                                             <td>{{ tr.date_time | myDate4 }} - {{ tr.date_time | myDate5 }}</td>
+                                            <td>{{ tr.remarks }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -229,7 +233,6 @@
         </div>
     </div>
 </template>
-
 <script>
 export default {
     data(){
@@ -238,6 +241,7 @@ export default {
             pr: {},
             search_word: '',
             track: {},
+            pr_id: '',
         }
     },
     methods:{
@@ -266,30 +270,31 @@ export default {
 
             });
         },
-        view_track(id){
-            axios.get('../../api/purchase_request_track/'+id).then(({data}) => {
+        view_track(item){
+            this.pr_id = item.pr_id;
+            axios.get('../../api/purchase_request_track/'+item.purchase_request_id).then(({data}) => {
                 this.track = data;
                 $('#viewTrack').modal('show');
             }).catch(() => {
-
+                
             });
         }
     },
     created(){
         this.get_dmd_pr();
-
     },
     computed:{
         filteredPrs: function(){
             let matcher = new RegExp(this.search_word, 'i')
-            return this.dmd_pr.filter(function(dmd){
-                return matcher.test(dmd.dmddesc)
-            });
+            return this.dmd_pr.filter(function(dmd)
+                {
+                    return matcher.test(dmd.dmddesc);
+                }
+            );
         },
         current_user() {
             return this.$store.getters.current_user;
         }
-
     },
     mounted(){
         window.Echo.channel("pr_created").listen(".purchase_request.created", (e) => {

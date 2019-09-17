@@ -142,7 +142,7 @@
                             <div class="w-100"></div>
                             <div class="col-md-12 text-right">
                                 <button type="button" class="btn btn-sm btn-success" @click="receive_modal()">
-                                    Receive
+                                    Create IAR
                                 </button>
                             </div>
                         </div>
@@ -661,7 +661,7 @@
                 }).catch(() => {
 
                 });
-                axios.get('../../api/iar_batch/'+po.po_id).then(({data}) => {
+                axios.get('../../api/get_iar/'+po.po_id).then(({data}) => {
                     this.view_po_form.iars = data;
                 }).catch(() => {    
 

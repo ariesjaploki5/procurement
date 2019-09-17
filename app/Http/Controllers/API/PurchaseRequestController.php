@@ -224,6 +224,12 @@ class PurchaseRequestController extends Controller
         return response()->jsoN($data);
     }
 
+    public function get_total_amount($id){
+        $data = DB::SELECT("procurement.dbo.fn_get_pr_total_amount($id)");
+
+        return response()->json($data);
+    }
+
     public function pr_show($id){
 
         $data = DB::SELECT("SELECT * FROM fn");

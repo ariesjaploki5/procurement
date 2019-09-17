@@ -34,8 +34,6 @@
         </div>
     </div>
 
-
-
     <div class="row">
         <div class="col-6 pr all">
             <div class="row">
@@ -115,7 +113,7 @@
     <div class="row cheight" v-for="dpr in dmd_pr" :key="dpr.dpr_id" id="height"> 
         <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.dmd_id }}</span></div>
         <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.request_quantity | numeral3 }}</span></div>
-        <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
+        <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.unit_desc }}</span></div>
         <div class="col-4 pr top right bottom text-center font-weight-bold"><span>{{ dpr.dmddesc }}</span></div>
         <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
         <div class="col-2 pr top right bottom text-center font-weight-bold"><span>{{ dpr.cost_price | currency2 }}</span></div>

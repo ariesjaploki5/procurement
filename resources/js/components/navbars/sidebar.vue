@@ -173,6 +173,12 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
+                    <router-link to='../../mmo_terminated' class="nav-link">
+                        <i class="nav-icon fas fa-list-ul"></i>
+                        <p>List of Terminated</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
                     <router-link to='../../holidays' class="nav-link">
                         <i class="nav-icon fas fa-list-ul"></i>
                         <p>Holidays</p>

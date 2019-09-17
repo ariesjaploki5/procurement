@@ -79,6 +79,8 @@ import mmo_dmd from './components/mmo/drugs_and_medicines.vue';
 import dmd_po from './components/mmo/dmd_po.vue';
 import mmo_dvs from './components/mmo/dv.vue';
 import mmo_iar from './components/mmo/iar.vue';
+import mmo_terminated from './components/mmo/terminated.vue';
+
 import holidays from './components/mmo/holidays.vue';
 
 import aoq from './components/print/aoq';
@@ -104,6 +106,12 @@ import consignment_requests from './components/pharmacy/consignment_request.vue'
 import others from './components/others/main.vue';
 
 export const routes = [
+    {
+        path: '/mmo_terminated',
+        component: mmo_terminated,
+        name: 'mmo_terminated',
+        meta: { requiresAuth: true }
+    },
     {
         path: '/holidays',
         component: holidays,
