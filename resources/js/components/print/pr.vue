@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div class="container" id="container">
     <button class="btn btn-primary d-print-none button ml-2 mb-2" onclick="print()">Print</button>
 
     <div class="row">
         <div class="col-12">
             <div class="row bottom">
-                <div class="pr col-auto bottom right">
+                <div class="pr col-3 bottom right">
                     <img :src="'/img/bghmc.png'" class="img-thumbnail">
                 </div>
                 <div class="pr col bottom">
@@ -110,16 +110,19 @@
         <div class="col-2 pr top right text-center font-weight-bold"><span>Estimated Unit Cost</span></div>
         <div class="col-2 pr top text-center font-weight-bold"><span>Estimated Cost</span></div>
     </div>
-    <div class="row cheight" v-for="dpr in dmd_pr" :key="dpr.dpr_id" id="height"> 
-        <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.dmd_id }}</span></div>
-        <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.request_quantity | numeral3 }}</span></div>
-        <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.unit_desc }}</span></div>
-        <div class="col-4 pr top right bottom text-center font-weight-bold"><span>{{ dpr.dmddesc }}</span></div>
-        <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
-        <div class="col-2 pr top right bottom text-center font-weight-bold"><span>{{ dpr.cost_price | currency2 }}</span></div>
-        <div class="col-2 pr top bottom text-center font-weight-bold"><span>{{ dpr.total_amount | currency2 }}</span></div>
+        <div id="body">
+            <div class="row bheight" v-for="dpr in dmd_pr" :key="dpr.dpr_id" id="height"> 
+            <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.dmd_id }}</span></div>
+            <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.request_quantity | numeral3 }}</span></div>
+            <div class="col pr top right bottom text-center font-weight-bold"><span>{{ dpr.unit_desc }}</span></div>
+            <div class="col-4 pr top right bottom text-center font-weight-bold"><span>{{ dpr.dmddesc }}</span></div>
+            <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
+            <div class="col-2 pr top right bottom text-center font-weight-bold"><span>{{ dpr.cost_price | currency2 }}</span></div>
+            <div class="col-2 pr top bottom text-center font-weight-bold"><span>{{ dpr.total_amount | currency2 }}</span></div>
+        </div>
     </div>
-    <div class="row">
+    <div id="footer">
+      <div class="row">
         <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
         <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
         <div class="col pr top right bottom text-center font-weight-bold"><span></span></div>
@@ -205,6 +208,7 @@
         <div class="col-5 pr top text-center"><span>Pharmacist IV</span></div>
         <div class="col-5 pr top left text-center"><span>Chief Medical Professional Staff II</span></div>
     </div>
+    </div>
 </div>
 </template>
 
@@ -272,6 +276,22 @@
         border: none;
     }
 
+    #container {
+        position: relative;
+        min-height: 100vh;
+    }
+
+    #body {
+        padding-bottom: 2.5rem;
+    }
+
+    #footer {
+        position: absolute;
+        bottom: 0;
+        width: 97%;
+        height: 2.5rem;
+    }
+
     .img-thumbnail {
         border: none;
         display: block;
@@ -315,21 +335,9 @@
         height: 5px;
     }
     .bheight {
-        height: 20px;
+        height: 120px;
     }
     .cheight {
         height: 600px;
-    }
-    #footer {
-        position: fixed;
-        bottom: 0;
-        width: auto;
-        margin-left: -1.3%;
-    }
-
-    @media print{
-        #height{
-            height: 330px;
-        }
     }
 </style>
