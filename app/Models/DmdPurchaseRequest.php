@@ -10,7 +10,7 @@ class DmdPurchaseRequest extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'dmd_id', 'purchase_request_id',
+        'dmd_id', 'pr_id',
         'request_quantity', 'cost_price',
         'purchase_order_id', 'order_quantity',
         'status', 'received_quantity',
@@ -18,7 +18,7 @@ class DmdPurchaseRequest extends Model
     ];
 
     public function purchase_request(){
-        return $this->belongsTo('App\Models\PurchaseRequest');
+        return $this->belongsTo('App\Models\PurchaseRequest', 'pr_id', 'pr_id');
     }
 
     public function dmd_price_schedule(){

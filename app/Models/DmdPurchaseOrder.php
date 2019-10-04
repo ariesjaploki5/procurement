@@ -14,9 +14,7 @@ class DmdPurchaseOrder extends Model
     public $timestamps = false;
 
     protected $fillable = [
-
-        'purchase_order_id',
-        'purchase_request_id',
+        'po_id',
         'dmd_id',
         'order_quantity',
         
@@ -33,7 +31,7 @@ class DmdPurchaseOrder extends Model
 
 
     public function purchase_order(){
-        return $this->belongsTo('App\Models\PurchaseOrder', 'purchase_order_id', 'purchase_order_id');
+        return $this->belongsTo('App\Models\PurchaseOrder', 'po_id', 'po_id');
     }
 
 

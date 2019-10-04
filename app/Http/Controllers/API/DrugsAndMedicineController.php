@@ -169,6 +169,20 @@ class DrugsAndMedicineController extends Controller
         return response()->json();
     }
 
+    public function update_cpr(Request $request){
+        $dmd = DB::table('dmds')->where('dmd_id', $request->dmd_id)->update([
+            'cpr' => $request->cpr,
+        ]);
+
+        return response()->json();
+    }
+
+    public function update_vat_exempt(Request $request){
+        $dmd = DB::table('dmds')->where('dmd_id', $request->dmd_id)->update([
+            'vat_exempt' => 1,
+        ]);
+    }
+
     public function update(){
 
 

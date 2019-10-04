@@ -10,7 +10,7 @@ class NoticeOfAdjustment extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'purchase_order_id',
+        'po_id',
         'adjust_ors_burs_no',
         'resp_center_to',
         'particulars_to',
@@ -19,12 +19,11 @@ class NoticeOfAdjustment extends Model
         'amount_to_p',
         'adjust_raod',
         'remarks',
-        'ors',
-        'burs'
+        'to_id'
     ];
 
     public function purchase_order(){
-        return $this->belongsTo('App\Models\PurchaseOrder', 'purchase_order_id', 'purchase_order_id');
+        return $this->belongsTo('App\Models\PurchaseOrder', 'po_id', 'po_id');
     }
 
 }

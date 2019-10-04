@@ -40,10 +40,10 @@
                         <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
                         <th @click="view_po(po)" width="37%">{{ po.supplier_name }}</th>
                         <th width="10%">
-                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 5" @click="cmps_rcv(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 5" @click="cmps_rcv(po.po_id)">
                                 <i class="fas fa-file-download"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 6" @click="cmps_rls(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 6" @click="cmps_rls(po.po_id)">
                                 <i class="fas fa-file-upload"></i>
                             </button>
                         </th>
@@ -204,7 +204,7 @@ export default {
         view_po(po){
             this.view_po_form.reset();
             this.view_po_form.fill(po);
-            axios.get('../../api/purchase_order/'+po.purchase_order_id).then(({data}) => {
+            axios.get('../../api/purchase_order/'+po.po_id).then(({data}) => {
                     this.view_po_form.dmd_purchase_orders = data;
                 }).catch(() => {
 

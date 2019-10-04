@@ -17,7 +17,7 @@
                         <tbody>
                             <tr v-for="rfq in rfqs" :key="rfq.rfq_id">
                                 <td @click="view_rfq(rfq.rfq_id)">{{ rfq.rfq_id }}</td>
-                                <td @click="view_rfq(rfq.rfq_id)">{{ rfq.created_at | myDate }} - {{ rfq.purchase_request_id | numeral2 }}</td>
+                                <td @click="view_rfq(rfq.rfq_id)">{{ rfq.pr_id }}</td>
                                 <td @click="view_rfq(rfq.rfq_id)">{{rfq.created_at | myDate3 }} - {{rfq.created_at | time1 }}</td>
 
                             </tr>

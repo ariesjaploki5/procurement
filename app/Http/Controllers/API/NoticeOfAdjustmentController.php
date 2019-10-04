@@ -23,17 +23,6 @@ class NoticeOfAdjustmentController extends Controller
             $adjust_ors_burs_no = 1;
         }
 
-        if($request->ors == false) {
-            $ors = 0;
-        } else {
-            $ors = 1;
-        }
-
-        if($request->burs == false) {
-            $burs = 0;
-        } else {
-            $burs = 1;
-        }
 
         if($request->amount_to_p == false) {
             $amount_to_p = 0;
@@ -42,9 +31,9 @@ class NoticeOfAdjustmentController extends Controller
         }
 
         $noa = NoticeOfAdjustment::create([
-            'purchase_order_id' => $request->purchase_order_id,
-            'ors' => $ors,
-            'burs' => $burs,
+            'to_id' => $request->to_id,
+            'po_id' => $request->po_id,
+
             'amount_to_p' => $amount_to_p,
 
             'adjust_ors_burs_no' => $adjust_ors_burs_no,
@@ -57,7 +46,7 @@ class NoticeOfAdjustmentController extends Controller
             'remarks' => $request->remarks
         ]);
         
-        $po = PurchaseOrder::findOrFail($noa->purchase_order_id);
+        $po = PurchaseOrder::findOrFail($noa->po_id);
 
         $po->update([
             'updated_at' => Carbon::now(),
@@ -67,7 +56,7 @@ class NoticeOfAdjustmentController extends Controller
     }
 
     public function show($id){
-        $data = DB::table('fn_po_noa()')->where('purchase_order_id', $id)->first();
+        $data = DB::table('fn_po_noa()')->where('po_id', $id)->first();
 
         return response()->json($data);
     }

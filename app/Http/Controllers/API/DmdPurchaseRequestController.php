@@ -39,16 +39,17 @@ class DmdPurchaseRequestController extends Controller
 
     public function store(Request $request){
 
-        // $month = Carbon::now()->format('YmdH')->month;
-        // $year = Carbon::now()->format('YmdH')->year;
-
-        $year_month = Carbon::now()->format('Y-m');
+        $year = Carbon::now()->year;
+        $month = Carbon::now()->month;
 
         $dmd = $request->items;
         $count = count($dmd);
 
         $cart = Cart::where('status', 0)->where('mode_id', 1)->first();
-        
+
+        $cart->update([
+            'status' => 1
+        ]);  
 
         for($i = 0; $i < $count; $i++){
 
@@ -56,27 +57,26 @@ class DmdPurchaseRequestController extends Controller
             $quantity = $dmd[$i]['item_needed'];
             $supplier_id = $dmd[$i]['supplier_id'];
             $ep = $dmd[$i]['ep'];
-
             $cost = $dmd[$i]['cost'];
 
-            $pr = PurchaseRequest::firstOrCreate([
-                'mode_id' => $request->mode_id,
-                'supplier_id' => $supplier_id,
-                'category_id' => $request->category_id,
-                'user_id' => $request->user_id,
-                'status' => 0,
-                'purpose' => $request->purpose,
-                'cart_id' => $cart->id,
-                'ep' =>  $ep,
-            ]);
+            $count_2 = PurchaseRequest::whereYear('created_at', $year)->get();
+            $new_pr = count($count_2) + 1;
+            $zero_id = sprintf("%04d", $new_pr);
+            $zero_month = sprintf("%02d", $month);
+            $pr_id = $year. "-" . $zero_month . "-" . $zero_id;
 
-            
-            if(!$pr->pr_id){
-                $zero_id = sprintf("%04d", $pr->purchase_request_id);
-                
-                $pr->pr_id = $year_month.'-'.$zero_id;
-                $pr->save();
-            }
+            $pr = PurchaseRequest::firstOrCreate([
+                    'mode_id' => 1,
+                    'supplier_id' => $supplier_id,
+                    'category_id' => $request->category_id,
+                    'user_id' => $request->user_id,
+                    'status' => 0,
+                    'cart_id' => $cart->id,
+                    'ep' =>  $ep,
+                ],[ 
+                    'pr_id' => $pr_id,
+                    'purpose' => $request->purpose,
+                ]);
 
             $pr->dmd_purchase_requests()->create([
                 'dmd_id' => $dmd_id,
@@ -89,41 +89,43 @@ class DmdPurchaseRequestController extends Controller
             ]);
         }
 
-        $cart->update([
-            'status' => 1
-        ]);  
-
         return response()->json();
     }
 
     public function shopping(Request $request){
 
-        $year_month = Carbon::now()->format('Y-m');
-
+        $year = Carbon::now()->year;
+        $month = Carbon::now()->month;
         $dmd = $request->items;
         $count = count($dmd);
-
         $cart = Cart::where('status', 0)->where('mode_id', 4)->first();
+        $cart->update([
+            'status' => 1
+        ]);  
 
         for($i = 0; $i < $count; $i++){
 
             $ep = $dmd[$i]['ep'];
 
-            $pr = PurchaseRequest::create([
-                'mode_id' => $request->mode_id,
+            $count_2 = PurchaseRequest::whereYear('created_at', $year)->get();
+            $new_pr = count($count_2) + 1;
+            $zero_id = sprintf("%04d", $new_pr);
+            $zero_month = sprintf("%02d", $month);
+            $pr_id = $year. "-" . $zero_month . "-" . $zero_id;
+
+            
+            $pr = PurchaseRequest::firstOrCreate([
+                'mode_id' => 4,
                 'category_id' => $request->category_id,
-                'user_id' => $request->user_id, 
+                'user_id' => $request->user_id,
                 'status' => 0,
-                'purpose' => $request->purpose,
                 'cart_id' => $cart->id,
-                'ep' => $ep
+                'ep' => $ep,
+            ], [ 
+                'pr_id' => $pr_id,
+                'purpose' => $request->purpose,
             ]);
     
-            if(!$pr->pr_id){
-                $zero_id = sprintf("%04d", $pr->purchase_request_id);
-                $pr->pr_id = $year_month.'-'.$zero_id;
-                $pr->save();
-            }
 
             $dmd_id = $dmd[$i]['dmd_id'];
             $quantity = $dmd[$i]['item_needed'];
@@ -140,11 +142,8 @@ class DmdPurchaseRequestController extends Controller
             ]);
         }
 
-        $cart->update([
-            'status' => 1
-        ]);  
-
         return response()->json();
+
     }
 
     public function rfq(Request $request){

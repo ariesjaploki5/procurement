@@ -10,14 +10,14 @@ class PurchaseRequestStatus extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'purchase_request_id', 
+        'pr_id', 
         'current_status_id', 
         'status_date_time', 
         'remarks'
     ];
 
     public function purchase_request(){
-        return $this->belongsTo('App\Models\PurchaseRequest', 'purchase_request_id', 'purchase_request_id');
+        return $this->belongsTo('App\Models\PurchaseRequest', 'pr_id', 'pr_id');
     }
 
     public function current_status(){

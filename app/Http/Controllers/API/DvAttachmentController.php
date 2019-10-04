@@ -14,12 +14,20 @@ class DvAttachmentController extends Controller
 
     public function store(Request $request){
 
-        $dv_attachment = DvAttachment::firstOrCreate([  
-            'attachment_id' => $request->attachment_id,
-            'po_id' => $request->po_id,
-            'purchase_order_id' => $request->purchase_order_id,
-            'number_date_particulars' => $request->number_date_particulars
-        ]);
+        $attachment = $request->attachments;
+        $count = count($attachment);
+        $po_id = $request->po_id;
+
+        for($i = 0; $i < $count; $i++){
+            $attachment_id = $attachment[$i]['attachment_id'];
+            $number_date_particulars = $attachment[$i]['number_date_particulars'];
+
+            $dv_attachment = DvAttachment::create([  
+                'attachment_id' => $attachment_id,
+                'po_id' => $po_id,
+                'number_date_particulars' => $number_date_particulars,
+            ]);
+        }
 
         return response()->json();
     }

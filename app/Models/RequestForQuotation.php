@@ -11,14 +11,14 @@ class RequestForQuotation extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'purchase_request_id',
+        'pr_id',
     ];
 
     public function purchase_request(){
-        return $this->belongsTo('App\Models\PurchaseRequest', 'purchase_request_id', 'purchase_request_id');
+        return $this->belongsTo('App\Models\PurchaseRequest', 'pr_id', 'pr_id');
     }
 
     public function dmd_rfqs(){
-        return $this->hasMany('App\Models\DmdRfq', 'purchase_request_id', 'purchase_request_id');
+        return $this->hasMany('App\Models\DmdRfq', 'pr_id', 'pr_id');
     }
 }

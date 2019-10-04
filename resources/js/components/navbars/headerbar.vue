@@ -16,7 +16,7 @@
               <span v-show="current_user.role_id == 1">Administrator</span>
               <span v-show="current_user.role_id == 2">Pharmacy</span>
               <span v-show="current_user.role_id == 3">Procumement Management Office</span>
-              <span v-show="current_user.role_id == 4">Materials Managment Office</span>
+              <span v-show="current_user.role_id == 4">Materials Management Office</span>
               <span v-show="current_user.role_id == 5">Division Head</span>
               <span v-show="current_user.role_id == 6">Budget Office</span>
               <span v-show="current_user.role_id == 7">Accounting Office</span>

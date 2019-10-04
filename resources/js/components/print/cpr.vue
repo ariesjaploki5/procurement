@@ -223,7 +223,7 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
       @font-face {
         font-family: 'Helvetica';
         src: url('https://fonts.googleapis.com/css?family=Helvetica');

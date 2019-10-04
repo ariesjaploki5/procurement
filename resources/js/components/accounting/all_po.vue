@@ -31,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
-                    <tr v-for="po in pos" :key="po.purchase_order_id">
+                    <tr v-for="po in pos" :key="po.po_id">
                         <th @click="view_po(po)" width="10%">{{ po.po_id }}</th>
                         <th @click="view_po(po)" width="15%">{{ po.created_at | myDate3 }}</th>
                         <th @click="view_track(po)" width="18%">
@@ -40,10 +40,10 @@
                         <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
                         <th @click="view_po(po)" width="37%">{{ po.supplier_name }}</th>
                         <th width="10%">
-                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 9" @click="accounting_rcv(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 9" @click="accounting_rcv(po.po_id)">
                                 <i class="fas fa-file-download"></i> Received
                             </button>
-                            <!-- <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 10" @click="accounting_rls(po.purchase_order_id)">
+                            <!-- <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 10" @click="accounting_rls(po.po_id)">
                                 <i class="fas fa-file-upload"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-primary" v-if="po.csid == 10" @click="na_modal(po)">
@@ -57,10 +57,10 @@
                                     <button v-if="!po.noa_id" class="dropdown-item" @click="na_modal(po)">
                                         <span>Notice of Adjustment</span>
                                     </button>
-                                    <router-link v-else class="dropdown-item" :to="{ name: 'na', params: { id: po.purchase_order_id }}">
+                                    <router-link v-else class="dropdown-item" :to="{ name: 'na', params: { id: po.po_id }}">
                                         <span>Notice of Adjustment</span>
                                     </router-link>
-                                    <!-- <button class="dropdown-item" v-show="po.csid == 10" @click="accounting_rls(po.purchase_order_id)">
+                                    <!-- <button class="dropdown-item" v-show="po.csid == 10" @click="accounting_rls(po.po_id)">
                                         <span>Released to FMO</span>
                                     </button> -->
                                     <button class="dropdown-item" @click="release_modal(po)">
@@ -102,9 +102,9 @@
                                             <td width="5%">{{ index + 1}}</td>
                                             <td width="17%" class="text-center">
                                                 <span v-if="dmd.code">{{ dmd.code }}</span>
-                                                <span v-else>
+                                                <!-- <span v-else>
                                                     <button class="btn btn-sm btn-primary" type="button" @click="add_stock_code(dmd)">add stock no</button>
-                                                </span>
+                                                </span> -->
                                             </td>
                                             <td width="35%">
                                                 <tr><td colspan="2"><span>{{ dmd.dmddesc }}</span></td></tr>
@@ -195,21 +195,20 @@
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck9" v-model="na_form.ors">
-                                                <label class="custom-control-label" for="customCheck9">OBLIGATION REQUEST AND STATUS</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" value="1" v-model="na_form.to_id">
+                                                <label class="form-check-label" for="exampleRadios1">
+                                                    OBLIGATION REQUEST AND STATUS
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" value="2" v-model="na_form.to_id">
+                                                <label class="form-check-label" for="exampleRadios2">
+                                                    BUDGET UTILIZATION REQUEST AND STATUS
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-12">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck8" v-model="na_form.burs">
-                                                <label class="custom-control-label" for="customCheck8">BUDGET UTILIZATION REQUEST AND STATUS</label>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                         <div class="form-group row">
                                             <div class="col-md-5">
                                                 <div class="custom-control custom-checkbox">
@@ -354,7 +353,6 @@
                             <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Close</button>
                             <button type="submit" class="btn btn-sm btn-success">Submit</button>
                         </div>
-
                         </form>
                     </div>
                 </div>
@@ -380,7 +378,7 @@
                                             <option value="19">CMPS</option>
                                             <option value="20">PMO</option>
                                             <option value="21">Budget</option>
-                                            <option value="13">FMO</option>
+                                            <option value="11">FMO</option>
                                         </select>
                                     </div>
                                 </div>
@@ -420,12 +418,14 @@
                                             <tr>
                                                 <th>Status</th>
                                                 <th>Date/Time</th>
+                                                <th>Remarks</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="(tr, index) in track" :key="index">
                                                 <td>{{ tr.status_desc }}</td>
                                                 <td>{{ tr.date_time | myDate4 }} - {{ tr.date_time | myDate5 }}</td>
+                                                <td>{{ tr.remarks }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -451,8 +451,8 @@ export default {
             view_po_form: new Form({
                 payment_term_id: '',
                 place_of_delivery: '',
-                purchase_order_id: '',
-                purchase_request_id: '',
+                po_id: '',
+                pr_id: '',
                 payment_term_desc: '',
                 po_id: '',
                 uacs_code_id: '',
@@ -472,9 +472,8 @@ export default {
                 noa_id: '',
             }),
             na_form: new Form({
-                purchase_order_id: '',
-                ors: false,
-                burs: false,
+                po_id: '',
+                to_id: '',
                 amount_to_p: false,
                 adjust_ors_burs_no: false,
                 resp_center_to_check: false,
@@ -499,7 +498,6 @@ export default {
             }),
             release_form: new Form({
                 po_id: '',
-                purchase_order_id: '',
                 cs_id: '',
                 remarks: '',
             }),
@@ -510,12 +508,10 @@ export default {
     methods:{
         release_modal(po){
             this.release_form.po_id = po.po_id;
-            this.release_form.purchase_order_id = po.purchase_order_id;
             $('#releaseModal').modal('show');
         },
         release(){
             this.release_form.post('../../api/release').then(({data}) => {
-
                 $('#releaseModal').modal('hide');
                 toast.fire({
                     type: 'success',
@@ -542,7 +538,7 @@ export default {
         view_po(po){
             this.view_po_form.reset();
             this.view_po_form.fill(po);
-            axios.get('../../api/purchase_order/'+po.purchase_order_id).then(({data}) => {
+            axios.get('../../api/purchase_order/'+po.po_id).then(({data}) => {
                     this.view_po_form.dmd_purchase_orders = data;
                 }).catch(() => {
 
@@ -555,7 +551,7 @@ export default {
         },
         na_modal(po){
             this.view_po_form.fill(po);
-            this.na_form.purchase_order_id = po.purchase_order_id;
+            this.na_form.po_id = po.po_id;
             $('#naModal').modal('show')
         },
         store_na(){
@@ -593,7 +589,7 @@ export default {
         store_stock_code(){
             this.stock_code_form.post('../../api/dmd_uacs').then(() => {
                 $('#stockModal').modal('hide');
-                axios.get('../../api/purchase_order/'+view_po_form.purchase_order_id).then(({data}) => {
+                axios.get('../../api/purchase_order/'+view_po_form.po_id).then(({data}) => {
                     this.view_po_form.dmd_purchase_orders = data;
                     
                 }).catch(() => {
@@ -606,7 +602,7 @@ export default {
         },
         view_track(po){
             this.po_id = po.po_id;
-            axios.get('../../api/purchase_request_track/'+po.purchase_request_id).then(({data}) => {
+            axios.get('../../api/purchase_request_track/'+po.pr_id).then(({data}) => {
                 this.track = data;
                 $('#viewTrack').modal('show');
             }).catch(() => {

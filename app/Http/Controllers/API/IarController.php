@@ -23,21 +23,21 @@ class IarController extends Controller
 
 
     public function store(Request $request){
-
-
+        $po_id = $request->po_id;
 
         $year_now = Carbon::now()->year;
         $month_now = Carbon::now()->month;
-        $count = Iar::where(DB::raw('YEAR(created_at)'), $year_now)->count();
+        $count = Iar::whereYear('created_at', $year_now)->count();
         $new_count = $count + 1;
         
         $iar_no = sprintf( '%04d', $new_count );
         $month = sprintf('%02d', $month_now);
+
         $iar_now_m_y = $year_now.'-'.$month.'-'.$iar_no;
 
         $iar = Iar::create([
             'iar_no' => $iar_now_m_y,
-            'po_id' => $request->po_id,
+            'po_id' => $po_id,
             'date_received' => $request->date_received,
             'officer_id' => $request->officer_id,
             'officer_inspected' => $request->officer_inspected,
@@ -64,13 +64,22 @@ class IarController extends Controller
                 'remarks' => $item[$i]['remarks']
             ]);
 
-            $dmd_po = DmdPurchaseOrder::where('po_id', $request->po_id)
+            $dmd_po = DmdPurchaseOrder::where('po_id', $po_id)
                 ->where('dmd_id', $item[$i]['dmd_id'])
                 ->first();
 
             $dmd_po->total_received = $item[$i]['received_quantity'] + $dmd_po->total_received;
-            
             $dmd_po->save();
+
+           
+            $mmo_stock = DB::table("mmo_stocks")->firstOrCreate([
+            'code' => $dmd_uacs->code,
+            'cost_price' => $dmd_po->cost_price
+            ]);
+
+            $mmo_stock->quantity = $mmo_stock + $item[$i]['received_quantity'];
+            $mmo_stock->save();
+            
         }
 
         return response()->json();

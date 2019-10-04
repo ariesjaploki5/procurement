@@ -223,7 +223,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 tr {
         width: 100%;
         display: inline-table;

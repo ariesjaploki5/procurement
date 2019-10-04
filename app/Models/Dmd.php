@@ -12,7 +12,7 @@ class Dmd extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'dmdctr', 'dmdcomb', 'ssl', 'unit_id', 'status'
+        'dmdctr', 'dmdcomb', 'ssl', 'unit_id', 'status', 'cpr'
     ]; 
 
     public function homis_dmd(){

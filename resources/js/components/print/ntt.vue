@@ -1,5 +1,5 @@
 <template>
-<div class="" >
+<div>
     <button class="btn btn-primary d-print-none button ml-2 mb-2" onclick="print()">Print</button>
     <div class="row">
         <div class="col nt text-center font-weight-bold all"><h3>NOTICE TO TERMINATE</h3></div>
@@ -159,7 +159,7 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
    @font-face {
         font-family: 'Roboto', sans-serif;
         src: url('https://fonts.googleapis.com/css?family=Roboto&display=swap');

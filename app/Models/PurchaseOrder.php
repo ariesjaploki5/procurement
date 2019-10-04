@@ -8,22 +8,25 @@ use App\Events\PurchaseOrderCreated;
 
 class PurchaseOrder extends Model
 {
-    protected $primaryKey = 'purchase_order_id';
-    public $timestamps = false;
+    protected $primaryKey = 'po_id';
+    protected $table = 'procurement.dbo.purchase_orders';
+    public $incrementing = false;
 
     protected $fillable = [
-        'created_at', 'allotment_id', 
-        'fund_source_code_id', 'fund_cluster_id',
-        'fund_source_id', 'uacs_code_id','amount', 'obrs_date', 
-        'date_of_delivery', 'terminated', 'date_served',
-        'payment_term_id', 'place_of_delivery',
-        'current_status','supplier_id',
-        'purchase_request_id','mode_id',
-        'delivery_term','updated_at',
-        'po_id','dod',
+        'po_id',
+        'pr_id',
+        'created_at', 
+        'updated_at',
+        'terminated', 
+        'date_served',
+        'payment_term_id', 
+        'place_of_delivery', 
+        'supplier_id',
+        'mode_id',
+        'delivery_term',
+        'dod',
         'pod','ors_burs',
-        'notice','waiver',        
-        'pr_id'
+        'notice','waiver',
     ];
 
     protected $dispatchesEvents = [
@@ -36,7 +39,7 @@ class PurchaseOrder extends Model
     }
 
     public function purchase_request(){
-        return $this->hasOne('App\Models\PurchaseRequest', 'purchase_request_id', 'purchase_request_id');
+        return $this->hasOne('App\Models\PurchaseRequest', 'pr_id', 'pr_id');
     }
 
     public function uacs(){
@@ -56,7 +59,7 @@ class PurchaseOrder extends Model
     }
 
     public function dmd_purchase_orders(){
-        return $this->hasMany('App\Models\DmdPurchaseOrder', 'purchase_order_id', 'purchase_order_id');
+        return $this->hasMany('App\Models\DmdPurchaseOrder', 'po_id', 'po_id');
     }
 
     public function supplier(){
@@ -68,11 +71,11 @@ class PurchaseOrder extends Model
     }
 
     public function purchase_order_statuses(){
-        return $this->hasMany('App\Models\PurchaseOrderStatus', 'purchase_order_id', 'purchase_order_id');
+        return $this->hasMany('App\Models\PurchaseOrderStatus', 'po_id', 'po_id');
     }
 
     public function last_status(){
-        return $this->hasOne('App\Models\PurchaseOrderStatus', 'purchase_order_id', 'purchase_order_id')
+        return $this->hasOne('App\Models\PurchaseOrderStatus', 'po_id', 'po_id')
         ->orderBy('id', 'desc');
     }
 
@@ -81,10 +84,14 @@ class PurchaseOrder extends Model
     }
 
     public function notice_of_adjustment(){
-        return $this->hasMany('App\Models\NoticeOfAdjustment', 'purchase_order_id', 'purchase_order_id');
+        return $this->hasMany('App\Models\NoticeOfAdjustment', 'po_id', 'po_id');
     }
     
     public function dv_current_status(){
-        return $this->hasMany('App\Models\DvCurrentStatus', 'purchase_order_id', 'purchase_order_id');
+        return $this->hasMany('App\Models\DvCurrentStatus', 'po_id', 'po_id');
+    }
+
+    public function obrs_no(){
+        return $this->hasOne('App\Models\PoObrs', 'po_id', 'po_id');
     }
 }

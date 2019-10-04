@@ -91,7 +91,7 @@ class PurchaseOrderController extends Controller
         ->whereNotNUll('accntng_rls')
         ->whereNotNull('fmo_rls')
         ->whereNotNull('mcc_rls')
-        ->where('purchase_order_id', $id)->first();
+        ->where('po_id', $id)->first();
 
         return response()->jsoN($data);
     }
@@ -170,7 +170,7 @@ class PurchaseOrderController extends Controller
             }
         }
 
-        $po = PurchaseOrder::findOrFail($request->purchase_order_id);
+        $po = PurchaseOrder::findOrFail($request->po_id);
         $po->update([
             'terminated' => 2
         ]);
@@ -190,7 +190,7 @@ class PurchaseOrderController extends Controller
 
     public function terminate(Request $request){
         
-        $po = PurchaseOrder::findOrfail($request->purchase_order_id);
+        $po = PurchaseOrder::findOrfail($request->po_id);
         
         $po->update([
             'terminated' => 1,
@@ -227,10 +227,9 @@ class PurchaseOrderController extends Controller
 
     public function store_dod(Request $request){
 
-        $po = PurchaseOrder::findOrFail($request->purchase_order_id);
+        $po = PurchaseOrder::findOrFail($request->po_id);
 
         $po->update([
-            'date_of_delivery' => $request->date_of_delivery,
             'delivery_term' => $request->delivery_term,
             'date_served' => $request->date_served,
             'dod' => 1
@@ -240,11 +239,10 @@ class PurchaseOrderController extends Controller
     }
 
     public function store_pod(Request $request){
-        $po = PurchaseOrder::findOrFail($request->purchase_order_id);
+        $po = PurchaseOrder::findOrFail($request->po_id);
 
         $po->update([
             'payment_term_id' => $request->payment_term_id,
-            'place_of_delivery' => $request->place_of_delivery,
             'pod' => 1
         ]);
 
@@ -255,7 +253,7 @@ class PurchaseOrderController extends Controller
     public function store_update_obrs(Request $request){
         $date = Carbon::now();
 
-        $po = PurchaseOrder::findOrFail($request->purchase_order_id);
+        $po = PurchaseOrder::findOrFail($request->po_id);
 
         $po->update([
             'allotment_id' => $request->allotment_id,
@@ -274,8 +272,8 @@ class PurchaseOrderController extends Controller
     public function pmo_show($id){
 
         $data = DB::table('purchase_orders as po')
-        ->join('dmd_purchase_orders as dpo', 'po.purchase_order_id', '=', 'dpo.purchase_order_id')
-        ->where('po.purchase_order_id', $id)
+        ->join('dmd_purchase_orders as dpo', 'po.po_id', '=', 'dpo.po_id')
+        ->where('po.po_id', $id)
         ->get();
         
         return response()->json($data);
@@ -285,7 +283,7 @@ class PurchaseOrderController extends Controller
 
         $word = $request->word;
 
-        $data = DB::SELECT("SELECT * FROM fn_filter_purchase_orders_search($word) order by purchase_order_id");
+        $data = DB::SELECT("SELECT * FROM fn_filter_purchase_orders_search($word) order by po_id");
 
         return response()->json($data);
     }
@@ -378,23 +376,21 @@ class PurchaseOrderController extends Controller
 
     public function show($id){
 
-        // $data = DB::SELECT("SELECT * FROM fn_dmd_purchase_orders($id) order by dmddesc asc");
-
         $data = DmdPurchaseOrder::with([
             'dmd_po_receiveds'
-        ])->where('purchase_order_id', $id)->get();
+        ])->where('po_id', $id)->get();
 
         return response()->json($data);
     }
 
     public function get_attachments($id){
 
-        $po = DB::Table("fn_get_dv($id)")->first();
+        $po = DB::Table("fn_get_dv()")->where('po_id', $id)->first();
 
         $array_1 = array(
             ["attachment" => $po->po_no], 
             ["attachment" => $po->pr_id], 
-            ["attachment" => $po->ors_burs_no],
+            ["attachment" => $po->obrs_no],
             // ["attachment" => $po->total_amount]
         );
 
@@ -419,7 +415,7 @@ class PurchaseOrderController extends Controller
 
     public function get_liquidated_damages($id){
 
-        $data = DB::Table("fn_get_liquidated_damages($id)")->get();
+        $data = DB::Table("fn_get_all_iar_with_liquidated_damages()")->where('po_id', $id)->get();
 
         return response()->json($data);
         
@@ -427,14 +423,14 @@ class PurchaseOrderController extends Controller
 
     public function get_dv_item($id){
 
-        $item = DB::Table("fn_get_dv($id)")->first();
+        $item = DB::Table("fn_get_dv()")->where('po_id', $id)->first();
         
         return response()->json($item);
     }
 
     public function purchase_order_obrs($id){
         
-        $data = DB::table("fn_dmd_purchase_orders($id)")->take(1)->first();
+        $data = DB::table("fn_dmd_purchase_orders()")->where('po_id', $id)->first();
 
         return response()->json($data);
 
@@ -442,7 +438,7 @@ class PurchaseOrderController extends Controller
 
     public function po_show($id){
 
-        $data = DB::table("fn_purchase_orders()")->where('purchase_order_id', $id)->first();
+        $data = DB::table("fn_purchase_orders()")->where('po_id', $id)->first();
 
         return response()->json($data);
         
@@ -450,7 +446,7 @@ class PurchaseOrderController extends Controller
 
     public function budget_show($id){
 
-        $data = DB::SELECT("exec procurement.dbo.sp_cons $id");
+        $data = DB::table("fn_dmd_purchase_orders_2()")->where('po_id', $id)->get();
     
         return response()->json($data);
     
@@ -834,11 +830,9 @@ class PurchaseOrderController extends Controller
         $dt = $po->delivery_term;
         $ds = $po->date_served;
         
-        $dmd_pos = DmdPurchaseOrder::where('purchase_order_id', $id)->get();
-
+        $dmd_pos = DmdPurchaseOrder::where('po_id', $id)->get();
 
         return response()->json();
-
     }
 
     public function release(Request $request){
@@ -846,6 +840,7 @@ class PurchaseOrderController extends Controller
         $po = PurchaseOrder::where('po_id', $request->po_id)->first();
         $po->purchase_order_statuses()->create([
             'current_status_id' => $request->cs_id,
+            'remarks' => $request->remarks
         ]);
 
         $po->update([

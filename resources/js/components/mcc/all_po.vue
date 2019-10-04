@@ -31,19 +31,19 @@
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
-                    <tr v-for="po in pos" :key="po.purchase_order_id">
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.po_id }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="15%">{{ po.created_at | myDate3 }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="18%">
+                    <tr v-for="po in pos" :key="po.po_id">
+                        <th @click="view_po(po.po_id)" width="10%">{{ po.po_id }}</th>
+                        <th @click="view_po(po.po_id)" width="15%">{{ po.created_at | myDate3 }}</th>
+                        <th @click="view_po(po.po_id)" width="18%">
                             <span v-if="po.csd">{{ po.csd }}</span>
                         </th>
-                        <th @click="view_po(po.purchase_order_id)" width="10%">{{ po.mode_desc }}</th>
-                        <th @click="view_po(po.purchase_order_id)" width="37%">{{ po.supplier_name }}</th>
+                        <th @click="view_po(po.po_id)" width="10%">{{ po.mode_desc }}</th>
+                        <th @click="view_po(po.po_id)" width="37%">{{ po.supplier_name }}</th>
                         <th width="10%" class="text-bold">
-                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 13" @click="mcc_rcv(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 13" @click="mcc_rcv(po.po_id)">
                                 <i class="fas fa-file-download"></i>  Receive PO
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 14" @click="mcc_rtn(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 14" @click="mcc_rtn(po.po_id)">
                                 <i class="fas fa-file-upload"></i>  Return to PMO
                             </button>
                         </th>
@@ -100,7 +100,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            {{ track_po_modal.created_at | myDate }} - {{ track_po_modal.purchase_order_id | numeral2 }}
+                            {{ track_po_modal.created_at | myDate }} - {{ track_po_modal.po_id | numeral2 }}
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
@@ -160,9 +160,8 @@ export default {
                 word: '',
             }),
             view_po_form: new Form({
-                purchase_order_id: '',
-                purchase_request_id: '',
                 po_id: '',
+                pr_id: '',
                 uacs_code_id: '',
                 uacs: {},
                 allotment_id: '',

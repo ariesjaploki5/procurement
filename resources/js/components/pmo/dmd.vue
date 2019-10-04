@@ -6,233 +6,37 @@
             </div>
         </div>
         <div class="col-md-12">
-            <div class="form-group row">
-                <div class="col-md-auto">
-                    <label for="" class="form-label">Search Item</label>
+            <form >
+                <div class="form-group row">
+                    <div class="col-md-auto">
+                        <label for="" class="form-label">PR #</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-contro form-control-sm">
+                    </div>
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-sm btn-primary">Search</button>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <input type="text" class="form-control form-control-sm" v-model="search_word">
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
+            </form>
             <table class="table table-sm table-hover">
-
                 <thead>
                     <tr>
-                        <th width="3%" class="text-left">#</th>
-                        <th width="25%" class="text-left">Item Desc</th>
-                        <th width="5%" class="text-left">Unit</th>
-                        <th width="12%" class="text-left">Document #</th>
-                        <th width="9%" class="text-left">Date of PR</th>
-                        <th width="11%" class="text-center">Status</th>
-                        <!-- <th width="9%" class="text-center">Date (Status)</th> -->
-                        <th width="16%" class="text-left">Date (Whole)</th>
-                        <th width="7%">Qty Ordered</th>
-                        <th width="9%" class="text-left">Action</th>
+                        <th>#</th>
+                        <th>PR #</th>
+                        <th>Item Desc</th>
+                        <th></th>
                     </tr>
                 </thead>
-                <tbody class="table-bordered">
-                    <tr v-for="(item, index) in filteredPrs" :key="item.dmd_pr_id">
-                        <td width="3%" class="text-left" @click="view_pr(item.purchase_request_id)">
-                            <span>{{ index + 1 }}</span>
-                        </td>
-                        <td width="25%" class="text-left" @click="view_pr(item.purchase_request_id)">
-                            <span class="text-link btn" >
-                                {{ item.dmddesc }}
-                            </span>
-                        </td>
-                        <td width="5%" class="text-left" @click="view_pr(item.purchase_request_id)">
-                            {{ item.unit_desc }}
-                        </td>
-                        <td width="12%" class="text-center" @click="view_pr(item.purchase_request_id)">
-                            <span class="text-link btn">
-                                <span v-show="item.pr_id">PR #: {{ item.pr_id }}</span>
-                                <div class="w-100"></div>
-                                <span v-show="item.po_id">PO #: {{ item.po_id }}</span>
-                            </span>
-                        </td>  
-                        <td width="9%" class="text-center" @click="view_pr(item.purchase_request_id)">
-                            <span>
-                                {{ item.pr_date_time | myDate4 }}
-                            </span>
-                        </td>
-                        <td width="11%" class="text-center" @click="view_track(item)">
-                            <span v-if="item.csid2" class="badge badge-pill" v-bind:class="[
-                                { 'badge-success' : item.csid2 == 5 },
-                                { 'badge-success' : item.csid2 == 6 },
-                                { 'badge-danger' : item.csid2 == 7 },
-                                { 'badge-danger' : item.csid2 == 8 },
-                                { 'badge-warning' : item.csid2 == 9 },
-                                { 'badge-warning' : item.csid2 == 10 },
-                                { 'badge-info' : item.csid2 == 11 },
-                                { 'badge-info' : item.csid2 == 12 },
-                                { 'badge-light' : item.csid2 == 13 },
-                                { 'badge-light' : item.csid2 == 14 },
-                                { 'badge-dark' : item.csid2 == 15 },
-                                { 'badge-dark' : item.csid2 == 16 },
-                                ]">{{ item.csd2 }}
-                            </span>
-                            <span v-else>
-                                <span v-if="item.csid" class="badge badge-pill" v-bind:class="[
-                                    { 'badge-primary' : item.csid == 1 },
-                                    { 'badge-primary' : item.csid == 2 },
-                                    { 'badge-secondary' : item.csid == 3 },
-                                    { 'badge-secondary' : item.csid == 4 },
-                                    ]">
-                                    {{ item.csd }}
-                                </span>
-                            </span>
-                            <div class="w-100">
-                            </div>
-                            <small>
-                                <span v-if="item.ep == 0">Regular Purchase</span>
-                                <span v-else>Emergency Purchase</span>
-                            </small>
-                        </td>
-                        <!-- <td width="9%" class="text-center" @click="view_pr(item.purchase_request_id)">
-                            <span v-if="item.csid2">
-                                {{ item.lpos_datetime | myDate4 }}
-                            </span>
-                            <span v-else>
-                                <span v-if="item.lprs_datetime">
-                                    {{ item.lprs_datetime | myDate4 }}
-                                </span>
-                                <span v-else>
-                                    {{ item.pr_date_time | myDate4 }}
-                                </span>
-                            </span>
-                        </td> -->
-                        <td width="16%" class="text-center" @click="view_pr(item.purchase_request_id)">
-                            {{ item.pr_date_time | myDate4 }}
-                            <span v-if="item.lprs_datetime"> - 
-                                <span v-if="item.lpos_datetime">
-                                    {{ item.lpos_datetime | myDate4 }}
-                                </span>
-                                <span v-else>
-                                    {{ item.lprs_datetime | myDate4 }}
-                                </span>
-                            </span>
-                            <span v-else>
-                            </span>
-                        </td>
-                        <td width="7%" class="text-right" @click="view_pr(item.purchase_request_id)">
-                            <span v-if="item.o_qty">
-                                {{ item.o_qty | numeral3 }}
-                            </span>
-                            <span v-else>
-                                {{ item.r_qty | numeral3 }}
-                            </span>
-                        </td>
-                        <td width="9%" class="text-center">
-                            <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-primary" :to="{ name: 'pr', params: { id: item.purchase_request_id }}">PR</router-link>
-                            <router-link v-show="current_user.role_id == 2" class="btn btn-sm btn-success" :to="{ name: 'sps', params: { id: item.purchase_request_id }}">SPS</router-link>
-                        </td>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-        <div class="modal fade" id="viewPrModal" tabindex="-1" role="dialog" aria-labelledby="viewPrModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5  class="modal-title text-bold" id="viewPrModalLabel">PR # {{ pr.created_at | myDate }} - {{ pr.purchase_request_id | numeral2 }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form>
-                    <div class="modal-body">
-                        <form action="">
-                            <table class="table table-sm table-hover" id="pr_table">
-                                <thead>
-                                    <tr>
-                                        <th width="5%"  class="text-center">#</th>
-                                        <th width="25%"  class="text-center">Item Desc</th>
-                                        <th class="text-center">Unit</th>
-                                        <th class="text-center">SSL</th>
-                                        <th class="text-center">BOH</th>
-                                        <th width="10%" class="text-center">Quantity</th>
-                                        <th width="10%" class="text-center">Cost</th>
-                                        <th width="15%" class="text-center">Estimated Cost</th>
-                                        <!-- <th></th> -->
-                                    </tr>
-                                </thead>
-                                <tbody id="pr_tbody">
-                                    <tr v-for="(dmd,index) in pr" :key="dmd.dpr_id">
-                                        <td width="5%">{{ index + 1}}</td>
-                                        <td width="25%">{{ dmd.dmddesc }}</td>
-                                        <td class="text-right"></td>
-                                        <td class="text-right">
-                                            <span>{{ dmd.ssl | numeral3 }}</span> 
-                                        </td>
-                                        <td class="text-right">
-                                            <span>{{ dmd.boh | numeral3 }}</span>
-                                        </td>
-                                        <td width="10%" class="text-right">
-                                            <span>{{ dmd.request_quantity | numeral3 }}</span>
-                                        </td>
-                                        <td width="10%" class="text-right">
-                                            <span>{{ dmd.cost_price | currency2 }}</span>
-                                        </td>
-                                        <td width="15%"  class="text-right">
-                                            <span>{{ dmd.request_quantity * dmd.cost_price | currency2}}</span>
-                                        </td>
-                                        <!-- <td class="text-center">
-                                            <button type="button" class="btn btn-sm btn-danger" @click="remove_item(dmd.id)">
-                                                <i class="fas fa-times-circle"></i>
-                                            </button>
-                                        </td> -->
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </form>
-                    </div>
-                    <div class="modal-footer" >
-                        <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
-                        <!-- <span v-show="!pr.last_status">
-                            <button type="button" class="btn btn-sm btn-success" @click="send_to_cmps()">Send to CMPS</button>
-                        </span> -->
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="viewTrack" tabindex="-1" role="dialog" aria-labelledby="viewTrackLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5  class="modal-title text-bold" id="viewTrackLabel">PR # {{ pr_id }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Status</th>
-                                            <th>Date/Time</th>
-                                            <th>Remarks</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(tr, index) in track" :key="index">
-                                            <td>{{ tr.status_desc }}</td>
-                                            <td>{{ tr.date_time | myDate4 }} - {{ tr.date_time | myDate5 }}</td>
-                                            <td>{{ tr.remarks }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
@@ -241,77 +45,27 @@ export default {
     data(){
         return{
             dmd_pr: [],
-            pr: {},
-            search_word: '',
-            track: {},
-            pr_id: '',
         }
     },
     methods:{
         get_dmd_pr(){
-            axios.get('../../api/all_dmd_pr').then(({data}) => {
+            axios.get('../../api/get_pmo_dmd_pr').then(({data}) => {
                 this.dmd_pr = data;
-            })
-        },
-        view_pr(id){
-            axios.get('../../api/purchase_request/'+id).then(({data}) => {
-                this.pr = data;
-                $('#viewPrModal').modal('show');
             }).catch(() => {
 
             });
         },
-        send_to_cmps(){
-            axios.put('../../api/send_to_cmps/'+this.pr.purchase_request_id).then(() =>{
-                this.pr = '';
-                toast.fire({
-                    type: 'success',
-                    title: 'Send Successfuly', 
-                });
-                $('#viewPrModal').modal('hide');
-            }).catch(() => {
-
-            });
-        },
-        view_track(item){
-            this.pr_id = item.pr_id;
-            axios.get('../../api/purchase_request_track/'+item.purchase_request_id).then(({data}) => {
-                this.track = data;
-                $('#viewTrack').modal('show');
-            }).catch(() => {
-                
-            });
-        }
     },
     created(){
         this.get_dmd_pr();
     },
     computed:{
-        filteredPrs: function(){
-            let matcher = new RegExp(this.search_word, 'i')
-            return this.dmd_pr.filter(function(dmd)
-                {
-                    return matcher.test(dmd.dmddesc);
-                }
-            );
-        },
         current_user() {
             return this.$store.getters.current_user;
         }
     },
     mounted(){
-        window.Echo.channel("pr_created").listen(".purchase_request.created", (e) => {
-            this.get_dmd_pr();
-        });
-        window.Echo.channel("pr_updated").listen(".purchase_request.updated", (e) => {
-            this.get_dmd_pr();
-        });
-        window.Echo.channel("po_created").listen(".purchase_order.created", (e) => {
-            this.get_dmd_pr();
-        });
-        window.Echo.channel("po_updated").listen(".purchase_order.updated", (e) => {
-            this.get_dmd_pr();
-        });
+
     }
 }
 </script>
@@ -332,7 +86,6 @@ export default {
         /* background: #38c172;
         color: white; */
     }
-
     
     tbody.table-bordered > tr > td{
         border:1px solid black;
@@ -385,6 +138,4 @@ export default {
         height:24rem;             
         display: -moz-groupbox;    
     }
-
-    
 </style>

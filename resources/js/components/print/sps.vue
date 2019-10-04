@@ -59,7 +59,7 @@
             <div class="col">
                 <div class="row">
                     <div class="col-3 sps all font-weight-bold">UNIT:</div>
-                    <div class="col-9 sps top left right"></div>
+                    <div class="col-9 sps top left right text-center font-weight-bold">{{ dmd_pr.unit_desc }}</div>
                 </div>
                 <div class="row">
                     <div class="col-3 sps all font-weight-bold">SSL:</div>
@@ -108,7 +108,7 @@
 
             <div class="col-4 sps top left right"></div>
             <div class="col-4 sps all"></div>
-            <div class="col-4 sps top left right text-center font-weight-bold"></div>
+            <div class="col-4 sps top left right text-center font-weight-bold">{{ pr.created_at | myDate4 }}</div>
             <div class="w-100"></div>
             
             <div class="col-4 sps all text-center font-weight font-weight-bold">RISCILLA E. LAZATIN, MPA</div>
@@ -134,7 +134,7 @@ export default {
         data(){
         return{
             dmd_pr: [],
-
+            pr: {},
         }
     },
     methods:{
@@ -145,12 +145,19 @@ export default {
 
             });
         },
+        get_pr_2(){
+                axios.get('../../api/get_pr/'+this.$route.params.id).then(({data}) => {
+                    this.pr = data;
+                }).catch(() => {
+
+                });
+            }
 
 
     },
     created(){
         this.get_pr();
-
+        this.get_pr_2();
     },
     mounted() {
 

@@ -40,18 +40,18 @@
                         <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
                         <th @click="view_po(po)" width="32%">{{ po.supplier_name }}</th>
                         <th width="15%">
-                            <span v-if="!po.csid && po.pod">
-                                <button type="button" class="btn btn-sm btn-danger" @click="pmo_rls_po(po.purchase_order_id)">
+                            <span v-if="!po.csid && po.payment_term_id">
+                                <button type="button" class="btn btn-sm btn-danger" @click="pmo_rls_po(po.po_id)">
                                     <i class="fas fa-file-upload"></i>
                                 </button>
                             </span>
                             <span v-if="po.csid == 20 && po.dod">
-                                <button type="button" class="btn btn-sm btn-danger" @click="pmo_to_mmo(po.purchase_order_id)">
+                                <button type="button" class="btn btn-sm btn-danger" @click="pmo_to_mmo(po.po_id)">
                                     <i class="fas fa-file-upload"></i>
                                 </button>
                             </span>
-                            <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: po.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link>
-                            <router-link class="btn btn-sm btn-success" :to="{ name: 'obrs', params: { id: po.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
+                            <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: po.po_id }}"><i class="fas fa-print"></i> PO</router-link>
+                            <router-link class="btn btn-sm btn-success" :to="{ name: 'obrs', params: { id: po.po_id }}"><i class="fas fa-print"></i> OBRS</router-link>
                         </th>
                     </tr>
                 </tbody>
@@ -244,7 +244,7 @@
                                     <div class="form-label">Delivery Term: <small>(Days)</small></div>
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="number" class="form-control form-control-sm" v-model="view_po_form.delivery_term" required>
+                                    <input type="number" class="form-control form-control-sm" min="1" v-model="view_po_form.delivery_term" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -322,13 +322,6 @@ export default {
                 purchase_request_id: '',
                 payment_term_desc: '',
                 po_id: '',
-                uacs_code_id: '',
-                uacs: '',
-                allotment_id: '',
-                allotment: '',
-                uacs_id: '',
-                fund_source_id: '',
-                fund_source: '',
                 date_of_delivery: '',
                 delivery_term: '',
                 dmd_purchase_orders: [],
@@ -368,16 +361,13 @@ export default {
         view_po(po){
             this.view_po_form.reset();
             this.view_po_form.fill(po);
-
-                axios.get('../../api/purchase_order/'+po.purchase_order_id).then(({data}) => {
+                axios.get('../../api/purchase_order/'+po.po_id).then(({data}) => {
                     this.view_po_form.dmd_purchase_orders = data;
                 }).catch(() => {
 
                 });
             $('#poModal').modal('show');
         },
-
-
         track_po(pos){
             this.track_po_modal = pos;
             $('#trackModal').modal('show')
@@ -442,7 +432,6 @@ export default {
 
             });
         },
-        
     },
     created(){
         this.get_pos();

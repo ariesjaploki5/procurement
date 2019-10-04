@@ -7,27 +7,24 @@ use App\Events\PurchaseRequestUpdated;
 
 class PurchaseRequest extends Model
 {
-    protected $primaryKey = 'purchase_request_id';
-    public $timestamps = false;
+    protected $primaryKey = 'pr_id';
+    protected $table = 'procurement.dbo.purchase_requests';
+    public $incrementing = false;
 
     protected $fillable = [
+        'pr_id',
         'user_id', 
         'supplier_id', 
         'mode_id',
         'category_id',
         'purpose',
-        'purchase_order_id',
         'cart_id',
 
         'send',
         'current_status',
         'status',
 
-        'cmps_rcv', 'cmps_rls',
-        'pmo_rcv',
-
         'updated_at',
-        'pr_id',
         'ep'
     ];
 
@@ -36,7 +33,7 @@ class PurchaseRequest extends Model
     ];
 
     public function purchase_order(){
-        return $this->belongsTo('App\Models\PurchaseOrder', 'purchase_order_id', 'purchase_order_id');
+        return $this->belongsTo('App\Models\PurchaseOrder', 'pr_id', 'pr_id');
     }
 
     public function items(){
@@ -48,11 +45,11 @@ class PurchaseRequest extends Model
     }
     
     public function dmd_purchase_requests(){
-        return $this->hasMany('App\Models\DmdPurchaseRequest', 'purchase_request_id', 'purchase_request_id');
+        return $this->hasMany('App\Models\DmdPurchaseRequest', 'pr_id', 'pr_id');
     }
 
     public function view_dmd_purchase_requests(){
-        return $this->hasMany('App\Views\DmdPurchaseRequest', 'purchase_request_id', 'purchase_request_id');
+        return $this->hasMany('App\Views\DmdPurchaseRequest', 'pr_id', 'pr_id');
     }
 
     public function user(){
@@ -64,7 +61,7 @@ class PurchaseRequest extends Model
     }
 
     public function purchase_orders(){
-        return $this->belongsTo('App\Models\PurchaseOrder', 'purchase_order_id', 'purchase_order_id');
+        return $this->belongsTo('App\Models\PurchaseOrder', 'pr_id', 'pr_id');
     }
 
     public function app_dmd(){
@@ -72,19 +69,19 @@ class PurchaseRequest extends Model
     }
 
     public function rfq(){
-        return $this->hasOne('App\Models\RequestForQuotation', 'purchase_request_id');
+        return $this->hasOne('App\Models\RequestForQuotation', 'pr_id', 'pr_id');
     }
 
     public function purchase_request_remarks(){
-        return $this->hasOne('App\Models\PurchaseRequestRemark', 'purchase_request_id', 'purchase_request_id');
+        return $this->hasOne('App\Models\PurchaseRequestRemark', 'pr_id', 'pr_id');
     }
 
     public function purchase_request_statuses(){
-        return $this->hasMany('App\Models\PurchaseRequestStatus', 'purchase_request_id', 'purchase_request_id');
+        return $this->hasMany('App\Models\PurchaseRequestStatus', 'pr_id', 'pr_id');
     }
 
     public function last_status(){
-        return $this->hasOne("App\Models\PurchaseRequestStatus", 'purchase_request_id', 'purchase_request_id')
+        return $this->hasOne("App\Models\PurchaseRequestStatus", 'pr_id', 'pr_id')
         ->orderBy('id', 'desc');
     }
 

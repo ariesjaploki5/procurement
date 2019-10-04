@@ -17,16 +17,29 @@
                         </div>
                     </div>
                     <div class="row po left right">
-                        <div class="col">
+                        <div class="col" v-if="noa.to_id_2">
                             <div class="font-weight-bold text-center mt-3"><h6>NOTICE OF ADJUSTMENT</h6> </div>
                             <div class="form-check mb-2">
-                                <span style='font-size:22px;' v-if="noa.ors">&#9746;</span>
-                                <span style='font-size:22px;' v-else>&#9634;</span>
+                                <span style='font-size:22px;' >&#9746;</span>
+                        
                                 <label class="form-check-label font-weight-bold ml-2 mt-2" for="defaultCheck1"><h6>OBLIGATION REQUEST AND STATUS</h6></label>
                             </div>
                             <div class="form-check">
-                                <span style='font-size:22px;' v-if="noa.burs">&#9746;</span>
-                                <span style='font-size:22px;' v-else>&#9634;</span>
+                                
+                                <span style='font-size:22px;' >&#9634;</span>
+                                <label class="form-check-label font-weight-bold ml-2 mt-2" for="defaultCheck2"><h6>BUDGET UTILIZATION REQUEST AND STATUS</h6></label>
+                            </div>
+                        </div>
+                        <div class="col" v-else>
+                            <div class="font-weight-bold text-center mt-3"><h6>NOTICE OF ADJUSTMENT</h6> </div>
+                            <div class="form-check mb-2">
+                               
+                                <span style='font-size:22px;' >&#9634;</span>
+                                <label class="form-check-label font-weight-bold ml-2 mt-2" for="defaultCheck1"><h6>OBLIGATION REQUEST AND STATUS</h6></label>
+                            </div>
+                            <div class="form-check">
+                                <span style='font-size:22px;'>&#9746;</span>
+                                
                                 <label class="form-check-label font-weight-bold ml-2 mt-2" for="defaultCheck2"><h6>BUDGET UTILIZATION REQUEST AND STATUS</h6></label>
                             </div>
                         </div>
@@ -270,16 +283,29 @@
                         </div>
                     </div>
                     <div class="row po left right">
-                        <div class="col">
+                        <div class="col" v-if="noa.to_id_2">
                             <div class="font-weight-bold text-center mt-3"><h6>NOTICE OF ADJUSTMENT</h6> </div>
                             <div class="form-check mb-2">
-                                <span style='font-size:22px;' v-if="noa.ors">&#9746;</span>
-                                <span style='font-size:22px;' v-else>&#9634;</span>
+                                <span style='font-size:22px;' >&#9746;</span>
+                        
                                 <label class="form-check-label font-weight-bold ml-2 mt-2" for="defaultCheck1"><h6>OBLIGATION REQUEST AND STATUS</h6></label>
                             </div>
                             <div class="form-check">
-                                <span style='font-size:22px;' v-if="noa.burs">&#9746;</span>
-                                <span style='font-size:22px;' v-else>&#9634;</span>
+                                
+                                <span style='font-size:22px;' >&#9634;</span>
+                                <label class="form-check-label font-weight-bold ml-2 mt-2" for="defaultCheck2"><h6>BUDGET UTILIZATION REQUEST AND STATUS</h6></label>
+                            </div>
+                        </div>
+                        <div class="col" v-else>
+                            <div class="font-weight-bold text-center mt-3"><h6>NOTICE OF ADJUSTMENT</h6> </div>
+                            <div class="form-check mb-2">
+                               
+                                <span style='font-size:22px;' >&#9634;</span>
+                                <label class="form-check-label font-weight-bold ml-2 mt-2" for="defaultCheck1"><h6>OBLIGATION REQUEST AND STATUS</h6></label>
+                            </div>
+                            <div class="form-check">
+                                <span style='font-size:22px;'>&#9746;</span>
+                                
                                 <label class="form-check-label font-weight-bold ml-2 mt-2" for="defaultCheck2"><h6>BUDGET UTILIZATION REQUEST AND STATUS</h6></label>
                             </div>
                         </div>
@@ -528,7 +554,7 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
     @font-face {
         font-family: 'Helvetica';
         src: url('https://fonts.googleapis.com/css?family=Helvetica');

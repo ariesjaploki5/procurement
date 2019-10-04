@@ -101,7 +101,7 @@
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .img-thumbnail{
         margin-top: 0% !important;
     }

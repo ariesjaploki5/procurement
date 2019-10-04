@@ -20,6 +20,7 @@ import numeral from 'numeral';
 import converter from 'number-to-words';
 import Swal from 'sweetalert2';
 import VueProgressBar from 'vue-progressbar';
+import nwords from 'num-words';
 
 window.Swal = Swal;
 
@@ -57,7 +58,7 @@ Vue.filter('numeral2', function(val){return numeral(val).format('0000');});
 Vue.filter('numeral3', function(val){return numeral(val).format('0,0');});
 
 Vue.filter('num_words', function(val){return converter.toWords(val);});
-
+Vue.filter('nwords', function(val){return nwords(val);});
 
 Vue.filter('currency', function(val){return accounting.formatMoney(val, {symbol: '',});});
 Vue.filter('currency2', function(val){return accounting.formatMoney(val, {symbol: '₱ ',decimals: 2,});});

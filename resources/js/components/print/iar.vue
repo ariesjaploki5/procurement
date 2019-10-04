@@ -120,13 +120,13 @@
     <div class="row" v-for="b in batches" :key="b.batch_no">
         <div class="col-6 iar top right">
             <div class="row">
-                <div class="col-3 iar top bottom left cheight"></div>
+                <div class="col-3 iar top bottom left cheight">{{ b.code }}</div>
                 <div class="col iar all">{{ b.dmddesc }}</div>
             </div>
         </div>
         <div class="col-6 iar top">
             <div class="row">
-                <div class="col-2 iar top bottom left cheight"></div>
+                <div class="col-2 iar top bottom left cheight">{{ b.unit_desc }}</div>
                 <div class="col-3 iar top bottom left text-right">{{ b.received_quantity }}</div>
                 <div class="col-3 iar top bottom left text-right">{{ b.cost_price | currency2 }}</div>
                 <div class="col-2 iar top bottom left text-right">{{ b.total_cost | currency2 }}</div>
@@ -192,9 +192,9 @@
                 <div class="w-100"></div>
                 <div class="col bheight"></div>
                 <div class="w-100"></div>
-                <div class="col text-center font-weight-bold eheight"><h5> {{ iar.officer_name }} </h5></div>
+                <div class="col text-center font-weight-bold eheight"><h5> {{ iar.user_name }} </h5></div>
                 <div class="w-100"></div>
-                <div class="col text-center eheight"> {{ iar.officer_pos }} </div>
+                <div class="col text-center eheight">  </div>
                 <div class="w-100"></div>
                 <div class="col-5 font-weight-bold">Date Inspected</div>
                 <div class="col-6 top left right iar">{{ iar.officer_inspected }}</div>
@@ -266,8 +266,7 @@
     }
 
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
     @font-face {
         font-family: 'Helvetica';
         src: url('https://fonts.googleapis.com/css?family=Helvetica');

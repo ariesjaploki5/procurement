@@ -24,7 +24,7 @@ class IarBatchController extends Controller
     }
 
     public function get_iar($id){
-        $data = DB::table("procurement.dbo.fn_filter_iar_3($id)")->get();
+        $data = DB::table("procurement.dbo.fn_filter_iar_3()")->where('po_id', $id)->get();
 
         return response()->json($data);
     }

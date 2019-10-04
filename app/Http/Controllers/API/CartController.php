@@ -34,13 +34,7 @@ class CartController extends Controller
             'user_id' => $user_id, 
             'mode_id' => $mode_id,
             'status' => 0 ,
-        ]);
-        
-        // if(!CartDmd::where('cart_id', $cart->id)->where('dmd_id', $request->dmd_id)->exists()){
-        //     $cart->dmds()->attach($request->dmd_id);
-            
-        
-        // }
+            ]);
 
         $cart_dmd = CartDmd::firstOrCreate([
             'cart_id' => $cart->id,
@@ -59,9 +53,7 @@ class CartController extends Controller
             'status' => 0
         ]);
 
-        // if(!CartDmd::where('cart_id', $cart->id)->where('dmd_id', $request->dmd_id)->exists()){
-        //     $cart->dmds()->attach($request->dmd_id);
-        // }
+
 
         $cart_dmd = CartDmd::firstOrCreate([
             'cart_id' => $cart->id,

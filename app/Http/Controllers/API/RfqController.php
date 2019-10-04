@@ -71,10 +71,10 @@ class RfqController extends Controller
     public function store(Request $request){
 
         $rfq = Rfq::firstOrCreate([
-            'purchase_request_id' => $request->purchase_request_id,
+            'pr_id' => $request->pr_id,
         ]);
 
-        $pr = PurchaseRequest::findOrFail($request->purchase_request_id);
+        $pr = PurchaseRequest::findOrFail($request->pr_id);
         $pr->update([
             'updated_at' => Carbon::now()
         ]);

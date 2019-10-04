@@ -31,7 +31,7 @@ class PurchaseRequestController extends Controller
                 ]);
             },
         ])->orderBy('created_at', 'desc')
-        ->leftjoin('purchase_orders as po', 'purchase_requests.purchase_request_id', '=', 'po.purchase_request_id')
+        ->leftjoin('purchase_orders as po', 'purchase_requests.pr_id', '=', 'po.pr_id')
         ->leftjoin('purchase_order_status as pos', 'po.purchase_order_id', '=', 'pos.purchase_order_id')
         ->take(20)
         ->get();
@@ -41,7 +41,7 @@ class PurchaseRequestController extends Controller
 
     public function search_pr(Request $request){
 
-        $data = DB::SELECT("SELECT * FROM fn_filter_purchase_requests_search($request->word) order by purchase_request_id");
+        $data = DB::SELECT("SELECT * FROM fn_filter_purchase_requests_search($request->word) order by pr_id");
 
 
         return response()->json($data);
@@ -150,6 +150,7 @@ class PurchaseRequestController extends Controller
         $count = count($item);
 
         for($i = 0; $i < $count; $i++){
+
             $dmd_id = $item[$i]['dmd_id'];
             $request_quantity = $item[$i]['quantity'];
             $supplier_id = $item[$i]['dmd_price_schedule']['supplier_id'];
@@ -212,14 +213,14 @@ class PurchaseRequestController extends Controller
 
     public function show($id){
 
-        $data = DB::SELECT("SELECT * FROM fn_dmd_purchase_request($id)");
+        $data = DB::table("fn_dmd_purchase_request()")->where('pr_id', $id)->get();
 
         return response()->json($data);
 
     }
 
     public function get_pr($id){
-        $data = DB::table("fn_filter_dmd_pr()")->where('purchase_request_id', $id)->first();
+        $data = DB::table("fn_filter_dmd_pr()")->where('pr_id', $id)->first();
 
         return response()->jsoN($data);
     }
@@ -240,7 +241,7 @@ class PurchaseRequestController extends Controller
     public function show_2($id){
 
         $data = DB::table('procurement.dbo.purchase_requests as tb1')
-        ->join('procurement.dbo.dmd_purchase_request as tb2', 'tb1.purchase_request_id', '=', 'tb2.purchase_request_id')
+        ->join('procurement.dbo.dmd_purchase_request as tb2', 'tb1.pr_id', '=', 'tb2.pr_id')
         ->join('procurement.dbo.view_new_dmds as tb3', 'tb3.dmd_id', '=', 'tb3.dmd_id')
         ->join('procurement.dbo.app_dmd as tb4', 'tb3.dmd_id', '=','tb4.dmd_id')
         ->join('procurement.dbo.apps as tb5', 'tb4.app_id', '=', 'tb5.app_id')
@@ -268,13 +269,10 @@ class PurchaseRequestController extends Controller
             'created_at' => $this->date_now()
         ]);
 
-        $pr->update([
-            'purchase_order_id' => $po->purchase_order_id,
-        ]);
-
         for($i = 0; $i < $count; $i++){
 
             $dmd_pr = DmdPurchaseRequest::findOrFail($dmd[$i]['id']);
+
             $dmd_pr->update([
                 'order_quantity' => $dmd[$i]['request_quantity'],
             ]);
@@ -290,9 +288,8 @@ class PurchaseRequestController extends Controller
 
         $item = $request->items;
         $count = count($item);
-        $purchase_request_id = $request->purchase_request_id;
-        $pr_id = $request->pr_id;
-        
+        $pr_id = $request->pr_id;      
+
         for($i = 0; $i < $count; $i++){
 
             $dmd_id = $item[$i]['dmd_id'];
@@ -306,23 +303,23 @@ class PurchaseRequestController extends Controller
             ->orderBy('tb1.rank', 'asc')
             ->first();
 
-            $po = PurchaseOrder::firstOrCreate([
+            $count_2 = PurchaseOrder::whereYear('created_at', $year_now)->count();
+            $new_id = $count_2 + 1;        
+
+            $zero_id = sprintf("%04d", $new_id);
+            $po_id = $year_month.'-'.$zero_id;
+
+            $po = PurchaseOrder::create([
                 'supplier_id' => $dmd->supplier_id,
-                'purchase_request_id' => $purchase_request_id,
                 'mode_id' => 1,
                 'pr_id' => $pr_id,
+                'po_id' => $po_id
             ]);
 
-            if(!$po->po_id){
-                $zero_id = sprintf("%04d", $po->purchase_order_id);
-                $po->po_id = $year_month.'-'.$zero_id;
-                $po->save();
-            }
+            $dmd_po = DmdPurchaseOrder::whereYear('created_at', $year_now)->get();
 
-            $dmd_po = DmdPurchaseOrder::where('created_at', $year_now)->get();
-
-            $count = count($dmd_po);
-            $new_count = $count + 1;
+            $count_3 = count($dmd_po);
+            $new_count = $count_3 + 1;
             $list_no = sprintf( '%04d', $new_count );
 
             $po->dmd_purchase_orders()->create([
@@ -342,12 +339,13 @@ class PurchaseRequestController extends Controller
     }
 
     public function rfq_to_po(Request $request){
+        $now = Carbon::now();
 
         $year_month = Carbon::now()->format('Y-m');
 
         $item = $request->items;
         $count = count($item);
-        $purchase_request_id = $request->purchase_request_id;
+        $pr_id = $request->pr_id;
         
         for($i = 0; $i < $count; $i++){
 
@@ -357,38 +355,46 @@ class PurchaseRequestController extends Controller
 
             $dmd = DmdRfq::findOrFail($dmd_rfq_id);
 
+            $count_2 = PurchaseOrder::whereYear('created_at', $now->year)->count();
+            $new_id = $count_2 + 1;        
+
+            $zero_id = sprintf("%04d", $new_id);
+            $po_id = $year_month.'-'.$zero_id;
+
             $po = PurchaseOrder::create([
                 'supplier_id' => $dmd->supplier_id,
-                'purchase_request_id' => $purchase_request_id,
+                'pr_id' => $pr_id,
                 'mode_id' => 4,
+                'po_id' => $po_id,
             ]);
 
-            if(!$po->po_id){
-                $zero_id = sprintf("%04d", $po->purchase_order_id);
-    
-                $po->po_id = $year_month.'-'.$zero_id;
-                $po->save();
-            }
+            $dmd_po = DmdPurchaseOrder::whereYear('created_at', $now->year)->get();
+
+            $count_3 = count($dmd_po);
+            $new_count = $count_3 + 1;
+            $list_no = sprintf( '%04d', $new_count );
 
             $po->dmd_purchase_orders()->create([
                 'dmd_id' => $dmd_id,
                 'order_quantity' => $quantity,
                 'cost_price' => $dmd->cost_unit,
                 'brand_id' => $dmd->brand_id,
-                // 'country_id' => $dmd->country_id,
-                // 'packaging_id' => $dmd->packaging_id,
+                'country_id' => $dmd->country_id,
+                'packaging_id' => $dmd->packaging_id,
                 'manufacturer_id' => $dmd->manufacturer_id,
-                // 'purchase_order_id' => $po->purchase_order_id,
+                'list_no' => $list_no,
+                'po_id' => $po->po_id
             ]);
         }
 
         return response()->json();
+        
     }
 
     public function aoq_to_po(){
         $item = $request->view_dmd_purchase_requests;
         $count = count($item);
-        $purchase_request_id = $request->purchase_request_id;
+        $pr_id = $request->pr_id;
         
         for($i = 0; $i < $count; $i++){
 

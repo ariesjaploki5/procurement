@@ -273,7 +273,6 @@
                                                         </select>
                                                     </div>
                                                     </div>
-                                                    
                                                 </td>
                                                 <td class="text-right">{{ item.ssl }}</td>
                                                 <td class="text-right">{{ item.boh }}</td>
@@ -403,12 +402,11 @@ export default {
         pb_submit(){
             axios.post('../../api/dmd_pr',{
                 items: this.pb_form.items,
-                mode_id: this.pb_form.mode_id,
                 category_id: this.pb_form.category_id,
                 user_id: this.current_user.user_id,
                 purpose: this.form.purpose,
-            }).then(() => { 
-                
+            }).then(({data}) => { 
+                 console.log(data);
             }).catch(() => {
 
             });
@@ -429,12 +427,11 @@ export default {
         sp_submit(){
             axios.post('../../api/shopping', {
                 items: this.sp_form.items,
-                mode_id: this.sp_form.mode_id,
                 category_id: this.sp_form.category_id,
                 user_id: this.current_user.user_id,
                 purpose: this.form.purpose,
-            }).then(() => {
-
+            }).then(({data}) => {
+                console.log(data);
             }).catch(() =>{
 
             });

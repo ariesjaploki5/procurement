@@ -32,9 +32,9 @@
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
-                    <tr v-for="pr in prs" :key="pr.purchase_request_id" >
+                    <tr v-for="pr in prs" :key="pr.pr_id" >
                         <td @click="view_pr(pr)" width="10%">{{ pr.pr_id }}</td> 
-                        <td @click="view_pr(pr)" width="12%">{{ pr.created_at | myDate4}} - {{ pr.created_at | time1}}</td>
+                        <td @click="view_pr(pr)" width="12%">{{ pr.created_at | myDate4}} - {{ pr.created_at | time1 }}</td>
                         <td @click="view_pr(pr)" width="8%" class="text-center">
                             <span v-show="pr.status == 2">Disapproved</span>
                             <span v-show="pr.status == 1">Approved</span>
@@ -55,10 +55,10 @@
                         </td>
                         <td width="5%">
                             <span v-if="pr.csi">
-                                <button type="button" class="btn btn-sm btn-success" v-if="pr.csi == 1" @click="cmps_rcv(pr.purchase_request_id)">
+                                <button type="button" class="btn btn-sm btn-success" v-if="pr.csi == 1" @click="cmps_rcv(pr.pr_id)">
                                     <i class="fas fa-file-download"></i>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-danger" v-if="pr.csi == 2 && pr.status == 1" @click="cmps_rls(pr.purchase_request_id)">
+                                <button type="button" class="btn btn-sm btn-danger" v-if="pr.csi == 2 && pr.status == 1" @click="cmps_rls(pr.pr_id)">
                                     <i class="fas fa-file-upload"></i>
                                 </button>
                             </span>
@@ -228,9 +228,8 @@ export default {
             pr_remarks: '',
             view_pr_form: new Form({
                 pr_id: '',
-                purchase_request_id: '',
                 dmd_purchase_requests: [],
-                purchase_order_id: '',
+                po_id: '',
                 mode_id: '',
                 rfq: {},
                 rfq_id: '',
@@ -261,7 +260,7 @@ export default {
         view_pr(pr){
             this.view_pr_form.reset();
             this.view_pr_form.fill(pr);
-            axios.get('../../api/purchase_request/'+pr.purchase_request_id).then(({data}) => {
+            axios.get('../../api/purchase_request/'+pr.pr_id).then(({data}) => {
                     this.view_pr_form.dmd_purchase_requests = data;
                 }).catch(() => {
 
@@ -275,7 +274,7 @@ export default {
         store_pr_remarks(){
             axios.post('../../api/pr_remarks', {
                 remarks: this.pr_remarks,
-                purchase_request_id: this.view_pr_form.purchase_request_id,
+                pr_id: this.view_pr_form.pr_id,
                 user_id: this.current_user.user_id,
             }).then(() => {
                 $('#disapprovedModal').modal('hide');
@@ -285,7 +284,7 @@ export default {
             });
         },
         approved_pr(){
-            axios.put('../../api/approved_pr/'+this.view_pr_form.purchase_request_id).then(() => {
+            axios.put('../../api/approved_pr/'+this.view_pr_form.pr_id).then(() => {
                 $('#prModal').modal('hide');
                 this.view_pr_form.reset();
             }).catch(() => {

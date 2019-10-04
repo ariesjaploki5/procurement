@@ -10,17 +10,17 @@ class DmdPrDmdPo extends Model
     public $timestamps = false;
 
     public function last_status(){
-        return $this->hasOne("App\Models\PurchaseRequestStatus", 'purchase_request_id', 'purchase_request_id')
+        return $this->hasOne("App\Models\PurchaseRequestStatus", 'pr_id', 'pr_id')
         ->orderBY('id', 'desc');
     }
 
     public function current_last_status(){
-        return $this->hasOne("App\Views\PrCurrentStatus", 'purchase_request_id', 'purchase_request_id')
+        return $this->hasOne("App\Views\PrCurrentStatus", 'pr_id', 'pr_id')
         ->orderBy('current_status_id', 'desc');
     }
 
     public function last_po_status(){
-        return $this->hasOne("App\Models\PurchaseOrderStatus", 'purchase_order_id', 'purchase_order_id')
+        return $this->hasOne("App\Models\PurchaseOrderStatus", 'po_id', 'po_id')
         ->orderBy('id', 'desc');
     }
 }

@@ -10,11 +10,11 @@ class PurchaseOrderStatus extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'purchase_order_id', 'current_status_id', 'status_date_time', 'remarks'
+        'po_id', 'current_status_id', 'status_date_time', 'remarks'
     ];
 
     public function purchase_order(){
-        return $this->belongsTo('App\Models\PurchaseOrder', 'purchase_order_id', 'purchase_order_id');
+        return $this->belongsTo('App\Models\PurchaseOrder', 'po_id', 'po_id');
     }
 
     public function current_status(){

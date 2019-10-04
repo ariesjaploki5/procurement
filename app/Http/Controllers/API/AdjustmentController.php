@@ -23,6 +23,7 @@ class AdjustmentController extends Controller
     }
 
     public function search(Request $request, $id){
+
         $data = AdjustmentItem::where('chrgcode', $id)
         ->where('item_desc', 'like', $request->word.'%')
         ->orderBy('gendesc', 'asc')
@@ -74,5 +75,6 @@ class AdjustmentController extends Controller
         ]);
 
         return response()->jsoN($medicine);
+        
     }
 }

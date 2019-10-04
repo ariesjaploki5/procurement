@@ -10,6 +10,7 @@ export function login(credentials) {
                 res(response.data);
             })
             .catch((err) =>{
+                console.log(err);
                 rej("Wrong Username or Password");
             })
     })

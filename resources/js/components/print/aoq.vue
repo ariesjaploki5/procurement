@@ -362,7 +362,7 @@
 
 </script>
 
-<style type="text/css" media="print">
+<style type="text/css" media="print" scoped>
     .landscape {
         width: 276mm;
         height: 190mm;

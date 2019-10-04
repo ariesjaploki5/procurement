@@ -31,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
-                    <tr v-for="po in pos" :key="po.purchase_order_id">
+                    <tr v-for="po in pos" :key="po.po_id">
                         <th @click="view_po(po)" width="10%">{{ po.po_id }}</th>
                         <th @click="view_po(po)" width="15%">{{ po.created_at | myDate3 }}</th>
                         <th @click="view_po(po)" width="18%">
@@ -40,7 +40,7 @@
                         <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
                         <th @click="view_po(po)" width="37%">{{ po.supplier_name }}</th>
                         <th width="10%">
-                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 11" @click="fmo_rcv(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 11" @click="fmo_rcv(po.po_id)">
                                 <i class="fas fa-file-download"></i> Received
                             </button>
 
@@ -49,17 +49,14 @@
                                 Action
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                <button type="button" class="dropdown-item" v-if="po.csid == 12" @click="fmo_rtn(po.purchase_order_id)">
+                                <button type="button" class="dropdown-item" v-if="po.csid == 12" @click="fmo_rtn(po.po_id)">
                                     <i class="fas fa-file-upload"></i> Returned to BUDGET
                                 </button>
 
-                                <button type="button" class="dropdown-item" v-if="po.csid == 12" @click="fmo_rls(po.purchase_order_id)">
+                                <button type="button" class="dropdown-item" v-if="po.csid == 12" @click="fmo_rls(po.po_id)">
                                     <i class="fas fa-file-upload"></i> Released to MCC
                                 </button></div>
                             </div>
-
-                            
-                            
                         </th>
                     </tr>
                 </tbody>
@@ -112,7 +109,7 @@
                                             </div>
                                             <div>
                                                 <span class="text-bold">Delivery Term: </span>  
-                                                {{ view_po_form.delivery_term }}
+                                                FOB Destination
                                             </div>
                                         </div>
                                     </div>
@@ -121,7 +118,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div>
-                                                <span class="text-bold">Place of Delivery: </span>{{ view_po_form.place_of_delivery }}
+                                                <span class="text-bold">Place of Delivery: </span>BGHMC
                                             </div>
                                             <div>
                                                 <span class="text-bold">Payment Term: </span>{{ view_po_form.payment_term_desc }}
@@ -154,7 +151,6 @@ export default {
             view_po_form: new Form({
                 payment_term_id: '',
                 place_of_delivery: '',
-                purchase_order_id: '',
                 purchase_request_id: '',
                 payment_term_desc: '',
                 po_id: '',
@@ -175,7 +171,7 @@ export default {
                 noa_id: '',
             }),
             na_form: new Form({
-                purchase_order_id: '',
+                po_id: '',
                 ors: false,
                 burs: false,
                 amount_to_p: false,
@@ -213,7 +209,7 @@ export default {
         view_po(po){
             this.view_po_form.reset();
             this.view_po_form.fill(po);
-            axios.get('../../api/purchase_order/'+po.purchase_order_id).then(({data}) => {
+            axios.get('../../api/purchase_order/'+po.po_id).then(({data}) => {
                     this.view_po_form.dmd_purchase_orders = data;
                 }).catch(() => {
 
@@ -226,7 +222,7 @@ export default {
         },
         na_modal(po){
             this.view_po_form.fill(po);
-            this.na_form.purchase_order_id = po.purchase_order_id;
+            this.na_form.po_id = po.po_id;
             $('#naModal').modal('show')
         },
         store_na(){

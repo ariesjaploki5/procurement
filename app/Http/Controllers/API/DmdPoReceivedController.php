@@ -50,8 +50,9 @@ class DmdPoReceivedController extends Controller
         $last_quantity = $dmd_uacs->stock_quantity;
         $new_stock = $last_quantity + $request->order_quantity;
         $dmd_uacs->stock_quantity = $new_stock;
-
         $dmd_uacs->save();
+    
+
 
         return response()->json();
     }

@@ -220,7 +220,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 @font-face {
         font-family: 'Helvetica';
         src: url('https://fonts.googleapis.com/css?family=Helvetica');

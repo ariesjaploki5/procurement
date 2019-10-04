@@ -33,24 +33,24 @@
                     </tr>
                 </thead>
                 <tbody class="table-bordered">
-                    <tr v-for="po in pos" :key="po.purchase_order_id">
+                    <tr v-for="po in pos" :key="po.po_id">
                         <th @click="view_po(po)" width="10%">{{ po.po_id }}</th>
                         <th @click="view_po(po)" width="15%">{{ po.created_at | myDate3 }}</th>
                         <th @click="view_po(po)" width="18%"><span v-if="po.csid">{{ po.csd }}</span></th>
                         <th @click="view_po(po)" width="10%">{{ po.mode_desc }}</th>
                         <th @click="view_po(po)" width="37%">{{ po.supplier_name }}</th>
                         <th width="10%">
-                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 7" @click="budget_rcv(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-success" v-if="po.csid == 7" @click="budget_rcv(po.po_id)">
                                 <i class="fas fa-file-download"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 8 && po.obrs_date" @click="budget_rls(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 8 && po.obrs_date" @click="budget_rls(po.po_id)">
                                 <i class="fas fa-file-upload"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 21" @click="budget_rls(po.purchase_order_id)">
+                            <button type="button" class="btn btn-sm btn-danger" v-if="po.csid == 21" @click="budget_rls(po.po_id)">
                                 <i class="fas fa-file-upload"></i>
                             </button>
-                            <!-- <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: po.purchase_order_id }}"><i class="fas fa-print"></i> PO</router-link> -->
-                            <router-link class="btn btn-sm btn-success" v-show="po.obrs_date" :to="{ name: 'obrs', params: { id: po.purchase_order_id }}"><i class="fas fa-print"></i> OBRS</router-link>
+                            <!-- <router-link class="btn btn-sm btn-success" :to="{ name: 'po', params: { id: po.po_id }}"><i class="fas fa-print"></i> PO</router-link> -->
+                            <router-link class="btn btn-sm btn-success" v-show="po.obrs_no" :to="{ name: 'obrs', params: { id: po.po_id }}"><i class="fas fa-print"></i> OBRS</router-link>
                         </th>
                     </tr>
                 </tbody>
@@ -125,16 +125,16 @@
                                             <div class="row">
                                                 <div class="col-md-10">
                                                     <div>
-                                                        <span class="text-bold">Serial No: </span>    
-                                                        {{ view_po_form.obrs_no }}
+                                                        <span class="text-bold">Serial No.:</span>   
+                                                        <div class="w-100"></div>
+                                                        <span>{{ view_po_form.obrs_no }}</span>
                                                     </div>
-
                                                 </div>
                                                 <div class="col-md-2 text-right" v-if="view_po_form.csid == 8">
-                                                    <button class="btn btn-sm btn-primary" type="button" v-if="!view_po_form.obrs_no" @click="create_obrs()">
+                                                    <button class="btn btn-sm btn-primary" type="button" v-if="!view_po_form.obrs_no" @click="create_obrs(view_po_form.po_id)">
                                                         <i class="fas fa-plus-circle"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-success" type="button" v-else @click="edit_obrs()">
+                                                    <button class="btn btn-sm btn-success" type="button" v-else @click="edit_obrs(view_po_form.po_id)">
                                                         <i class="fas fa-pen-square"></i>
                                                     </button>
                                                 </div>
@@ -158,7 +158,7 @@
         </div> <!-- col-md-12 poModal -->
         <div class="col-md-12">
             <div class="modal fade" id="obrsModal" tabindex="-1" role="dialog" aria-labelledby="obrsModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             OBRS
@@ -168,50 +168,102 @@
                         </div>
                         <form @submit.prevent="store_obrs()">
                         <div class="modal-body">
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" :value="1" v-model="view_po_form.ors_burs" required>
-                                    <label class="form-check-label" for="gridRadios1">
-                                        OBLIGATION REQUEST AND STATUS
-                                    </label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Type Of Obligation:</label>
+                                        </div>
+                                        <select class="form-control col-9" v-model="obrs_form.type_of_obligation" required>
+                                            <option value="" selected disabled></option>
+                                            <option value="1">OBLIGATION REQUEST AND STATUS</option>
+                                            <option value="2">BUDGET UTILIZATION REQUEST AND STATUS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Fund:</label>
+                                        </div>
+                                        <input type="text" class="form-control col-9" v-model="obrs_form.fund">
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Allotment Class:</label>
+                                        </div>
+                                        <select class="form-control col-9" v-model="obrs_form.allotment_class" required>
+                                            <option value="" selected disabled></option>
+                                            <option value="01">Personnel Services - 01</option>
+                                            <option value="02">Maintenance & Other Operating Expenses - 02</option>
+                                            <option value="03">Financial Expenses - 03</option>
+                                            <option value="04">Capital Outlays - 04</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Funding Source:</label>
+                                        </div>
+                                        <select class="form-control col-9" v-model="obrs_form.funding_source" required>
+                                            <option value="" selected disabled></option>
+                                            <option value="1">Specific Budgets of National Government                               - 01 - Regular Agency Fund</option>
+                                            <option value="2">Miscellaneous Personal Benefits Fund                                  - 01 - Regular Agency Fund</option>
+                                            <option value="3">Pension and Gratuity Fund                                             - 01 - Regular Agency Fund</option>
+                                            <option value="4">Retirement and Life Insurance Premiums                                - 01 - Regular Agency Fund</option>
+                                            <option value="5">Hospital Retained Income applicable to all DOH - retained hospitals   - 05 - Internally Generated Funds</option>
+                                            <option value="6">Drugs and Medicines Revolving Funds                                   - 06 - Business Related Funds</option>
+                                            <option value="7">Receipts Deposited with Authorized Government Depository Banks (AGDB) - 07 - Trust Receipts</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-3">
+                                            <label for="" class="form-label">Type Of Appropriation:</label>
+                                        </div>
+                                        <select class="form-control col-9" v-model="obrs_form.type_of_appropriation" required>
+                                            <option value="" selected disabled></option>
+                                            <option value="1">Current Appropriations</option>
+                                            <option value="2">Continuing Appropriations</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" :value="2" v-model="view_po_form.ors_burs" required>
-                                    <label class="form-check-label" for="gridRadios2">
-                                        BUDGET UTILIZATION REQUEST AND STATUS
-                                    </label>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-6">
+                                            <label for="" class="form-label">UACS Object Code/Expenditure</label>
+                                        </div>
+
+                                        <div class="col-6 text-right text-bold">
+                                            Total Amount:   <span>{{ view_po_form.total_amount | currency2 }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row" v-for="(item, index) in obrs_form.uc" :key="index">
+                                        <div class="col-9">
+                                            <select v-model="item.code" class="form-control form-control-sm" >
+                                                <option v-for="uc in uacs_codes" :key="uc.id" :value="uc.uacs_code">{{ uc.uacs_desc }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-3">
+                                            <input type="text" class="form-control form-control-sm text-right" v-model="item.amount">
+                                        </div>
+                                        
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-primary" @click="add_uc()" v-if="obrs_form.uc.length < 5">add</button>
+                                    <button type="button" class="btn btn-sm btn-danger" @click="remove_uc()" v-if="obrs_form.uc.length > 1">remove</button>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="form-label font-weight-bold">Allotment</div>
-                                <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.allotment_id">
-                                    <option v-for="al in allotments" :key="al.allotment_id" :value="al.allotment_id">{{ al.allotment_desc }}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-label font-weight-bold">Fund Cluster</div>
-                                <select class="form-control form-control-sm" v-model="view_po_form.fund_cluster_id">
-                                    <option v-for="fc in fund_clusters" :key="fc.fund_cluster_id"  :value="fc.fund_cluster_id">{{ fc.fund_cluster_desc }} - {{ fc.fund_cluster_code }}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-label font-weight-bold">Fund Source</div>
-                                <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.fund_source_id">
-                                    <option v-for="fs in fund_sources" :key="fs.fund_source_id" :value="fs.fund_source_id">{{ fs.description }}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-label font-weight-bold">Fund Source Code</div>
-                                <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.fund_source_code_id">
-                                    <option v-for="fsc in fund_source_codes" :key="fsc.fund_source_code_id" :value="fsc.fund_source_code_id">{{ fsc.description }}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-label font-weight-bold">UACS</div>
-                                <select v-show="current_user.role_id == 6" class="form-control form-control-sm" v-model="view_po_form.uacs_code_id">
-                                    <option v-for="uc in uacs_codes" :key="uc.uacs_code_id" :value="uc.uacs_code_id">{{ uc.uacs_desc }}</option>
-                                </select>
-                            </div>
+                            
+                            
+                            <!-- <div class="form-group row">
+                                <div class="col-3">
+                                    <label for="" class="form-label">UACS Object Code/Expenditure:</label>
+                                </div>
+                                <vue-multi-select v-model="obrs_form.uacs_codes" 
+                                :options="uacs_codes" 
+                                option-label="uacs_desc" 
+                                :max-results="192"
+                                class="col-6">
+                                </vue-multi-select>
+                            </div>  -->
+                            
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal" aria-label="Close">Cancel</button>
@@ -248,7 +300,14 @@
 </template>
 
 <script>
+import {Money} from 'v-money'
+import VueMultiSelect from "vue-simple-multi-select";
 export default {
+
+    components: {
+        VueMultiSelect,
+        Money
+    },
     data(){
         return{
             pos: [],
@@ -256,68 +315,60 @@ export default {
                 word: '',
             }),
             view_po_form: new Form({
-                obrs_no: '',
-                allotment_code: '',
-                allotment_desc: '',
-                
                 created_at: '',
                 csd: '',
                 csid:'',
                 date_of_delivery:'',
                 delivery_term:'',
-                fs_acro: '',
-                fs_desc: '',
-                
-                fsc_ca: '',
-                fsc_cra: '',
-                fsc_desc: '',
-                fsc_source: '',
-
-                fund_cluster_desc: '',
-                fund_cluster_code: '',
-
                 id: '',
                 mode_desc:'',
+                obrs_no: '',
                 obrs_date: '',
                 po_id:'',
-                purchase_order_id:'',
+                po_id:'',
                 purchase_request_id:'',
                 supplier_name:'',
-
-                allotment_id: '',
-                fund_cluster_id: '',
-                fund_source_code_id: '',
-                fund_source_id: '',
-                uacs_code_id: '',
-
-                uacs_code: '',
-                uacs_desc: '',
-                uacs_type_id: '',
                 dmd_purchase_orders: [],
-
-                ors_burs: '',
+                total_amount: '',
             }),
             track_po_modal: {},
-            fund_sources: [],
-            fund_clusters: [],
-            uacs_codes: [],
-            allotments: [],
-            fund_source_codes: [],
-            uacs: [],
+            
+            obrs_form: new Form({
+                po_id: '',
+                type_of_obligation: '',
+                fund: '',
+                allotment_class: '',
+                funding_source: '',
+                type_of_appropriation: '',
+                uacs_object_code: [],
+                amount: '',
+                uacs_codes: [],
+                uc: [
+                    {
+                        code: null,
+                        amount: '',
+                    }
+                ],
+            }),
             isLoading: true,
             update_order_form: new Form({
-                id: '',
-                
+                id: '',    
             }),
+
+            uacs_codes: [],
+            value: [],
+            uc_limit: 5,
+            uc_count: 1,
         }
     },
     methods:{
+
         view_po(po){
             this.isLoading = true;
             this.view_po_form.reset();
             this.view_po_form.fill(po);
             axios.
-            get('../../api/budget_show/'+po.purchase_order_id)
+            get('../../api/budget_show/'+po.po_id)
             .then(({data}) => {
                     this.view_po_form.dmd_purchase_orders = data;
                     this.isLoading = false;
@@ -327,34 +378,7 @@ export default {
                 });
             $('#poModal').modal('show');
         },
-        get_fund_clusters(){
-            axios.get('../../api/fund_cluster').then(({data}) => {
-                this.fund_clusters = data;
-            }).catch(() => {
 
-            });
-        },
-        get_uacs(){
-            axios.get('../../api/uacs').then(({data}) => {
-                this.uacs = data;
-            }).catch(() => {
-
-            });
-        },
-        get_fund_sources(){
-            axios.get('../../api/fund_source').then(({data}) => {
-                this.fund_sources = data;
-            }).catch(() => {
-
-            });
-        },
-        get_fund_source_codes(){
-            axios.get('../../api/fund_source_code').then(({data}) => {
-                this.fund_source_codes = data;
-            }).catch(() => {
-
-            });
-        },
         get_uacs_codes(){
             axios.get('../../api/uacs_code').then(({data}) => {
                 this.uacs_codes = data;
@@ -362,13 +386,7 @@ export default {
 
             });
         },
-        get_allotments(){
-            axios.get('../../api/allotment').then(({data}) => {
-                this.allotments = data;
-            }).catch(() => {
 
-            });
-        },
         get_pos(){
             axios.get('../../api/po_for_budget').then(({data}) => {
                 this.pos = data;
@@ -383,18 +401,24 @@ export default {
 
             });
         },
+
         track_po(pos){
             this.track_po_modal = pos;
             $('#trackModal').modal('show')
         },
-        create_obrs(){
+
+        create_obrs(id){
+            this.obrs_form.po_id = id;
             $('#obrsModal').modal('show')
         },
-        edit_obrs(){
+
+        edit_obrs(id){
+            this.obrs_form.po_id = id;
             $('#obrsModal').modal('show')
         },
+        
         store_obrs(){
-            this.view_po_form.post('../../api/obrs').then(() => {
+            this.obrs_form.post('../../api/obrs_no').then(() => {
                 toast.fire({
                     type: 'success',
                     title: 'Success'
@@ -402,15 +426,13 @@ export default {
 
                 $('#obrsModal').modal('hide');
                 $('#poModal').modal('hide');
-                // axios.get('../../api/purchase_order/'+this.view_po_form.purchase_order_id).then(({data}) => {
-                //     this.view_po_form.fill(data);
-                // }).catch(() => {
-
-                // });
+                this.obrs_form.reset();
+                this.view_po_form.reset();
             }).catch(() => {
 
             });
         },
+
         budget_rls(id){
             axios.put('../../api/budget_rls/'+id).then(() => {
                 toast.fire({
@@ -421,6 +443,7 @@ export default {
 
             });
         },
+
         budget_rcv(id){
             axios.put('../../api/budget_rcv/'+id).then(() => {
                 toast.fire({
@@ -431,23 +454,35 @@ export default {
 
             });
         },
+
         update_order(){
             this.update_order_form.put('../../api/update_order/'+this.update_order_form.id).then(() => {
 
             }).catch(() => {
 
             });
+        },
+
+        get_uacs_codes(){
+            axios.get('../../api/uacs_code').then(({data}) => {
+                this.uacs_codes = data;
+            });
+        },
+        add_uc(){
+            this.obrs_form.uc.push({
+                code: null,
+                amount: '',
+            });
+        },
+        remove_uc(){
+            this.obrs_form.uc.pop();
         }
+          
     },
     created(){
 
         this.get_pos();
-        this.get_fund_source_codes();
-        this.get_allotments();
         this.get_uacs_codes();
-        this.get_fund_sources();
-        this.get_uacs();
-        this.get_fund_clusters();
     },
     computed:{
         current_user() {

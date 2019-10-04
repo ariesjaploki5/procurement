@@ -63,6 +63,10 @@ Route::apiResources([
     
 ]);
 
+Route::get('homis_dmds', 'API\PmoController@index');
+
+Route::post('obrs_no', 'API\PoObrsController@store');
+
 Route::post('dmd_unit', 'API\DrugsAndMedicineController@update_unit');
 
 Route::post('release', 'API\PurchaseOrderController@release');
@@ -135,7 +139,8 @@ Route::get('get_pr_total_amount/{id}', 'API\PurchaseRequestController@get_total_
 
 Route::post('received_po_dmd', 'API\DmdReceivedController@store');
 Route::put('notice_to_terminate/{id}', 'API\PurchaseOrderController@notice_to_terminate');
-Route::post('rfq_to_po', 'API\PurchaseRequestController@rfq_to_po');
+
+
 Route::get('pr_dmd_rqf/{id}', 'API\RfqController@show');
 Route::post('pr_to_po', 'API\PurchaseRequestController@pr_to_po');
 Route::put('change_patient/{id}/{hpercode}','API\ConsignmentRequestController@change_patient');
@@ -143,7 +148,9 @@ Route::get('need_to_pr', 'API\DrugsAndMedicineController@need_to_pr');
 Route::post('receive_dmd', 'API\PurchaseOrderController@receive_dmd');
 Route::get('dmd_rfq/{id}', 'API\RfqController@dmd_rfq');
 Route::get('dmd_aoq/{id}/{rfq_id}', 'API\RfqController@dmd_aoq');
+
 Route::post('rfq_to_po', 'API\PurchaseRequestController@rfq_to_po');
+
 Route::get('mds_consignment', 'API\MdsConsignmentController@index');
 Route::get('add_to_mds_cart/{cl2comb}/{costprc}', 'API\MdsConsignmentCartController@store');
 Route::get('mds_cart', 'API\MdsConsignmentCartController@index');
