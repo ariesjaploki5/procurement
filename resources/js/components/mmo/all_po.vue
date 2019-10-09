@@ -649,7 +649,7 @@
 
                 });
             },
-            get_dv_items(){
+            get_dv_items(id){
                 axios.get('../../api/get_dv_item/'+id).then(({data}) => {
                     this.dv_form.dmddesc = data.dmddesc;
                     this.dv_form.total_amount = data.total_amount;

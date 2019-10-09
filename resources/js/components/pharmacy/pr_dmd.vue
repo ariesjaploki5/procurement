@@ -25,8 +25,9 @@
                         <th width="12%" class="text-left">Document #</th>
                         <th width="9%" class="text-left">Date of PR</th>
                         <th width="11%" class="text-center">Status</th>
-                        <th width="16%" class="text-left">Date (Whole)</th>
-                        <th width="7%">Qty Ordered</th>
+                        <th width="11%" class="text-left">Date (Whole)</th>
+                        <th width="6%">Qty Ordered</th>
+                        <th width="6%">Received</th>
                         <th width="9%" class="text-left">Action</th>
                     </tr>
                 </thead>
@@ -88,7 +89,7 @@
                                 <span v-else>Emergency Purchase</span>
                             </small>
                         </td>
-                        <td width="16%" class="text-center" @click="view_pr(item.pr_id)">
+                        <td width="11%" class="text-center" @click="view_pr(item.pr_id)">
                             {{ item.pr_date_time | myDate4 }}
                             <span v-if="item.lprs_datetime"> - 
                                 <span v-if="item.lpos_datetime">
@@ -101,15 +102,19 @@
                             <span v-else>
                             </span>
                         </td>
-                        <td width="7%" class="text-right" @click="view_pr(item.pr_id)">
+                        <td width="6%" class="text-right" @click="view_pr(item.pr_id)">
                             <span v-if="item.o_qty">
                                 {{ item.o_qty | numeral3 }}
                             </span>
                             <span v-else>
                                 {{ item.r_qty | numeral3 }}
                             </span>
+                            <div class="w-100"></div>
+                            
+                        </td>
+                        <td width="6%" class="text-right" @click="view_pr(item.pr_id)">
                             <span>
-                                
+                                {{ item.total_received | numeral3 }}
                             </span>
                         </td>
                         <td width="9%" class="text-center">

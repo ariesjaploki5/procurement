@@ -401,8 +401,9 @@ class PurchaseOrderController extends Controller
             $array_2[] = $i; 
         }
 
-        $dv_attachment = DB::Table("fn_get_dv_attachment($id)")->get();
+        $dv_attachment = DB::Table("fn_get_dv_attachment()")->where('po_id', $id)->select('attachment')->get();
         $array_3 = array();
+
         foreach($dv_attachment as $d){
             $array_3[] = $d;
         }
