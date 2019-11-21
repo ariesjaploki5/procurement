@@ -273,50 +273,46 @@
                         <form @submit.prevent="store_dv()">
                             <div class="modal-body">
                                 <div class="row">
-                                    <div class="col-md-6 border-right border-dark">
+                                    <div class="col-md-12 border-bottom border-dark">
                                         <div class="form-group row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <label for="" class="label form-label"><span>Item Description:</span></label>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <span>{{ dv_form.dmddesc }}</span>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <label for="" class="label form-label">
                                                     <span>Approving Officer:</span>
                                                 </label>
                                             </div>
-                                            <div class="col-md-9">
+                                            <div class="col-md-4">
                                                 <select class="form-control form-control-sm" v-model="dv_form.approving_officer_id" required>
                                                     <option v-for="ao in approving_officers" :key="ao.id" :value="ao.id">{{ ao.officer_name }}</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <label for="" class="label form-label">
                                                     <span>Supplier:</span>
                                                 </label>
                                             </div>
-                                            <div class="col-md-9">
+                                            <div class="col-md-4">
                                                 <span>{{ dv_form.supplier_name }}</span>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <label for="" class="label form-label">
                                                     <span>Amount (Payment):</span>
                                                 </label>
                                             </div>
-                                            <div class="col-md-9 text-right">
+                                            <div class="col-md-4 text-right">
                                                 <span>{{ dv_form.total_amount | currency2 }}</span>
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group row">
                                             <div class="col-md-12">
                                                 <label for="" class="label form-label">

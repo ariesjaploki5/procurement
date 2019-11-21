@@ -30,6 +30,7 @@ class DvController extends Controller
 
         $count = count($attachment);
         $count_2 = count($liquidated_damage);
+        
         $dv = Dv::create([
             'po_id' => $request->po_id,
             'dv_officer_id' => $request->approving_officer_id,

@@ -334,7 +334,7 @@ export default {
 
     },
     computed:{
-        filteredMds: function(){
+        filteredMds(){
             let matcher = new RegExp(this.search_word, 'i');
             return this.mds.filter(function(md){
                 return matcher.test(md.cl1desc)
