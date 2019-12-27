@@ -591,13 +591,13 @@ export default {
     }
 
     table {
-        height:35rem;             
+        height:28rem;             
         display: -moz-groupbox;    
     }
 
     tbody {
         overflow-y: scroll;      
-        height: 34rem;           
+        height: 15rem;           
         width: 98.5%;
         position: absolute;
     }
