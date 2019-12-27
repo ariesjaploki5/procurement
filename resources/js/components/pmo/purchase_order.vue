@@ -20,9 +20,7 @@
                     <tbody>
                         <tr v-for="pos in purchase_orders" :key="pos.purchase_order_id">
                             <td>{{ pos.created_at | myDate }} - {{ pos.purchase_order_id | numeral2 }}</td>
-                            <td>
-                                <span v-if="pos.mode_id">{{ pos.mode.mode_desc }}</span>
-                            </td>
+                            <td><span v-if="pos.mode_id">{{ pos.mode.mode_desc }}</span></td>
                             <td>{{ pos.created_at | myDate3 }}, {{ pos.created_at | time1 }}</td>
                             <td>{{ pos.date_of_delivery | myDate3 }}, {{ pos.date_of_delivery | time1 }} </td>
                             <td>
