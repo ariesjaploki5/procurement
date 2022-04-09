@@ -30,7 +30,7 @@
         "eslint": "^5.16.0",
         "laravel-echo": "^1.5.3",
         "laravel-vue-pagination": "^2.3.0",
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "num-words": "^1.0.1",
         "number-to-words": "^1.2.4",
         "numeral": "^2.0.6",
